@@ -226,17 +226,10 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.rainier.permission</groupId>
-			<artifactId>auth_core</artifactId>
-			<version>0.1.8-SNAPSHOT</version>
-		</dependency>
-		
-		<dependency>
 			<groupId>com.brightengold</groupId>
 			<artifactId>brightengold-util</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
 		
 	    <dependency>
 	      <groupId>junit</groupId>
