@@ -1,0 +1,117 @@
+*{
+	margin:0;
+	padding:0;
+}
+body{
+	
+	font-size: 12px;
+	font-family: Arial, Tahoma, Verdana;
+}
+img{
+	border:0;
+	margin:1px;
+}
+p{
+	padding:3px;
+}
+#footer{
+	clear:both;
+	position:fixed; 
+	height:24px; 
+	width:100%;
+	line-height:24px; 
+	text-align:center; 
+	 border-top:1px solid #fff; 
+	 bottom:-4px; 
+	 left:0px;
+	 _position:absolute;
+}
+#footer ul {
+	list-style:none;
+}
+#footer li {
+	display:inline;
+}
+
+/*********************
+		Forms
+*********************/
+form{
+	padding: 0px 10px;
+	margin:3px auto;
+}
+form#form span{
+	color:red;
+}
+form#form fieldset {
+	display:block;
+	padding:5px 10px 5px 10px;
+	line-height:20px;
+	margin-bottom:10px;
+}
+form#form legend {
+	font-size:12px;
+	font-weight:bold;
+	margin-bottom:5px;
+	padding:3px;
+	width:254px;
+}
+ form#form #label {
+	clear:left;
+	display:block;
+	float:left;
+	width:120px;
+	text-align:right;
+	padding-right:10px;
+	margin-bottom:5px;
+}  
+ form#form #labelmm {
+	clear:left;
+	display:block;
+	float:left;
+	width:70px;
+	text-align:right;
+	padding-right:10px;
+	margin-bottom:5px;
+} 
+form#form label.error{
+	background:url(../images/x.png) no-repeat 0px 0px;
+	padding-left:18px;
+	color: red;
+	width:150px;
+	
+} 
+
+form#form input {
+	padding:3px;
+	margin-bottom:5px;
+}
+
+form#form input:focus { border-color:#77BACE; }
+
+form#form select {
+	margin-left:5px;
+}
+form#form textarea {
+	width:410px;
+	height:200px;
+	padding:5px;
+	overflow:auto;
+}
+form#form option {
+	background:#FFF;
+}
+form#form optgroup option {
+
+}
+form#form #button1, form#form #button2 {
+	padding-right:5px;
+	cursor:pointer;
+	width:120px;
+	margin-left:8px;
+	font-weight:bold;
+}
+
+form#form #button1:hover, form#form #button2:hover {
+	background-position:center left;
+}
