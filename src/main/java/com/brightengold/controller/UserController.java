@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,18 +41,19 @@ public class UserController {
 	private Integer pageSize = 10;
 	
 	@RequestMapping({"/users/{pageNo}"})
+	@Secured("ROLE_SUPER")
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
 		if(pageNo==null){
 			pageNo = 1;
 		}
 		users = userService.findAllUser(pageNo, pageSize, true);
 		model.addAttribute("page",users);//map
-		return "admin/sys/user/list";
+		return "manage/sys/user/list";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String add(Model model) {
-		return "admin/sys/user/add";
+		return "manage/sys/user/add";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)

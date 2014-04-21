@@ -27,7 +27,7 @@ public class GennerateController {
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 		String url=basePath+"/sys/html/gennerateHtml";
 		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername())){
+		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser)){
 			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
 		}else{
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
@@ -46,7 +46,7 @@ public class GennerateController {
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 		String url=basePath+"/sys/html/gennerateHtml";
 		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername())){
+		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser)){
 			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
 		}else{
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
@@ -60,7 +60,7 @@ public class GennerateController {
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 		String url=basePath+"/sys/html/gennerateHtml";
 		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername())){
+		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser)){
 			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
 		}else{
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
@@ -74,7 +74,7 @@ public class GennerateController {
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 		String url=basePath+"/sys/html/gennerateHtml";
 		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername())){
+		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser)){
 			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
 		}else{
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
@@ -88,7 +88,7 @@ public class GennerateController {
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 		String url=basePath+"/sys/html/gennerateHtml";
 		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername())){
+		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser)){
 			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
 		}else{
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
@@ -102,7 +102,7 @@ public class GennerateController {
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 		String url=basePath+"/sys/html/gennerateHtml";
 		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername())){
+		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser)){
 			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
 		}else{
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
