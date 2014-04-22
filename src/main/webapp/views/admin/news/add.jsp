@@ -53,7 +53,9 @@
 <body>
 <jsp:include page="/views/admin/commons/header.jsp"/>
 	<jsp:include page="/views/admin/commons/left.jsp">
-	<jsp:param value="10" name="menuId"/>
+		<jsp:param value="10" name="menuId"/>
+		<jsp:param value="新闻管理" name="menuName"/>
+		<jsp:param value="添加新闻" name="menuSubName"/>
 	</jsp:include>
 	<section id="main" class="column">
 		<article class="module width_full">

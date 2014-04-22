@@ -104,6 +104,8 @@
 <jsp:include page="/views/admin/commons/header.jsp"/>
 <jsp:include page="/views/admin/commons/left.jsp">
 	<jsp:param value="3" name="menuId"/>
+	<jsp:param value="角色管理" name="menuName"/>
+	<jsp:param value="分配权限" name="menuSubName"/>
 </jsp:include>
 <section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>

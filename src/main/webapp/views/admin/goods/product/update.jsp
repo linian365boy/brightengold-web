@@ -45,6 +45,8 @@ $(document).ready(function(){
 <jsp:include page="/views/admin/commons/header.jsp"/>
 	<jsp:include page="/views/admin/commons/left.jsp">
 		<jsp:param value="6" name="menuId"/>
+		<jsp:param value="商品管理" name="menuName"/>
+		<jsp:param value="编辑商品" name="menuSubName"/>
 	</jsp:include>
 	<section id="main" class="column">
 		<article class="module width_full">

@@ -53,12 +53,14 @@
 <body>
 <jsp:include page="/views/admin/commons/header.jsp"/>
 	<jsp:include page="/views/admin/commons/left.jsp">
-	<jsp:param value="10" name="menuId"/>
+		<jsp:param value="10" name="menuId"/>
+		<jsp:param value="新闻管理" name="menuName"/>
+		<jsp:param value="编辑新闻" name="menuSubName"/>
 	</jsp:include>
 	<section id="main" class="column">
 		<article class="module width_full">
 		<header>
-		<h3 class="tabs_involved">添加新闻</h3>
+		<h3 class="tabs_involved">编辑新闻</h3>
 		</header>
 		<div class="tab_container">
 		<div id="tab1" class="tab_content">
