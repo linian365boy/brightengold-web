@@ -25,8 +25,14 @@
 		<div class="breadcrumbs_container">
 			<article class="breadcrumbs">
 			<a href="${ctx }admin">首页</a> 
-			<div class="breadcrumb_divider"></div> 
-			<a class="current">${param.menuName }</a>
+			<c:if test="${!empty param.menuName}">
+				<div class="breadcrumb_divider"></div>
+				<a href="#" class="${!empty param.menuSubName?'current':'' }">${param.menuName }</a>
+			</c:if>
+			<c:if test="${!empty param.menuSubName }">
+				<div class="breadcrumb_divider"></div>
+				<a class="current">${param.menuSubName }</a>
+			</c:if>
 			</article>
 		</div>
 	</section><!-- end of secondary bar -->
