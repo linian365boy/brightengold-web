@@ -1,3 +1,6 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.TimeZone"%>
+<%@page import="java.util.Calendar"%>
 <%@page import="cn.rainier.nian.service.impl.MenuServiceImpl"%>
 <%@page import="cn.rainier.nian.model.Menu"%>
 <%@page import="org.springframework.web.context.ContextLoader"%>
@@ -143,7 +146,10 @@
 		</ul> --%>
 		<footer id="footer">
 			<hr />
-			<p><strong>Copyright &copy; 2013 linian365boy@foxmail.com</strong></p>
+			<%
+				Calendar now = Calendar.getInstance(TimeZone.getDefault(),Locale.getDefault());
+			%>
+			<p><strong>Copyright &copy; <%=now.get(Calendar.YEAR) %> linian365boy@foxmail.com</strong></p>
 		</footer>
 	</aside><!-- end of sidebar -->
 	
