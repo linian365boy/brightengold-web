@@ -157,7 +157,7 @@ public class NewsController {
 			String url=basePath+"/admin/news/"+tempNews.getId();
 			HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
 			JsonEntity entity = new JsonEntity();
-			if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath(tempNews.getUrl()),loginUser)){
+			if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath(tempNews.getUrl()),loginUser.getUsername(),null)){
 				tempNews.setPublishDate(new Date());
 				LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
 				if(newsService.saveNews(tempNews)!=null){
