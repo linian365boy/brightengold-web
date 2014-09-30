@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,12 +50,12 @@ public class UserController {
 		}
 		users = userService.findAllUser(pageNo, pageSize, true);
 		model.addAttribute("page",users);//map
-		return "manage/sys/user/list";
+		return "admin/sys/user/list";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String add(Model model) {
-		return "manage/sys/user/add";
+		return "admin/sys/user/add";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
@@ -63,7 +65,7 @@ public class UserController {
 			//日志记录
 			Role role = roleService.loadRoleByName(request.getParameter("role"));
 			Role defaultR = roleService.findDefault();
-			List<Role> roles = new ArrayList<Role>();
+			Set<Role> roles = new HashSet<Role>();
 			roles.add(role);		//设置用户选择的权限
 			roles.add(defaultR);	//设置默认权限
 			user.setRoles(roles);
@@ -95,7 +97,7 @@ public class UserController {
 	
 	@RequestMapping(value="/{username}/update",method=RequestMethod.POST)
 	public String update(HttpServletRequest request,@PathVariable String username,User user) {
-		List<Role> roles = null;
+		Set<Role> roles = null;
 		StringBuilder content = new StringBuilder();
 		if(user.getId()!=null){
 			User temp = userService.loadUserById(user.getId());
@@ -110,7 +112,7 @@ public class UserController {
 				content.append("姓名："+temp.getRealName());
 			}
 			
-			roles = new ArrayList<Role>();
+			roles = new HashSet<Role>();
 			String role = request.getParameter("role");
 			String enabled = request.getParameter("enabled");
 			user.setPassword(temp.getPassword());

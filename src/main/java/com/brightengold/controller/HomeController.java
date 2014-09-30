@@ -21,12 +21,12 @@ public class HomeController {
 	
 	@RequestMapping(value={"/index","/",""}, method = RequestMethod.GET)
 	public String home(Model model) {
-		return "manage/index";
+		return "admin/index";
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model) {
-		return "manage/login";
+		return "admin/login";
 	}
 	
 }

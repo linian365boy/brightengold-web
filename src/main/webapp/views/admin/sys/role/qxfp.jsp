@@ -15,7 +15,7 @@
 <script src="${ctx}resources/js/jquery-1.8.3.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$.getJSON("${ctx}admin/sys/role/getRolesByAjax", function(data) {
+		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html", function(data) {
 			var da = $(data);
 			var str = "";
 			for ( var i = 0; i < da.length; i++) {
@@ -39,8 +39,8 @@
 			tree.setDataMode("xml");
 			tree.enableCheckBoxes(true);
 		    tree.enableThreeStateCheckboxes(true);
-			tree.setXMLAutoLoading("${ctx}admin/sys/menu/findMenuByRole?name="+selectValue)+"&flag=true";
-		   	tree.loadXML("${ctx}admin/sys/menu/findMenuByRole?id=0&name="+selectValue+"&flag=true",function(){
+			tree.setXMLAutoLoading("${ctx}admin/sys/menu/findMenuByRole.html?name="+selectValue)+"&flag=true";
+		   	tree.loadXML("${ctx}admin/sys/menu/findMenuByRole.html?id=0&name="+selectValue+"&flag=true",function(){
 		   		tree.openAllItems(0);
 		   	});
 		}
@@ -83,7 +83,7 @@
 			});*/
 			$("#name").attr("value",selectValue);
 			$("#str").attr("value",allCheckedBranches);
-			$("#actionForm").attr("action","${ctx}admin/sys/role/"+selectValue+"/distribute");
+			$("#actionForm").attr("action","${ctx}admin/sys/role/"+selectValue+"/distribute.html");
 			$("#actionForm").submit();
 		}
 	}

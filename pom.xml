@@ -230,6 +230,11 @@
 			<artifactId>brightengold-util</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.rainier.permission</groupId>
+		  	<artifactId>auth_core</artifactId>
+		  	<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 		
 	    <dependency>
 	      <groupId>junit</groupId>
@@ -240,82 +245,52 @@
 	</dependencies>
 	<build>
     <finalName>brightengold-web</finalName>
-    <!-- 配置输出路径 -->
-    <outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
-    <testOutputDirectory>${basedir}/src/main/webapp/WEB-INF/test-classes</testOutputDirectory>
-    <pluginManagement>
-	<plugins>
-		<plugin>
-		    <groupId>org.eclipse.m2e</groupId>
-		    <artifactId>lifecycle-mapping</artifactId>
-		    <version>1.0.0</version>
-		    <configuration>
-		     <lifecycleMappingMetadata>
-		      <pluginExecutions>
-		       <pluginExecution>
-		        <pluginExecutionFilter>
-		         <groupId>org.apache.maven.plugins</groupId>
-		         <artifactId>maven-dependency-plugin</artifactId>
-		         <versionRange>[1.0.0,)</versionRange>
-		         <goals>
-		          <goal>copy-dependencies</goal>
-		          <goal>unpack</goal>
-		         </goals>
-		        </pluginExecutionFilter>
-		        <action>
-		         <ignore />
-		        </action>
-		       </pluginExecution>
-		      </pluginExecutions>
-		     </lifecycleMappingMetadata>
-		    </configuration>
-		</plugin>
-	</plugins>
-	</pluginManagement>
-	<plugins>
-    	<plugin>
-    		<artifactId>maven-dependency-plugin</artifactId>
-		    <version>2.6</version>
-		    <executions>
-		     <execution>
-		      <id>copy-dependencies</id>
-		      <phase>compile</phase>
-		      <goals>
-		       <goal>copy-dependencies</goal>
-		      </goals>
-		      <configuration>
-		       <outputDirectory>${basedir}/src/main/webapp/WEB-INF/lib</outputDirectory>
-		      </configuration>
-		     </execution>
-		    </executions>
-    	</plugin>
-    	<plugin>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>2.3.2</version>
-			<configuration>
-			<source>1.6</source>
-			<target>1.6</target>
-			<encoding>UTF-8</encoding>
-			<compilerArguments>  
-                <verbose />  
-                <bootclasspath>${java.home}/lib/rt.jar</bootclasspath>  
-	        </compilerArguments>
-			</configuration>
-			<dependencies>
-			    <dependency>
-			      <groupId>org.codehaus.plexus</groupId>
-			      <artifactId>plexus-compiler-javac</artifactId>
-			      <version>1.8.1</version>
-			    </dependency>
-  			</dependencies>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-resources-plugin</artifactId>
-			<configuration>
-				<encoding>UTF-8</encoding>
-			</configuration>
-		</plugin>
-    </plugins>
+    <!-- 插件 -->
+	<pluginManagement>
+		<plugins>
+		<!-- jetty插件 -->
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>8.1.15.v20140411</version>
+					<configuration>
+					    <scanIntervalSeconds>0</scanIntervalSeconds>
+						<webAppConfig>
+						  <contextPath>/</contextPath>
+						  <defaultsDescriptor>src/test/resources/webdefault.xml</defaultsDescriptor>
+						</webAppConfig>
+					    <connectors>
+					       <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+					          <port>8081</port>
+					          <maxIdleTime>60000</maxIdleTime>
+					       </connector>
+					     </connectors>
+				    </configuration>
+					<dependencies>
+						<dependency>
+							<groupId>mysql</groupId>
+							<artifactId>mysql-connector-java</artifactId>
+							<version>5.1.10</version>
+						</dependency>
+						<dependency>
+							<artifactId>netty</artifactId>
+							<groupId>org.jboss.netty</groupId>
+							<version>3.2.5.Final</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>  
+	                <groupId>org.zeroturnaround</groupId>  
+	                <artifactId>jrebel-maven-plugin</artifactId>
+	                <version>1.1.5</version>
+	                <executions></executions>
+	                <configuration>
+		                <!-- 指定生成的jrebel.xml放在哪里，要求放在web应用的 classpath下 -->
+		                <rebelXmlDirectory>${basedir}/src/main/webapp/WEB-INF/classes</rebelXmlDirectory>
+	                </configuration>
+            </plugin>
+    	</plugins>
+    </pluginManagement>
+	<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
   </build>
 </project>

@@ -68,7 +68,7 @@
 			<script type="text/javascript">
 				$(document).ready(function(){
 					var t = new Date().getTime();
-					$.get("${ctx}admin/sys/menu_findMenuByRole.do?t="+t,function(xml){
+					$.get("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(xml){
 						var da = $(xml);
 						var pMenu = da.find("item[url='javascript:void(0);']");
 						var str = "";

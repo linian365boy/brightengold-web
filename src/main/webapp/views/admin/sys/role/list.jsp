@@ -44,7 +44,7 @@
 		};
 		
 		function qxfp(){
-			window.location.href = '${ctx}admin/sys/role/qxfp';
+			window.location.href = '${ctx}admin/sys/role/qxfp.html';
 		}
 		
 </script>
