@@ -6,11 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
-
 import cn.rainier.nian.utils.PageRainier;
-
 import com.brightengold.dao.NewsDao;
-import com.brightengold.model.Category;
 import com.brightengold.model.News;
 
 @Component("newsService")

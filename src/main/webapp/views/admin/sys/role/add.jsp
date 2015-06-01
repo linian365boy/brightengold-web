@@ -36,7 +36,7 @@
 </script>
 </head>
 <body>
-		<form id="form" action="${ctx}admin/sys/role/add" method="post" target="_parent">
+		<form id="form" action="${ctx}admin/sys/role/add.html" method="post" target="_parent">
             <fieldset >
             <div id="label"><label for="desc">角色： </label></div>
             <input name="desc" type="text"

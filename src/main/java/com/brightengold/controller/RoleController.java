@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -32,8 +34,6 @@ import cn.rainier.nian.utils.UUIDGenerator;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 @Controller
 @RequestMapping("/admin/sys/role")
@@ -49,6 +49,7 @@ public class RoleController {
 	private ResourceDetailsMonitor resourceDetailsMonitor;
 	@Autowired
 	private MenuServiceImpl menuService;
+	private Logger logger = LoggerFactory.getLogger(RoleController.class);
 	
 	/**
 	 * @FunName: getRolesByAjax

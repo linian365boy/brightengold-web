@@ -18,29 +18,20 @@
     <http pattern="/admin/login.html" security="none" />
     <http pattern="/admin/loginCheck.html" security="none"/>
 	
-  	<!-- <global-method-security pre-post-annotations="enabled" 
-  	secured-annotations="enabled" jsr250-annotations="enabled" 
-  	access-decision-manager-ref="businessAccessDecisionManager">
-  	</global-method-security> -->
-	
     <http auto-config="false" request-matcher="regex" use-expressions="true" entry-point-ref="myAuthenticationEntryPoint">
-    	<!-- <access-denied-handler error-page="/admin/accessDenied.html"/>
+    	<access-denied-handler error-page="/admin/accessDenied.html"/>
     	<remember-me key="act_spring"/>
     	<form-login login-page="/admin/login.html" default-target-url="/admin/index.html"
     		authentication-failure-url="/admin/login.html"/>
-    	<custom-filter ref="myFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
-    	会话管理配置
-        <intercept-url pattern="/admin/**" access="isAuthenticated()" />
+    	<!-- 会话管理配置 -->
    		<session-management session-authentication-error-url="/admin/login.html" session-fixation-protection="migrateSession">
    			<concurrency-control expired-url="/admin/login.html" max-sessions="1" error-if-maximum-exceeded="false"/>
-   		</session-management> -->
-   		<intercept-url pattern="/admin/**" access="isAuthenticated()" />
+   		</session-management>
    		<logout logout-url="/admin/logout" logout-success-url="/admin/login.html" delete-cookies="JSESSIONID" invalidate-session="true"/>
-   		<custom-filter ref="mySecurityFilter" before="FILTER_SECURITY_INTERCEPTOR"/> 
     </http>
     
      <!-- 配置认证管理器 -->
-    <authentication-manager alias="autheticationManager" id="autheticationManager">
+    <authentication-manager alias="autheticationManager">
    		<authentication-provider user-service-ref="userService">
    			<password-encoder hash="md5"/>
    		</authentication-provider>
@@ -57,52 +48,17 @@
   
   <beans:bean id="accessDecisionManager" class="cn.rainier.nian.security.MyAccessDecisionManager"/>
   
-	<beans:bean id="mySecurityFilter" class="cn.rainier.nian.security.MySecurityFilter" >
-	  	<beans:property name="autheticationManager" ref="autheticationManager"/>
-	  	<beans:property name="securityMetadataSource" ref="securityMetadataSource"/>
-	  	<beans:property name="accessDecisionManager" ref="accessDecisionManager"/>
-	  </beans:bean> 
-  
-		<!-- <beans:bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+	<beans:bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
 			<filter-chain-map request-matcher="ant">
 		     <filter-chain pattern="/**" filters="
-		     	   channelProcessingFilter,
 		           securityContextPersistenceFilter,
 		           usernamePasswordProcessingFilter,
 		           anonymousProcessingFilter,
 		           exceptionTranslationFilter,
 		           filterSecurityInterceptor"/>
 		  </filter-chain-map>
-		</beans:bean> -->
-	<!--==========================================================================
-	核心过滤器成员之一
-	常用来将某些HTTP协议的URL重定向到HTTPS协议
-	============================================================================-->
-	<beans:bean id="channelProcessingFilter" class="org.springframework.security.web.access.channel.ChannelProcessingFilter">
-		<beans:property name="channelDecisionManager" ref="channelDecisionManager" />
-		<beans:property name="securityMetadataSource">
-			<filter-security-metadata-source request-matcher="ant">
-				<intercept-url pattern="/**" access="ANY_CHANNEL" />
-			</filter-security-metadata-source>
-		</beans:property>
-	</beans:bean>
-	
-	<beans:bean id="channelDecisionManager"
-		class="org.springframework.security.web.access.channel.ChannelDecisionManagerImpl">
-		<beans:property name="channelProcessors">
-			<beans:list>
-				<beans:ref local="secureChannelProcessor" />
-				<beans:ref local="insecureChannelProcessor" />
-			</beans:list>
-		</beans:property>
-	</beans:bean>
-	<beans:bean id="secureChannelProcessor" class="org.springframework.security.web.access.channel.SecureChannelProcessor" />
-	<beans:bean id="insecureChannelProcessor" class="org.springframework.security.web.access.channel.InsecureChannelProcessor" />
-	
-	<!--==========================================================================
-	核心过滤器成员之一
-	获取或存储一个SecurityContext
-	============================================================================-->
+		</beans:bean> 
+		
 	<beans:bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
 	
 		<!-- Used for expressions -->
@@ -142,10 +98,6 @@
 		<beans:constructor-arg name="dataSource" ref="dataSource"/>
 	</beans:bean>
 
-    <beans:bean id="resourceDetailsMonitor" class="cn.rainier.nian.model.ResourceDetailsMonitor" autowire="byType" init-method="afterPropertiesSet">
-    	<beans:property name="resourceDetailsBuilder" ref="resourceDetailsBuilder"/>
-    	<beans:property name="accessDecisionManager" ref="aclDecisionManager"/>
-    </beans:bean>
     <!-- 引入auth_core.jar start -->
 	
      <beans:bean id="aclDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
@@ -153,7 +105,6 @@
    		<beans:property name="decisionVoters">
    			<beans:list>
 				<beans:ref local="roleVoter"/>
-				<beans:ref bean="expressionVoter"/>
 				<beans:ref local="authenticatedVoter"/>
    			</beans:list>
    		</beans:property>
@@ -164,41 +115,6 @@
 			<beans:ref bean="userService"/>
 		</beans:property>
 	</beans:bean>
-
-   <!-- ++++++++++++++Method security!@++++++++++++ -->
-	<beans:bean class="org.springframework.security.access.prepost.PostInvocationAdviceProvider" id="postAdviceProvider">
-		<beans:constructor-arg ref="exprPostInvocationAdvice"/>
-	</beans:bean>
-	<beans:bean class="org.springframework.security.access.expression.method.ExpressionBasedPostInvocationAdvice" id="exprPostInvocationAdvice">
-		<beans:constructor-arg ref="methodExprHandler"/>
-	</beans:bean>
-	<beans:bean class="org.springframework.security.access.annotation.Jsr250MethodSecurityMetadataSource" id="jsr250MetadataSource"/>
-	<beans:bean class="org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource" id="securedMetadataSource"/>
-    <beans:bean class="org.springframework.security.access.prepost.PrePostAnnotationSecurityMetadataSource" id="prePostMetadataSource">
-		<beans:constructor-arg ref="exprAnnotationAttrFactory"/>
-	</beans:bean>
-	<beans:bean class="org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory" id="exprAnnotationAttrFactory">
-		<beans:constructor-arg ref="methodExprHandler"/>
-	</beans:bean>
-	<beans:bean class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler" id="methodExprHandler"/>
-    <beans:bean id="businessAccessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
-        <beans:property name="decisionVoters">
-			<beans:list>
-				<beans:ref local="preAdviceVoter"/>
-				<beans:ref local="roleVoter"/>
-				<beans:ref local="authenticatedVoter"/>
-				<beans:ref local="jsr250Voter"/> <!-- For JSR 250 Method Annotations -->
-			</beans:list>
-		</beans:property>
-    </beans:bean>
-    <beans:bean class="org.springframework.security.access.annotation.Jsr250Voter" id="jsr250Voter"/>
     <beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter" id="authenticatedVoter"/>
     <beans:bean class="org.springframework.security.access.vote.RoleVoter" id="roleVoter"/>
-    <beans:bean class="org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter" id="preAdviceVoter">
-		<beans:constructor-arg ref="exprPreInvocationAdvice"/>
-	</beans:bean>
-	<beans:bean class="org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice" id="exprPreInvocationAdvice">
-		<beans:property name="expressionHandler" ref="methodExprHandler"/>
-	</beans:bean>
-
 </beans:beans>

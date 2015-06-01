@@ -5,6 +5,8 @@ import java.io.File;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,7 @@ import com.brightengold.util.Tools;
 public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
+	private Logger logger = LoggerFactory.getLogger(CompanyController.class);
 	
 	@RequestMapping(value={"/detail","/",""},method=RequestMethod.GET)
 	public String detail(Model model) {

@@ -1,13 +1,18 @@
 package com.brightengold.controller;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 import cn.rainier.nian.model.User;
+
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.HTMLGenerator;
 
@@ -15,6 +20,8 @@ import com.brightengold.util.HTMLGenerator;
 @RequestMapping("/admin/sys/html")
 @Scope("prototype")
 public class GennerateController {
+	
+	private Logger logger = LoggerFactory.getLogger(GennerateController.class);
 	
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
 	public String gennerateHtml(){

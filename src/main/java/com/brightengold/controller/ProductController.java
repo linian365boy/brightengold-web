@@ -7,6 +7,8 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +43,7 @@ public class ProductController {
 	private CategoryService categoryService;
 	private PageRainier<Product> products;
 	private Integer pageSize = 10;
+	private Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@RequestMapping(value={"/products/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){

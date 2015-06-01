@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +23,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
+
 import com.brightengold.model.Category;
 import com.brightengold.service.CategoryService;
 import com.brightengold.service.LogUtil;
@@ -34,6 +38,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 	private PageRainier<Category> categorys;
 	private Integer pageSize = 10;
+	private Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
 	@RequestMapping(value={"/categorys/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
@@ -67,7 +72,7 @@ public class CategoryController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/goods/category/categorys/1";
+		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/goods/category/categorys/1.html";
 	}
 	
 	@RequestMapping(value="/getParentByAjax/{flag}",method=RequestMethod.GET)

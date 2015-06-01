@@ -20,7 +20,7 @@
 		});
 		var username = $(obj).attr("name");
 		jQuery.ajax({
-			url:'${ctx}admin/sys/user/'+username,
+			url:'${ctx}admin/sys/user/'+username+".html",
 			type:'GET',
 			success:function(data){
 				myDialog.content(data);
@@ -34,7 +34,7 @@
 	
 	var update = function(obj){
 		var username = $(obj).attr("name");
-		var url = '${ctx}admin/sys/user/'+username+'/update';
+		var url = '${ctx}admin/sys/user/'+username+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑员工信息',
 			id:'bianji',
@@ -45,7 +45,7 @@
 		};
 		
 		var tianjia = function(){
-			var url = "${ctx}admin/sys/user/add";
+			var url = "${ctx}admin/sys/user/add.html";
 			art.dialog.open(url,{
 				title:'添加用户',
 				id:'tianjia',
@@ -58,7 +58,7 @@
 		var resetPassword = function(obj){
 			art.dialog.confirm('密码将重置为888888，是否确认继续？',function(){
 			var username = $(obj).attr("name");
-			var url = '${ctx}admin/sys/user/'+username+'/reset';
+			var url = '${ctx}admin/sys/user/'+username+'/reset.html';
 			jQuery.ajax({
 				url:url,
 				success:function(data){
@@ -83,7 +83,7 @@
 		var unsubscribe = function(obj){
 			var username = $(obj).attr("name");
 			art.dialog.confirm('注销后将不能使用此账户！是否确定注销此账户？',function(){
-				var url = '${ctx}admin/sys/user/'+username+'/unsubscribe';
+				var url = '${ctx}admin/sys/user/'+username+'/unsubscribe.html';
 				window.location.href=url;
 			});
 		};

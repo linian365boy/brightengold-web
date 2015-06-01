@@ -14,7 +14,7 @@
 	href="${ctx }resources/css/style.css" />
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$.getJSON("${ctx}admin/sys/role/getRolesByAjax",function(returnJson){
+		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
@@ -29,19 +29,25 @@
 					required:true,
 					remote:{
 						type:'POST',
-						url:'${ctx}admin/sys/user/existUser',
+						url:'${ctx}admin/sys/user/existUser.html',
 						data:{
 							username:function(){
 								return $("#username").val();
 							}
 						}
 					}
+				},
+				"password":{
+					required:true
 				}
 			},
 			messages:{
 				"username":{
 					required:"用户名不能为空",
 					remote:"用户名已存在"
+				},
+				"password":{
+					required:"密码不能为空",
 				}
 			}
 		});
@@ -49,7 +55,7 @@
 	</script>
 </head>
 <body>
-	<form id="form" action="${ctx }sys/user/add" method="post" target="_parent">
+	<form id="form" action="${ctx }sys/user/add.html" method="post" target="_parent">
             <div id="label"><label for="username">用户名：</label></div>
             <input id="username" name="username"  type="text"  autocomplete="off"
                         tabindex="1"/>

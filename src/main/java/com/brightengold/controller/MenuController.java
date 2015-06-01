@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +34,7 @@ public class MenuController {
 	private MenuServiceImpl menuService;
 	@Autowired
 	private ResourceServiceImpl resourceService;
+	private Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
 	public String generateXmlString(HttpServletRequest request,Model model) {
 		String output = "";

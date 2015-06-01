@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +34,8 @@ import com.brightengold.util.Tools;
 @RequestMapping("/admin/news")
 @Scope("prototype")
 public class NewsController {
+	private Logger logger = LoggerFactory.getLogger(NewsController.class);
+	
 	@Autowired
 	private NewsService newsService;
 	private PageRainier<News> news;

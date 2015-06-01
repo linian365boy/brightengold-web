@@ -2,18 +2,16 @@ package com.brightengold.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,14 +39,17 @@ public class UserController {
 	private RoleServiceImpl roleService;
 	private PageRainier<User> users;
 	private Integer pageSize = 10;
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@RequestMapping({"/users/{pageNo}"})
-	@Secured("ROLE_SUPER")
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
 		if(pageNo==null){
 			pageNo = 1;
 		}
-		users = userService.findAllUser(pageNo, pageSize, true);
+		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		//排除当前用户
+		users = userService.findAllUser(pageNo, pageSize, u.getId(),true);
+		//排除自己
 		model.addAttribute("page",users);//map
 		return "admin/sys/user/list";
 	}
@@ -116,7 +117,7 @@ public class UserController {
 			String role = request.getParameter("role");
 			String enabled = request.getParameter("enabled");
 			user.setPassword(temp.getPassword());
-			user.setAccountNonLocked(temp.getAccountNonLocked());
+			user.setAccountNonLocked(temp.isAccountNonLocked());
 			user.setLastCloseDate(temp.getLastCloseDate());
 			if(enabled!=null){
 				user.setEnabled(true);

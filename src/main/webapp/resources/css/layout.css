@@ -887,3 +887,12 @@ color: #32510F;
 padding: 10px 0;
 text-indent: 40px;
 font-size: 14px;}
+a.aui_close{
+	outline:none;
+}
+a.aui_close:FOCUS {
+	outline:none;
+}
+*, *::before, *::after {
+    box-sizing: content-box;
+}
