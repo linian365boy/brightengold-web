@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<!-- 主框架 -->
+	<definition name="baselayout" template="/WEB-INF/tiles/baselayout.jsp">
+		<put-attribute name="title" value="年年有鱼管理后台" />
+        <put-attribute name="head" value="/WEB-INF/tiles/head.jsp"/>
+        <put-attribute name="left" value="/WEB-INF/tiles/menu.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/tiles/index.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>
+        <put-list-attribute name="stylesheets">  
+            <add-attribute value="static/style/main" />  
+        </put-list-attribute>
+        <put-list-attribute name="scripts">  
+            <add-attribute value="static/js/util" />  
+        </put-list-attribute>
+	</definition>
+	<!-- 没有extends　baselayout 会是新页面 -->
+	<!-- <definition name="/manage_unless/*/*" template="/manage/{1}/{2}.ftl" />
+	<definition name="manage_unless/*/*" template="/manage/{1}/{2}.ftl" /> -->
+    <!-- 菜单 -->
+    <definition name="admin/index" extends="baselayout">
+		<put-attribute name="main" value="/views/admin/index.jsp" />
+	</definition>
+	<definition name="/manage/commodity/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/commodity/{1}.ftl" />
+	</definition>
+	<definition name="manage/order/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/order/{1}.ftl" />
+	</definition>
+	<definition name="manage/bi/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/bi/{1}.ftl" />
+	</definition>
+	<definition name="/manage/asm/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/asm/{1}.ftl" />
+	</definition>
+	<definition name="manage/finance/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/finance/{1}.ftl" />
+	</definition>
+	<definition name="/manage/order/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/order/{1}.ftl" />
+	</definition>
+	<definition name="manage/wms/supplyStockInput/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/wms/supplyStockInput/{1}.ftl" />
+	</definition>
+	<definition name="manage/wms/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/wms/{1}.ftl" />
+	</definition>
+	<definition name="manage/notice/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/notice/{1}.ftl" />
+	</definition>
+	<definition name="manage/comm/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/comm/{1}.ftl" />
+	</definition>
+	<definition name="/manage/pics/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/pics/{1}.ftl" />
+	</definition>
+	<definition name="/manage/taobao/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/taobao/{1}.ftl" />
+	</definition>
+	<definition name="/manage/fss/*" extends="baselayout">
+		<put-attribute name="main" value="/manage/fss/{1}.ftl" />
+	</definition>
+</tiles-definitions>
