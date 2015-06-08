@@ -10,9 +10,6 @@
 </head>
 
 <body>
-	<jsp:include page="commons/header.jsp"/>
-	<jsp:include page="commons/left.jsp"/>
-	
 	<section id="main" class="column" style="text-align:center;">
 		<div style="height: 180px">&nbsp;</div>
 		<img src="${ctx }resources/images/bglogo.jpg"/>

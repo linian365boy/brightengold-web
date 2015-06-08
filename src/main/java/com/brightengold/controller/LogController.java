@@ -1,9 +1,6 @@
 package com.brightengold.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -24,7 +21,6 @@ public class LogController {
 	private LogService logService;
 	private PageRainier<Log> logs;
 	private Integer pageSize = 10;
-	private Logger logger = LoggerFactory.getLogger(LogController.class);
 	
 	@RequestMapping({"/logs/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){

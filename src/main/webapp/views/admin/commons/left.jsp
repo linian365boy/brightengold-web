@@ -101,7 +101,7 @@
 	</c:choose>
     </head>
     <body>
-<section id="secondary_bar">
+<%-- <section id="secondary_bar">
 		<div class="user">
 			<p><sec:authentication property="principal.realName"/>(<sec:authentication property="principal.username"/>)</p>
 			<!-- <a class="logout_user" href="#" title="Logout">Logout</a> -->
@@ -119,7 +119,7 @@
 			</c:if>
 			</article>
 		</div>
-	</section><!-- end of secondary bar -->
+	</section> --%><!-- end of secondary bar -->
 	
 	<aside id="sidebar" class="column" style="height: 602px;">
 		<footer id="footer">

@@ -896,3 +896,10 @@ a.aui_close:FOCUS {
 *, *::before, *::after {
     box-sizing: content-box;
 }
+.bs-docs-footer {
+    border-top: 1px solid #e5e5e5;
+    color: #767676;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}

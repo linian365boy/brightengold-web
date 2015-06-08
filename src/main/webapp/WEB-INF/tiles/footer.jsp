@@ -7,6 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-    Copyright 2013 springmvc3.2, developer java Nian ge  
+    <footer role="contentinfo" class="bs-docs-footer">
+  <div class="container">
+    <p>版权所有&nbsp;&nbsp;&copy;copyright&nbsp;&nbsp;linian365boy@foxmail.com</p>
+  </div>
+</footer> 
 </body>
 </html>

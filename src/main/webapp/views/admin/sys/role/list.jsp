@@ -50,11 +50,6 @@
 </script>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="3" name="menuId"/>
-		<jsp:param value="角色管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
@@ -70,7 +65,7 @@
 
 		<div class="tab_container">
 			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
+			<table class="tablesorter table table-striped" cellspacing="0"> 
 			<thead> 
 				<tr> 
     				<th >序号</th>
@@ -80,6 +75,8 @@
 				</tr> 
 			</thead> 
 			<tbody id="dataContent"> 
+			<c:choose>
+				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
 				<c:forEach items="${page.result }" var="role" varStatus="status">
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
@@ -98,6 +95,11 @@
 					</td>
 				</tr>
 			</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<tr class="text-center"><td colspan="4">暂无数据</td></tr>
+			</c:otherwise>
+			</c:choose>
 			</tbody> 
 			<tfoot>
 				<tr>

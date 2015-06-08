@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ import cn.rainier.nian.utils.UUIDGenerator;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/admin/sys/role")
@@ -59,9 +62,10 @@ public class RoleController {
 	 */
 	@RequestMapping(value="/getRolesByAjax",method=RequestMethod.GET)
 	@ResponseBody
-	public List<Object[]> getRolesByAjax(){
+	public String getRolesByAjax(){
+		Gson gson = new Gson();
 		List<Object[]> rolesByAjax = roleService.findAllByAjax();
-		return rolesByAjax;
+		return gson.toJson(rolesByAjax);
 	}
 	
 	@RequestMapping({"/roles/{pageNo}"})
@@ -76,7 +80,7 @@ public class RoleController {
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String add(Model model) {
-		return "admin/sys/role/add";
+		return "admin_unless/sys/role/add";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
@@ -88,9 +92,10 @@ public class RoleController {
 			roleService.saveRole(role);
 			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD,"角色："+role.getDesc());
+			logger.info("添加角色{}成功！",ToStringBuilder.reflectionToString(role,ToStringStyle.SHORT_PREFIX_STYLE, true));
 		} catch (Exception e) {
 			MsgUtil.setMsgAdd("error");
-			e.printStackTrace();
+			logger.error("添加角色发生错误：{}",e);
 		}
 		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/role/roles/1";
 	}
@@ -100,7 +105,7 @@ public class RoleController {
 		if (roleName != null) {
 			model.addAttribute("model",roleService.loadRoleByName(roleName));
 		}
-		return "admin/sys/role/update";
+		return "admin_unless/sys/role/update";
 	}
 	
 	@RequestMapping(value="/{roleName}/update",method=RequestMethod.POST)
@@ -126,6 +131,7 @@ public class RoleController {
 			roleService.delRole(role);
 			MsgUtil.setMsgDelete("success");
 			LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDesc());
+			logger.warn("删除角色为{}",role.getDesc());
 		}
 		return "redirect:/admin/admin/sys/role/roles/1";
 	}
@@ -174,6 +180,9 @@ public class RoleController {
 				roleService.saveRole(model);
 				MsgUtil.setMsg("success", "成功分配【"+model.getDesc()+"】权限！");
 				LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDesc()+"的权限");
+				logger.warn("角色{}重新分配了权限{}",model.getDesc(),
+						ToStringBuilder.reflectionToString(model.getResources(), 
+								ToStringStyle.SHORT_PREFIX_STYLE));
 				try {
 					resourceDetailsMonitor.afterPropertiesSet();
 					session.removeAttribute("menuXml");
@@ -182,9 +191,11 @@ public class RoleController {
 				}
 			}else{
 				MsgUtil.setMsg("error", "分配权限失败！");
+				logger.error("角色{}分配权限失败！",roleName);
 			}
 		} catch (NumberFormatException e) {
 			MsgUtil.setMsg("error", "分配权限失败！");
+			logger.error("角色{}分配权限失败，发生错误：{}！",roleName,e);
 		}
 		return "redirect:/admin/sys/role/roles/1";
 	}

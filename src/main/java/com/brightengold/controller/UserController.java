@@ -5,8 +5,12 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +60,7 @@ public class UserController {
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String add(Model model) {
-		return "admin/sys/user/add";
+		return "admin_unless/sys/user/add";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
@@ -72,11 +76,12 @@ public class UserController {
 			user.setRoles(roles);
 			userService.saveUser(user);
 			LogUtil.getInstance().log(LogType.ADD,"用户名："+user.getUsername()+" 姓名："+user.getRealName());
+			logger.info("添加了用户{}",ToStringBuilder.reflectionToString(user, ToStringStyle.SHORT_PREFIX_STYLE, true));
 		} catch (Exception e) {
 			MsgUtil.setMsgAdd("error");
 			e.printStackTrace();
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/user/users/1";
+		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/user/users/1.html";
 	}
 	
 	@RequestMapping(value="/{username}",method=RequestMethod.GET)
@@ -84,7 +89,7 @@ public class UserController {
 		if(username!=null&&username!=""){
 			model.addAttribute("model",userService.loadUserByName(username));
 		}
-		return "admin/sys/user/detail";
+		return "admin_unless/sys/user/detail";
 	}
 	
 	@RequestMapping(value="/{username}/update",method=RequestMethod.GET)
@@ -93,7 +98,7 @@ public class UserController {
 			model.addAttribute("model",userService.loadUserByName(username));
 			model.addAttribute("rolesAjax", roleService.findAllByAjax());
 		}
-		return "admin/sys/user/update";
+		return "admin_unless/sys/user/update";
 	}
 	
 	@RequestMapping(value="/{username}/update",method=RequestMethod.POST)
@@ -131,6 +136,10 @@ public class UserController {
 			userService.saveUser(user);
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT,content.toString());
+			logger.info("用户从：{}，修改为：{}",
+					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE, true),
+					ToStringBuilder.reflectionToString(user, ToStringStyle.SHORT_PREFIX_STYLE, true)
+					);
 		}
 		return "redirect:/admin/sys/user/users/1";
 	}
@@ -178,10 +187,12 @@ public class UserController {
 				userService.resetPassword(user.getUsername());
 				actionMsg = "重置密码成功！";
 				LogUtil.getInstance().log(LogType.RESETPASSWORD, user.getUsername()+"的密码重置了");//日志记录
+				logger.warn("用户：{}，密码重置了",user.getUsername());
 				out.write(actionMsg);
 				out.flush();
 			}else{
 				actionMsg = "用户不存在！重置密码失败！";
+				logger.error("用户：{}，密码重置失败",user.getUsername());
 				out.write(actionMsg);
 				out.flush();
 			}
@@ -203,6 +214,7 @@ public class UserController {
 			MsgUtil.setMsg("success", "注销用户成功！");
 			//日志记录
 			LogUtil.getInstance().log(LogType.NSUBSCTIBE, user.getUsername()+"被注销了");
+			logger.warn("用户：{}，注销成功",user.getUsername());
 		}
 		return "redirect:/admin/sys/user/users/1";
 	}

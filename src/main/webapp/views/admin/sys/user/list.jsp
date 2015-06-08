@@ -90,11 +90,6 @@
 </script>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="2" name="menuId"/>
-		<jsp:param value="用户管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
@@ -107,7 +102,7 @@
 
 		<div class="tab_container">
 			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
+			<table class="tablesorter table table-striped" cellspacing="0"> 
 			<thead> 
 				<tr> 
     				<th >序号</th>
@@ -119,34 +114,41 @@
 				</tr> 
 			</thead> 
 			<tbody id="dataContent"> 
-				<c:forEach items="${page.result }" var="user" varStatus="status">
-				<tr>
-					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td><a onclick="detail(this)" name="${user.username }" href="javascript:void(0);">${user.username }</a></td>
-					<td>${user.realName }</td>
-					<td>
-              			<c:forEach items="${user.roles }" var="role">
-              				<c:if test="${role.name!='ROLE_DEFAULT' }">
-								${role.desc }
-              				</c:if>
-						</c:forEach>
-					</td>
-					<td>
-						${user.accountNonLocked?(user.enabled?"<span class='label label-success' title='正常'>正常</span>":"<span class='label label-warning' title='禁用'>禁用</span>"):"<span class='label label-danger' title='注销'>注销</span>" }
-					</td>
-					<c:if test="${user.accountNonLocked }">
+			<c:choose>
+				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
+					<c:forEach items="${page.result }" var="user" varStatus="status">
+					<tr>
+						<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
+						<td><a onclick="detail(this)" name="${user.username }" href="javascript:void(0);">${user.username }</a></td>
+						<td>${user.realName }</td>
 						<td>
-							<input type="image" name="${user.username }" 
-							src="${ctx }resources/images/icn_reset.png" onclick="resetPassword(this);" 
-							title="重置密码"/>&nbsp;&nbsp;
-							<input type="image" name="${user.username }" onclick="update(this);" 
-							src="${ctx }resources/images/icn_edit.png" title="编辑"/>&nbsp;&nbsp;
-							<input type="image" name="${user.username }" onclick="unsubscribe(this);"
-							src="${ctx }resources/images/icn_trash.png" title="注销"/>
+	              			<c:forEach items="${user.roles }" var="role">
+	              				<c:if test="${role.name!='ROLE_DEFAULT' }">
+									${role.desc }
+	              				</c:if>
+							</c:forEach>
 						</td>
-					</c:if>
-				</tr>
-			</c:forEach>
+						<td>
+							${user.accountNonLocked?(user.enabled?"<span class='label label-success' title='正常'>正常</span>":"<span class='label label-warning' title='禁用'>禁用</span>"):"<span class='label label-danger' title='注销'>注销</span>" }
+						</td>
+						<td>
+							<c:if test="${user.accountNonLocked }">
+								<input type="image" name="${user.username }" 
+									src="${ctx }resources/images/icn_reset.png" onclick="resetPassword(this);" 
+									title="重置密码"/>&nbsp;&nbsp;
+								<input type="image" name="${user.username }" onclick="update(this);" 
+									src="${ctx }resources/images/icn_edit.png" title="编辑"/>&nbsp;&nbsp;
+								<input type="image" name="${user.username }" onclick="unsubscribe(this);"
+									src="${ctx }resources/images/icn_trash.png" title="注销"/>
+							</c:if>
+						</td>
+					</tr>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<tr class="text-center"><td colspan="6">暂无数据</td></tr>
+			</c:otherwise>
+			</c:choose>
 			</tbody> 
 			<tfoot>
 				<tr>

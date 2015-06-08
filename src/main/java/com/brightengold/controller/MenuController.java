@@ -4,21 +4,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
 import cn.rainier.nian.model.User;
@@ -36,7 +33,7 @@ public class MenuController {
 	private ResourceServiceImpl resourceService;
 	private Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
-	public String generateXmlString(HttpServletRequest request,Model model) {
+	public String generateXmlString(HttpServletRequest request,ModelMap model) {
 		String output = "";
 		String roleName = request.getParameter("name");
 		String id = request.getParameter("id");
@@ -50,14 +47,12 @@ public class MenuController {
 				flag = "false";
 			}
 			output = generateInitTreeString(model,roleName,Boolean.parseBoolean(flag));
-			//根据客户要求更改
-			//output = generateInitTreeStringByClient(roleName,Boolean.parseBoolean(flag));
 		}
 		return output;
 	}
 	
 	@RequestMapping(value="/findMenuByRole",method=RequestMethod.GET)
-	public void findMenuByRole(HttpServletRequest request,HttpServletResponse response,Model model){
+	public void findMenuByRole(HttpServletRequest request,HttpServletResponse response,ModelMap model){
 		PrintWriter out = null;
 		String str = generateXmlString(request,model);
 		try{
@@ -67,7 +62,7 @@ public class MenuController {
 			out.print(str);
 			out.flush();
 		}catch(IOException e){
-			e.printStackTrace();
+			logger.error("服务器发送错误:{}",e);
 		}finally{
 			if(out!=null){
 				out.close();
@@ -83,7 +78,7 @@ public class MenuController {
 	 * @Author: 李年
 	 * @CreateDate: 2013-5-9
 	 */
-	public String generateInitTreeString(Model model,String name,boolean flag){
+	public String generateInitTreeString(ModelMap model,String name,boolean flag){
 		Iterator<Menu> it = null;
 		List<Menu> children = null;
 		String menuXml = null;
@@ -138,9 +133,13 @@ public class MenuController {
 			xmlStr.append("</item>");
 		}
 		xmlStr.append("</tree>");
+		System.out.println(xmlStr+"=================");
 		menuXml = xmlStr.toString();
+		System.out.println(menuXml+"=================");
 		if(!flag){
+			System.out.println("-----------=-=--------=-=-=-=-=-=-=");
 			model.addAttribute("menuXml", menuXml);
+			System.out.println("-----------=-=--------=-=-=-=-=-=-=");
 		}
 		return menuXml;
 	}

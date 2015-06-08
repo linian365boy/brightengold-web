@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@include file="../../commons/include.jsp" %>
+    <%@include file="/views/commons/include.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,36 +8,36 @@
  <%@include file="/views/admin/commons/listJsCss.jsp" %>
  <%@include file="/views/admin/commons/jsCss.jsp" %>
  <script type="text/javascript" src="${ctx }resources/js/system.js"></script>
-<title>商品分类管理</title>
+<title>栏目分类管理</title>
 
 <script type="text/javascript">
 	var update = function(obj){
 		var categoryId = $(obj).attr("name");
-		var url = '${ctx}admin/goods/category/'+categoryId+'/update';
+		var url = '${ctx}admin/sys/col/'+categoryId+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑分类信息',
 			id:'bianji',
-			width:450,
-			height:140,
+			width:550,
+			height:240,
 			resize: false
 			});
 		};
 		
 		var tianjia = function(){
-			var url = "${ctx}admin/goods/category/add";
+			var url = "${ctx}admin/sys/col/add.html";
 			art.dialog.open(url,{
-				title:'添加商品分类',
+				title:'添加栏目类别',
 				id:'tianjia',
-				width: 450,
-				height: 140,
+				width: 550,
+				height: 540,
 				resize: false
 			});
 		};
 		
 		var del = function(obj){
 			var categoryId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此分类',function(){
-				var url = '${ctx}admin/goods/category/'+categoryId+'/del';
+			art.dialog.confirm('确定删除此栏目？',function(){
+				var url = '${ctx}admin/sys/col/'+categoryId+'/del.html';
 				window.location.href=url;
 			});
 		};
@@ -45,18 +45,13 @@
 </script>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="7" name="menuId"/>
-		<jsp:param value="分类管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
 		<header>
-		<h3 class="tabs_involved">商品分类列表</h3>
+		<h3 class="tabs_involved">栏目分类列表</h3>
 		<ul class="tabs">
-   			<li><a href="javascript:void(0);" onclick="tianjia();">新增分类</a></li>
+   			<li><a href="javascript:void(0);" onclick="tianjia();">新增栏目</a></li>
 		</ul>
 		</header>
 
@@ -66,25 +61,36 @@
 			<thead> 
 				<tr> 
     				<th >序号</th>
-					<th >一级分类</th>
-					<th >二级分类</th>
+					<th >栏目名称</th>
+					<th >栏目代码</th>
+					<th >父级栏目</th>
+					<th >排序号</th>
 					<th >操作</th>
 				</tr> 
 			</thead> 
-			<tbody id="dataContent"> 
-				<c:forEach items="${page.result }" var="category" varStatus="status">
+			<tbody id="dataContent">
+				<c:choose>
+				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
+				<c:forEach items="${page.result }" var="column" varStatus="status">
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td>${empty category.parent?"————":category.parent.enName }</td>
-					<td>${category.enName }</td>
+					<td>${column.name }</td>
+					<td>${column.code }</td>
+					<td>${empty column.parentColumn?"————":column.parentColumn.name }</td>
+					<td>${column.priority }</td>
 					<td>
-						<input type="image" name="${category.id }" onclick="update(this);"
+						<input type="image" name="${column.id }" onclick="update(this);"
 						src="${ctx }resources/images/icn_edit.png" title="修改"/>
-						<input type="image" name="${category.id }" onclick="del(this);" 
+						<input type="image" name="${column.id }" onclick="del(this);" 
 						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
 					</td>
 				</tr>
 				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<tr class="text-center"><td colspan="6">暂无数据</td></tr>
+			</c:otherwise>
+			</c:choose>
 				</tbody> 
 			<tfoot>
 				<tr>

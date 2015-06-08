@@ -1,6 +1,7 @@
 package com.brightengold.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,15 +14,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import cn.rainier.nian.utils.PageRainier;
 
 import com.brightengold.model.Column;
 import com.brightengold.service.ColumnService;
+import com.google.gson.Gson;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/sys/col")
 @Scope("prototype")
 public class ColumnController {
 	@Autowired
@@ -30,15 +33,26 @@ public class ColumnController {
 	private Integer pageSize = 10;
 	private Logger logger = LoggerFactory.getLogger(ColumnController.class);
 	
-	@RequestMapping(value={"/column/list/{pageNo}"})
+	@RequestMapping(value={"/cols/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
 		columns = columnService.findAll(pageNo, pageSize);
 		model.addAttribute("page",columns);//map
-		return "admin/column/list";
+		return "admin/sys/col/list";
+	}
+	
+	@RequestMapping(value="/getParentByAjax/{flag}",method=RequestMethod.GET)
+	@ResponseBody
+	public String getParentByAjax(@PathVariable Integer flag){
+		Gson gson = new Gson();
+		List<Object[]> parentsByAjax = columnService.findParentByAjax();
+		if(flag!=0){
+			parentsByAjax.add(0, new Object[]{0,"根节点"});
+		}
+		return gson.toJson(parentsByAjax);
 	}
 	
 	
-	@RequestMapping(value={"/column/add"},method=RequestMethod.POST)
+	@RequestMapping(value={"/add"},method=RequestMethod.POST)
 	public String add(Model model,Column column){
 		column.setCreateDate(new Date());
 		Column temp = columnService.save(column);
@@ -47,28 +61,29 @@ public class ColumnController {
 		}else{
 			
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"admin/column/list/1.html";
+		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"admin/sys/col/cols/1.html";
 	}
 	
-	@RequestMapping(value={"/column/add"},method=RequestMethod.GET)
+	@RequestMapping(value={"/add"},method=RequestMethod.GET)
 	public String addUI(Model model){
-		return "admin/column/add";
+		return "admin_unless/sys/col/add";
 	}
 	
-	@RequestMapping(value={"/column/{id}/update"},method=RequestMethod.POST)
+	@RequestMapping(value={"/{id}/update"},method=RequestMethod.POST)
 	public String update(@PathVariable Integer id,Model model,Column column){
 		Column temp = columnService.getById(id);
 		column.setCreateDate(temp.getCreateDate());
 		column = columnService.save(column);
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"admin/column/list/1.html";
+		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"admin/sys/col/cols/1.html";
 	}
 	
-	@RequestMapping(value={"/column/{id}/update"},method=RequestMethod.GET)
+	@RequestMapping(value={"/{id}/update"},method=RequestMethod.GET)
 	public String updateUI(Model model){
-		return "admin/column/update";
+		return "admin_unless/sys/col/update";
 	}
 	
-	@RequestMapping(value={"/column/{id}/delete"},method=RequestMethod.POST)
+	@RequestMapping(value={"/{id}/delete"},method=RequestMethod.POST)
+	@ResponseBody
 	public String delete(@PathVariable Integer id,Model model){
 		Column temp = columnService.getById(id);
 		if(temp.getChildColumn()!=null && temp.getChildColumn().size()>0){

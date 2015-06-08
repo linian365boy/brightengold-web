@@ -10,11 +10,6 @@
 <title>日志管理</title>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="4" name="menuId"/>
-		<jsp:param value="日志管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 		<article class="module width_full">
 		<header>
@@ -23,7 +18,7 @@
 
 		<div class="tab_container">
 			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
+			<table class="tablesorter table table-striped" cellspacing="0"> 
 			<thead> 
 				<tr> 
     				<th width="10%">序号</th>
@@ -34,21 +29,28 @@
 	                <th width="30%">内容</th>
 				</tr> 
 			</thead> 
-			<tbody id="dataContent"> 
-				<c:forEach items="${page.result }" var="log" varStatus="status">
-				<tr>
-					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td>${log.type }</td>
-					<td title="员工号：${log.operator }&nbsp;&nbsp;姓名：${log.operatorRealName}">
-						${log.operatorRealName }
-					</td>
-					<td>${log.menu.name }</td>
-					<td>
-						<fmt:formatDate value="${log.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/>
-					</td>
-					<td>${log.content }</td>
-				</tr>
-			</c:forEach>
+			<tbody id="dataContent">
+				<c:choose>
+					<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
+						<c:forEach items="${page.result }" var="log" varStatus="status">
+							<tr>
+								<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
+								<td>${log.type }</td>
+								<td title="员工号：${log.operator }&nbsp;&nbsp;姓名：${log.operatorRealName}">
+									${log.operatorRealName }
+								</td>
+								<td>${log.menu.name }</td>
+								<td>
+									<fmt:formatDate value="${log.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/>
+								</td>
+								<td>${log.content }</td>
+							</tr>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<tr class="text-center"><td colspan="6">暂无数据</td></tr>
+					</c:otherwise>
+				</c:choose>
 			</tbody> 
 			<tfoot>
 				<tr>

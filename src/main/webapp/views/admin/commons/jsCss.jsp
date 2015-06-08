@@ -6,3 +6,4 @@
 <script src="${ctx }resources/js/jquery-1.5.2.min.js" type="text/javascript"></script>
 <script src="${ctx }resources/js/hideshow.js" type="text/javascript"></script>
 <script src="${ctx }resources/js/jquery.tablesorter.min.js" type="text/javascript"></script>
+<script src="${ctx }resources/js/jquery.equalHeight.js" type="text/javascript"></script>
