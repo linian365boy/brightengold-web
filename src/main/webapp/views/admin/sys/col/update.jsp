@@ -10,35 +10,64 @@
 <script type="text/javascript" src="${ctx }resources/js/jquery-1.8.3.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="${ctx }resources/css/style.css" />
+<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="${ctx }resources/css/style.css" rel="stylesheet"/>
 <script type="text/javascript">
+$(document).ready(function(){
+	$.getJSON("${ctx}admin/sys/col/getParentByAjax/1.html",function(returnJson){
+		var json = $(returnJson);
+		var str = "";
+		var checkId = "${model.parentColumn.id }";
+		for(var i=0;i<json.length;i++){
+			str+="<option value='"+json.get(i)[0]+"'";
+			if(checkId==json.get(i)[0]){
+				str+=" selected "
+			}
+			str+=">"+json.get(i)[1]+"</option>";
+		}
+		$("#parentColumn").append(str);
+	});
 	$("#form").validate({
-			rules:{
-				"enName":{
-					required:true,
-					remote:{
-						type:'POST',
-						url:'${ctx}admin/goods/category/existCategory',
-						data:{
-							username:function(){
-								return $("#enName").val();
-							},
-							u:function(){
-								return "${model.enName}";
-							}
+		rules:{
+			"name":{
+				required:true
+			},
+			"code":{
+				required:true,
+				remote:{
+					type:'POST',
+					url:'${ctx}admin/sys/col/existCol.html',
+					data:{
+						ycode:function(){
+							return "${model.code}";
 						}
 					}
 				}
 			},
-			messages:{
-				"enName":{
-					required:"商品分类不能为空",
-					remote:"该商品分类已存在，请更换！"
-				}
+			"priority":{
+				number:true
 			}
+		},
+		messages:{
+			"name":{
+				required:"栏目名称不能为空"
+			},
+			"code":{
+				required:"栏目代码不能为空",
+				remote:"该栏目代码已存在，请更换！"
+			},
+			"priority":{
+				number:"请输入数字！"
+			}
+		},
+		highlight: function(element) {
+		      jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+		},
+		success: function(element) {
+		      jQuery(element).closest('.form-group').removeClass('has-error');
+		}
 	});
-
+});
 function formSubmit(){
 	var categoryId = "${model.id}";
 	$("#form").attr("action","${ctx}admin/goods/category/"+categoryId+"/update");
@@ -47,29 +76,38 @@ function formSubmit(){
 </script>
 </head>
 <body>
-	<form id="form" action="#" method="post" target="_parent">
-            <div id="label"><label for="pName">一级分类：</label></div>
-             <select name="parents" id="parents" style="width: 158px;margin-left: 0px;margin-bottom: 5px;">
-            <c:forEach items="${parents }" var="parent">
-            	<option value="${parent[0] }"
-            			<c:if test="${parent[0] eq model.parent.id }">
-            				selected="selected"
-            			</c:if>
-            		>
-            			${parent[1] }
-            		</option>
-            </c:forEach>
-            </select>
-             <br />
-            <div id="label"><label for="enName">名称：</label></div>
-            <input name="enName" value="${model.enName }"  type="text" tabindex="4" />
-             <br />
-            <br/>
-            <input type="hidden" name="id" value="${model.id }"/>
-            <div class="aui_buttons" style="width:388px;">
-              <button class="aui_state_highlight" type="submit" onclick="formSubmit();">提交</button>
-              <button type="reset">重置</button>
-            </div>
-          </form>
+	<form class="form-horizontal" id="form" method="post" target="_parent" action="${ctx }admin/sys/col/{id}/update.html">
+  <div class="form-group">
+    <label for="parentColumn" class="col-sm-2 control-label">父级栏目</label>
+     <div class="col-sm-8">
+      <select class="form-control" name="parentColumn.id" id="parentColumn">
+      </select>
+    </div> 
+  </div>
+  <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">名称<span class="asterisk">*</span></label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="name" value="${model.name }" name="name" placeholder="名称">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="code" class="col-sm-2 control-label">代码<span class="asterisk">*</span></label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="code" value="${model.code }" name="code" placeholder="栏目代码">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="priority" class="col-sm-2 control-label">排序号</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="priority" value="${model.priority }" name="priority" placeholder="排序号，越大排名越前">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-8">
+      <button type="submit" class="btn btn-primary">保存</button>
+      <button class="btn btn-default" type="reset">重置</button>
+    </div>
+  </div>
+</form>
 </body>
 </html>

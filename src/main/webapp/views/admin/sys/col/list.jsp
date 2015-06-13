@@ -18,7 +18,7 @@
 			title:'编辑分类信息',
 			id:'bianji',
 			width:550,
-			height:240,
+			height:340,
 			resize: false
 			});
 		};
@@ -29,7 +29,7 @@
 				title:'添加栏目类别',
 				id:'tianjia',
 				width: 550,
-				height: 540,
+				height: 340,
 				resize: false
 			});
 		};

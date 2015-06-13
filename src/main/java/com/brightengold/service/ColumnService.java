@@ -2,11 +2,17 @@ package com.brightengold.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import cn.rainier.nian.utils.PageRainier;
@@ -39,5 +45,19 @@ public class ColumnService {
 
 	public List<Object[]> findParentByAjax() {
 		return this.columnDao.findParentByAjax();
+	}
+
+	public Long countColumnByCode(String code) {
+		return columnDao.count(countSpec(code));
+	}
+
+	private Specification<Column> countSpec(final String code) {
+		return new Specification<Column>(){
+			@Override
+			public Predicate toPredicate(Root<Column> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.<String>get("code"), code);
+			}
+		};
 	}
 }

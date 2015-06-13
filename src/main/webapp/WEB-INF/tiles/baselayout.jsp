@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><tiles:insertAttribute name="title" /></title>
+<link rel="shortcut icon" href="/resources/images/favicon.ico" type="image/ico"/>
 <%@include file="/views/admin/commons/listJsCss.jsp" %>
  <%@include file="/views/admin/commons/jsCss.jsp" %>
 </head>

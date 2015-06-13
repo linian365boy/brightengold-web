@@ -19,10 +19,12 @@
 		<class>com.brightengold.model.Feedback</class>
 		<class>com.brightengold.model.Category</class>
 		<class>com.brightengold.model.Product</class>
+		<class>com.brightengold.model.Column</class>
 		
 		<properties>
-			<property name="show_sql" value="true" />
+			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.format_sql" value="true"/>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/> 
 		</properties>
 	</persistence-unit>
