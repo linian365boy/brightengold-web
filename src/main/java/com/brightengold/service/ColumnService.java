@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,11 +33,27 @@ public class ColumnService {
 		return columnDao.save(column);
 	}
 	
-	public PageRainier<Column> findAll(Integer pageNo, Integer pageSize){
-		Page<Column> tempPage = columnDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
+	public PageRainier<Column> findAll(Integer pageNo, Integer pageSize, String keyword){
+		Page<Column> tempPage = columnDao.findAll(columnSpec(keyword),
+				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
 		PageRainier<Column> page = new PageRainier<Column>(tempPage.getTotalElements(),pageNo,pageSize);
 		page.setResult(tempPage.getContent());
 		return page;
+	}
+
+	private Specification<Column> columnSpec(final String keyword) {
+		if(StringUtils.isNotBlank(keyword)){
+			return new Specification<Column>(){
+				@Override
+				public Predicate toPredicate(Root<Column> root,
+						CriteriaQuery<?> query, CriteriaBuilder cb) {
+					return cb.or(cb.like(root.<String>get("name"), '%'+keyword+'%'),
+							cb.like(root.<String>get("code"), '%'+keyword+'%'));
+				}
+			};
+		}else{
+			return null;
+		}
 	}
 
 	public void delete(Integer id) {
@@ -59,5 +76,9 @@ public class ColumnService {
 				return cb.equal(root.<String>get("code"), code);
 			}
 		};
+	}
+
+	public Column loadColumnByCode(String code) {
+		return columnDao.loadColumnByCode(code);
 	}
 }

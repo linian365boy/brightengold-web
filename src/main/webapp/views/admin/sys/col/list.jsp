@@ -37,8 +37,14 @@
 		var del = function(obj){
 			var categoryId = $(obj).attr("name");
 			art.dialog.confirm('确定删除此栏目？',function(){
-				var url = '${ctx}admin/sys/col/'+categoryId+'/del.html';
-				window.location.href=url;
+				var url = '${ctx}admin/sys/col/'+categoryId+'/delete.html';
+				$.getJSON(url,function(json){
+					art.dialog.alert(json.message,function(){
+						if(json.code==200){
+							$("#searchForm").submit();
+						}
+					});
+				});
 			});
 		};
 		
@@ -48,13 +54,23 @@
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
+		<form class="form-inline" id="searchForm">
+		  <div class="form-group">
+		    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+		    <div class="input-group">
+		      <div class="input-group-addon">关键字</div>
+		      <input type="text" class="form-control" name="keyword" value="${param.keyword }" id="exampleInputAmount" placeholder="请输入关键字搜索">
+		      <div class="input-group-addon"></div>
+		    </div>
+		  </div>
+		  <button type="submit" class="btn btn-primary">搜索</button>
+		</form>
 		<header>
 		<h3 class="tabs_involved">栏目分类列表</h3>
 		<ul class="tabs">
    			<li><a href="javascript:void(0);" onclick="tianjia();">新增栏目</a></li>
 		</ul>
 		</header>
-
 		<div class="tab_container">
 			<div id="tab1" class="tab_content">
 			<table class="tablesorter" cellspacing="0"> 
@@ -97,7 +113,7 @@
                 <td colspan="12">
                 	<div class="pagination">
                 		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/goods/category/categorys"/>
+                			<c:param name="url" value="admin/sys/col/cols"/>
                 		</c:import>
                 	</div>
               </tr>

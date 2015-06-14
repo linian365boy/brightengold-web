@@ -20,6 +20,7 @@
 		<class>com.brightengold.model.Category</class>
 		<class>com.brightengold.model.Product</class>
 		<class>com.brightengold.model.Column</class>
+		<class>com.brightengold.model.Advertisement</class>
 		
 		<properties>
 			<property name="hibernate.show_sql" value="true" />

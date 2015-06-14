@@ -43,7 +43,7 @@ public class Column implements Serializable{
 	/**
 	 * 优先值（排序用），越大排名越前，默认为0
 	 */
-	private int priority;
+	private Integer priority;
 	/**
 	 * 创建日期
 	 */
@@ -87,10 +87,10 @@ public class Column implements Serializable{
 	public void setParentColumn(Column parentColumn) {
 		this.parentColumn = parentColumn;
 	}
-	public int getPriority() {
+	public Integer getPriority() {
 		return priority;
 	}
-	public void setPriority(int priority) {
+	public void setPriority(Integer priority) {
 		this.priority = priority;
 	}
 	@Temporal(TemporalType.DATE)

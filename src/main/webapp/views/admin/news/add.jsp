@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <%@include file="/views/admin/commons/listJsCss.jsp" %>
 <%@include file="/views/admin/commons/jsCss.jsp" %>
- <script type="text/javascript" src="${ctx }resources/js/jquery-1.8.3.js"></script>
+ <script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
  <script type="text/javascript" src="${ctx }resources/js/ckEditor/ckeditor.js"></script>
  <script type="text/javascript" src="${ctx }resources/js/ckEditor/lang/zh-cn.js"></script>
  <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>

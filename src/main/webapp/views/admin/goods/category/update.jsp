@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>商品分类编辑</title>
 <link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
 <link rel="stylesheet" type="text/css"

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>华夏银行CPP即时查询系统</title>
 <link href="${ctx}resources/js/skins/blue.css" rel="stylesheet"/>
-<script type="text/javascript" src="${ctx}resources/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="${ctx}resources/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="${ctx}resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}resources/js/jquery.metadata.js"></script>
 <link rel="stylesheet" type="text/css" href="${ctx}resources/css/style.css" />

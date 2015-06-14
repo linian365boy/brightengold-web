@@ -95,7 +95,20 @@
 	<session-config>
     	<session-timeout>10</session-timeout>
   	</session-config>
+  	<!-- Error Page定义 -->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/views/500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/views/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/views/403.jsp</location>
+	</error-page>
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>/admin/index.html</welcome-file>
 	</welcome-file-list>
 </web-app>

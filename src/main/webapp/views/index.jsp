@@ -12,7 +12,7 @@
 .left{ margin:0 50px 30px 0;}
 #etw_con .left,#etw_con .left1{width:100%; margin:0px;}
 </style>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
 <title>Brightengold Furniture</title>
 </head>
 <body>

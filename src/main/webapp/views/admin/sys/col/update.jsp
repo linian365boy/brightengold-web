@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>商品分类编辑</title>
 <link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
 <link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
@@ -76,7 +76,7 @@ function formSubmit(){
 </script>
 </head>
 <body>
-	<form class="form-horizontal" id="form" method="post" target="_parent" action="${ctx }admin/sys/col/{id}/update.html">
+	<form class="form-horizontal" id="form" method="post" target="_parent" action="${ctx }admin/sys/col/${model.id}/update.html">
   <div class="form-group">
     <label for="parentColumn" class="col-sm-2 control-label">父级栏目</label>
      <div class="col-sm-8">
@@ -108,6 +108,7 @@ function formSubmit(){
       <button class="btn btn-default" type="reset">重置</button>
     </div>
   </div>
+  <input type="hidden" name="id" value="${model.id }"/>
 </form>
 </body>
 </html>

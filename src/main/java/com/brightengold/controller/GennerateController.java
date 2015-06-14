@@ -4,15 +4,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import cn.rainier.nian.model.User;
 
+import com.brightengold.model.Column;
+import com.brightengold.service.ColumnService;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.HTMLGenerator;
 
@@ -22,10 +26,19 @@ import com.brightengold.util.HTMLGenerator;
 public class GennerateController {
 	
 	private Logger logger = LoggerFactory.getLogger(GennerateController.class);
+	@Autowired
+	private ColumnService columnService;
 	
-	@RequestMapping(value={"/",""},method=RequestMethod.GET)
-	public String gennerateHtml(){
+	@RequestMapping(value={"/generate"},method=RequestMethod.GET)
+	public String toGennerateHtml(){
 		return "admin/sys/html/generate";
+	}
+	
+	@RequestMapping(value={"/{code}/generate",""})
+	public String gennerateHtml(@PathVariable String code){
+		Column column = columnService.loadColumnByCode(code);
+		
+		return null;
 	}
 	
 	@RequestMapping(value="/index",method=RequestMethod.GET)
@@ -36,10 +49,12 @@ public class GennerateController {
 		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
 		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername(),null)){
 			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
+			logger.info("生成首页成功！");
 		}else{
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
+			logger.error("生成首页失败！");
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/html/";
+		return "redirect:/admin/sys/html/";
 	}
 	
 	@RequestMapping(value="/gennerateHtml",method=RequestMethod.GET)

@@ -9,7 +9,7 @@
 <%@include file="/views/admin/commons/jsCss.jsp" %>
 <title>公司信息</title>
 <link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 	<jsp:include page="/views/admin/commons/header.jsp"/>

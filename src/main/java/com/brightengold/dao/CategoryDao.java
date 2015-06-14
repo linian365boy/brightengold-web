@@ -4,10 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import cn.rainier.nian.dao.base.AbstractDao;
-import cn.rainier.nian.model.User;
-
 import com.brightengold.model.Category;
 
 public interface CategoryDao extends AbstractDao<Category, Integer>{

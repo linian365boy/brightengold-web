@@ -12,7 +12,7 @@
 <script src="${ctx}resources/js/dhtmlxtree.js"></script>
 <link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
  <%@include file="/views/admin/commons/jsCss.jsp" %>
-<script src="${ctx}resources/js/jquery-1.8.3.js" type="text/javascript"></script>
+<script src="${ctx}resources/js/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html", function(data) {
