@@ -3,10 +3,15 @@ package com.brightengold.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -56,9 +61,14 @@ public class News implements Serializable {
 	 */
 	private String keyWords;
 	/**
+	 * 发布后的页码
+	 */
+	private int pageNum;
+	
+	private com.brightengold.model.Column column;
+	/**
 	 * 备用字段
 	 */
-	private String temp1;
 	private String temp2;
 	
 	@Id
@@ -76,6 +86,7 @@ public class News implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	@Lob
 	public String getContent() {
 		return content;
 	}
@@ -94,12 +105,6 @@ public class News implements Serializable {
 	}
 	public void setUrl(String url) {
 		this.url = url;
-	}
-	public String getTemp1() {
-		return temp1;
-	}
-	public void setTemp1(String temp1) {
-		this.temp1 = temp1;
 	}
 	public String getTemp2() {
 		return temp2;
@@ -133,11 +138,26 @@ public class News implements Serializable {
 	public void setKeyWords(String keyWords) {
 		this.keyWords = keyWords;
 	}
+	@Column(length=500)
 	public String getIntroduce() {
 		return introduce;
 	}
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
+	}
+	public int getPageNum() {
+		return pageNum;
+	}
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
+	}
+	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
+	@JoinColumn(name="columnId")
+	public com.brightengold.model.Column getColumn() {
+		return column;
+	}
+	public void setColumn(com.brightengold.model.Column column) {
+		this.column = column;
 	}
 	
 }

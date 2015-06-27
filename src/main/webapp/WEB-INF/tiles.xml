@@ -36,8 +36,11 @@
 	<definition name="admin/sys/col/*" extends="baselayout">
 		<put-attribute name="main" value="/views/admin/sys/col/{1}.jsp" />
 	</definition>
-	<definition name="admin/ad/*" extends="baselayout">
-		<put-attribute name="main" value="/views/admin/ad/{1}.jsp" />
+	<definition name="admin/sys/html/*" extends="baselayout">
+		<put-attribute name="main" value="/views/admin/sys/html/{1}.jsp" />
+	</definition>
+	<definition name="admin/news/*" extends="baselayout">
+		<put-attribute name="main" value="/views/admin/news/{1}.jsp" />
 	</definition>
 	<definition name="/manage/order/*" extends="baselayout">
 		<put-attribute name="main" value="/manage/order/{1}.ftl" />

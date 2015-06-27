@@ -7,12 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>角色权限分配</title>
 <link rel="stylesheet" type="text/css" href="${ctx}resources/css/dhtmlxtree.css"/>
-<link rel="stylesheet" type="text/css" href="${ctx}resources/css/style.css" />
 <script src="${ctx}resources/js/dhtmlxcommon.js"></script>
 <script src="${ctx}resources/js/dhtmlxtree.js"></script>
-<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
  <%@include file="/views/admin/commons/jsCss.jsp" %>
-<script src="${ctx}resources/js/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html", function(data) {
@@ -91,22 +88,8 @@
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="css/ie-sucks.css" />
 <![endif]-->
-<style type="text/css">
-#tree table tr td,th{
-	clear:both;
-	padding:0px;
-	border:0px;
-	text-align:left;
-}
-</style>
 </head>
 <body>
-<jsp:include page="/views/admin/commons/header.jsp"/>
-<jsp:include page="/views/admin/commons/left.jsp">
-	<jsp:param value="3" name="menuId"/>
-	<jsp:param value="角色管理" name="menuName"/>
-	<jsp:param value="分配权限" name="menuSubName"/>
-</jsp:include>
 <section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">

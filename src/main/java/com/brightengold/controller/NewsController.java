@@ -1,10 +1,11 @@
 package com.brightengold.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
@@ -43,9 +43,6 @@ public class NewsController {
 	
 	@RequestMapping({"/news/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		if(pageNo==null){
-			pageNo = 1;
-		}
 		news = newsService.findAll(pageNo, pageSize);
 		model.addAttribute("page",news);//map
 		return "admin/news/list";
@@ -57,7 +54,7 @@ public class NewsController {
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(News news, HttpServletRequest request){
+	public String add(News news){
 		if(news.getPriority()==null){
 			news.setPriority(0);
 		}
@@ -67,7 +64,8 @@ public class NewsController {
 		newsService.saveNews(news);
 		MsgUtil.setMsgAdd("success");
 		LogUtil.getInstance().log(LogType.ADD,"标题："+news.getTitle());
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/news/news/1";
+		logger.info("添加了新闻：{}",ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
+		return "redirect:/admin/news/news/1.html";
 	}
 	
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.GET)
@@ -110,7 +108,7 @@ public class NewsController {
 			newsService.updateClicks(tempNews);
 			if(tempNews!=null){
 				model.addAttribute("news", tempNews);
-				return "admin/news/details";
+				return "admin_unless/news/details";
 			}
 		}
 		return "redirect:/admin/news/news/1";

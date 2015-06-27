@@ -11,30 +11,30 @@
 <script type="text/javascript">
 	var update = function(obj){
 		var newsId = $(obj).attr("name");
-		var url = '${ctx}admin/news/'+newsId+'/update';
+		var url = '${ctx}admin/news/'+newsId+'/update.html';
 		window.location.href=url;
 		};
 		//del
 		var del = function(obj){
 			var newsId = $(obj).attr("name");
 			art.dialog.confirm('确定删除此新闻？',function(){
-				var url = '${ctx}admin/news/'+newsId+'/del';
+				var url = '${ctx}admin/news/'+newsId+'/del.html';
 				window.location.href=url;
 			});
 		};
 		//purview
 		var purview = function(obj){
 			var newsId = $(obj).attr("name");
-			var url = '${ctx}admin/news/'+newsId;
+			var url = '${ctx}admin/news/'+newsId+".html";
 			window.open(url);
 		};
 		//publish
 		var publish = function(obj){
 			var newsId = $(obj).attr("name");
-			$.get("${ctx}admin/news/"+newsId+"/checkPub",function(rs){
+			$.get("${ctx}admin/news/"+newsId+"/checkPub.html",function(rs){
 				if(rs==1){
 					art.dialog.confirm('此新闻已发布，确定重新发布？',function(){
-						$.getJSON("${ctx}admin/news/"+newsId+"/publish",function(data){
+						$.getJSON("${ctx}admin/news/"+newsId+"/publish.html",function(data){
 							var json = $(data);
 							var dialog = art.dialog({
 								id:"publish",
@@ -51,7 +51,7 @@
 				}else{
 					art.dialog.confirm('确定发布此新闻？',function(){
 						var newsId = $(obj).attr("name");
-						$.getJSON("${ctx}admin/news/"+newsId+"/publish",function(data){
+						$.getJSON("${ctx}admin/news/"+newsId+"/publish.html",function(data){
 							var json = $(data);
 							var dialog = art.dialog({
 								id:"publish",
@@ -72,18 +72,13 @@
 </script>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="10" name="menuId"/>
-		<jsp:param value="新闻管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
 		<header>
 		<h3 class="tabs_involved">新闻列表</h3>
 		<ul class="tabs">
-   			<li><a href="${ctx}admin/news/add" >新增新闻</a></li>
+   			<li><a href="${ctx}admin/news/add.html" >新增新闻</a></li>
 		</ul>
 		</header>
 
@@ -104,7 +99,7 @@
 				<c:forEach items="${page.result }" var="news" varStatus="status">
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td><a href="${ctx }news/${news.id}" title="${news.title }" target="_blank">${news.title }</a></td>
+					<td><a href="${ctx }admin/news/${news.id}.html" title="${news.title }" target="_blank">${news.title }</a></td>
 					<td>${news.createDate }</td>
 					<td id="${news.id }">
 						<c:choose>
