@@ -10,25 +10,26 @@
 <title>公司信息</title>
 <script type="text/javascript">
 	function gennerateHome(){
-		windown.location.href="${ctx}/sys/html/index";
+		location.href="${ctx}admin/sys/html/index.html";
+	}
+	/* function gennerateHome(){
+		location.href="${ctx}/sys/html/index";
 	}
 	function gennerateHome(){
-		windown.location.href="${ctx}/sys/html/index";
+		location.href="${ctx}/sys/html/index";
 	}
 	function gennerateHome(){
-		windown.location.href="${ctx}/sys/html/index";
+		location.href="${ctx}/sys/html/index";
 	}
 	function gennerateHome(){
-		windown.location.href="${ctx}/sys/html/index";
-	}
-	function gennerateHome(){
-		windown.location.href="${ctx}/sys/html/index";
-	}
+		location.href="${ctx}/sys/html/index";
+	} */
 </script>
 
 </head>
 <body>
 	<section id="main" class="column">
+	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
 		<header>
 		<h3 class="tabs_involved">生成管理</h3>
