@@ -60,10 +60,9 @@ public class Company implements Serializable{
 	 */
 	private Date createDate;
 	/**
-	 * 备用字段
+	 * 联系人
 	 */
-	private String temp1;
-	private String temp2;
+	private String contactUser;
 	@Id
 	@GeneratedValue
 	public Integer getId() {
@@ -126,18 +125,6 @@ public class Company implements Serializable{
 	public void setWebsite(String website) {
 		this.website = website;
 	}
-	public String getTemp1() {
-		return temp1;
-	}
-	public void setTemp1(String temp1) {
-		this.temp1 = temp1;
-	}
-	public String getTemp2() {
-		return temp2;
-	}
-	public void setTemp2(String temp2) {
-		this.temp2 = temp2;
-	}
 	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
 		return createDate;
@@ -151,5 +138,10 @@ public class Company implements Serializable{
 	public void setPhonePic(String phonePic) {
 		this.phonePic = phonePic;
 	}
-	
+	public String getContactUser() {
+		return contactUser;
+	}
+	public void setContactUser(String contactUser) {
+		this.contactUser = contactUser;
+	}
 }

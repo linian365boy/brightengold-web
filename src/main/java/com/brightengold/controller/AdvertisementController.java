@@ -130,7 +130,7 @@ public class AdvertisementController {
 	@RequestMapping(value={"/{id}/updateStatus"})
 	public String updateStatus(@PathVariable Integer id,Integer status){
 		Gson gson = new Gson();
-		ResultVo vo = new ResultVo();
+		ResultVo<String> vo = new ResultVo<String>();
 		try{
 			service.updateStatus(id,status);
 			vo.setCode(200);
@@ -148,7 +148,7 @@ public class AdvertisementController {
 	@ResponseBody
 	public String delete(@PathVariable Integer id){
 		Gson gson = new Gson();
-		ResultVo vo = new ResultVo();
+		ResultVo<String> vo = new ResultVo<String>();
 		Advertisement ad = service.loadAdvertisement(id);
 		try{
 			service.delAdvertisement(id);

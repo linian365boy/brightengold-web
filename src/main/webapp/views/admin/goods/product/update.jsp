@@ -1,17 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
      <%@include file="../../../commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>商品编辑</title>
-<%@include file="/views/admin/commons/jsCss.jsp" %>
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
-<link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/ckEditor/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/ckEditor/lang/zh-cn.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/jquery.equalHeight.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx }resources/css/style.css" />
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#form").validate({
@@ -24,6 +24,9 @@ $(document).ready(function(){
 			},
 			"category":{
 				required:true
+			},
+			"description":{
+				required:true
 			}
 		},
 		messages:{
@@ -31,10 +34,13 @@ $(document).ready(function(){
 				required:"标题不能为空！"
 			},
 			"photo":{
-				required:"优先值为数字！"
+				required:"图片不能为空！"
 			},
 			"category":{
-				required:"内容不能为空！"
+				required:"分类不能为空！"
+			},
+			"description":{
+				required:"详情不能为空！"
 			}
 		}
 	});
@@ -42,12 +48,6 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="6" name="menuId"/>
-		<jsp:param value="商品管理" name="menuName"/>
-		<jsp:param value="编辑商品" name="menuSubName"/>
-	</jsp:include>
 	<section id="main" class="column">
 		<article class="module width_full">
 		<header>
@@ -55,20 +55,32 @@ $(document).ready(function(){
 		</header>
 		<div class="tab_container">
 		<div id="tab1" class="tab_content">
-	<form id="form" action="${ctx }goods/product/${model.id }/update" method="post" enctype="multipart/form-data">
-            <div id="label"><label for="enName">商品名称：</label></div>
-            <input id="enName" value="${model.enName }" name="enName" type="text"/>
-             <br />
-             <div id="label"><label for="introduce">商品介绍：</label></div>
-            <textarea rows="3" cols="100" name="introduce">${model.introduce }</textarea>
-             <br />
-            <div id="label"><label for="photo">商品图片： </label></div>
-            <img alt="${model.enName }" title="${model.enName }" src="${ctx }resources/${model.picUrl}" >
-            <input type="file" name="photo" title="点击更换商品图片"/>
-             <br />
-            <div id="label"><label for="parents">商品分类：</label></div>
-            <select name="parents" id="parents" style="width: 158px;margin-left: 0px;margin-bottom: 5px;">
-	            <c:forEach items="${parents }" var="parent">
+	<form id="form" class="form-horizontal"
+	 action="${ctx }admin/goods/product/${model.id }/update.html" method="post" enctype="multipart/form-data">
+	 <div class="form-group">
+			    <label for="enName" class="col-sm-1 control-label">商品名称<span class="asterisk">*</span></label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control" value="${model.enName }" id="enName" name="enName" placeholder="商品名称">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="introduce" class="col-sm-1 control-label">商品简介</label>
+			    <div class="col-sm-8">
+			      <textarea class="form-control" rows="3" name="introduce" id="introduce">${model.introduce }</textarea>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="photo" class="col-sm-1 control-label">商品图片<span class="asterisk">*</span></label>
+			    <div class="col-sm-8">
+			    <img alt="${model.enName }" width="100px" height="100px" title="${model.enName }" src="${ctx }resources/${model.picUrl}" >
+			      <input type="file" name="photo" id="photo"/>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="parents" class="col-sm-1 control-label">商品分类<span class="asterisk">*</span></label>
+			    <div class="col-sm-4">
+			      <select  name="parents" id="parents" class="form-control">
+			      <c:forEach items="${parents }" var="parent">
 	            	<option value="${parent[0] }"
 	            			<c:if test="${parent[0] eq model.category.id }">
 	            				selected="selected"
@@ -77,22 +89,35 @@ $(document).ready(function(){
 	            			${parent[1] }
 	            		</option>
 	            </c:forEach>
-            </select>
-            <div id="label"><label for="hot">是否热门：</label></div>
-            <input name="hot" id="hot" type="checkbox"
-            	<c:choose>
+            		</select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			  	<div class="col-sm-offset-1 col-sm-8">
+				  <div class="checkbox">
+				  	<label>
+				      <input type="checkbox" name="hot" <c:choose>
 			 		<c:when test="${model.hot }">
 			 			checked="checked"
 			 		</c:when>
-			 	</c:choose>
-            />
-            <span>（勾选表示热门，否则非热门商品）</span>
-             <br />
+			 	</c:choose>/> 是否热门（勾选表示热门，否则非热门商品）
+				    </label>
+				  </div>
+				  </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="description" class="col-sm-1 control-label">产品详情<span class="asterisk">*</span></label>
+			    <div class="col-sm-9">
+			      <textarea id="description" rows="16" name="description" class="form-control ckeditor">${model.description }</textarea>
+			    </div>
+		   </div>
              <input type="hidden" name="id" value="${model.id }"/>
-            <div class="aui_buttons" style="width:388px;">
-              <button class="aui_state_highlight" type="submit">提交</button>
-              <button type="reset">重置</button>
-            </div>
+            <div class="form-group">
+			  <div class="col-sm-offset-4 col-sm-8">
+			  	<button type="submit" class="btn btn-primary">保存</button>
+			      <button class="btn btn-default" type="reset">重置</button>
+			    </div>
+			  </div>
           </form>
           </div>
           </div>

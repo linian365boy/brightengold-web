@@ -1,20 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@include file="../../../commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+     <%@include file="/views/commons/include.jsp" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>商品分类新增</title>
-<link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="${ctx }resources/css/style.css" />
+<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="${ctx }resources/css/style.css" rel="stylesheet"/>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$.getJSON("${ctx}admin/goods/category/getParentByAjax/1",function(returnJson){
+		$.getJSON("${ctx}admin/goods/category/getParentByAjax/1.html",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
@@ -25,11 +23,14 @@
 		
 		$("#form").validate({
 			rules:{
+				"name":{
+					required:true
+				},
 				"enName":{
 					required:true,
 					remote:{
 						type:'POST',
-						url:'${ctx}admin/goods/category/existCategory',
+						url:'${ctx}admin/goods/category/existCategory.html',
 						data:{
 							enName:function(){
 								return $("#enName").val();
@@ -39,29 +40,83 @@
 				}
 			},
 			messages:{
+				"name":{
+					required:"商品名称不能为空"
+				},
 				"enName":{
-					required:"商品分类不能为空",
-					remote:"该商品分类已存在，请更换！"
+					required:"商品名称不能为空",
+					remote:"该商品名称已存在，请更换！"
 				}
+			},
+			highlight: function(element) {
+			      jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+			},
+			success: function(element) {
+			      jQuery(element).closest('.form-group').removeClass('has-error');
 			}
 		});
 	});
+	
+	function changeCol(obj){
+		var colId = $(obj).val();
+		$.post("${ctx }admin/sys/col/getChildren/"+colId+".html",{
+			id:colId
+		},function(json){
+			$(obj).next().remove();
+			var html = "";
+			if(json.length>0){
+				html+='<select class="col-xs-5 selectpicker" name="secondCol" >';
+				html+="<option value='0'>==请选择==</option>";
+				$.each(json,function(i,n){
+					html+="<option value='"+n[0]+"'>"+n[1]+"</option>";
+				});
+				html+="</select>";
+			}
+			$(obj).after(html);
+		},"json");
+	};
 	</script>
 </head>
 <body>
-	<form id="form" action="${ctx }goods/category/add" method="post" target="_parent">
-            <div id="label"><label for="pName">一级分类：</label></div>
-            <select name="parentC" id="parentCs" style="width: 158px; margin-left: 0px;margin-bottom: 5px;">
-            </select>
-             <br />
-            <div id="label"><label for="enName">名称： </label></div>
-            <input style="width: 149px;" id="enName" name="enName"/>
-             <br />
-            <br/>
-            <div class="aui_buttons" style="width:388px;">
-              <button class="aui_state_highlight" type="submit">提交</button>
-              <button type="reset">重置</button>
-            </div>
+	<form id="form" class="form-horizontal" action="${ctx }admin/goods/category/add.html" 
+		method="post" target="_parent">
+			<div class="form-group">
+			    <label for="parentCs" class="col-sm-3 control-label">所属栏目</label>
+			    	<div class="row col-xs-8" style="overflow:hidden;">
+			    		<c:if test="${fn:length(parentCol)>0 }">
+			    			<select class="col-xs-5 selectpicker" name="parentCol" onchange="changeCol(this);">
+				    			<c:forEach items="${parentCol }" var="col">
+				    				<option value="${col[0] }">${col[1] }</option>
+				    			</c:forEach>
+				      		</select>
+			    		</c:if>
+			    	</div>
+			  </div>
+             <div class="form-group">
+			    <label for="parentCs" class="col-sm-3 control-label">父级分类</label>
+				     <div class="row col-sm-8" style="overflow:hidden;">
+				      <select class="col-xs-5 selectpicker" name="parentC" id="parentCs">
+				      </select>
+				    </div> 
+			  </div>
+			  <div class="form-group">
+			    <label for="name" class="col-sm-3 control-label">中文名称<span class="asterisk">*</span></label>
+			    <div class="row col-sm-8">
+			      <input type="text" class="form-control" id="name" name="name" placeholder="名称">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="enName" class="col-sm-3 control-label">英文名称<span class="asterisk">*</span></label>
+			    <div class="row col-sm-8">
+			      <input type="text" class="form-control" id="enName" name="enName" placeholder="名称">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			  <div class="col-sm-offset-4 col-sm-8">
+			  	<button type="submit" class="btn btn-primary">保存</button>
+			      <button class="btn btn-default" type="reset">重置</button>
+			    </div>
+			  </div>
           </form>
 </body>
 </html>

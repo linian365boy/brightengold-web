@@ -903,3 +903,30 @@ a.aui_close:FOCUS {
     padding-bottom: 20px;
     text-align: center;
 }
+.mb40{
+	margin-bottom: 40px;
+}
+.mb50{
+	margin-bottom: 50px;
+}
+.mb60{
+	margin-bottom: 60px;
+}
+.mb70{
+	margin-bottom: 70px;
+}
+.mb80{
+	margin-bottom: 80px;
+}
+.mb100{
+	margin-bottom: 100px;
+}
+.mb140{
+	margin-bottom: 140px;
+}
+.mt10{
+	margin-top: 10px;
+}
+.mt20{
+	margin-top: 20px;
+}

@@ -5,25 +5,53 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
-<%@include file="/views/admin/commons/jsCss.jsp" %>
 <title>公司信息</title>
 <script type="text/javascript">
-	function gennerateHome(){
-		location.href="${ctx}admin/sys/html/index.html";
+	var style = "${style}";
+	function genneratePage(){
+		var code = $("#code").val();
+		if(code!=''){
+			$.ajax({
+				   type: "POST",
+				   data: "style="+style,
+				   url: "${ctx }admin/sys/html/"+code+"/generate.html",
+				   beforeSend: function(){
+					   art.dialog({
+						   id:'beforeTips',
+						   content:'<img src="${ctx }resources/js/skins/icons/loading.gif"/>正在生成中...',
+						   lock:true
+					   });
+				   },
+				   success: function(text){
+					   art.dialog.list['beforeTips'].close();
+					   if("200"==text){
+							art.dialog({
+								id:'tips',
+								title:'页面生成成功',
+								content:'页面生成成功',
+								icon:'face-smile'
+							});
+						}else if("501"==text){
+							art.dialog({
+								id:'tips',
+								title:'提示',
+								content:'页面代码不存在',
+								icon:'face-sad'
+							});
+						}else{
+							art.dialog({
+								id:'tips',
+								title:'页面生成失败',
+								content:'页面生成失败',
+								icon:'face-sad'
+							});
+						}
+				   }
+			});
+		}else{
+			art.dialog.alert("栏目代码不能为空！");
+		}
 	}
-	/* function gennerateHome(){
-		location.href="${ctx}/sys/html/index";
-	}
-	function gennerateHome(){
-		location.href="${ctx}/sys/html/index";
-	}
-	function gennerateHome(){
-		location.href="${ctx}/sys/html/index";
-	}
-	function gennerateHome(){
-		location.href="${ctx}/sys/html/index";
-	} */
 </script>
 
 </head>
@@ -35,27 +63,23 @@
 		<h3 class="tabs_involved">生成管理</h3>
 		</header>
 		<div class="tab_container">
-		<div id="tab1" class="tab_content">
-			<form action="#" class="form-horizontal">
-				<div style="margin: 10px 50px;">
-					<input type="button" class="btn btn-danger" value="生成Home" onclick="gennerateHome();" title="生成首页静态页面"/>
-				</div>
-				<div style="margin: 10px 50px;">
-					<input type="button" class="btn btn-danger" value="生成About Us" onclick="gennerateAboutUs();" title="生成首页静态页面"/>
-				</div>
-				<div style="margin: 10px 50px;">
-					<input type="button" class="btn btn-danger" value="生成Products" onclick="gennerateProducts();" title="生成首页静态页面"/>
-				</div>
-				<div style="margin: 10px 50px;">
-					<input type="button" class="btn btn-danger" value="生成News" onclick="gennerateNews();" title="生成首页静态页面"/>
-				</div>
-				<div style="margin: 10px 50px;">
-					<input type="button" class="btn btn-danger" value="生成Feedback" onclick="gennerateFeedback();" title="生成首页静态页面"/>
-				</div>
-				<div style="margin: 10px 50px;">
-					<input type="button" class="btn btn-danger" value="生成Contact Us" onclick="gennerateContactUs();" title="生成首页静态页面"/>
-				</div>
+		<div id="tab1" class="tab_content mb140">
+			<form class="form-inline">
+			  <div class="form-group">
+			  	<div class="col-xs-7">
+			    <input type="text" class="form-control" placeholder="栏目代码" id="code" name="code">
+			    </div>
+			  </div>
+			  <button type="button" onclick="genneratePage();" class="btn btn-danger">生成页面</button>
 			</form>
+			<div class="form-group mt20">
+			  	<div class="text-info col-xs-7">
+			  		<p class="text-left">注意：</p>
+			  		<p class="text-left">1．生成首页请使用"index"或"home"代码</p>
+			  		<p class="text-left">2．生成商品分类页请使用分类英文名称</p>
+			  		<p class="text-left">3．栏目代码与分类英文名称相同时，优先生成栏目页面，不生成分类页面</p>
+				</div>
+			</div>
 		</div>
 		</div>
 		</article>

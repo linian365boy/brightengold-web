@@ -38,3 +38,15 @@ function gettab(index,base){
 		}
 	}
 }
+
+function locationTo(url){
+	if(url!=''){
+		$("#tempHref").attr("href",url);
+		$("#spanlink").click();
+		$("#tempHref").attr("href","javascript:void(0);");
+	}
+}
+
+function goPage(pageNo,code){
+	$("#pager").load("/news/"+code+"/"+pageNo+".htm");
+}

@@ -5,8 +5,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
- <%@include file="/views/admin/commons/jsCss.jsp" %>
  <script type="text/javascript" src="${ctx }resources/js/system.js"></script>
 <title>商品分类管理</title>
 
@@ -14,17 +12,17 @@
 
 	var update = function(obj){
 		var productId = $(obj).attr("name");
-		location.href= '${ctx}admin/goods/product/'+productId+'/update';
+		location.href= '${ctx}admin/goods/product/'+productId+'/update.html';
 	};
 		
 	var tianjia = function(){
-		location.href="${ctx}admin/goods/product/add";
+		location.href="${ctx}admin/goods/product/add.html";
 	};
 		
 	var del = function(obj){
 		var productId = $(obj).attr("name");
 		art.dialog.confirm('确定删除此商品',function(){
-			var url = '${ctx}admin/goods/product/'+productId+'/del';
+			var url = '${ctx}admin/goods/product/'+productId+'/del.html';
 			window.location.href=url;
 		});
 	};
@@ -32,7 +30,7 @@
 	var publish = function(obj){
 		var productId = $(obj).attr("name");
 		art.dialog.confirm('确定发布此商品',function(){
-			var url = '${ctx}admin/goods/product/'+productId+'/publish';
+			var url = '${ctx}admin/goods/product/'+productId+'/publish.html';
 			window.location.href=url;
 		});
 	}
@@ -41,11 +39,6 @@
 </script>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="8" name="menuId"/>
-		<jsp:param value="商品管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
@@ -80,7 +73,7 @@
 						title="${product.enName }" alt="${product.enName }" 
 						name="picUrl" width="50" height="50"/>
 					</td>
-					<td><a href="${ctx }goods/product/${product.id}" title="${ product.enName}">${product.enName }</a></td>
+					<td><a href="${ctx }admin/goods/product/${product.id}.html" title="${ product.enName}">${product.enName }</a></td>
 					<td>${product.category.enName }</td>
 					<td>${product.hot?"<span class='label label-danger' title='热门'>热门</span>":"<span class='label label-primary' title='非热门'>非热门</span>" }</td>
 					<td>${product.publish?"<span class='label label-info' title='发布'>发布</span>":"<span class='label label-default' title='未发布'>未发布</span>" }</td>

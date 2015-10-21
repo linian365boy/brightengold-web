@@ -5,8 +5,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
- <%@include file="/views/admin/commons/jsCss.jsp" %>
 <title>新闻管理</title>
 <script type="text/javascript">
 	var tianjia = function(){
@@ -88,7 +86,7 @@
 					<td><img title="${ad.name }" alt="${ad.name }"
 					 src="${ctx }resources/${ ad.picUrl}" width="107px" height="50px"/></td>
 					<td>${ad.name }</td>
-					<td>${ ad.url}</td>
+					<td><a href="${ ad.url}" target="_blank">${ ad.url}</a></td>
 					<td>${ ad.width}</td>
 					<td>${ ad.height}</td>
 					<td>${ ad.priority}</td>

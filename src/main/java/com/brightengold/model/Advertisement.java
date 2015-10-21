@@ -49,7 +49,7 @@ public class Advertisement implements Serializable {
 	 * 1正常  0锁定
 	 * 默认为1 正常
 	 */
-	private int status;
+	private int status = 1;
 	@Id
 	@GeneratedValue
 	public Integer getId() {

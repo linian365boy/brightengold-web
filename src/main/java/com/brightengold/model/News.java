@@ -64,12 +64,22 @@ public class News implements Serializable {
 	 * 发布后的页码
 	 */
 	private int pageNum;
-	
+	/**
+	 * 新闻发布所在的栏目下
+	 */
 	private com.brightengold.model.Column column;
 	/**
-	 * 备用字段
+	 * 新闻类型，
+	 * 0文章类型，内容含文字或图片或视频　　
+	 * 1（产品）图片类型，内容不含文字，只能上传图片
+	 * 默认为0　文章类型
 	 */
-	private String temp2;
+	private boolean type;
+	/**
+	 * 文章深度
+	 * 存储格式:1-2 表示该文章在一级id为1的栏目下，同时也在二级id为2的栏目下
+	 */
+	private String depth;
 	
 	@Id
 	@GeneratedValue
@@ -105,12 +115,6 @@ public class News implements Serializable {
 	}
 	public void setUrl(String url) {
 		this.url = url;
-	}
-	public String getTemp2() {
-		return temp2;
-	}
-	public void setTemp2(String temp2) {
-		this.temp2 = temp2;
 	}
 	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
@@ -158,6 +162,18 @@ public class News implements Serializable {
 	}
 	public void setColumn(com.brightengold.model.Column column) {
 		this.column = column;
+	}
+	public boolean getType() {
+		return type;
+	}
+	public void setType(boolean type) {
+		this.type = type;
+	}
+	public String getDepth() {
+		return depth;
+	}
+	public void setDepth(String depth) {
+		this.depth = depth;
 	}
 	
 }

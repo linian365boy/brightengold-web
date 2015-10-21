@@ -1,9 +1,11 @@
 package com.brightengold.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,14 +24,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
 
+import com.brightengold.model.Column;
 import com.brightengold.model.JsonEntity;
 import com.brightengold.model.News;
+import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.NewsService;
 import com.brightengold.util.HTMLGenerator;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/admin/news")
@@ -38,29 +44,45 @@ public class NewsController {
 	
 	@Autowired
 	private NewsService newsService;
+	@Autowired
+	private ColumnService columnService;
+	
 	private PageRainier<News> news;
 	private Integer pageSize = 10;
 	
 	@RequestMapping({"/news/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
+	public String list(@PathVariable Integer pageNo,Model model){
 		news = newsService.findAll(pageNo, pageSize);
 		model.addAttribute("page",news);//map
 		return "admin/news/list";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
-	public String add(){
+	public String add(ModelMap map){
+		//获取一级栏目
+		List<Object[]> parentCol = columnService.findParentByAjax();
+		map.put("parentCol", parentCol);
 		return "admin/news/add";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(News news){
+	public String add(News news, Integer firstColId, Integer secondColId, Integer thirdColId){
 		if(news.getPriority()==null){
 			news.setPriority(0);
 		}
 		news.setClicks(0);
 		news.setCreateDate(new Date());
-		news.setUrl("views/html/news/"+Tools.getRndFilename()+".html");
+		news.setUrl(Tools.getRndFilename()+".htm");
+		if(StringUtils.isNotBlank(String.valueOf(thirdColId))){
+			news.setColumn(columnService.getById(thirdColId));
+			news.setDepth(firstColId+"-"+secondColId+"-"+thirdColId);
+		}else if(StringUtils.isNotBlank(String.valueOf(secondColId))){
+			news.setColumn(columnService.getById(secondColId));
+			news.setDepth(firstColId+"-"+secondColId);
+		}else{
+			news.setColumn(columnService.getById(firstColId));
+			news.setDepth(String.valueOf(firstColId));
+		}
 		newsService.saveNews(news);
 		MsgUtil.setMsgAdd("success");
 		LogUtil.getInstance().log(LogType.ADD,"标题："+news.getTitle());
@@ -69,10 +91,19 @@ public class NewsController {
 	}
 	
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.GET)
-	public String update(@PathVariable Integer newsId,Model model){
+	public String update(@PathVariable Integer newsId,ModelMap map){
 		if(newsId!=null){
-			model.addAttribute("news", newsService.loadNews(newsId));
+			News news = newsService.loadNews(newsId);
+			Column temp = news.getColumn();
+			if(temp.getParentColumn()==null){
+				map.addAttribute("childs",columnService.findChildrenByParentId(temp.getId()));
+			}else{
+				map.addAttribute("childs",columnService.findChildrenByParentId(temp.getParentColumn().getId()));
+			}
+			map.addAttribute("news", news);
 		}
+		List<Object[]> parentCol = columnService.findParentByAjax();
+		map.put("parentCol", parentCol);
 		return "admin/news/update";
 	}
 	
@@ -128,37 +159,38 @@ public class NewsController {
 			}
 			LogUtil.getInstance().log(LogType.DEL, "标题："+news.getTitle());
 		}
-		return "redirect:/admin/news/news/1";
+		return "redirect:/admin/news/news/1.html";
 	}
 	
 	@RequestMapping(value="/{newsId}/checkPub",method=RequestMethod.GET)
 	@ResponseBody
-	public int checkPub(@PathVariable Integer newsId){
+	public String checkPub(@PathVariable Integer newsId){
 		if(newsId!=null){
 			News tempNews = newsService.loadNews(newsId);
 			if(tempNews!=null){
 				if(tempNews.getPublishDate()!=null){
-					return 1;
+					return "1";
 				}else{
-					return -1;
+					return "-1";
 				}
 			}else{
-				return 0;
+				return "0";
 			}
 		}else{
-			return 0;
+			return "0";
 		}
 	}
 	
 	@RequestMapping(value="/{newsId}/publish",method=RequestMethod.GET)
 	@ResponseBody
-	public JsonEntity publishNews(@PathVariable Integer newsId,HttpServletRequest request){
+	public String publishNews(@PathVariable Integer newsId,HttpServletRequest request){
 			News tempNews = newsService.loadNews(newsId);
 			User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 			String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();				
 			String url=basePath+"/admin/news/"+tempNews.getId();
 			HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
 			JsonEntity entity = new JsonEntity();
+			Gson gson = new Gson();
 			if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath(tempNews.getUrl()),loginUser.getUsername(),null)){
 				tempNews.setPublishDate(new Date());
 				LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
@@ -173,7 +205,7 @@ public class NewsController {
 				entity.setKey("-1");
 			}
 			newsService.saveNews(tempNews);
-			return entity;
+			return gson.toJson(entity);
 	}
 	
 	public PageRainier<News> getNews() {
@@ -188,5 +220,4 @@ public class NewsController {
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
 	}
-	
 }

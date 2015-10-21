@@ -5,8 +5,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
- <%@include file="/views/admin/commons/jsCss.jsp" %>
 <title>新闻管理</title>
 <script type="text/javascript">
 	var update = function(obj){
@@ -32,7 +30,7 @@
 		var publish = function(obj){
 			var newsId = $(obj).attr("name");
 			$.get("${ctx}admin/news/"+newsId+"/checkPub.html",function(rs){
-				if(rs==1){
+				if(rs=="1"){
 					art.dialog.confirm('此新闻已发布，确定重新发布？',function(){
 						$.getJSON("${ctx}admin/news/"+newsId+"/publish.html",function(data){
 							var json = $(data);
@@ -66,7 +64,7 @@
 						});
 					});
 				}
-			});
+			},"html");
 		};
 		
 </script>
@@ -89,6 +87,7 @@
 				<tr> 
     				<th >序号</th>
 					<th >新闻标题</th>
+					<th >所在栏目</th>
 					<th >创建日期</th>
 					<th >发布日期</th>
 					<th >优先值</th>
@@ -100,6 +99,7 @@
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td><a href="${ctx }admin/news/${news.id}.html" title="${news.title }" target="_blank">${news.title }</a></td>
+					<td>${news.column.name }（${news.column.enName }）</td>
 					<td>${news.createDate }</td>
 					<td id="${news.id }">
 						<c:choose>

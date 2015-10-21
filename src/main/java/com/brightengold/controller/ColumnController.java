@@ -2,7 +2,6 @@ package com.brightengold.controller;
 
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -42,6 +41,14 @@ public class ColumnController {
 		return "admin/sys/col/list";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value={"/getChildren/{pId}"},method = RequestMethod.POST)
+	public String getChildrenbyParentId(@PathVariable Integer pId){
+		Gson gson = new Gson();
+		List<Object[]> childByAjax = columnService.findChildrenByParentId(pId);
+		return gson.toJson(childByAjax);
+	}
+	
 	@RequestMapping(value="/getParentByAjax/{flag}",method=RequestMethod.GET)
 	@ResponseBody
 	public String getParentByAjax(@PathVariable Integer flag){
@@ -53,15 +60,26 @@ public class ColumnController {
 		return gson.toJson(parentsByAjax);
 	}
 	
-	
+	//目前最大只到三级
 	@RequestMapping(value={"/add"},method=RequestMethod.POST)
-	public String add(Model model,Column column){
+	public String add(Model model,Column column,
+			Integer firstColumnId,Integer secondColumnId){
 		if(null==column.getPriority()){
 			column.setPriority(0);
 		}
 		column.setCreateDate(new Date());
-		column.setParentColumn(columnService.getById(column.getParentColumn().getId()));
-		column.setUrl("/col/"+column.getCode());
+		if(secondColumnId!=null){
+			column.setParentColumn(columnService.getById(secondColumnId));
+			column.setDepth(3);
+		}else{
+			if(firstColumnId!=null){
+				column.setParentColumn(columnService.getById(firstColumnId));
+				column.setDepth(2);
+			}else{
+				column.setDepth(1);
+			}
+		}
+		column.setUrl("views/html/col/"+column.getCode()+".htm");
 		Column temp = columnService.save(column);
 		if(temp!=null){
 			MsgUtil.setMsgAdd("success");
@@ -92,7 +110,7 @@ public class ColumnController {
 			}
 			column.setCreateDate(temp.getCreateDate());
 			if(!(temp.getCode().equals(column.getCode()))){
-				column.setUrl("/col/"+column.getCode());
+				column.setUrl("views/html/col/"+column.getCode()+".htm");
 			}
 			column = columnService.save(column);
 			MsgUtil.setMsgUpdate("success");
@@ -120,7 +138,7 @@ public class ColumnController {
 	public String delete(@PathVariable Integer id,Model model){
 		Column temp = columnService.getById(id);
 		Gson gson = new Gson();
-		ResultVo vo = new ResultVo();
+		ResultVo<String> vo = new ResultVo<String>();
 		if(temp.getChildColumn()!=null && temp.getChildColumn().size()>0){
 			//还有子节点，不能删除
 			//MsgUtil.setMsg("error","删除失败，该节点包含有"+temp.getChildColumn().size()+"个子节点，请先删除该节点下的子节点！");
@@ -138,7 +156,7 @@ public class ColumnController {
 	
 	@RequestMapping(value="/existCol",method=RequestMethod.POST)
 	@ResponseBody
-	public String existUser(String code,String ycode){
+	public String existCol(String code,String ycode){
 		if(code!=null){
 			//如果没有修改code
 			if(code.equals(ycode)){
@@ -155,4 +173,22 @@ public class ColumnController {
 		return Boolean.toString(false);
 	}
 	
+	@RequestMapping(value={"/{id}/setPublishContent"},method = RequestMethod.GET)
+	public String setPublishContent(@PathVariable Integer id,ModelMap map){
+		Column column = columnService.getById(id);
+		map.put("column", column);
+		return "admin_unless/sys/col/setContent";
+	}
+	
+	@RequestMapping(value={"/{id}/setPublishContent"},method = RequestMethod.POST)
+	public String doPublishContent(@PathVariable Integer id,Column column, ModelMap map){
+		try{
+			columnService.updateColumnPublishContent(id,column.getType());
+			MsgUtil.setMsgUpdate("success");
+		}catch(Exception e){
+			logger.error("设置发布模式发生错误！",e);
+			MsgUtil.setMsgUpdate("error");
+		}
+		return "redirect:/admin/sys/col/cols/1.html";
+	}
 }

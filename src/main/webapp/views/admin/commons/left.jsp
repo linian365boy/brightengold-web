@@ -12,7 +12,6 @@
     <head>
     <meta charset="utf-8"/>
 	<title>header</title>
-	<script type="text/javascript" src="${ctx }resources/js/jquery.equalHeight.js"></script>
 	<script type="text/javascript">
 	    $(function(){
 	        $('.column').equalHeight();

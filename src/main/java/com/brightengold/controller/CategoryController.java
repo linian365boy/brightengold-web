@@ -8,6 +8,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +18,22 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
 
 import com.brightengold.model.Category;
 import com.brightengold.service.CategoryService;
+import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/admin/goods/category")
@@ -37,6 +42,8 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	private PageRainier<Category> categorys;
+	@Autowired
+	private ColumnService columnService;
 	private Integer pageSize = 10;
 	private Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
@@ -51,14 +58,26 @@ public class CategoryController {
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
-	public String add(Model model) {
-		return "admin/goods/category/add";
+	public String add(ModelMap map) {
+		//获取一级栏目
+		List<Object[]> parentCol = columnService.findParentByAjax();
+		map.put("parentCol", parentCol);
+		return "admin_unless/goods/category/add";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public String add(Category category, HttpServletRequest request) {
 		User u = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		try {
+			String secondColStr = request.getParameter("secondCol");
+			if(StringUtils.isNotBlank(secondColStr) 
+					&& !("0".equals(secondColStr))){
+				//有二级栏目
+				category.setColumn(columnService.getById(Integer.parseInt(secondColStr)));
+			}else{
+				//只选择一级栏目
+				category.setColumn(columnService.getById(Integer.parseInt(request.getParameter("parentCol"))));
+			}
 			if(Integer.parseInt(request.getParameter("parentC"))==0){
 				category.setParent(null);
 			}else{
@@ -69,61 +88,86 @@ public class CategoryController {
 			categoryService.saveCategory(category);
 			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD,"名称："+category.getEnName());
+			logger.info("添加产品分类{}成功！",
+					ToStringBuilder.reflectionToString(category, ToStringStyle.SHORT_PREFIX_STYLE));
 		} catch (Exception e) {
-			e.printStackTrace();
+			MsgUtil.setMsgAdd("error");
+			logger.error("添加产品分类失败！",e);
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/goods/category/categorys/1.html";
+		return "redirect:/admin/goods/category/categorys/1.html";
 	}
 	
 	@RequestMapping(value="/getParentByAjax/{flag}",method=RequestMethod.GET)
 	@ResponseBody
-	public List<Object[]> getParentByAjax(@PathVariable Integer flag){
+	public String getParentByAjax(@PathVariable Integer flag){
+		Gson gson = new Gson();
 		List<Object[]> parentsByAjax = categoryService.findParentByAjax();
 		if(flag!=0){
 			parentsByAjax.add(0, new Object[]{0,"根节点"});
 		}
-		return parentsByAjax;
+		return gson.toJson(parentsByAjax);
 	}
 	
 	@RequestMapping(value="/{categoryId}/update",method=RequestMethod.GET)
 	public String update(@PathVariable Integer categoryId,Model model) {
 		if (categoryId != null) {
-			model.addAttribute("model",categoryService.loadCategoryById(categoryId));
-			model.addAttribute("parents", this.getParentByAjax(1));
+			Category category = categoryService.loadCategoryById(categoryId);
+			model.addAttribute("model",category);
+			List<Object[]> parentsByAjax = categoryService.findParentByAjax();
+			parentsByAjax.add(0, new Object[]{0,"根节点"});
+			//获取一级栏目
+			List<Object[]> parentCol = columnService.findParentByAjax();
+			model.addAttribute("parentCol", parentCol);
+			model.addAttribute("parents", parentsByAjax);
 		}
-		return "admin/goods/category/update";
+		return "admin_unless/goods/category/update";
 	}
 	
 	@RequestMapping(value="/{categoryId}/update",method=RequestMethod.POST)
 	public String update(HttpServletRequest request,@PathVariable Integer categoryId,Category category) {
 		StringBuilder content = new StringBuilder();
-		if(categoryId!=null){
-			Category temp = categoryService.loadCategoryById(categoryId);
-			String parentIds = (String)request.getParameter("parents");
-			if(parentIds!=null){
-				category.setParent(categoryService.loadCategoryById(Integer.parseInt(parentIds)));
-			}
-			if(!temp.getEnName().equals(category.getEnName())){
-				content.append("名称由\""+temp.getEnName()+"\"修改为\""+category.getEnName()+"\"");
-			}else{
-				content.append("名称："+temp.getEnName());
-			}
-			if(temp.getParent()!=null&&!temp.getParent().equals(category.getParent())){
-				content.append("一级分类由\""+temp.getParent().getEnName()+"\"修改为\""+category.getParent().getEnName()+"\"");
-			}else if(temp.getParent()==null&&parentIds!=null){
-				content.append("一级分类由\"无\"修改为\""+category.getParent().getEnName()+"\"");
-			}else{
-				if(temp.getParent()!=null){
-					content.append("一级分类："+temp.getParent().getEnName());
+		try {
+			if(categoryId!=null){
+				Category temp = categoryService.loadCategoryById(categoryId);
+				String parentIds = (String)request.getParameter("parents");
+				String secondColStr = request.getParameter("secondCol");
+				if(StringUtils.isNotBlank(secondColStr) 
+						&& !("0".equals(secondColStr))){
+					//有二级栏目
+					category.setColumn(columnService.getById(Integer.parseInt(secondColStr)));
+				}else{
+					//只选择一级栏目
+					category.setColumn(columnService.getById(Integer.parseInt(request.getParameter("parentCol"))));
 				}
+				if(parentIds!=null){
+					category.setParent(categoryService.loadCategoryById(Integer.parseInt(parentIds)));
+				}
+				if(!temp.getEnName().equals(category.getEnName())){
+					content.append("名称由\""+temp.getEnName()+"\"修改为\""+category.getEnName()+"\"");
+				}else{
+					content.append("名称："+temp.getEnName());
+				}
+				if(temp.getParent()!=null&&!temp.getParent().equals(category.getParent())){
+					content.append("一级分类由\""+temp.getParent().getEnName()+"\"修改为\""+category.getParent().getEnName()+"\"");
+				}else if(temp.getParent()==null&&parentIds!=null){
+					//content.append("一级分类由\"无\"修改为\""+category.getParent().getEnName()+"\"");
+				}else{
+					if(temp.getParent()!=null){
+						content.append("一级分类："+temp.getParent().getEnName());
+					}
+				}
+				category.setCreateDate(temp.getCreateDate());
+				category.setCreateUser(temp.getCreateUser());
+				categoryService.saveCategory(category);
+				MsgUtil.setMsgUpdate("success");
+				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				logger.info("修改商品分类{}成功！",
+						ToStringBuilder.reflectionToString(category, ToStringStyle.SHORT_PREFIX_STYLE));
 			}
-			category.setCreateDate(temp.getCreateDate());
-			category.setCreateUser(temp.getCreateUser());
-			categoryService.saveCategory(category);
-			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT,content.toString());
+		}catch(Exception e){
+			logger.error("修改商品分类失败！",e);
 		}
-		return "redirect:/admin/goods/category/categorys/1";
+		return "redirect:/admin/goods/category/categorys/1.html";
 	}
 	
 	@RequestMapping(value="/existCategory",method=RequestMethod.POST)
@@ -171,7 +215,7 @@ public class CategoryController {
 				LogUtil.getInstance().log(LogType.DEL, temp.getEnName()+"删除了");
 			}
 		}
-		return "redirect:/admin/goods/category/categorys/1";
+		return "redirect:/admin/goods/category/categorys/1.html";
 	}
 
 	public PageRainier<Category> getCategorys() {

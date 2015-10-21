@@ -28,6 +28,10 @@ public class Category implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	/**
+	 * 产品类型中文名称
+	 */
+	private String name;
+	/**
 	 * 产品类型名称
 	 */
 	private String enName;
@@ -44,10 +48,9 @@ public class Category implements Serializable{
 	 */
 	private User createUser;
 	/**
-	 * 备用字段
+	 * 分类所在的栏目下
 	 */
-	private String temp1;
-	private String temp2;
+	private com.brightengold.model.Column column;
 	private List<Category> children;
 	private List<Product> products;
 	
@@ -104,17 +107,19 @@ public class Category implements Serializable{
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
-	public String getTemp1() {
-		return temp1;
+	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
+	@JoinColumn(name="columnId")
+	public com.brightengold.model.Column getColumn() {
+		return column;
 	}
-	public void setTemp1(String temp1) {
-		this.temp1 = temp1;
+	public void setColumn(com.brightengold.model.Column column) {
+		this.column = column;
 	}
-	public String getTemp2() {
-		return temp2;
+	public String getName() {
+		return name;
 	}
-	public void setTemp2(String temp2) {
-		this.temp2 = temp2;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

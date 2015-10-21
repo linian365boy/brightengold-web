@@ -1,22 +1,61 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@include file="../../../commons/include.jsp" %>
-<!DOCTYPE >
+     <%@include file="/views/commons/include.jsp" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
-<%@include file="/views/admin/commons/jsCss.jsp" %>
-<title>公司信息</title>
 <link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/My97DatePicker/WdatePicker.js"></script>
+<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="${ctx }resources/css/style.css" rel="stylesheet"/>
+<title>公司信息</title>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#form").validate({
+			rules:{
+				"name":{
+					required:true
+				},
+				"address":{
+					required:true
+				},
+				"email":{
+					required:true,
+					email:true
+				},
+				"telPhone":{
+					required:true
+				}
+			},
+			messages:{
+				"name":{
+					required:"公司名称不能为空！"
+				},
+				"address":{
+					required:"公司地址不能为空！"
+				},
+				"email":{
+					required:"公司邮箱不能为空！",
+					email:"邮箱格式不正确！"
+				},
+				"telPhone":{
+					required:"联系方式不能为空！"
+				}
+			},
+			highlight: function(element) {
+			      jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+			},
+			success: function(element) {
+			      jQuery(element).closest('.form-group').removeClass('has-error');
+			}
+		});
+	});
+</script>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="5" name="menuId"/>
-		<jsp:param value="公司管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
@@ -25,56 +64,72 @@
 		</header>
 		<div class="tab_container">
 		<div id="tab1" class="tab_content">
-	<form id="form" action="${ctx }sys/company/update" method="post" enctype="multipart/form-data">
-            <div id="label"><label for="name" style="padding-left: 10px;">公司名称：</label>
-	            <input id="name" name="name" value="${model.name }" style="width:450px;" type="text"
-	                        tabindex="1"/>
-             </div>
-             <br/>
-            <div id="label"><label for="logo" style="padding-left: 10px;">公司logo：</label>
-            <img src="${ctx }resources/${model.logo }" 
+	<form id="form" action="${ctx }admin/sys/company/update.html" method="post" 
+	enctype="multipart/form-data" class="form-horizontal">
+		<div class="form-group">
+			    <label for="name" class="col-sm-2 control-label">公司名称<span class="asterisk">*</span></label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control" id="name" value="${model.name }" name="name" placeholder="公司名称">
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="name" class="col-sm-2 control-label">公司logo<span class="asterisk">*</span></label>
+			    <div class="col-sm-8">
+			      <img src="${ctx }resources/${model.logo }" 
             	title="公司logo" alt="公司logo" width="390px" height="130px" 
             	name="logoPic" />
-            <input type="file" name="photos" title="点击更换公司logo"/>
-            </div>
-            <br/>
-            <div id="label"><label for="logo" style="padding-left: 10px;">热线图片：</label>
-            <img src="${ctx }resources/${model.phonePic }" 
-            	title="热线图片" alt="热线图片" width="307px" height="130px" 
-            	name="phoneUrl" />
-            <input type="file" name="photos" title="点击更换热线图片"/>
-            </div>
-            <br/>
-            <div id="label"><label for="slogan" style="padding-left: 10px;">公司口号：</label>
-            	<textarea rows="4" cols="" style="width:450px;" id="slogan" name="slogan">${model.slogan }</textarea>
-            </div>
-            <br/>
-			<div id="label"><label for="introduce" style="padding-left: 10px;">公司介绍：</label>
-            	<textarea rows="4" cols="" style="width:450px;" id="introduce" name="introduce">${model.introduce }</textarea>
-			</div>
-			<br/>
-            <div id="label"><label for="introduce" style="padding-left: 10px;">公司创建日期：</label>
-            <input id="introduce" name="introduce" value="${model.createDate }"/>
-            </div>
-            <br/>
-            <div id="label"><label for="address" style="padding-left: 10px;">公司地址：</label>
-            <input id="introduce" name="address" value="${model.address }"/>
-            </div>
-            <br/>
-            <div id="label"><label for="email" style="padding-left: 10px;">公司邮箱：</label>
-            <input id="introduce" name="email" value="${model.email }"/>
-            </div>
-            <br/>
-            <div id="label"><label for="telPhone" style="padding-left: 10px;">联系方式：</label>
-            <input id="introduce" name="telPhone" value="${model.telPhone }"/>
-            </div>
-            <br/>
-            <div id="label"><label for="website" style="padding-left: 10px;">公司网址：</label>
-            <input id="introduce" name="website" value="${model.website }"/>
-            </div>
-            <br/>
+            	<input type="file" name="photos" title="点击更换公司logo" class="required" accept="image/*"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="slogan" class="col-sm-2 control-label">公司口号</label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control" id="slogan" value="${model.slogan }" name="slogan" placeholder="公司口号">
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="introduce" class="col-sm-2 control-label">公司介绍</label>
+			    <div class="col-sm-8">
+			      <textarea rows="3" class="form-control" id="introduce" name="introduce">${model.introduce }</textarea>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="createDate" class="col-sm-2 control-label">公司创建日期</label>
+			    <div class="col-sm-8">
+			      <input id="createDate" class="form-control" name="createDate" 
+			      class="Wdate" onfocus="WdatePicker({maxDate:'%y-%M-%d'})" value="${model.createDate }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="address" class="col-sm-2 control-label">公司地址<span class="asterisk">*</span></label>
+			    <div class="col-sm-8">
+			      <input id="address" class="form-control" name="address" value="${model.address }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="email" class="col-sm-2 control-label">公司邮箱<span class="asterisk">*</span></label>
+			    <div class="col-sm-8">
+			      <input id="email" class="form-control" name="email" value="${model.email }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="telPhone" class="col-sm-2 control-label">联系方式<span class="asterisk">*</span></label>
+			    <div class="col-sm-8">
+			      <input id="telPhone" class="form-control" name="telPhone" value="${model.telPhone }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="website" class="col-sm-2 control-label">公司网址</label>
+			    <div class="col-sm-8">
+			      <input id="website" class="form-control" name="website" value="${model.website }"/>
+			    </div>
+		   </div>
             <input type="hidden" name="id" value="${model.id }"/>
-            <button name="submit" class="btn btn-primary" type="submit">确定</button>
+            <div class="form-group">
+		    <div class="col-sm-offset-4 col-sm-8">
+		      <button type="submit" class="btn btn-primary">保存</button>
+		    </div>
+		  </div>
           </form>
           </div>
           </div>

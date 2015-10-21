@@ -48,7 +48,8 @@ public class ColumnService {
 				public Predicate toPredicate(Root<Column> root,
 						CriteriaQuery<?> query, CriteriaBuilder cb) {
 					return cb.or(cb.like(root.<String>get("name"), '%'+keyword+'%'),
-							cb.like(root.<String>get("code"), '%'+keyword+'%'));
+							cb.like(root.<String>get("code"), '%'+keyword+'%'),
+							cb.like(root.<String>get("enName"), '%'+keyword+'%'));
 				}
 			};
 		}else{
@@ -64,6 +65,11 @@ public class ColumnService {
 		return this.columnDao.findParentByAjax();
 	}
 
+	/**
+	 * 根据栏目代码查询是否存在该栏目
+	 * @param code　栏目代码
+	 * @return
+	 */
 	public Long countColumnByCode(String code) {
 		return columnDao.count(countSpec(code));
 	}
@@ -81,4 +87,19 @@ public class ColumnService {
 	public Column loadColumnByCode(String code) {
 		return columnDao.loadColumnByCode(code);
 	}
+
+	public List<Object[]> findChildrenByParentId(Integer pId) {
+		return this.columnDao.findChildrenByParentId(pId);
+	}
+
+	public List<Column> findColumnsByDepth(int crossMaxDepth) {
+		List<Column> colList = columnDao.findFirstColumn();
+		System.out.println(colList.size());
+		return colList;
+	}
+
+	public void updateColumnPublishContent(Integer id, boolean type) {
+		columnDao.updateColumnPublishContent(id,type);
+	}
+
 }

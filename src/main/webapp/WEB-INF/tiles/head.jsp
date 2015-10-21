@@ -10,6 +10,12 @@
 	<title>header</title>
 	<link rel="icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon">
 	<link rel="shortcut icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon" />
+	<script type="text/javascript">
+		$(function(){
+			if (window != top)
+			top.location.href = location.href;
+		});
+	</script>
     </head>
     <body>
 	<header id="header">

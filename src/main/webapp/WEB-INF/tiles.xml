@@ -24,27 +24,19 @@
     <definition name="admin/index" extends="baselayout">
 		<put-attribute name="main" value="/views/admin/index.jsp" />
 	</definition>
-	<definition name="admin/sys/user/*" extends="baselayout">
-		<put-attribute name="main" value="/views/admin/sys/user/{1}.jsp" />
-	</definition>
-	<definition name="admin/sys/role/*" extends="baselayout">
-		<put-attribute name="main" value="/views/admin/sys/role/{1}.jsp" />
-	</definition>
-	<definition name="admin/sys/log/*" extends="baselayout">
-		<put-attribute name="main" value="/views/admin/sys/log/{1}.jsp" />
-	</definition>
-	<definition name="admin/sys/col/*" extends="baselayout">
-		<put-attribute name="main" value="/views/admin/sys/col/{1}.jsp" />
-	</definition>
-	<definition name="admin/sys/html/*" extends="baselayout">
-		<put-attribute name="main" value="/views/admin/sys/html/{1}.jsp" />
+	<definition name="admin/sys/*/*" extends="baselayout">
+		<put-attribute name="main" value="/views/admin/sys/{1}/{2}.jsp" />
 	</definition>
 	<definition name="admin/news/*" extends="baselayout">
 		<put-attribute name="main" value="/views/admin/news/{1}.jsp" />
 	</definition>
-	<definition name="/manage/order/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/order/{1}.ftl" />
+	<definition name="admin/ad/*" extends="baselayout">
+		<put-attribute name="main" value="/views/admin/ad/{1}.jsp" />
 	</definition>
+	<definition name="admin/goods/*/*" extends="baselayout">
+		<put-attribute name="main" value="/views/admin/goods/{1}/{2}.jsp" />
+	</definition>
+	
 	<definition name="manage/wms/supplyStockInput/*" extends="baselayout">
 		<put-attribute name="main" value="/manage/wms/supplyStockInput/{1}.ftl" />
 	</definition>

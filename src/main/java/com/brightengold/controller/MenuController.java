@@ -6,21 +6,30 @@ import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import com.brightengold.service.LogUtil;
+import com.brightengold.service.MsgUtil;
+import com.brightengold.util.LogType;
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.service.impl.MenuServiceImpl;
 import cn.rainier.nian.service.impl.ResourceServiceImpl;
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/sys/menu")
@@ -31,7 +40,43 @@ public class MenuController {
 	private MenuServiceImpl menuService;
 	@Autowired
 	private ResourceServiceImpl resourceService;
-	private Logger logger = LoggerFactory.getLogger(MenuController.class);
+	private PageRainier<Menu> menus;
+	private Integer pageSize = 10;
+	private static Logger logger = LoggerFactory.getLogger(MenuController.class);
+	
+	@RequestMapping({"/menus/{pageNo}"})
+	public String list(@PathVariable Integer pageNo, Model model){
+		menus = menuService.findAll(pageNo, pageSize);
+		model.addAttribute("page",menus);//map
+		return "admin/sys/menu/list";
+	}
+	
+	@RequestMapping(value="/add",method=RequestMethod.GET)
+	public String addUI(ModelMap map){
+		List<Object[]> parentMenu = menuService.findParentByAjax();
+		map.put("parentMenu", parentMenu);
+		return "admin_unless/sys/menu/add";
+	}
+	
+	@RequestMapping(value="/add",method=RequestMethod.POST)
+	public String add(Menu menu){
+		try{
+			Menu temp = menuService.saveMenu(menu);
+			if(temp!=null){
+				MsgUtil.setMsgAdd("success");
+				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
+				logger.info("添加菜单{}成功！",
+						ToStringBuilder.reflectionToString(menu, ToStringStyle.SHORT_PREFIX_STYLE));
+			}else{
+				MsgUtil.setMsgAdd("error");
+				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
+			}
+		}catch(Exception e){
+			MsgUtil.setMsgAdd("error");
+			logger.error("新增菜单报错！",e);
+		}
+		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/menu/menus/1.html";
+	}
 	
 	public String generateXmlString(HttpServletRequest request,ModelMap model) {
 		String output = "";
@@ -133,13 +178,9 @@ public class MenuController {
 			xmlStr.append("</item>");
 		}
 		xmlStr.append("</tree>");
-		System.out.println(xmlStr+"=================");
 		menuXml = xmlStr.toString();
-		System.out.println(menuXml+"=================");
 		if(!flag){
-			System.out.println("-----------=-=--------=-=-=-=-=-=-=");
 			model.addAttribute("menuXml", menuXml);
-			System.out.println("-----------=-=--------=-=-=-=-=-=-=");
 		}
 		return menuXml;
 	}
@@ -178,5 +219,21 @@ public class MenuController {
 		}
 		sb.append("</tree>");
 		return sb.toString();
+	}
+
+	public PageRainier<Menu> getMenus() {
+		return menus;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setMenus(PageRainier<Menu> menus) {
+		this.menus = menus;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
 	}
 }

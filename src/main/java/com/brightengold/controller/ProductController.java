@@ -7,6 +7,8 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +16,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
-
 import com.brightengold.model.Product;
 import com.brightengold.service.CategoryService;
 import com.brightengold.service.LogUtil;
@@ -47,9 +44,6 @@ public class ProductController {
 	
 	@RequestMapping(value={"/products/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		if(pageNo==null){
-			pageNo = 1;
-		}
 		products = productService.findAll(pageNo, pageSize);
 		model.addAttribute("page",products);//map
 		return "admin/goods/product/list";
@@ -65,7 +59,8 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.POST)
-	public String update(HttpServletRequest request,MultipartFile photo, @PathVariable Integer productId,Product product) {
+	public String update(HttpServletRequest request,MultipartFile photo, 
+			@PathVariable Integer productId,Product product) {
 		StringBuilder content = new StringBuilder();
 		try {
 			if(productId!=null){
@@ -93,7 +88,7 @@ public class ProductController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "redirect:/admin/goods/product/products/1";
+		return "redirect:/admin/goods/product/products/1.html";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -102,10 +97,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(MultipartFile photo,Product product,BindingResult result, HttpServletRequest request) {
-		if(result.hasErrors()){
-			return "admin/goods/product/add";
-		}
+	public String add(MultipartFile photo,Product product,HttpServletRequest request) {
 		User u = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -123,10 +115,11 @@ public class ProductController {
 			MsgUtil.setMsgAdd("success");
 			sb.append("名称："+product.getEnName());
 			LogUtil.getInstance().log(LogType.ADD, sb.toString());
+			logger.info("新增产品{}成功！",ToStringBuilder.reflectionToString(product, ToStringStyle.SHORT_PREFIX_STYLE));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/goods/product/products/1";
+		return "redirect:/admin/goods/product/products/1.html";
 	}
 	
 	@RequestMapping(value="/{productId}/del",method=RequestMethod.GET)
@@ -139,7 +132,7 @@ public class ProductController {
 			MsgUtil.setMsgDelete("success");
 			LogUtil.getInstance().log(LogType.DEL, sb.toString());
 		}
-		return "redirect:/admin/goods/product/products/1";
+		return "redirect:/admin/goods/product/products/1.html";
 	}
 	
 	@RequestMapping(value="/{productId}/publish",method=RequestMethod.GET)
@@ -147,6 +140,7 @@ public class ProductController {
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
 			if(!checkPub(temp)){
+				temp.setUrl(Tools.getRndFilename()+".htm");
 				temp.setPublish(true);
 				productService.saveProduct(temp);
 				MsgUtil.setMsg("success", "产品发布成功！");
@@ -154,11 +148,12 @@ public class ProductController {
 				MsgUtil.setMsg("error", "产品已发布！");
 			}
 		}
-		return "redirect:/admin/goods/product/products/1";
+		return "redirect:/admin/goods/product/products/1.html";
 	}
 
 	private boolean checkPub(Product product) {
-		if(product.isPublish()){
+		if(product.isPublish() && 
+				product.getUrl()!=null){
 			return true;
 		}else{
 			return false;

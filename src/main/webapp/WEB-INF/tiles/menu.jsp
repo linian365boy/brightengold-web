@@ -93,6 +93,7 @@
 							};
 						};
 						$("#sidebar").html(str);
+						//showHide();
 					});
 				});
 				</script>

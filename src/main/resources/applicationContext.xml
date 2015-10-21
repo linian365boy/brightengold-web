@@ -21,12 +21,30 @@
     <property name="basenames">
       <list>
         <value>messages</value>
+        <!-- <value>i18n/messages</value> -->
       </list>
     </property>
+    <!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称 -->  
+    <property name="useCodeAsDefaultMessage" value="true"/> 
   </bean>
+  
   <context:component-scan base-package="com.brightengold" />
-  <context:property-placeholder location="classpath*:jdbc.properties" />
-
+  <!-- 定义受环境影响易变的变量 -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<!-- 禁止调整加载顺序(注：系统以list最后一个有效的value元素为准) -->
+			<list>
+				<!-- 服务器生产环境配置 -->
+				<!-- <value>file:/etc/project/web/*.properties</value> -->
+				<!-- 本地开发环境配置 -->
+				<value>classpath:*.properties</value>
+			</list>
+		</property>
+   </bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="properties" ref="configProperties" />
+    </bean>
   <bean id="dataSource" destroy-method="close"
     class="org.apache.commons.dbcp.BasicDataSource">
     <property name="driverClassName" value="${jdbc.driver}"></property>
@@ -119,4 +137,7 @@
       <tx:method name="unsubscribe" propagation="REQUIRED"/>
     </tx:attributes>
   </tx:advice>
+  
+  <!-- 获取本地 -->  
+  <!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> -->
 </beans>

@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -38,9 +39,13 @@ public class Product implements Serializable{
 	 */
 	private String picUrl;
 	/**
-	 * 产品介绍
+	 * 产品简介
 	 */
 	private String introduce;
+	/**
+	 * 产品详情描述
+	 */
+	private String description;
 	/**
 	 * 是否热门
 	 */
@@ -51,6 +56,7 @@ public class Product implements Serializable{
 	private String url;
 	/**
 	 * 是否发布
+	 * true 发布  false 未发布
 	 */
 	private boolean publish;
 	/**
@@ -62,10 +68,9 @@ public class Product implements Serializable{
 	 */
 	private User createUser;
 	/**
-	 * 备用字段
+	 * 发布后的页码
 	 */
-	private String temp1;
-	private String temp2;
+	private int pageNum;
 	
 	@Id
 	@GeneratedValue
@@ -122,18 +127,6 @@ public class Product implements Serializable{
 	public void setCreateUser(User createUser) {
 		this.createUser = createUser;
 	}
-	public String getTemp1() {
-		return temp1;
-	}
-	public void setTemp1(String temp1) {
-		this.temp1 = temp1;
-	}
-	public String getTemp2() {
-		return temp2;
-	}
-	public void setTemp2(String temp2) {
-		this.temp2 = temp2;
-	}
 	public boolean isHot() {
 		return hot;
 	}
@@ -149,5 +142,17 @@ public class Product implements Serializable{
 	public String getIntroduce() {
 		return introduce;
 	}
-	
+	public int getPageNum() {
+		return pageNum;
+	}
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
+	}
+	@Lob
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

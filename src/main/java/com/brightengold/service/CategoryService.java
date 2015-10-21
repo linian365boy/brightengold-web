@@ -1,13 +1,22 @@
 package com.brightengold.service;
 
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+
 import cn.rainier.nian.utils.PageRainier;
+
 import com.brightengold.dao.CategoryDao;
 import com.brightengold.model.Category;
 
@@ -45,6 +54,28 @@ public class CategoryService {
 
 	public boolean checkHasChildren(Category temp) {
 		return categoryDao.checkHasChildren(temp)>0?true:false;
+	}
+	/**
+	 * 根据英文名称查询分类是否存在
+	 * @param code
+	 * @return
+	 */
+	public long countByCateEname(String enName) {
+		return categoryDao.count(countSpec(enName));
+	}
+
+	private Specification<Category> countSpec(final String enName) {
+		return new Specification<Category>(){
+			@Override
+			public Predicate toPredicate(Root<Category> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.<String>get("enName"), enName);
+			}
+		};
+	}
+
+	public Category loadCategoryByEname(String code) {
+		return categoryDao.findOne(countSpec(code));
 	}
 	
 	

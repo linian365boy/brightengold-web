@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
      <%@include file="/views/commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>栏目新增</title>
-<link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
 <script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
@@ -28,6 +26,9 @@
 				"name":{
 					required:true
 				},
+				"enName":{
+					required:true
+				},
 				"code":{
 					required:true,
 					remote:{
@@ -41,6 +42,9 @@
 			},
 			messages:{
 				"name":{
+					required:"栏目名称不能为空"
+				},
+				"enName":{
 					required:"栏目名称不能为空"
 				},
 				"code":{
@@ -59,31 +63,57 @@
 			}
 		});
 	});
+	function changeCol(obj){
+		var colId = $(obj).val();
+		$.post("${ctx }admin/sys/col/getChildren/"+colId+".html",{
+			id:colId
+		},function(json){
+			$(obj).next().remove();
+			var html = "";
+			if(json.length>0){
+				html+='<select class="col-xs-6 selectpicker" name="secondColumnId" >';
+				html+='<option value="">=请选择=</option>';
+				$.each(json,function(i,n){
+					html+="<option value='"+n[0]+"'>"+n[1]+"</option>";
+				});
+				html+="</select>";
+			}
+			$(obj).after(html);
+		},"json");
+	}
 	</script>
 </head>
 <body>
 	<form class="form-horizontal" id="form" method="post" action="${ctx }admin/sys/col/add.html" target="_parent">
   <div class="form-group">
-    <label for="parentColumn" class="col-sm-2 control-label">父级栏目</label>
-     <div class="col-sm-8">
-      <select class="form-control" name="parentColumn.id" id="parentColumn">
-      </select>
-    </div> 
+    <label for="parentColumn" class="col-sm-3 control-label">父级栏目</label>
+    <div class="row col-sm-8">
+	     <div class="col-sm-10">
+	      <select class="col-xs-6 selectpicker" name="firstColumnId" id="parentColumn" onchange="changeCol(this);">
+	      </select>
+	    </div> 
+    </div>
   </div>
   <div class="form-group">
-    <label for="name" class="col-sm-2 control-label">名称<span class="asterisk">*</span></label>
+    <label for="name" class="col-sm-3 control-label">中文名称<span class="asterisk">*</span></label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="name" name="name" placeholder="名称">
     </div>
   </div>
   <div class="form-group">
-    <label for="code" class="col-sm-2 control-label">代码<span class="asterisk">*</span></label>
+    <label for="enName" class="col-sm-3 control-label">英文名称<span class="asterisk">*</span></label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="enName" name="enName" placeholder="名称">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="code" class="col-sm-3 control-label">代码<span class="asterisk">*</span></label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="code" name="code" placeholder="栏目代码">
     </div>
   </div>
   <div class="form-group">
-    <label for="priority" class="col-sm-2 control-label">排序号</label>
+    <label for="priority" class="col-sm-3 control-label">排序号</label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="priority" name="priority" placeholder="排序号，越大排名越前">
     </div>

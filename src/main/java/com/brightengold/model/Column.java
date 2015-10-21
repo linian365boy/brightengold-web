@@ -29,9 +29,13 @@ public class Column implements Serializable{
 	private static final long serialVersionUID = 2393928737707029978L;
 	private Integer id;
 	/**
-	 * 栏目名称
+	 * 栏目中文名称
 	 */
 	private String name;
+	/**
+	 * 栏目英文名称
+	 */
+	private String enName;
 	/**
 	 * 栏目跳转url
 	 */
@@ -53,9 +57,32 @@ public class Column implements Serializable{
 	 */
 	private Set<Column> childColumn;
 	/**
+	 * 栏目下的产品分类
+	 */
+	private Set<Category> categorys;
+	/**
 	 * 栏目代码，唯一
 	 */
 	private String code;
+	//方便显示到第几深度
+	//存储类似：1，表示本栏目是深度为1，一级栏目,2表示为二级栏目,3表示为三级栏目
+	//冗余字段
+	private int depth = 1;
+	
+	//发布时用到的一些设置
+	/**
+	 * 状态
+	 * 1未发布　２发布
+	 * 默认为1 未发布
+	 */
+	private int status;
+	/**
+	 * 栏目页面发布的类型，
+	 * 区别即显示标题还是内容的页面
+	 * false　文章标题列表的页面
+	 * true　产品展示的页面
+	 */
+	private boolean type;
 	
 	@Id
 	@GeneratedValue
@@ -114,4 +141,36 @@ public class Column implements Serializable{
 	public void setCode(String code) {
 		this.code = code;
 	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public boolean getType() {
+		return type;
+	}
+	public void setType(boolean type) {
+		this.type = type;
+	}
+	public int getDepth() {
+		return depth;
+	}
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
+	public String getEnName() {
+		return enName;
+	}
+	public void setEnName(String enName) {
+		this.enName = enName;
+	}
+	@OneToMany(cascade={CascadeType.MERGE},mappedBy="column",fetch=FetchType.LAZY)
+	public Set<Category> getCategorys() {
+		return categorys;
+	}
+	public void setCategorys(Set<Category> categorys) {
+		this.categorys = categorys;
+	}
+	
 }

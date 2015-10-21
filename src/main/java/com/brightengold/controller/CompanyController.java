@@ -1,24 +1,16 @@
 package com.brightengold.controller;
 
 import java.io.File;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import cn.rainier.nian.model.User;
-
 import com.brightengold.model.Company;
 import com.brightengold.service.CompanyService;
 import com.brightengold.service.LogUtil;
@@ -32,7 +24,6 @@ import com.brightengold.util.Tools;
 public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
-	private Logger logger = LoggerFactory.getLogger(CompanyController.class);
 	
 	@RequestMapping(value={"/detail","/",""},method=RequestMethod.GET)
 	public String detail(Model model) {

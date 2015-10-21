@@ -9,7 +9,6 @@
 <link rel="stylesheet" type="text/css" href="${ctx}resources/css/dhtmlxtree.css"/>
 <script src="${ctx}resources/js/dhtmlxcommon.js"></script>
 <script src="${ctx}resources/js/dhtmlxtree.js"></script>
- <%@include file="/views/admin/commons/jsCss.jsp" %>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html", function(data) {

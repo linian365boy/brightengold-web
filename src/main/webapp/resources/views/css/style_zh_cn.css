@@ -56,7 +56,7 @@ a:hover{color:#005ba6;}
 
 .menu ul li ul{clear:both;width:161px;padding-bottom:4px;background:url(../images/m_sub_bt.png) no-repeat center bottom;overflow:visible;z-index:10000; position:absolute;left:13px; top:47px;height:auto;display:none;}
 .menu ul li ul li{clear:both;height:33px;line-height:33px;border-bottom:1px solid #61eea8;background:url(../images/m_sub_bg.gif) repeat-x left center;}
-.menu ul li ul li a{display:block; overflow:hidden;width:161px;height:33px;background:url(../images/m_sub_ddbg.gif) repeat-x left center;line-height:33px;color:#FFF;}
+.menu ul li ul li a{display:block; overflow:hidden;width:161px;height:33px;line-height:33px;color:#FFF;}
 .menu ul li ul li a:hover{background:url(../images/m_sub_on.gif) repeat-x;color:#00542b;}
 
 #nav_sel{background:url(../images/m_on_bg.jpg) no-repeat center bottom;color:#FFF;}

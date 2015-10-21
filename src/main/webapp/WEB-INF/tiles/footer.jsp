@@ -9,7 +9,7 @@
 <body>
     <footer role="contentinfo" class="bs-docs-footer">
   <div class="container">
-    <p>版权所有&nbsp;&nbsp;&copy;copyright&nbsp;&nbsp;linian365boy@foxmail.com</p>
+    <p>版权所有&nbsp;&copy;copyright&nbsp;&nbsp;linian365boy@foxmail.com</p>
   </div>
 </footer> 
 </body>

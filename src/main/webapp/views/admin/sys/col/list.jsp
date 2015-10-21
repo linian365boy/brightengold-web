@@ -1,15 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="/views/commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
- <%@include file="/views/admin/commons/jsCss.jsp" %>
  <script type="text/javascript" src="${ctx }resources/js/system.js"></script>
 <title>栏目分类管理</title>
-
 <script type="text/javascript">
 	var update = function(obj){
 		var categoryId = $(obj).attr("name");
@@ -47,7 +43,19 @@
 				});
 			});
 		};
-		
+		var setPublish = function(obj){
+			var categoryId = $(obj).attr("name");
+			art.dialog.open("${ctx}admin/sys/col/"+categoryId+"/setPublishContent.html",{
+				title:'发布内容设置',
+				id:'setPublish',
+				width: 550,
+				height: 235,
+				resize: false
+			});
+		};
+		$(function(){
+			 $('[data-toggle="tooltip"]').tooltip();
+		});
 </script>
 </head>
 <body>
@@ -73,11 +81,11 @@
 		</header>
 		<div class="tab_container">
 			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
+			<table class="tablesorter"> 
 			<thead> 
 				<tr> 
     				<th >序号</th>
-					<th >栏目名称</th>
+					<th >栏目名称(英文)</th>
 					<th >栏目代码</th>
 					<th >父级栏目</th>
 					<th >排序号</th>
@@ -90,14 +98,17 @@
 				<c:forEach items="${page.result }" var="column" varStatus="status">
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td>${column.name }</td>
+					<td title="${column.name }（${column.enName }）">${column.name }（${column.enName }）</td>
 					<td>${column.code }</td>
 					<td>${empty column.parentColumn?"————":column.parentColumn.name }</td>
 					<td>${column.priority }</td>
 					<td>
-						<input type="image" name="${column.id }" onclick="update(this);"
-						src="${ctx }resources/images/icn_edit.png" title="修改"/>
-						<input type="image" name="${column.id }" onclick="del(this);" 
+						<input type="image" name="${column.id }" data-toggle="tooltip" data-placement="top" onclick="update(this);"
+						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
+						<input type="image" name="${column.id }" onclick="setPublish(this);" 
+						src="${ctx }resources/images/icn_publish.png" data-toggle="tooltip" data-placement="top" 
+						title="发布设置（当前使用${column.type?'产品':'标题' }模式发布）．设置时，其子栏目也会一起设置"/>&nbsp;
+						<input type="image" name="${column.id }" data-toggle="tool1tip" data-placement="top" onclick="del(this);" 
 						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
 					</td>
 				</tr>

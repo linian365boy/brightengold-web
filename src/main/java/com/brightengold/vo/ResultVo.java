@@ -2,7 +2,7 @@ package com.brightengold.vo;
 
 import java.io.Serializable;
 
-public class ResultVo implements Serializable {
+public class ResultVo<T> implements Serializable {
 	private static final long serialVersionUID = -6578704371684617065L;
 	/**
 	 * 200  正常，成功
@@ -10,7 +10,7 @@ public class ResultVo implements Serializable {
 	 */
 	private int code;
 	private String message;
-	private Object obj;
+	private T obj;
 	
 	public int getCode() {
 		return code;
@@ -24,10 +24,10 @@ public class ResultVo implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public Object getObj() {
+	public T getObj() {
 		return obj;
 	}
-	public void setObj(Object obj) {
+	public void setObj(T obj) {
 		this.obj = obj;
 	}
 }
