@@ -2,10 +2,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="keywords" content="brightengold furniture,brightengold,furniture, Hotel furniture, dining tables, restaurant furniture, hotel furniture accessories, decorative furniture">
-<meta name="description" content="Welcome to the home of Brightengold Furniture, a leader in contemporary furniture design in China! Our sofa suites, dining table and other furniture are well-received in hotels and restaurants.">
+<meta name="keywords" content="sunshin,sunshinecig,ecig">
+<meta name="description" content="Welcome to sunshin.">
 <script type="text/javascript" src="${ctx}/resources/js/jquery-1.8.3.js"></script>
-<title>${model.title }|Brightengold Furniture</title>
+<title>${model.title }|sunshinecig</title>
 <script type="text/javascript">
 var content=new Object;
 var context="";//HTML文本内容

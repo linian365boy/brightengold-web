@@ -10,12 +10,12 @@
         <put-attribute name="left" value="/WEB-INF/tiles/menu.jsp"/>
         <put-attribute name="main" value="/WEB-INF/tiles/index.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>
-        <put-list-attribute name="stylesheets">  
+        <!-- <put-list-attribute name="stylesheets">  
             <add-attribute value="static/style/main" />  
         </put-list-attribute>
         <put-list-attribute name="scripts">  
             <add-attribute value="static/js/util" />  
-        </put-list-attribute>
+        </put-list-attribute> -->
 	</definition>
 	<!-- 没有extends　baselayout 会是新页面 -->
 	<definition name="admin_unless/*/*/*" template="/views/admin/{1}/{2}/{3}.jsp" />

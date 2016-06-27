@@ -32,6 +32,7 @@ import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
+import com.brightengold.service.ProductService;
 import com.brightengold.util.LogType;
 import com.google.gson.Gson;
 
@@ -44,8 +45,10 @@ public class CategoryController {
 	private PageRainier<Category> categorys;
 	@Autowired
 	private ColumnService columnService;
+	@Autowired
+	private ProductService productService;
 	private Integer pageSize = 10;
-	private Logger logger = LoggerFactory.getLogger(CategoryController.class);
+	private static Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
 	@RequestMapping(value={"/categorys/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
@@ -209,10 +212,16 @@ public class CategoryController {
 			if(categoryService.checkHasChildren(temp)){
 				MsgUtil.setMsg("error", "请先删除该分类下的子分类");
 			}else{
-				categoryService.delCategory(categoryId);
-				MsgUtil.setMsg("success", "删除分类成功！");
-				//日志记录
-				LogUtil.getInstance().log(LogType.DEL, temp.getEnName()+"删除了");
+				//判断分类下是否有产品
+				long count = productService.countByCateId(categoryId);
+				if(count>0){
+					MsgUtil.setMsg("error", "请先删除该分类下的"+count+"产品！");
+				}else{
+					categoryService.delCategory(categoryId);
+					MsgUtil.setMsg("success", "删除分类成功！");
+					//日志记录
+					LogUtil.getInstance().log(LogType.DEL, temp.getEnName()+"删除了");
+				}
 			}
 		}
 		return "redirect:/admin/goods/category/categorys/1.html";

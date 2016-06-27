@@ -71,6 +71,11 @@ public class Product implements Serializable{
 	 * 发布后的页码
 	 */
 	private int pageNum;
+	/**
+	 * 锁定或正常两种状态
+	 * true正常  false锁定
+	 */
+	private boolean status;
 	
 	@Id
 	@GeneratedValue
@@ -154,5 +159,11 @@ public class Product implements Serializable{
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public boolean isStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 }

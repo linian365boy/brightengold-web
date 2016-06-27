@@ -50,6 +50,11 @@
 		<beans:property name="suffix" value=".jsp" />
 		<beans:property name="contentType" value="text/html;charset=UTF-8"/>
 	</beans:bean>
+	
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="5242880"></beans:property>
+		<beans:property name="defaultEncoding" value="UTF-8"></beans:property>
+	</beans:bean>
 		
 	<beans:bean id="tilesViewResolver"
 		class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"
@@ -67,9 +72,5 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.brightengold.controller" />
-	
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="5242880"></beans:property>
-	</beans:bean>
 	
 </beans:beans>

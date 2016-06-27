@@ -2,6 +2,8 @@ package com.brightengold.controller;
 
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.rainier.nian.utils.PageRainier;
 
+import com.brightengold.model.Category;
 import com.brightengold.model.Column;
+import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.vo.ResultVo;
@@ -32,7 +36,9 @@ public class ColumnController {
 	private ColumnService columnService;
 	private PageRainier<Column> columns;
 	private Integer pageSize = 10;
-	private Logger logger = LoggerFactory.getLogger(ColumnController.class);
+	@Autowired
+	private CategoryService categoryService;
+	private static Logger logger = LoggerFactory.getLogger(ColumnController.class);
 	
 	@RequestMapping(value={"/cols/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,String keyword){
@@ -109,8 +115,10 @@ public class ColumnController {
 				column.setParentColumn(null);
 			}
 			column.setCreateDate(temp.getCreateDate());
-			if(!(temp.getCode().equals(column.getCode()))){
+			if(!(column.getCode().equals(temp.getCode()))){
 				column.setUrl("views/html/col/"+column.getCode()+".htm");
+			}else{
+				column.setUrl(temp.getUrl());
 			}
 			column = columnService.save(column);
 			MsgUtil.setMsgUpdate("success");
@@ -146,6 +154,14 @@ public class ColumnController {
 			vo.setMessage("删除失败，该节点包含有"+temp.getChildColumn().size()+"个子节点，请先删除该节点下的子节点！");
 			logger.error("删除栏目信息：{}失败，该节点包含有{}个子节点",temp,temp.getChildColumn().size());
 		}else{
+			//判断是否有产品分类
+			List<Category> cates = categoryService.findCateByColId(temp.getId());
+			if(CollectionUtils.isNotEmpty(cates)){
+				vo.setCode(500);
+				vo.setMessage("删除失败，该栏目包含有未删除的"+cates.size()+"产品分类！");
+				logger.error("删除失败，该栏目包含有未删除的"+cates.size()+"产品分类！");
+				return gson.toJson(vo);
+			}
 			columnService.delete(id);
 			vo.setCode(200);
 			vo.setMessage("删除成功！");

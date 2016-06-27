@@ -105,7 +105,7 @@ public class Company implements Serializable{
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
 	}
-	@Column(length=20)
+	@Column(length=200)
 	public String getLogo() {
 		return logo;
 	}

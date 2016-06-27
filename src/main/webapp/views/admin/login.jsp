@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <meta http-equiv="description" content="brigtengold login"> 
 <meta http-equiv="author" content="brigtengold"> 
-<title>brightengold login</title>
+<title>sunshinecig login</title>
 <link rel="icon" href="${ctx }resources/images/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="${ctx }resources/images/favicon.ico" type="image/x-icon" />
 <link href="${ctx }resources/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
@@ -23,10 +23,9 @@
   	</fieldset>
   	<fieldset id="actions">
   		<input id="submit" type="submit" value="Log in"/>
-  		<a href="">Forgot your password?</a>
   	</fieldset>
   	<div id="login_footer">
-      Copyright &copy; 2013 linian365boy#sina.com。把#换成@
+      Copyright &copy; <%=Calendar.getInstance().get(Calendar.YEAR) %> linian365boy#sina.com。把#换成@
     </div>
   </form>
 </body>

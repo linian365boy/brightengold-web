@@ -1,167 +1,153 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<title>Company Profile-USB charging wall socket, wireless charger, USB 
-charger, car charger, mobile power,Shenzhen hien technology co.,ltd</title>
-<meta name="keywords" content="USB charging wall socket, wireless charger, USB charger, car charger, mobile power,Shenzhen hien technology co.,ltd"></meta>
-<meta name="description" content="Hain Technology Development Co., Ltd. Shenzhen was founded in 2009, formerly known as Shenzhen Technology Co. Huaen, due to development needs, in 2011 officially changed its name to the Shenzhen Science and Technology Development Co., Ltd. Hain, the company has an independent R &amp; D team, is a product R &amp; D, production, sales as one of the diveified high-tech enterprises ,hotline:0086-755-28412985"></meta>
-<link href="${ctx}/resources/views/css/style_en.css?${style_v}" type="text/css" rel="stylesheet"></link>
-<link rel="icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon" />
-<script type="text/javascript" src="${ctx}/resources/js/jquery-1.11.1.min.js?${style_v}"></script>
-<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js?${style_v}"></script>
-<script type="text/javascript" src="${ctx}/resources/views/css/commen.js?${style_v}"></script>
-<script type="text/javascript">
-	var basePath = "${ctx}";
-</script>
-</head>
+	<!DOCTYPE html>
+	<html lang="en"><head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1"/>
+	<title>${column.enName} | sunshinecig</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="keywords" content="sunshin,sunshinecig,ecig"></meta>
+	<meta name="description" content="Welcome to sunshin."></meta>
+	<link href="${ctx}/resources/views/css/style_en.css?${style_v}" type="text/css" rel="stylesheet"></link>
+	<link rel="icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon" />
+	<link href="${ctx}/resources/views/style2/css/application.css" rel="stylesheet"/>
+	<link href="${ctx}/resources/views/style2/css/link.css" rel="stylesheet">
+</head><body>
+	<div id="iqWrap" class="container">
+		<header id="iqHead" class="navbar navbar-inverse container-fluid">
+			<a href="${ctx }" class="text-center btn-block">
+				<img src="${ctx }/resources/${company.logo }" alt="${company.name}"/>
+			</a>
 
-<body>
-	<!--head start-->
-    <div class="head">
-    	<div class="wd">
-            <div class="logo"><a href="${company.website}" title="${company.name}"><img src="${ctx}/resources/${company.logo}" alt="${company.name}" height="91" width="480"></a></div>
-            <div class="head-right">
-            <!--
-                <div class="banben">
-                    <a href="http://www.hienpower.com/index.htm" title="Shenzhen Hien technology co.,ltd" class="en">English</a>
-                    <a href="http://www.hienpower.com/zh_cnindex.htm" title="Shenzhen Hien technology co.,ltd" class="cn">中文版</a>
-                </div>
-                 -->
-                <div class="search">
-                    <form target="_blank" method="post" name="searchform" id="searchform" action="/web/search.php?lanstr=en">
-                        <input name="s" class="search_btn" value="" type="submit"><input name="keywords" id="keywords" class="search_txt" type="text"><span>Search：</span>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--head end-->
-    <!--menu start-->
-    <div class="menu">
-    	<ul>
-    		<li><a title="首 页" href="" class="bigli">首 页</a></li>
-    		<li class="mline"></li>
-    		<#if ((crossCol?size)>0)>
-	    		<#list crossCol as col>
-	    			<#if ((col.childColumn)?size)==0 >
-		    			<li><a class="bigli" href="${ctx}/${(col.url)!'#'}" title="${(col.name)!''}" 
-		    				id="${(col.code)!''}">${(col.name)!''}</a>
-		    			</li>
-		            <#else>
-		                <li class="bigli">
-			    			<a class="" href="${ctx}/${(col.url)!''}" title="${(col.name)!''}" id="${(col.code)!''}">${(col.name)!''}</a>
-				            	<ul style="display: none;">
-					    			<#list col.childColumn as childCol>
-					    				<li><a href="${ctx}/${(childCol.url)!''}" title="${(childCol.name)!''}" 
-				            			id="${(childCol.code)!''}">${(childCol.name)!''}</a></li>
-					    			</#list>
-				            	</ul>
-			            </li>
-	                </#if>
-	                <#if col_has_next>
-				        <li class="mline"></li>
-	                </#if>
-	    		</#list>
-    		</#if>
-        </ul>
-    </div>
-    <!--menu end-->
-    <div class="banner">
-    	<ul>
-    		<#if indexAds?size &gt; 0>
-    			<#list indexAds as ad>
-				    <li style="background-image: url('${ctx}/resources/${ad.picUrl}');cursor:pointer;" 
-				    onclick='javascript:locationTo("${(ad.url)!}");'/>
-			    </#list>
-		    </#if>
-		</ul>
-    </div>
-    <!--banner end-->
-    <!--center start-->
-    <script type="text/javascript">
-	    $(function() {
-	        $('.banner').unslider({
-	        	speed: 500,               //  The speed to animate each slide (in milliseconds)
-				delay: 3000,              //  The delay between slide animations (in milliseconds)
-				complete: function() {},  //  A function that gets called after every slide animation
-				keys: true,               //  Enable keyboard (left, right) arrow shortcuts
-				dots: true,               //  Display dot navigation
-				fluid: false              //  Support responsive design. May break non-responsive designs
-	        });
-	    });
-    </script>
-    <div class="center">
-    	<!--left start-->
-        <div class="left">
-    <div class="left-top">${(parentCol.enName)!'--'}</div>
-    <#if ((parentCol.childColumn)?size)&gt;0>
-    	<ul class="left-menu">
-    		<#list parentCol.childColumn as childColumn>
-               <li><a href="${ctx}/${childColumn.url}" id="c_${childColumn.code}" title="${(childColumn.enName)!''}">${(childColumn.enName)!'--'}</a></li>
-    		</#list>
-    	</ul>
-    </#if>
-    
-    <div class="left-top m_t_10">CONTACT US</div>
-    <div class="left-contact">
-        <img alt="" src="${ctx}/resources/views/css/contact.jpg" height="52" width="204"> Tel :${(company.telPhone)!''}<br>
-		Email :${(company.email)!'--'}<br>
-		Contact: ${(company.contactUser)!'--'}<br>
-		Shenzhen Office Address: ${(company.address)!''}
-    </div>
-</div>
-        <!--left end-->
-        <!--right start-->
-        <div class="right">
-        	<div class="sitemap">
-    <h1>${column.enName}</h1><span></span>
-    <div>You are here: <a href="${ctx}">Home</a> &gt;&gt; 
-    <#if (parentCol.enName != column.enName)>
-    	<a href="${ctx}/${(parentCol.url)!''}">${parentCol.enName}</a>&gt;&gt;
-    </#if>
-    <a href="${ctx}/${(column.url)!''}">${column.enName}</a>
-    </div>
+			<nav class="navbar-inner">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".navmenu">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+
+				<div class="nav-collapse collapse navmenu">
+					<ul class="nav text-center" id="iqNav">
+						<li class="dropdown"><a class="dropdown-toggle" href="/" id="iqLogo">sunshinecig</a></li>
+						<#if ((crossCol?size)>0)>
+							<#list crossCol as col>
+								<li class="dropdown"><a class="dropdown-toggle" href="${ctx}/${(col.url)!'#'}">${col.enName}</a></li>
+							</#list>
+						</#if>
+					</ul>
+				</div>
+			</nav>
+		</header>
+
+		<section id="iqBody" class="container-fluid">
+			<div class="row-fluid">
+				
+<aside class="span3">
+	<div id="_loadAsideBar">
+    <a href="javascript:void(0);" class="btn btn-block btn-link fav">
+        <h2>Categories <span class="icon-tags pull-right"></span></h2>
+    </a>
+    <ul class="unstyled">
+    	<#if ((crossCol?size)>0)>
+			<#list crossCol as col>
+		        <li><a class="btn btn-link btn-block" href="${ctx}/${(col.url)!'#'}">${col.enName}</a></li>
+			</#list>
+		</#if>
+    </ul>
 	</div>
-            <div class="con-panel" id="pager">
-            	<#--virtual 相对路径-->
-            	<!--#include virtual="../news/${column.code}/1.htm"-->
-            </div>
-        </div>
-        <!--right end-->
+</aside>
+
+<article class="span9">
+	<#if ((cates?size)>0)>
+	<#list cates as cate>
+		<div class="row-fluid">
+	        <h2><a href="${ctx}/views/html/col/${(cate.enName)?replace('\\s*','','ri')}.htm">${cate.enName}</a></h2>
+	        <div class="innerContent">
+			<p>${(cate.remark)!''}</p>
+			<p>&nbsp;</p>
+			</div>
+	        <ul class="thumbnails">
+	        	<#if ((cate.products?size)>0)>
+	        	<#list cate.products as product>
+	                <li class="span3 thumbnail text-center">
+	                        <a href="${ctx}/views/html/product/${cate.id}/${product.url}">
+	                            <img src="${ctx }/resources/${product.picUrl}" alt="${product.enName}" />
+	                        </a>
+	                    <div class="caption">
+	                        <h4 class="text-left clearfix">${product.enName}</h4>
+	                    </div>
+	                </li>
+	               </#list>
+	               </#if>
+			</ul>
     </div>
-    <!--center end-->
-    <!--botnav start-->
-<div class="botnav">
-    	<div class="wd">
-            <ul>
-            	<li class="contact">
-            		<div class="hotline">
-                        ${(company.telPhone)!''}
-                    </div>
-            	</li>
-            	<li class="contact">
-            		<div class="email">
-                    	<a href="mailto:${(company.email)!''}" target="_blank" style="color:#2469e7;">${(company.email)!''}</a>
-                    </div>
-            	</li>
-                <li class="contact">
-                    <div class="dizhi">
-                    	${(company.address)!''}
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer">
-        <div class="wd">
-        	Copyright &copy; 2015 
-        	<#if .now?string("yyyy")!="2015">
-        		-${.now?string("yyyy")} 
-        	</#if>
-            Shenzhen hien technology co.,ltd . All rights reserved.<br>
-        </div>
-    </div>
-<link href="${ctx}/resources/views/images/kefu.css" type="text/css" rel="stylesheet">
+	</#list>
+	</#if>
+    </article>
+<div id="loading"></div>
+			</div>
+		</section>
+		<div id="iqPush"></div>
+	</div>
+
+	<footer id="iqFoot" class="container">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<ul class="span3 nav nav-list">
+					<li class="nav-header">sunshinecig</li>
+					<#if ((crossCol?size)>0)>
+						<#list crossCol as col>
+							<li><a href="${ctx}/${(col.url)!'#'}">${col.enName}</a></li>
+						</#list>
+					</#if>
+				</ul>
+
+				<ul class="span3 nav nav-list">
+					<li class="nav-header">Information</li>
+					<#if infos?? && (infos?size>0)>
+						<#list infos as inf>
+							<li><a href="${ctx}/${inf.url}">${inf.name}</a></li>
+						</#list>
+					</#if>
+				</ul>
+				<ul class="span3 nav nav-list">
+					<li class="nav-header">Follow Us</li>
+					<li><div class="addthis_toolbox addthis_vertical_style">
+							<div class="addthis_toolbox addthis_vertical_style">
+								<a class="addthis_button_facebook_follow at300b" href="https://www.facebook.com/wu.wilson.372" target="_blank" title="Follow on Facebook">
+									<span class="at4-icon-left at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);">
+										<span class="at_a11y">Share on facebook</span>
+									</span>
+									<span class="addthis_follow_label">Facebook</span>
+								</a>
+								<a class="addthis_button_google_follow at300b" title="Follow on Google" href="https://plus.google.com/u/0/103736009421571979699" target="_blank">
+									<span class="at4-icon-left at4-icon aticon-google_follow" style="background-color: rgb(207, 72, 50);">
+										<span class="at_a11y">Share on google_follow</span>
+									</span>
+									<span class="addthis_follow_label">Google</span>
+								</a>
+								<a class="addthis_button_skype_follow at300b" title="Follow on Skype" href="skype:wilsonwu552?chat" target="_blank">
+									<span class="at4-icon-left at4-icon aticon-skype_follow" style="background-color: rgb(44, 168, 210);">
+										<span class="at_a11y">Share on skype</span>
+									</span>
+									<span class="addthis_follow_label">Skype</span>
+								</a>
+								<div class="atclear"></div>
+							</div>
+							<div class="atclear"></div>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="row-fluid" style="font-size:.8em">
+				<div>&copy;&nbsp;${.now?string("yyyy")}&nbsp;Copyright. All Rights Reserved.</div>
+				<div>
+<p>sunshinecig® trade mark and associated market identifiers are the exclusive property of ${company.name}</p>
+</div>
+			</div>
+		</div>
+	</footer>
+	<script src="${ctx}/resources/views/style2/js/scripts.js"></script>
+	<script src="${ctx}/resources/views/style2/js/jquery.form.min.js"></script>
 </body>
 </html>

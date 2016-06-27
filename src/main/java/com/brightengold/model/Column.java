@@ -172,5 +172,4 @@ public class Column implements Serializable{
 	public void setCategorys(Set<Category> categorys) {
 		this.categorys = categorys;
 	}
-	
 }

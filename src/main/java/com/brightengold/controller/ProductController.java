@@ -3,10 +3,13 @@ package com.brightengold.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -16,17 +19,30 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
+
+import com.brightengold.model.Advertisement;
+import com.brightengold.model.Column;
+import com.brightengold.model.Company;
+import com.brightengold.model.Info;
 import com.brightengold.model.Product;
+import com.brightengold.service.AdvertisementService;
 import com.brightengold.service.CategoryService;
+import com.brightengold.service.ColumnService;
+import com.brightengold.service.CompanyService;
+import com.brightengold.service.InfoService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
+import com.brightengold.service.SystemConfig;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 
@@ -38,9 +54,20 @@ public class ProductController {
 	private ProductService productService;
 	@Autowired
 	private CategoryService categoryService;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private AdvertisementService advertisementService;
+	@Resource
+	private InfoService infoService;
+	@Resource
+	private SystemConfig systemConfig;
+	@Autowired
+	private ColumnService columnService;
+	
 	private PageRainier<Product> products;
 	private Integer pageSize = 10;
-	private Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@RequestMapping(value={"/products/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
@@ -56,6 +83,31 @@ public class ProductController {
 			model.addAttribute("parents", categoryService.findParentByAjax());
 		}
 		return "admin/goods/product/update";
+	}
+	
+	@RequestMapping(value="/{productId}",method=RequestMethod.GET)
+	public String detail(@PathVariable Integer productId,ModelMap model) {
+		if (productId != null) {
+			Product product = productService.loadProductById(productId);
+			//首页广告
+			List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
+			//横条菜单，最深显示到二级菜单
+			List<Column> crossCol = columnService.findColumnsByDepth(systemConfig.getCrossMaxDepth());
+			//首页侧边栏目，最深显示到三级菜单
+			List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
+			//info信息
+			List<Info> infos = infoService.getList();
+			//企业信息
+			Company company = companyService.loadCompany();
+			model.put("infos", infos);
+			model.put("company", company);
+			model.put("verticalCol", verticalCol);
+			model.put("crossCol", crossCol);
+			model.put("indexAds", ads);
+			model.put("model", product);
+			return "admin_unless/goods/product/detail";
+		}
+		return "redirect:/admin/goods/product/products/1.html";
 	}
 	
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.POST)
@@ -79,9 +131,18 @@ public class ProductController {
 				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
 				product.setCreateDate(tempProduct.getCreateDate());
 				product.setCreateUser(tempProduct.getCreateUser());
+				System.out.println(tempProduct.getUrl()+"-=-=");
+				product.setUrl(tempProduct.getUrl());
+				product.setStatus(tempProduct.isStatus());
 				productService.saveProduct(product);
 				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				//删除页面
+				System.out.println(product.getUrl()+"-=-=");
+				String path = request.getSession().getServletContext().getRealPath("/");
+				Tools.delFile(path + File.separator+"views"+File.separator+"html"+
+				 		File.separator+"product"+File.separator+
+			 			product.getCategory().getId()+File.separator+product.getUrl());
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -140,7 +201,11 @@ public class ProductController {
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
 			if(!checkPub(temp)){
-				temp.setUrl(Tools.getRndFilename()+".htm");
+				if(StringUtils.isNotBlank(temp.getUrl())){
+					temp.setUrl(temp.getUrl());
+				}else{
+					temp.setUrl(Tools.getRndFilename()+".htm");
+				}
 				temp.setPublish(true);
 				productService.saveProduct(temp);
 				MsgUtil.setMsg("success", "产品发布成功！");
@@ -149,6 +214,16 @@ public class ProductController {
 			}
 		}
 		return "redirect:/admin/goods/product/products/1.html";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/{id}/changeStatus",method = RequestMethod.POST)
+	public String changeStatus(@PathVariable("id") Integer id,boolean status){
+		if(productService.updateStatus(id,status)){
+			return "1";
+		}else{
+			return "-1";
+		}
 	}
 
 	private boolean checkPub(Product product) {

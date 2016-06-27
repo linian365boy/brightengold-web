@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/admin")
 @Scope("prototype")
 public class AccessDenyController {
-	private Logger logger = LoggerFactory.getLogger(AccessDenyController.class);
+	private static Logger logger = LoggerFactory.getLogger(AccessDenyController.class);
 	
 	@RequestMapping(value="/accessDenied", method = RequestMethod.GET)
 	public String accessDenied(){

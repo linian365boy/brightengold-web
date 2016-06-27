@@ -42,7 +42,7 @@ public class AdvertisementController {
 	private AdvertisementService service;
 	private PageRainier<Advertisement> page;
 	private Integer pageSize = 10;
-	private Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
+	private static Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
 	
 	@RequestMapping(value={"/ads/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model){

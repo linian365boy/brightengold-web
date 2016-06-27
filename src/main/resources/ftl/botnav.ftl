@@ -55,7 +55,7 @@
     
     <div class="footer">
         <div class="wd">
-       		<a title="Home" href="http://www.hienpower.com/enindex.htm">Home</a>
+       		<a title="Home" href="${ctx}">Home</a>
                           |  <a title="ABOUT US" href="http://www.hienpower.com/69/">ABOUT US</a>
                             |  <a title="PRODUCT" href="http://www.hienpower.com/3/">PRODUCT</a>
                             |  <a title="NEWS" href="http://www.hienpower.com/5/">NEWS</a>

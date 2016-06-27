@@ -52,7 +52,7 @@ public class RoleController {
 	private ResourceDetailsMonitor resourceDetailsMonitor;
 	@Autowired
 	private MenuServiceImpl menuService;
-	private Logger logger = LoggerFactory.getLogger(RoleController.class);
+	private static Logger logger = LoggerFactory.getLogger(RoleController.class);
 	
 	/**
 	 * @FunName: getRolesByAjax

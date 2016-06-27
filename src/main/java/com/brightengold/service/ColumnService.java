@@ -1,12 +1,10 @@
 package com.brightengold.service;
 
 import java.util.List;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,9 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
 import cn.rainier.nian.utils.PageRainier;
-
 import com.brightengold.dao.ColumnDao;
 import com.brightengold.model.Column;
 
@@ -100,6 +96,20 @@ public class ColumnService {
 
 	public void updateColumnPublishContent(Integer id, boolean type) {
 		columnDao.updateColumnPublishContent(id,type);
+	}
+
+	private Specification<Column> columnListSpec() {
+		return new Specification<Column>(){
+			@Override
+			public Predicate toPredicate(Root<Column> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.get("status"), 2);
+			}
+		};
+	}
+	
+	public List<Column> findList() {
+		return columnDao.findAll(columnListSpec());
 	}
 
 }

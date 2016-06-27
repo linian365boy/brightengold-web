@@ -110,7 +110,7 @@
     class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
     <property name="dataSource" ref="dataSource" />
     <property name="persistenceXmlLocation" value="classpath:jpa/persistence.xml" />
-    <property name="persistenceUnitName" value="brightengold" />
+    <property name="persistenceUnitName" value="sunshinecig" />
   </bean>
 
   <aop:aspectj-autoproxy proxy-target-class="true" />

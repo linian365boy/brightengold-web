@@ -29,12 +29,33 @@
 	
 	var publish = function(obj){
 		var productId = $(obj).attr("name");
-		art.dialog.confirm('确定发布此商品',function(){
+		art.dialog.confirm('确定发布此商品？',function(){
 			var url = '${ctx}admin/goods/product/'+productId+'/publish.html';
 			window.location.href=url;
 		});
 	}
 	
+	var changeStatus = function(id,status){
+		var statusStr = "正常";
+		if(status){
+			statusStr = "锁定";
+		}
+		art.dialog.confirm('确定修改状态为'+statusStr+'？',function(){
+			$.post("${ctx}admin/goods/product/"+id+"/changeStatus.html",
+					{status:status},function(text){
+				if(text=="1"){
+					if(status){
+						$("#status_"+id).html("<span class='label label-default' title='点击修改状态'>锁定</span>");
+					}else{
+						$("#status_"+id).html("<span class='label label-info' title='点击修改状态'>正常</span>");
+					}
+					art.dialog.alert("修改状态成功！");
+				}else{
+					art.dialog.alert("修改状态失败！");
+				}
+			});
+		});
+	}
 		
 </script>
 </head>
@@ -60,6 +81,7 @@
 					<th >商品分类</th>
 					<th >是否热门</th>
 					<th >是否发布</th>
+					<th >状态</th>
 					<th >创建人</th>
 					<th >操作</th>
 				</tr> 
@@ -73,10 +95,12 @@
 						title="${product.enName }" alt="${product.enName }" 
 						name="picUrl" width="50" height="50"/>
 					</td>
-					<td><a href="${ctx }admin/goods/product/${product.id}.html" title="${ product.enName}">${product.enName }</a></td>
+					<td><a href="${ctx }admin/goods/product/${product.id}.html" target="_blank" title="${ product.enName}">${product.enName }</a></td>
 					<td>${product.category.enName }</td>
 					<td>${product.hot?"<span class='label label-danger' title='热门'>热门</span>":"<span class='label label-primary' title='非热门'>非热门</span>" }</td>
 					<td>${product.publish?"<span class='label label-info' title='发布'>发布</span>":"<span class='label label-default' title='未发布'>未发布</span>" }</td>
+					<td onclick="changeStatus(${product.id},${product.status });" id="status_${product.id }" 
+					style="cursor: pointer;">${product.status?"<span class='label label-info' title='点击修改状态'>正常</span>":"<span class='label label-default' title='点击修改状态'>锁定</span>" }</td>
 					<td>${product.createUser.realName }(${product.createUser.username })</td>
 					<td>
 						<input type="image" name="${product.id }" onclick="update(this);"

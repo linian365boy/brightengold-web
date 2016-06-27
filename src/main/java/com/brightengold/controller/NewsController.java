@@ -40,7 +40,7 @@ import com.google.gson.Gson;
 @RequestMapping("/admin/news")
 @Scope("prototype")
 public class NewsController {
-	private Logger logger = LoggerFactory.getLogger(NewsController.class);
+	private static Logger logger = LoggerFactory.getLogger(NewsController.class);
 	
 	@Autowired
 	private NewsService newsService;

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,12 +16,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import cn.rainier.nian.model.Role;
@@ -43,7 +47,7 @@ public class UserController {
 	private RoleServiceImpl roleService;
 	private PageRainier<User> users;
 	private Integer pageSize = 10;
-	private Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@RequestMapping({"/users/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
@@ -217,6 +221,43 @@ public class UserController {
 			logger.warn("用户：{}，注销成功",user.getUsername());
 		}
 		return "redirect:/admin/sys/user/users/1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/modifyPass",method=RequestMethod.GET)
+	public String modifyPass(String oldPassword,
+			String newPassword1,
+			String newPassword2){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		User u = (User) authentication.getPrincipal();
+		String password = null;
+		String actionMsg = "恭喜您，密码修改成功！";
+		try {
+			if (new Md5PasswordEncoder().encodePassword(oldPassword, null).equals(u.getPassword())) {
+				if (newPassword1 != null && newPassword1.trim().length() > 0
+						&& newPassword2 != null && newPassword2.trim().length() > 0
+						&& newPassword1.equals(newPassword2)) {
+					if(newPassword1.trim().length()>=6&&newPassword1.trim().length()<=12){
+						if(Pattern.matches("^[0-9a-zA-Z]{6,12}$", newPassword1)){
+							password = new Md5PasswordEncoder().encodePassword(newPassword1,null);
+							userService.changePassword(oldPassword, password, authentication);
+						}else{
+							actionMsg = "-4";//字母需数字、字母
+						}
+					}else{
+						actionMsg = "-3";//长度不一致
+					}
+				}else{
+					actionMsg = "-1";
+				}
+			}else{
+				actionMsg = "-2";
+			}
+		} catch (Exception e) {
+			actionMsg = "error";
+			logger.error("修改密码出错："+e);
+		}
+		return null;
 	}
 
 	public PageRainier<User> getUsers() {

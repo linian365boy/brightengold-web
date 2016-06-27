@@ -28,7 +28,7 @@ public class FeedbackController {
 	private FeedbackService feedbackService;
 	private PageRainier<Feedback> feedbacks;
 	private Integer pageSize = 10;
-	private Logger logger = LoggerFactory.getLogger(FeedbackController.class);
+	private static Logger logger = LoggerFactory.getLogger(FeedbackController.class);
 	
 	@RequestMapping({"/feedbacks/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){

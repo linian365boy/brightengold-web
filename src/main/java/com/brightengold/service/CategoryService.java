@@ -77,6 +77,14 @@ public class CategoryService {
 	public Category loadCategoryByEname(String code) {
 		return categoryDao.findOne(countSpec(code));
 	}
+
+	public List<Category> findCateByColId(Integer id) {
+		return categoryDao.findCate(id);
+	}
+
+	public List<Category> findList() {
+		return categoryDao.findAll();
+	}
 	
 	
 }

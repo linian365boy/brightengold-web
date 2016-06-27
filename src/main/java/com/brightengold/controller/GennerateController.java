@@ -13,16 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
 
@@ -30,24 +27,24 @@ import com.brightengold.model.Advertisement;
 import com.brightengold.model.Category;
 import com.brightengold.model.Column;
 import com.brightengold.model.Company;
+import com.brightengold.model.Info;
 import com.brightengold.model.News;
 import com.brightengold.model.Product;
 import com.brightengold.service.AdvertisementService;
 import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.CompanyService;
+import com.brightengold.service.InfoService;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.NewsService;
 import com.brightengold.service.ProductService;
 import com.brightengold.service.SystemConfig;
 import com.brightengold.util.FreemarkerUtil;
-import com.brightengold.util.HTMLGenerator;
 
 @Controller
 @RequestMapping("/admin/sys/html")
 @Scope("prototype")
 public class GennerateController {
-	
 	private Logger logger = LoggerFactory.getLogger(GennerateController.class);
 	@Autowired
 	private ColumnService columnService;
@@ -63,18 +60,75 @@ public class GennerateController {
 	private ProductService productService;
 	@Resource
 	private CategoryService categoryService;
+	@Resource
+	private InfoService infoService;
+	
 	private Integer pageSize = 10;
 	private Integer pageNo = 1;
 	
 	@RequestMapping(value={"/generate"},method=RequestMethod.GET)
-	public String toGennerateHtml(){
-		return "admin/sys/html/preGenerate";
+	public String toGennerateHtml(ModelMap map){
+		//return "admin/sys/html/preGenerate";
+		map.put("style", 1);
+		return "admin/sys/html/generate";
 	}
 	
 	@RequestMapping(value={"/doGenerate"},method=RequestMethod.GET)
 	public String doGenerateHtml(int style,ModelMap map){
 		map.put("style", style);
 		return "admin/sys/html/generate";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value={"/generateAll"},method=RequestMethod.POST)
+	public String generateAll(int style,ModelMap map,HttpServletRequest request){
+		//按风格2生成页面
+		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+				request.getServerPort()+request.getContextPath();
+		String path = request.getSession().getServletContext().getRealPath("/");
+		String style_v = (String) request.getSession().getAttribute("style_v");
+		String templateName = "style2/columnTemplate2.ftl";
+		Column parentCol = null;
+		gennerateCommon(map);
+		map.put("ctx", basePath);
+		map.put("style_v", style_v);
+		//１　生成首页
+		FreemarkerUtil.fprint("style2/index2.ftl", map, path+File.separator, "index.htm");
+		//２　获取所有的栏目code
+		List<Column> columnList = columnService.findList();
+		for(Column col : columnList){
+			//当前栏目
+			parentCol = col.getParentColumn()==null?col:col.getParentColumn();
+			map.put("parentCol", parentCol);
+			map.put("column", col);
+			publishAllProductsByStyle2(request,col,map);
+			FreemarkerUtil.fprint(templateName, map, 
+					path+File.separator+"views"+File.separator+"html"+
+							File.separator+"col"+File.separator, col.getCode()+".htm");
+		}
+		//３　获取所有分类的英文名称
+		List<Category> cateList = categoryService.findList();
+		for(Category cate : cateList){
+			gennerateCommon(map);
+			map.put("ctx", basePath);
+			map.put("style_v", style_v);
+			map.put("category", cate);
+			FreemarkerUtil.fprint("style2/categoryTemplate.ftl", map, 
+					path+File.separator+"views"+File.separator+"html"+
+							File.separator+"col"+File.separator, cate.getEnName().replaceAll("\\s*", "")+".htm");
+		}
+		//４　获取所有info　page code
+		List<Info> infoList = infoService.findList();
+		for(Info info : infoList){
+			gennerateCommon(map);
+			map.put("ctx", basePath);
+			map.put("style_v", style_v);
+			map.put("model", info);
+			FreemarkerUtil.fprint("style2/info.ftl", map, path+File.separator+"views"+
+					File.separator+"html"+File.separator+"info"+
+					File.separator,info.getCode()+".htm");
+		}
+		return "200";
 	}
 	
 	@ResponseBody
@@ -158,15 +212,93 @@ public class GennerateController {
 						request.getServerPort()+request.getContextPath();
 				String path = request.getSession().getServletContext().getRealPath("/");
 				String style_v = (String) request.getSession().getAttribute("style_v");
+				String templateName = "style2/columnTemplate2.ftl";
+				Column col = null;
+				Column parentCol = null;
 				gennerateCommon(map);
 				map.put("ctx", basePath);
 				map.put("style_v", style_v);
 				if("index".equals(code) || "home".equals(code)){
 					FreemarkerUtil.fprint("style2/index2.ftl", map, path+File.separator, "index.htm");
+				}else{
+					//当前栏目
+					col = columnService.loadColumnByCode(code);
+					parentCol = col.getParentColumn()==null?col:col.getParentColumn();
+					map.put("parentCol", parentCol);
+					map.put("column", col);
+					publishAllProductsByStyle2(request,col,map);
+					FreemarkerUtil.fprint(templateName, map, 
+							path+File.separator+"views"+File.separator+"html"+
+									File.separator+"col"+File.separator, code+".htm");
+				}
+			}else{
+				//按分类英文名称查询是否有记录
+				Category cate = categoryService.loadCategoryByEname(code);
+				String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+						request.getServerPort()+request.getContextPath();
+				String path = request.getSession().getServletContext().getRealPath("/");
+				String style_v = (String) request.getSession().getAttribute("style_v");
+				if(cate!=null){
+					gennerateCommon(map);
+					map.put("ctx", basePath);
+					map.put("style_v", style_v);
+					map.put("category", cate);
+					FreemarkerUtil.fprint("style2/categoryTemplate.ftl", map, 
+							path+File.separator+"views"+File.separator+"html"+
+									File.separator+"col"+File.separator, code.replaceAll("\\s*", "")+".htm");
+					return "200";
+				}else{
+					Info info = infoService.loadOneByCode(code);
+					if(info!=null){
+						gennerateCommon(map);
+						map.put("ctx", basePath);
+						map.put("style_v", style_v);
+						map.put("model", info);
+						FreemarkerUtil.fprint("style2/info.ftl", map, path+File.separator+"views"+
+								File.separator+"html"+File.separator+"info"+
+								File.separator,info.getCode()+".htm");
+						return "200";
+					}
+					return "501";
 				}
 			}
 			return "200";
 		}
+	}
+	
+	private void publishAllProductsByStyle2(HttpServletRequest request,
+			Column col, ModelMap map) {
+		List<Category> cates = categoryService.findCateByColId(col.getId());
+		//String fPath = null;
+		for(Category cate : cates){
+			 List<Product> productList = productService.findAllListByCateId(cate.getId());;
+			 //得到该栏目下所有的产品
+			 //批量修改product;
+			 List<Product> tempProductList = new ArrayList<Product>();
+			 String path = request.getSession().getServletContext().getRealPath("/");
+			 String parentPath = path + File.separator+"views"+File.separator+"html"+
+				 		File.separator+"product"+File.separator+
+			 			cate.getId()+File.separator;
+			 for(Product product : productList){
+				 if(product.isPublish()){
+					 //fPath = path +File.separator+"views"+File.separator+"html"+File.separator+"product"+
+					//		 	File.separator+cate.getId()+File.separator+product.getPageNum()+
+					//		 		File.separator+product.getUrl();
+					 FileUtil.delFile(parentPath+product.getUrl());
+				 }
+				 product.setPublish(true);
+				 map.put("model", product);
+				 map.put("parentCol", ((Column)map.get("column")).getParentColumn());
+				 map.put("relateProducts", productList);
+				 FreemarkerUtil.fprint("style2/product.ftl", map, parentPath,product.getUrl());
+				 tempProductList.add(product);
+			 }
+			 if(tempProductList.size()>0){
+				 productService.insertOfBatch(tempProductList);
+			 }
+			 //pMap.put(cate, productList);
+		}
+		map.put("cates", cates);
 	}
 	
 	private void publishAllProducts(HttpServletRequest request, Category cate,
@@ -192,9 +324,10 @@ public class GennerateController {
 			 productList = page.getResult();
 			 for(Product product:productList){
 				 if(product.isPublish()){
-					 fPath = path +File.separator+"views"+File.separator+"html"+File.separator+"product"+
-							 	File.separator+cate.getId()+File.separator+product.getPageNum()+
-							 		File.separator+product.getUrl();
+					 //fPath = path +File.separator+"views"+File.separator+"html"+File.separator+"product"+
+					//		 	File.separator+cate.getId()+File.separator+product.getPageNum()+
+					//		 		File.separator+product.getUrl();
+					 fPath = parentPath+(i+1)+File.separator+product.getUrl();
 					 FileUtil.delFile(fPath);
 				 }
 				 product.setPublish(true);
@@ -338,6 +471,9 @@ public class GennerateController {
 		//首页产品
 		List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
 		map.put("products", products);
+		//info信息
+		List<Info> infos = infoService.getList();
+		map.put("infos", infos);
 	}
 	
 	@RequestMapping(value="/index",method=RequestMethod.GET)
@@ -363,82 +499,6 @@ public class GennerateController {
 		return "index";
 	}
 	
-	@RequestMapping(value="/aboutUs",method=RequestMethod.GET)
-	public String gennerateAboutUs(HttpServletRequest request){
-		/*try{
-			
-		}catch(Exception e){
-			MsgUtil.setMsg("error", "对不起，生成关于我们页面失败！");
-			logger.error("生成关于我们页面发生错误：{}",new Object[]{e});
-		}*/
-		User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-		String url=basePath+"/sys/html/gennerateHtml";
-		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername(),null)){
-			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
-		}else{
-			MsgUtil.setMsg("error", "对不起，生成首页失败！");
-		}
-		return "redirect:/admin/sys/html/generate.html";
-	}
-	
-	@RequestMapping(value="/contactUs",method=RequestMethod.GET)
-	public String gennerateContactUs(HttpServletRequest request){
-		User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-		String url=basePath+"/sys/html/gennerateHtml";
-		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername(),null)){
-			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
-		}else{
-			MsgUtil.setMsg("error", "对不起，生成首页失败！");
-		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/html/";
-	}
-	
-	@RequestMapping(value="/News",method=RequestMethod.GET)
-	public String gennerateNews(HttpServletRequest request){
-		User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-		String url=basePath+"/sys/html/gennerateHtml";
-		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername(),null)){
-			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
-		}else{
-			MsgUtil.setMsg("error", "对不起，生成首页失败！");
-		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/html/";
-	}
-	
-	@RequestMapping(value="/Feedback",method=RequestMethod.GET)
-	public String gennerateFeedback(HttpServletRequest request){
-		User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-		String url=basePath+"/sys/html/gennerateHtml";
-		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername(),null)){
-			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
-		}else{
-			MsgUtil.setMsg("error", "对不起，生成首页失败！");
-		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/html/";
-	}
-	
-	@RequestMapping(value="/products",method=RequestMethod.GET)
-	public String gennerateProducts(HttpServletRequest request){
-		User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-		String url=basePath+"/sys/html/gennerateHtml";
-		HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-		if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath("/"),loginUser.getUsername(),null)){
-			MsgUtil.setMsg("succss", "恭喜您，生成首页成功！");
-		}else{
-			MsgUtil.setMsg("error", "对不起，生成首页失败！");
-		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/html/";
-	}
-
 	public Integer getPageSize() {
 		return pageSize;
 	}

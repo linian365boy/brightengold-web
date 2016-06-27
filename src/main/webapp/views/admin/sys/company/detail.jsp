@@ -73,12 +73,12 @@
 			    </div>
 		   </div>
 		   <div class="form-group">
-			    <label for="name" class="col-sm-2 control-label">公司logo<span class="asterisk">*</span></label>
+			    <label for="logoPic" class="col-sm-2 control-label">公司logo<span class="asterisk">*</span></label>
 			    <div class="col-sm-8">
 			      <img src="${ctx }resources/${model.logo }" 
             	title="公司logo" alt="公司logo" width="390px" height="130px" 
             	name="logoPic" />
-            	<input type="file" name="photos" title="点击更换公司logo" class="required" accept="image/*"/>
+            	<input type="file" name="photos" title="点击更换公司logo" accept="image/*"/>
 			    </div>
 		   </div>
 		   <div class="form-group">

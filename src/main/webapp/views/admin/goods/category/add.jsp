@@ -112,6 +112,12 @@
 			    </div>
 			  </div>
 			  <div class="form-group">
+			    <label for="remark" class="col-sm-3 control-label">备注</label>
+			    <div class="row col-sm-8">
+			      <input type="text" class="form-control" id="remark" name="remark" placeholder="备注">
+			    </div>
+			  </div>
+			  <div class="form-group">
 			  <div class="col-sm-offset-4 col-sm-8">
 			  	<button type="submit" class="btn btn-primary">保存</button>
 			      <button class="btn btn-default" type="reset">重置</button>

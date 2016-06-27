@@ -7,6 +7,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ import com.brightengold.model.Product;
 public class ProductService {
 	@Autowired
 	private ProductDao productDao;
+	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
 	public PageRainier<Product> findAll(Integer pageNo, Integer pageSize) {
 		Page<Product> tempPage = productDao.findAll(
@@ -91,5 +94,25 @@ public class ProductService {
 		List<Product> products = productDao.findListByCateId(cateId);
 		page.setResult(products);
 		return page;
+	}
+
+	public List<Product> findAllListByCateId(Integer catId) {
+		return productDao.findAllListByCateId(catId);
+	}
+
+	public boolean updateStatus(Integer id, boolean status) {
+		if(status){
+			status = false;
+		}else{
+			status = true;
+		}
+		boolean flag = true;
+		try{
+			productDao.updateStatus(id,status);
+		}catch(Exception e){
+			logger.error("修改产品的状态失败！",e);
+			flag = false;
+		}
+		return flag;
 	}
 }

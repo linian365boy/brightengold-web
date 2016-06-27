@@ -1,13 +1,10 @@
 package com.brightengold.dao;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import cn.rainier.nian.dao.base.AbstractDao;
-
 import com.brightengold.model.Column;
 
 public interface ColumnDao extends AbstractDao<Column, Integer> {
@@ -27,5 +24,4 @@ public interface ColumnDao extends AbstractDao<Column, Integer> {
 	@Modifying
 	@Query("update Column c set c.type = :type where c.id = :id or c.parentColumn.id = :id")
 	void updateColumnPublishContent(@Param("id") Integer id,@Param("type")  boolean type);
-	
 }

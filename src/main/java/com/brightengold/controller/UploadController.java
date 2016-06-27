@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 @Controller
 @Scope("prototype")
 public class UploadController {
-	private Logger logger = LoggerFactory.getLogger(UploadController.class);
+	private static Logger logger = LoggerFactory.getLogger(UploadController.class);
 	private static final int minWidth = 50,maxWidth = 500;
 	
 	@ResponseBody

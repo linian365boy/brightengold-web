@@ -23,10 +23,7 @@ $(document).ready(function(){
 						type:'POST',
 						url:'${ctx}admin/goods/category/existCategory.html',
 						data:{
-							username:function(){
-								return $("#enName").val();
-							},
-							u:function(){
+							en:function(){
 								return "${model.enName}";
 							}
 						}
@@ -142,6 +139,12 @@ function changeCol(obj){
 			    <label for="enName" class="col-sm-3 control-label">英文名称<span class="asterisk">*</span></label>
 			    <div class="row col-sm-8">
 			      <input type="text" class="form-control" id="enName" value="${model.enName }" name="enName" placeholder="名称">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="remark" class="col-sm-3 control-label">备注</label>
+			    <div class="row col-sm-8">
+			      <input type="text" class="form-control" id="remark" value="${model.remark }" name="remark" placeholder="备注">
 			    </div>
 			  </div>
             <input type="hidden" name="id" value="${model.id }"/>

@@ -19,9 +19,6 @@ $(document).ready(function(){
 			"enName":{
 				required:true
 			},
-			"photo":{
-				required:true
-			},
 			"category":{
 				required:true
 			},
@@ -32,9 +29,6 @@ $(document).ready(function(){
 		messages:{
 			"enName":{
 				required:"标题不能为空！"
-			},
-			"photo":{
-				required:"图片不能为空！"
 			},
 			"category":{
 				required:"分类不能为空！"

@@ -52,6 +52,46 @@
 			art.dialog.alert("栏目代码不能为空！");
 		}
 	}
+	
+	function gennerateAllPage(){
+			$.ajax({
+				   type: "POST",
+				   data: "style="+style,
+				   url: "${ctx }admin/sys/html/generateAll.html",
+				   beforeSend: function(){
+					   art.dialog({
+						   id:'gennerateAllPageTips',
+						   content:'<img src="${ctx }resources/js/skins/icons/loading.gif"/>正在生成中...',
+						   lock:true
+					   });
+				   },
+				   success: function(text){
+					   art.dialog.list['gennerateAllPageTips'].close();
+					   if("200"==text){
+							art.dialog({
+								id:'tips',
+								title:'页面生成成功',
+								content:'页面生成成功',
+								icon:'face-smile'
+							});
+						}else if("501"==text){
+							art.dialog({
+								id:'tips',
+								title:'提示',
+								content:'页面代码不存在',
+								icon:'face-sad'
+							});
+						}else{
+							art.dialog({
+								id:'tips',
+								title:'页面生成失败',
+								content:'页面生成失败',
+								icon:'face-sad'
+							});
+						}
+				   }
+			});
+	}
 </script>
 
 </head>
@@ -63,7 +103,7 @@
 		<h3 class="tabs_involved">生成管理</h3>
 		</header>
 		<div class="tab_container">
-		<div id="tab1" class="tab_content mb140">
+		<div id="tab1" class="tab_content mb180">
 			<form class="form-inline">
 			  <div class="form-group">
 			  	<div class="col-xs-7">
@@ -78,6 +118,7 @@
 			  		<p class="text-left">1．生成首页请使用"index"或"home"代码</p>
 			  		<p class="text-left">2．生成商品分类页请使用分类英文名称</p>
 			  		<p class="text-left">3．栏目代码与分类英文名称相同时，优先生成栏目页面，不生成分类页面</p>
+			  		<p class="text-left"><button type="button" onclick="gennerateAllPage();" class="btn btn-danger">一键生成所有页面</button></p>
 				</div>
 			</div>
 		</div>

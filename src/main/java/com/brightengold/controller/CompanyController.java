@@ -1,16 +1,26 @@
 package com.brightengold.controller;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.brightengold.model.Company;
 import com.brightengold.service.CompanyService;
 import com.brightengold.service.LogUtil;
@@ -24,6 +34,12 @@ import com.brightengold.util.Tools;
 public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
+	private static Logger logger = LoggerFactory.getLogger(CompanyController.class);
+	
+	@InitBinder
+	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
 	
 	@RequestMapping(value={"/detail","/",""},method=RequestMethod.GET)
 	public String detail(Model model) {
@@ -32,33 +48,17 @@ public class CompanyController {
 	}
 	
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
-	public String update(@RequestParam  MultipartFile[] photos,Company company, HttpServletRequest request){
+	public String update(@RequestParam  MultipartFile photos,Company company, HttpServletRequest request){
 		Company temp = companyService.loadCompany();
 		try{
-			int i = 0;
-			for(MultipartFile photo : photos){
-				i++;
-				if(i==1){
-					if(!photo.isEmpty()){
-						String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
-						String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
-						FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
-						String url = newFileName.substring(realPath.lastIndexOf("upload"));
-						company.setLogo(url.replace("\\", "/"));
-					}else{
-						company.setLogo(temp.getLogo());
-					}
-				}else{
-					if(!photo.isEmpty()){
-						String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
-						String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
-						FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
-						String url = newFileName.substring(realPath.lastIndexOf("upload"));
-						company.setPhonePic(url.replace("\\", "/"));
-					}else{
-						company.setPhonePic(temp.getPhonePic());
-					}
-				}
+			if(!photos.isEmpty()){
+				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
+				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
+				FileUtils.copyInputStreamToFile(photos.getInputStream(), new File(newFileName));
+				String url = newFileName.substring(realPath.lastIndexOf("upload"));
+				company.setLogo(url.replace("\\", "/"));
+			}else{
+				company.setLogo(temp.getLogo());
 			}
 			company.setCreateDate(temp.getCreateDate());
 			company = companyService.save(company);
@@ -78,9 +78,9 @@ public class CompanyController {
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT, content.toString());
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error("修改公司信息报错",e);
 		}
-		return "redirect:/admin/sys/company/detail";
+		return "redirect:/admin/sys/company/detail.html";
 	}
 	
 }

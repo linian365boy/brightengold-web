@@ -53,6 +53,8 @@ public class Category implements Serializable{
 	private com.brightengold.model.Column column;
 	private List<Category> children;
 	private List<Product> products;
+	//备注
+	private String remark;
 	
 	@Id
 	@GeneratedValue
@@ -121,5 +123,10 @@ public class Category implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

@@ -72,11 +72,6 @@ $(document).ready(function(){
 		}
 	});
 });
-function formSubmit(){
-	var categoryId = "${model.id}";
-	$("#form").attr("action","${ctx}admin/goods/category/"+categoryId+"/update");
-	$("#form").submit();
-}
 </script>
 </head>
 <body>
@@ -104,7 +99,7 @@ function formSubmit(){
   <div class="form-group">
     <label for="enName" class="col-sm-3 control-label">英文名称<span class="asterisk">*</span></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="enName"　value="${model.enName }" name="enName" placeholder="名称">
+      <input type="text" class="form-control" id="enName" value="${model.enName }" name="enName" placeholder="名称">
     </div>
   </div>
   <div class="form-group">

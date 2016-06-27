@@ -4,7 +4,7 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>brightengold---${news.title }</title>
+    <title>sunshinecig---${news.title }</title>
 	<meta http-equiv="keywords" content="${news.keyWords }"/>
 	 <link href="${ctx }resources/css/basic.css" rel="stylesheet"/>
 	 <%@include file="/views/admin/commons/listJsCss.jsp" %>
