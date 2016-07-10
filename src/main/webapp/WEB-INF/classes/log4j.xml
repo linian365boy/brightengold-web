@@ -61,7 +61,7 @@
 	<!-- 记录该包下所有日志 -->
 	<logger name="com.brightengold" additivity="false">
 		 <level value="ERROR" />
-		<!--<appender-ref ref="stdout"/>-->
+		<appender-ref ref="stdout"/>
 		<appender-ref ref="infoLog"/>
 		<appender-ref ref="warnLog"/> 
 		<appender-ref ref="errorLog"/>
@@ -70,7 +70,7 @@
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework">
 		<level value="ERROR"/>
-		<!-- <appender-ref ref="stdout"/> -->
+		<appender-ref ref="stdout"/>
 		<appender-ref ref="infoLog"/>
 		<appender-ref ref="warnLog"/>
 		<appender-ref ref="errorLog"/>
@@ -78,7 +78,7 @@
 	
 	<logger name="org.apache.catalina">
 		<level value="ERROR"/>
-		<!-- <appender-ref ref="stdout"/>-->
+		<appender-ref ref="stdout"/>
 		<appender-ref ref="infoLog"/>
 		<appender-ref ref="warnLog"/> 
 		<appender-ref ref="errorLog"/>

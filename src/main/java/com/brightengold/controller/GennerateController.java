@@ -69,7 +69,7 @@ public class GennerateController {
 	@RequestMapping(value={"/generate"},method=RequestMethod.GET)
 	public String toGennerateHtml(ModelMap map){
 		//return "admin/sys/html/preGenerate";
-		map.put("style", 1);
+		map.put("style", 0);
 		return "admin/sys/html/generate";
 	}
 	
@@ -82,18 +82,17 @@ public class GennerateController {
 	@ResponseBody
 	@RequestMapping(value={"/generateAll"},method=RequestMethod.POST)
 	public String generateAll(int style,ModelMap map,HttpServletRequest request){
-		//按风格2生成页面
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
 		String path = request.getSession().getServletContext().getRealPath("/");
 		String style_v = (String) request.getSession().getAttribute("style_v");
-		String templateName = "style2/columnTemplate2.ftl";
+		String templateName = "columnTemplate.ftl";
 		Column parentCol = null;
 		gennerateCommon(map);
 		map.put("ctx", basePath);
 		map.put("style_v", style_v);
 		//１　生成首页
-		FreemarkerUtil.fprint("style2/index2.ftl", map, path+File.separator, "index.htm");
+		FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm");
 		//２　获取所有的栏目code
 		List<Column> columnList = columnService.findList();
 		for(Column col : columnList){
@@ -101,7 +100,7 @@ public class GennerateController {
 			parentCol = col.getParentColumn()==null?col:col.getParentColumn();
 			map.put("parentCol", parentCol);
 			map.put("column", col);
-			publishAllProductsByStyle2(request,col,map);
+			publishAllProductsByStyle(request,col,map);
 			FreemarkerUtil.fprint(templateName, map, 
 					path+File.separator+"views"+File.separator+"html"+
 							File.separator+"col"+File.separator, col.getCode()+".htm");
@@ -113,7 +112,7 @@ public class GennerateController {
 			map.put("ctx", basePath);
 			map.put("style_v", style_v);
 			map.put("category", cate);
-			FreemarkerUtil.fprint("style2/categoryTemplate.ftl", map, 
+			FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 					path+File.separator+"views"+File.separator+"html"+
 							File.separator+"col"+File.separator, cate.getEnName().replaceAll("\\s*", "")+".htm");
 		}
@@ -124,7 +123,7 @@ public class GennerateController {
 			map.put("ctx", basePath);
 			map.put("style_v", style_v);
 			map.put("model", info);
-			FreemarkerUtil.fprint("style2/info.ftl", map, path+File.separator+"views"+
+			FreemarkerUtil.fprint("info.ftl", map, path+File.separator+"views"+
 					File.separator+"html"+File.separator+"info"+
 					File.separator,info.getCode()+".htm");
 		}
@@ -158,6 +157,10 @@ public class GennerateController {
 				map.put("style_v", style_v);
 				try{
 					if("index".equals(code) || "home".equals(code)){
+						//生成首页的热销产品
+						//首页产品
+						List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
+						map.put("hotProducts", products);
 						FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm");
 					}else{
 						//当前栏目
@@ -171,6 +174,11 @@ public class GennerateController {
 						if(col.getType()){
 							templateName = "productTemplate.ftl";
 						}
+						//查找是否有相同code的Info，一起生成，填充column的内容页面
+						Info info = infoService.loadOneByCode(code);
+						if(info!=null){
+							map.put("info", info);
+						}
 						FreemarkerUtil.fprint(templateName, map, 
 								path+File.separator+"views"+File.separator+"html"+
 										File.separator+"col"+File.separator, code+".htm");
@@ -183,17 +191,17 @@ public class GennerateController {
 			}else{
 				//按分类英文名称查询是否有记录
 				Category cate = categoryService.loadCategoryByEname(code);
+				String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+						request.getServerPort()+request.getContextPath();
+				String style_v = (String) request.getSession().getAttribute("style_v");
+				String path = request.getSession().getServletContext().getRealPath("/");
 				if(cate!=null){
 					//productService.findAllByCateId(pageNo, pageSize, cate.getId());
-					String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-							request.getServerPort()+request.getContextPath();
-					String path = request.getSession().getServletContext().getRealPath("/");
-					String style_v = (String) request.getSession().getAttribute("style_v");
 					//Column col = null;
 					//Column parentCol = null;
+					map.put("style_v", style_v);
 					gennerateCommon(map);
 					map.put("ctx", basePath);
-					map.put("style_v", style_v);
 					//map.put("parentCol", parentCol);
 					map.put("category", cate);
 					map.put("column", cate.getColumn());
@@ -202,8 +210,20 @@ public class GennerateController {
 							path+File.separator+"views"+File.separator+"html"+
 									File.separator+"col"+File.separator, code.replaceAll("\\s*", "")+".htm");
 					return "200";
+				}else{
+					Info info = infoService.loadOneByCode(code);
+					if(info!=null){
+						gennerateCommon(map);
+						map.put("ctx", basePath);
+						map.put("style_v", style_v);
+						map.put("model", info);
+						FreemarkerUtil.fprint("info.ftl", map, path+File.separator+"views"+
+								File.separator+"html"+File.separator+"info"+
+								File.separator,info.getCode()+".htm");
+						return "200";
+					}
+					return "501";
 				}
-				return "501";
 			}
 		}else{
 			//按风格2生成页面
@@ -212,21 +232,21 @@ public class GennerateController {
 						request.getServerPort()+request.getContextPath();
 				String path = request.getSession().getServletContext().getRealPath("/");
 				String style_v = (String) request.getSession().getAttribute("style_v");
-				String templateName = "style2/columnTemplate2.ftl";
+				String templateName = "columnTemplate.ftl";
 				Column col = null;
 				Column parentCol = null;
 				gennerateCommon(map);
 				map.put("ctx", basePath);
 				map.put("style_v", style_v);
 				if("index".equals(code) || "home".equals(code)){
-					FreemarkerUtil.fprint("style2/index2.ftl", map, path+File.separator, "index.htm");
+					FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm");
 				}else{
 					//当前栏目
 					col = columnService.loadColumnByCode(code);
 					parentCol = col.getParentColumn()==null?col:col.getParentColumn();
 					map.put("parentCol", parentCol);
 					map.put("column", col);
-					publishAllProductsByStyle2(request,col,map);
+					publishAllProductsByStyle(request,col,map);
 					FreemarkerUtil.fprint(templateName, map, 
 							path+File.separator+"views"+File.separator+"html"+
 									File.separator+"col"+File.separator, code+".htm");
@@ -243,30 +263,18 @@ public class GennerateController {
 					map.put("ctx", basePath);
 					map.put("style_v", style_v);
 					map.put("category", cate);
-					FreemarkerUtil.fprint("style2/categoryTemplate.ftl", map, 
+					FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 							path+File.separator+"views"+File.separator+"html"+
 									File.separator+"col"+File.separator, code.replaceAll("\\s*", "")+".htm");
 					return "200";
-				}else{
-					Info info = infoService.loadOneByCode(code);
-					if(info!=null){
-						gennerateCommon(map);
-						map.put("ctx", basePath);
-						map.put("style_v", style_v);
-						map.put("model", info);
-						FreemarkerUtil.fprint("style2/info.ftl", map, path+File.separator+"views"+
-								File.separator+"html"+File.separator+"info"+
-								File.separator,info.getCode()+".htm");
-						return "200";
-					}
-					return "501";
 				}
+				return "501";
 			}
 			return "200";
 		}
 	}
 	
-	private void publishAllProductsByStyle2(HttpServletRequest request,
+	private void publishAllProductsByStyle(HttpServletRequest request,
 			Column col, ModelMap map) {
 		List<Category> cates = categoryService.findCateByColId(col.getId());
 		//String fPath = null;
@@ -290,7 +298,7 @@ public class GennerateController {
 				 map.put("model", product);
 				 map.put("parentCol", ((Column)map.get("column")).getParentColumn());
 				 map.put("relateProducts", productList);
-				 FreemarkerUtil.fprint("style2/product.ftl", map, parentPath,product.getUrl());
+				 FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl());
 				 tempProductList.add(product);
 			 }
 			 if(tempProductList.size()>0){
@@ -463,14 +471,16 @@ public class GennerateController {
 		List<Column> crossCol = columnService.findColumnsByDepth(systemConfig.getCrossMaxDepth());
 		map.put("crossCol", crossCol);
 		//首页侧边栏目，最深显示到三级菜单
-		List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
-		map.put("verticalCol", verticalCol);
-		//企业信息
+		//List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
+		//map.put("verticalCol", verticalCol);
+		//首页新闻
+		List<News> news = newsService.findIndexPic(systemConfig.getIndexNewsSize());
+		map.put("indexNews", news);
+		List<Category> categorysList = categoryService.findList();
+		map.put("categorys", categorysList);
+ 		//企业信息
 		Company company = companyService.loadCompany();
 		map.put("company", company);
-		//首页产品
-		List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
-		map.put("products", products);
 		//info信息
 		List<Info> infos = infoService.getList();
 		map.put("infos", infos);

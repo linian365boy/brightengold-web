@@ -13,7 +13,9 @@ public class SystemConfig {
 	@Value("#{configProperties['vertical.max.depth']}")
 	private int verticalMaxDepth = 3;
 	@Value("#{configProperties['index.product.size']}")
-	private int indexProductSize;
+	private int indexProductSize = 12;
+	@Value("#{configProperties['index.news.size']}")
+	private int indexNewsSize = 8;
 	
 	/**
 	 * 首页滚动图片最大数量
@@ -43,7 +45,13 @@ public class SystemConfig {
 	public int getIndexProductSize() {
 		return indexProductSize;
 	}
-	
+	/**
+	 * 首页新闻数
+	 * @return
+	 */
+	public int getIndexNewsSize() {
+		return indexNewsSize;
+	}
 }
 
 	

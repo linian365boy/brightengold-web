@@ -116,4 +116,21 @@ public class NewsService {
 		page.setResult(tempPage.getContent());
 		return page;
 	}
+
+	public List<News> findIndexPic(int indexNewsSize) {
+		Page<News> tempPage = newsDao.findAll(findIndexNewsSpec(), 
+				new PageRequest(0,indexNewsSize,new Sort(Direction.DESC,"priority","createDate")));
+		return tempPage.getContent();
+	}
+
+	private Specification<News> findIndexNewsSpec() {
+		return new Specification<News>(){
+			@Override
+			public Predicate toPredicate(Root<News> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.isNotNull(root.<Date>get("publishDate")));
+			}
+		};
+	}
+	
 }

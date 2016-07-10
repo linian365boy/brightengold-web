@@ -90,7 +90,6 @@ public class ColumnService {
 
 	public List<Column> findColumnsByDepth(int crossMaxDepth) {
 		List<Column> colList = columnDao.findFirstColumn();
-		System.out.println(colList.size());
 		return colList;
 	}
 

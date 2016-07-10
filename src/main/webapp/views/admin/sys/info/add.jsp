@@ -76,7 +76,7 @@
     </div>
   </div>
   <div class="form-group">
-			    <label for="content" class="col-sm-1 control-label">产品详情<span class="asterisk">*</span></label>
+			    <label for="content" class="col-sm-1 control-label">信息内容<span class="asterisk">*</span></label>
 			    <div class="col-sm-9">
 			      <textarea id="content" rows="16" name="content" class="form-control ckeditor"></textarea>
 			    </div>
