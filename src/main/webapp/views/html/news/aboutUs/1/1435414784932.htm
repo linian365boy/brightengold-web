@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="keywords" content="sunshin,sunshinecig,ecig">
+<meta name="description" content="Welcome to sunshin.">
+<script type="text/javascript" src="http://localhost:8081/resources/js/jquery-1.8.3.js"></script>
+<title>王毅:中日关系根本是日本能否真心接受中国崛起|sunshinecig</title>
+<script type="text/javascript">
+var content=new Object;
+var context="";//HTML文本内容
+var pgindex=[];//存储分页位置的数组
+var cont=[];//存储分段内容
+var pagesel="";//生成分页标签时用
+var contpg=0;//页号
+$(document).ready(function(){
+initpg();
+searchpg();
+});
+function initpg(){
+contpg=0; //置空变量
+pgindex.splice(0,pgindex.length);
+pgindex[0]=0;
+cont.splice(0,cont.length);
+pagesel="";
+content=document.getElementById("nc_con"); //获取节点HTML文本内容，搜索所有分页标签出现位置
+context=content.innerHTML;
+var i=0;
+var j=1;
+var tmpp=0;
+while(tmpp=context.indexOf("<div style=\"page-break-after: always",i)){
+if(tmpp!=-1){
+pgindex[j++]=tmpp;
+i=tmpp+30;
+}else{
+break;
+}
+}
+}
+function searchpg(){
+if(pgindex.length>1){
+for(var i=0;i<pgindex.length;i++)
+{
+cont[i]=context.substring(pgindex[i],pgindex[i+1]);
+}
+pagese();
+content.innerHTML=cont[0];
+document.getElementById("nc_page").innerHTML=pagesel;//换页使用的按钮内容输出在id=nc_page元素下
+}else
+pagese();
+document.getElementById("nc_page").innerHTML=pagesel;
+}
+function pagese(){
+if(cont.length>0){
+if(contpg==0){
+pagesel="First &nbsp;&nbsp; Previous &nbsp;&nbsp;<a href='#' onclick='nextpa()'>Next</a> &nbsp;&nbsp; <a href='#' onclick='endpa()'>Last</a>";
+}else if(contpg!=0&&contpg<cont.length-1){
+pagesel="<a href='#' onclick='firstpa()'>First</a>&nbsp;&nbsp; <a href='#' onclick='prepa()'>Previous</a> &nbsp;&nbsp; <a href='#' onclick='nextpa()'>Next</a>&nbsp;&nbsp; <a href='#' onclick='endpa()'>Last</a>";
+}else if(contpg==cont.length-1){
+pagesel="<a href='#' onclick='firstpa()'>First</a>&nbsp;&nbsp; <a href='#' onclick='prepa()'>Previous</a>&nbsp;&nbsp; Next &nbsp;&nbsp; Last";
+}
+}
+}
+function nextpa(){
+contpg++;
+pagese();
+content.innerHTML=cont[contpg];
+document.getElementById("nc_page").innerHTML=pagesel;
+}
+function prepa(){
+contpg--;
+pagese();
+content.innerHTML=cont[contpg];
+document.getElementById("nc_page").innerHTML=pagesel;
+}
+function firstpa(){
+contpg=0;
+pagese();
+content.innerHTML=cont[contpg];
+document.getElementById("nc_page").innerHTML=pagesel;
+}
+function endpa(){
+contpg=cont.length-1;
+pagese();
+content.innerHTML=cont[contpg];
+document.getElementById("nc_page").innerHTML=pagesel;
+}
+</script>
+</head>
+<body>
+<div class="clear"></div>
+<div id="container">
+<div id="center">
+<div style="left: 100px ! important;" class="Z_TypeList" id="Z_TypeList">
+<h1 class="title">Product categories<s class="btn_group bleft"><a class="bleft"></a><a class="bright"></a></s></h1>
+<div class="footerlist">
+</div>
+</div>
+<script type="text/javascript" src="/resources/js/jquery.tmailsider.js"></script>
+<script type="text/javascript">
+$('#Z_TypeList').Z_TMAIL_SIDER();
+</script>
+<div class="etw_hometitle">
+<img width="665px" height="28" border="0" src="/resources/images/news.jpg"/></div>
+<div id="etw_right">
+<div class="wrapper cFloat">
+<div class="content">
+<div class="fl cFloat" id="left">
+<div class="info_text">
+<h1>王毅:中日关系根本是日本能否真心接受中国崛起</h1>
+<div class="titBar">Hits:<span id="clickcount">0</span> | Publish Date:2015-08-16</div>
+<div class="bd cFloat">
+<div class="introduction"><strong>Abstract:</strong>&#12288;&#12288;2015年6月27日，外交部长王毅在出席第四届世界和平论坛回答关于中国对日政策的提问时表示，中日两国是近邻，我们当然希望两国和平相处，互利合作。这是中国的既定政策，不会改变。但中日关系的问题从根本上讲，在于日本能不能真心接受和欢迎最大的邻国中国重新发展和崛起</div>
+<div id="nc_con" class="bd-content" style="word-wrap: break-word;word-break: normal; margin:40px ">
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2015年6月27日，外交部长王毅在出席第四届世界和平论坛回答关于中国对日政策的提问时表示，中日两国是近邻，我们当然希望两国和平相处，互利 合作。这是中国的既定政策，不会改变。但中日关系的问题从根本上讲，在于日本能不能真心接受和欢迎最大的邻国中国重新发展和崛起。就现实意义而言，中国的 发展已经给日本带来了重要利益，但从心态上讲，似乎日本还没有为此做好充分的准备。中日之间目前的问题追根溯源，都与此有关。</p>
+
+<p>　　王毅说，但事情在改变。记得一位日本朋友曾告诉我，中国的发展很好，因为中国的复兴只是回到了过去历史上的应有状态。我想，随着时间的推移，中日关系迟早会走上正常和稳定的发展轨道。</p>
+
+<p>　　王毅强调，今年是世界反法西斯战争和抗日战争胜利70周年，日本还面临一个如何妥善处理历史的问题。对日本而言，对外已有其他国家的有益经验可 以借鉴，对内主张正义和爱好和平的声音也在不断上升，关键是看日本领导人做出什么样的选择。是仍然停留在历史阴影中，继续站在历史的被告席上，还是真正同 各国特别是曾经被日本侵略和伤害过的国家实现和解，共同开创未来。这是摆在日本领导人面前的重大问题。我们对此拭目以待。</p>
+
+</div>
+<div class="info-text-foot cFloat">
+<div class="fl">
+Tag:
+王毅
+|&nbsp;&nbsp;
+
+中国
+|&nbsp;&nbsp;
+
+崛起
+|&nbsp;&nbsp;
+
+和平论坛
+
+</div>
+</div>
+<div class="hq-pagination hq-pagination-centered">
+<div id="nc_page"></div>
+</div><!--end hq-pagination-->
+<!-- Baidu Button END -->
+</div><!--end bd-->
+</div><!--end info_text-->
+</div><!--end left-->
+</div><!--end content-->
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
