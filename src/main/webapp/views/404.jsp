@@ -9,9 +9,6 @@
 <link rel="stylesheet" type="text/css"
 	href="${ctx}resources/css/style.css" />
 
-<!--[if IE]>
-<link rel="stylesheet" type="text/css" href="css/ie-sucks.css" />
-<![endif]-->
 </head>
 <body >
 	<div id="container">
