@@ -9,7 +9,6 @@
 <!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,315] -->
 <meta name="description" itemprop="description" content="About Us &nbsp; HongKong Shijingu Technology Co.,Ltd is one of the most professional pharmaceutical intermediates manufactures and exporters in China." />
 <link rel="canonical" href="http://www.genuineraws.com/about_us/" />
-<!-- /all in one seo pack -->
 <style type="text/css">
 img.wp-smiley,
 img.emoji {
