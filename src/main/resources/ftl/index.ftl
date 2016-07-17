@@ -3,18 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Raw Steroid Powders|HomeBrew Injectable Steroid Solutions</title>
-<!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,298] -->
+	<title>Home - ${(company.name)!''}</title>
 <meta name="description" itemprop="description" content="China Pharmaceutical raw steroid powders,HomeBrew Injectable Solutions,Oral anabolics and Peptide Hormones Supplier-HongKong Shijingu Technology Co., Ltd" />
 <meta name="keywords" itemprop="keywords" content="Raw Steroid Powders,HomeBrew steroid Solutions,Oral anabolics,Peptide Hormones,Testosterone Cypionate,Trenbolone Acetate,Nandrolone Decaonate,Drostanolone Propionate,Methenolone Enanthate,Dianabol,Oxandrolone,Tadanafil,HongKong Shijingu Technology Co., Ltd" />
-<meta name="google-site-verification" content="xoipXXe1O8AziKBlkx-I5mcua5iFDjMU-Zc4dujkXq8" />
 
 <link rel="canonical" href="${ctx}/" />
-<!-- /all in one seo pack -->
-		<script type="text/javascript">
-			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.genuineraws.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.5.3"}};
-			!function(a,b,c){function d(a){var c,d,e,f=b.createElement("canvas"),g=f.getContext&&f.getContext("2d"),h=String.fromCharCode;if(!g||!g.fillText)return!1;switch(g.textBaseline="top",g.font="600 32px Arial",a){case"flag":return g.fillText(h(55356,56806,55356,56826),0,0),f.toDataURL().length>3e3;case"diversity":return g.fillText(h(55356,57221),0,0),c=g.getImageData(16,16,1,1).data,d=c[0]+","+c[1]+","+c[2]+","+c[3],g.fillText(h(55356,57221,55356,57343),0,0),c=g.getImageData(16,16,1,1).data,e=c[0]+","+c[1]+","+c[2]+","+c[3],d!==e;case"simple":return g.fillText(h(55357,56835),0,0),0!==g.getImageData(16,16,1,1).data[0];case"unicode8":return g.fillText(h(55356,57135),0,0),0!==g.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
-		</script>
 		<style type="text/css">
 img.wp-smiley,
 img.emoji {
@@ -29,22 +22,22 @@ img.emoji {
 	padding: 0 !important;
 }
 </style>
-<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css?${style_v}' type='text/css' media='' />
-<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='select2-css'  href='${ctx}/resources/views/style-ewa/css/select2.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css?${style_v}' type='text/css' media='only screen and (max-width: 768px)' />
-<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css?${style_v}' type='text/css' media='all' />
+<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css' type='text/css' media='' />
+<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='select2-css'  href='${ctx}/resources/views/style-ewa/css/select2.css' type='text/css' media='all' />
+<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css' type='text/css' media='all' />
+<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css' type='text/css' media='only screen and (max-width: 768px)' />
+<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css' type='text/css' media='all' />
+<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css' type='text/css' media='all' />
+<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css' type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css' type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css' type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css' type='text/css' media='all' />
 <link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
 <!--[if lt IE 9]>
-<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css?${style_v}' type='text/css' media='all' />
+<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css' type='text/css' media='all' />
 <![endif]-->
 <style id='imax-extra-stylesheet-inline-css' type='text/css'>
 #sun h3 span {
@@ -60,8 +53,9 @@ border-bottom: 3px solid #5fd6d8;
     font-weight: bold;
 }
 </style>
-<script type='text/javascript' src='${ctx}/resources/js/jquery-1.11.1.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/js/jquery-migrate.min.js?${style_v}'></script>
+<script type='text/javascript' src='${ctx}/resources/js/jquery-1.11.1.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/js/jquery-migrate.min.js'></script>
+<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js"></script>
 <meta name="generator" content="WordPress 4.5.3" />
 <meta name="generator" content="WooCommerce 2.3.11" />
 <link rel='shortlink' href='${ctx}/' />
@@ -365,25 +359,35 @@ $(document).ready(function() {
 	$('.widget_wpb_flash_class .owl-wrapper').addClass('grid cs-style-3');
 	
 	$('.widget_wpb_four_class .owl-wrapper').addClass('grid cs-style-3');
+	
+	$('.banner').unslider({
+		speed: 500, // The speed to animate each slide (in milliseconds)
+		delay: 3000, // The delay between slide animations (in milliseconds)
+		complete: function() {}, // A function that gets called after every slide animation
+		keys: true, // Enable keyboard (left, right) arrow shortcuts
+		dots: true, // Display dot navigation
+		fluid: false // Support responsive design. May break non-responsive designs
+	});
+	
 });	
 
 
 });
 })(jQuery);
 </script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/select2.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js?${style_v}'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/select2.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js'></script>
 </body>
 </html>

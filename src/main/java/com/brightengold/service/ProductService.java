@@ -79,6 +79,38 @@ public class ProductService {
 		page.setResult(products);
 		return page;
 	}
+	
+	/**
+	 * 供前台查询，分页查询产品
+	 * @param pageNo
+	 * @param pageSize
+	 * @param id
+	 * @return
+	 */
+	public PageRainier<Product> findPageByColId(int pageNo, Integer pageSize,
+			Integer id) {
+		PageRainier<Product> page = new PageRainier<Product>(countIndexByColId(id),pageNo,pageSize);
+		Page<Product> tempPage = productDao.findAll(findPageByColIdSpec(), 
+				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id","hot")));
+		//List<Product> products = productDao.findListByColId(id);
+		page.setResult(tempPage.getContent());
+		return page;
+	}
+	
+	public long countIndexByColId(Integer id) {
+		return productDao.countIndexByColId(id);
+	}
+
+	private Specification<Product> findPageByColIdSpec() {
+		return new Specification<Product>(){
+			@Override
+			public Predicate toPredicate(Root<Product> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.isTrue(root.<Boolean>get("publish")),
+						cb.isTrue(root.<Boolean>get("status")));
+			}
+		};
+	}
 
 	public void insertOfBatch(List<Product> productList) {
 		productDao.save(productList);

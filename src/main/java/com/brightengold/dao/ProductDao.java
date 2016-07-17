@@ -24,4 +24,6 @@ public interface ProductDao extends AbstractDao<Product, Integer>{
 	@Modifying
 	@Query("update Product set status = :status where id = :id")
 	void updateStatus(@Param("id") Integer id,@Param("status") boolean status);
+	@Query("select count(*) from Product pr join pr.category ca join ca.column co where (co.id = :id or co.parentColumn.id = :id) and pr.status is true and pr.publish is true")
+	long countIndexByColId(@Param("id") Integer id);
 }

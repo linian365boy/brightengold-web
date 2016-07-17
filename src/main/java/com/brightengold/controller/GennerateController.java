@@ -63,7 +63,7 @@ public class GennerateController {
 	@Resource
 	private InfoService infoService;
 	
-	private Integer pageSize = 10;
+	private Integer pageSize = 16;
 	private Integer pageNo = 1;
 	
 	@RequestMapping(value={"/generate"},method=RequestMethod.GET)
@@ -161,7 +161,10 @@ public class GennerateController {
 						//首页产品
 						List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
 						map.put("hotProducts", products);
-						FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm");
+						if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
+							logger.error("生成"+code+"页面失败！");
+							return "500";
+						}
 					}else{
 						//当前栏目
 						col = columnService.loadColumnByCode(code);
@@ -179,9 +182,12 @@ public class GennerateController {
 						if(info!=null){
 							map.put("info", info);
 						}
-						FreemarkerUtil.fprint(templateName, map, 
+						if(!FreemarkerUtil.fprint(templateName, map, 
 								path+File.separator+"views"+File.separator+"html"+
-										File.separator+"col"+File.separator, code+".htm");
+										File.separator+"col"+File.separator, code+".htm")){
+							logger.error("生成"+code+"页面失败！");
+							return "500";
+						}
 					}
 				}catch(Exception e){
 					logger.error("生成"+code+"页面失败！",e);
@@ -206,9 +212,12 @@ public class GennerateController {
 					map.put("category", cate);
 					map.put("column", cate.getColumn());
 					publishAllProducts(request,cate,map);
-					FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
+					if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 							path+File.separator+"views"+File.separator+"html"+
-									File.separator+"col"+File.separator, code.replaceAll("\\s*", "")+".htm");
+									File.separator+"col"+File.separator, code.replaceAll("\\s*", "")+".htm")){
+						logger.error("生成"+code+"页面失败！");
+						return "500";
+					}
 					return "200";
 				}else{
 					Info info = infoService.loadOneByCode(code);
@@ -217,9 +226,12 @@ public class GennerateController {
 						map.put("ctx", basePath);
 						map.put("style_v", style_v);
 						map.put("model", info);
-						FreemarkerUtil.fprint("info.ftl", map, path+File.separator+"views"+
+						if(!FreemarkerUtil.fprint("info.ftl", map, path+File.separator+"views"+
 								File.separator+"html"+File.separator+"info"+
-								File.separator,info.getCode()+".htm");
+								File.separator,info.getCode()+".htm")){
+							logger.error("生成"+code+"页面失败！");
+							return "500";
+						}
 						return "200";
 					}
 					return "501";
@@ -368,7 +380,8 @@ public class GennerateController {
 			 String fPath = null;
 			 List<Product> tempProductList = new ArrayList<Product>();
 			 for(int i=0;i<totalPageNum;i++){
-				 page = productService.findAllByColId((i+1), pageSize, col.getId()); //得到该栏目下所有的产品
+				 //page = productService.findAllByColId((i+1), pageSize, col.getId()); //得到该栏目下所有的产品
+				 page = productService.findPageByColId((i+1), pageSize, col.getId()); //分页得到该栏目下所有的产品
 				 map.put("productPage", page);
 				 parentPath = path + File.separator+"views"+File.separator+"html"+
 					 		File.separator+"product"+File.separator+
@@ -376,7 +389,9 @@ public class GennerateController {
 				 //列表的页面生成
 				 map.put("ctx", modelMap.get("ctx"));
 				 map.put("column", col);
-				 FreemarkerUtil.fprint("productList.ftl", map, parentPath,(i+1)+".htm");
+				 if(!FreemarkerUtil.fprint("productList.ftl", map, parentPath,(i+1)+".htm")){
+					 logger.error("生成产品列表页面失败");
+				 }
 				 map.clear();
 				 productList = page.getResult();
 				 map.put("ctx", modelMap.get("ctx"));
@@ -400,7 +415,9 @@ public class GennerateController {
 					 product.setPageNum(i+1);
 					 //product只要生成一个静态页面
 					 //TODO
-					 FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl());
+					 if(!FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl())){
+						 logger.error("生成产品页面失败");
+					 }
 					 parentPath = path + File.separator+"views"+File.separator+"html"+
 							 		File.separator+"product"+File.separator+col.getCode()+File.separator;
 					 tempProductList.add(product);

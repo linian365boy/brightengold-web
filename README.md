@@ -6,7 +6,7 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 @TODO
 1.搜索 search Products
 2.分类下的产品size
-3.首页广告滚动
+3.首页广告滚动										ok
 4.每个页面的title
 5.页底 Products 显示分类
 6.Follow us 显facebook twitter googkle+图标

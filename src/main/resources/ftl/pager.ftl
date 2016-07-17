@@ -1,5 +1,6 @@
 <#macro pager url totalPage curPage=1 class="" showPageNum=10>
-<div class="page">
+<nav class="woocommerce-pagination">
+<div class="page page-numbers">
 <#local halfPage=(showPageNum/2)?int/>
 <#if (halfPage>=curPage)>
 	<#if (curPage<=1)>
@@ -43,6 +44,7 @@
 	</#if>
 </#if>
 </div>
+</nav>
 </#macro>
 
 <#macro showPage start end curPage url class>

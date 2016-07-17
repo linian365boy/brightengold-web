@@ -17,8 +17,8 @@
         <div class="headerwrap">
             <header id="masthead" class="site-header" role="banner">
          		<div class="headerinnerwrap">
-					                        <a class="home-link" href="http://www.genuineraws.com/" title="HongKong Shijingu Technology Co., Ltd" rel="home">
-                            <span><img src="http://www.genuineraws.com/wp-content/uploads/QQ截图20160225163056.png" alt="HongKong Shijingu Technology Co., Ltd" /></span>
+					                        <a class="home-link" href="${ctx}" title="${(company.name)!''}" rel="home">
+                            <span><img src="${ctx}/resources/${(company.logo)}" alt="${(company.name)!''}" /></span>
                         </a>
                     	
         
@@ -33,7 +33,7 @@
                             	</li>
                             	<#if ((crossCol?size)>0)>
 								<#list crossCol as col>
-									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-685 ${(col.id==column.id)?string('current-menu-item current_page_item','')}">
+									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-685 ${(column?? && (col.id)==(column.id))?string('current-menu-item current_page_item','')}">
 										<a href="${ctx}/views/html/col/${col.code}.htm">${col.enName}</a>
 										<#if ((col.childColumn)?size>0)>
 										<ul class="sub-menu">
@@ -55,7 +55,17 @@
             </header><!-- #masthead -->
         </div>
         <!-- #Banner -->
-        <div class="other-slider" style="">
+        <div class="other-slider">
 	       	<div  style="margin-top:0px;" id="owl-demo-side-flash" class="owl-carousel">
-	       	<div class="lazyOwl"><p><img class="alignnone size-medium wp-image-815" src="http://www.genuineraws.com/wp-content/uploads/602.jpg" alt="602" width="1200" height="250" /></p>
-</div></div>        </div>
+	       		<div class="banner">
+	       			<ul>
+					<#if indexAds?size &gt; 0>
+						<#list indexAds as ad>
+							<li style="background-image: url('${ctx}/resources/${ad.picUrl}');cursor:pointer;"
+							onclick='javascript:locationTo("${(ad.url)!}");'/>
+						</#list>
+					</#if>
+					</ul>
+				</div>
+			</div>
+		</div>
