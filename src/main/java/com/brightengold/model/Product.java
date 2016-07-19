@@ -76,6 +76,10 @@ public class Product implements Serializable{
 	 * true正常  false锁定
 	 */
 	private boolean status;
+	/**
+	 * 产品关键字，相关产品显示需要，分号隔开不同的关键字
+	 */
+	private String keyWords;
 	
 	@Id
 	@GeneratedValue
@@ -165,5 +169,11 @@ public class Product implements Serializable{
 	}
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+	public String getKeyWords() {
+		return keyWords;
+	}
+	public void setKeyWords(String keyWords) {
+		this.keyWords = keyWords;
 	}
 }

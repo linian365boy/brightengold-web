@@ -15,4 +15,6 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 9.后台的页面title
 10.logo
 11.各个页面没有统一使用模板
+12.产品页未使用模板
+13.产品相关产品显示
 

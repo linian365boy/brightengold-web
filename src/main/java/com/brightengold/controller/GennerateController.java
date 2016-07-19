@@ -401,6 +401,8 @@ public class GennerateController {
 				 map.put("company", modelMap.get("company"));
 				 map.put("parentCol", modelMap.get("parentCol"));
 				 map.put("column", col);
+				 map.put("categorys", modelMap.get("categorys"));
+				 map.put("indexNews", modelMap.get("indexNews"));
 				 for(Product product:productList){
 					 if(product.isPublish()){
 						 fPath = path +File.separator+"views"+File.separator+"html"+File.separator+"product"+

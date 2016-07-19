@@ -3,13 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<link rel="pingback" href="http://www.genuineraws.com/xmlrpc.php">
 	<title>${(column.enName)!''} - ${(company.name)!''}</title>
 <!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,309] -->
 <meta name="keywords" itemprop="keywords" content="testosterone acetate powder,testosterone acetate powder suppliers,testosterone acetate powder recipe,testosterone acetate powder for sale,testosterone acetate powder manufacturers,testosterone acetate powder price,testosterone enanthate,testosterone propionate powder,testosterone propionate powder manufacturers,testosterone propionate powder conversion,buy testosterone propionate powder,testosterone cypionate powder,testosterone cypionate powder manufacturers,testosterone cypionate powder price,testosterone cypionate powder conversion,testosterone cypionate powder for sale,testosterone phenylpropionate,test phenylpropionate,testosterone sustanon 250,sustanon 250,omnadren,testosterone blend,testosterone base,testosterone suspention,tte,methyltestosterone,testosterone undecanoate,andriol,testosterone isocaproate,proviron mesterolone powder, proviron mesterolone powder suppliers, proviron mesterolone powder side effects, buy proviron mesterolone powder,clostebol acetate,megagrisevit; 4-chlorotestosterone acetate,trenbolone acetate powder,trenbolone acetate powder wholesale,tren ace raw powder" />
-
-<link rel="canonical" href="http://www.genuineraws.com/products/" />
 		<style type="text/css">
 img.wp-smiley,
 img.emoji {
@@ -83,11 +79,12 @@ body.custom-background { background-color: #e2e2e2; }
 <body class="archive post-type-archive post-type-archive-product custom-background woocommerce woocommerce-page sidebar nx-boxed onecol-blog no-avatars" style="  ">
 	<div id="page" class="hfeed site">
         <#include "headMenu.ftl">
-				<div id="main" class="site-main">
+		<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
                 <nav class="woocommerce-breadcrumb" ><a href="http://www.genuineraws.com">Home</a>&nbsp;&#47;&nbsp;Products</nav>				
 				<h1 class="page-title">Products</h1>
+				<div id="productContent">
 				<#--virtual 相对路径-->
             	<!--#include virtual="../product/${column.code}/1.htm"-->
 				<!--<nav class="woocommerce-pagination">
@@ -103,6 +100,7 @@ body.custom-background { background-color: #e2e2e2; }
 						<li><a class="next page-numbers" href="http://www.genuineraws.com/products/page/2/">&rarr;</a></li>
 					</ul>
 				</nav>-->
+				</div>
 		</div><!-- #content -->
 		<#include "leftCate.ftl">
 	</div><!-- #primary -->
@@ -359,26 +357,27 @@ $(document).ready(function() {
 		dots: true, // Display dot navigation
 		fluid: false // Support responsive design. May break non-responsive designs
 	});
+	
 });	
 });
 })(jQuery);
 
-function goPage(pageNo,code){
-		$(".page-title").load("/news/"+code+"/"+pageNo+".htm");
+	function goPage(pageNo,code){
+		jQuery("#productContent").load("/views/html/product/"+code+"/"+pageNo+".htm");
 	}
 </script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js?${style_v}'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js'></script>
 </body>
 </html>

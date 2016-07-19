@@ -1,345 +1,461 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<title>Company Profile-USB charging wall socket, wireless charger, USB 
-charger, car charger, mobile power,Shenzhen hien technology co.,ltd</title>
-<meta name="keywords" content="USB charging wall socket, wireless charger, USB charger, car charger, mobile power,Shenzhen hien technology co.,ltd"></meta>
-<meta name="description" content="Hain Technology Development Co., Ltd. Shenzhen was founded in 2009, formerly known as Shenzhen Technology Co. Huaen, due to development needs, in 2011 officially changed its name to the Shenzhen Science and Technology Development Co., Ltd. Hain, the company has an independent R &amp; D team, is a product R &amp; D, production, sales as one of the diveified high-tech enterprises ,hotline:0086-755-28412985"></meta>
-<link href="${ctx}/resources/views/css/style_en.css?${style_v}" type="text/css" rel="stylesheet"></link>
-<link rel="icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon" />
-<script type="text/javascript" src="${ctx}/resources/js/jquery-1.11.1.min.js?${style_v}"></script>
-<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js?${style_v}"></script>
-<script type="text/javascript" src="${ctx}/resources/views/css/commen.js?${style_v}"></script>
-<script type="text/javascript">
-	var basePath = "${ctx}";
-</script>
-<body>
-	<!--head start-->
-    <div class="head">
-    	<div class="wd">
-            <div class="logo"><a href="${company.website}" title="${company.name}"><img src="${ctx}/resources/${company.logo}" width="480" height="91" alt="${company.name}" /></a></div>
-            <div class="head-right">
-            <!--
-                <div class="banben">
-                    <a href="/index.htm" title="Shenzhen Hien technology co.,ltd" class="en">English</a>
-                    <a href="/zh_cnindex.htm" title="Shenzhen Hien technology co.,ltd" class="cn">中文版</a>
-                    <a href="javascript:window.external.addFavorite('http://www.baidu.com','Shenzhen Hien technology co.,ltd') ; " title="Shenzhen Hien technology co.,ltd" class="addfav">Favorites</a>
-                </div>
-                 -->
-                <div class="search">
-                    <form target="_blank" method="post" name="searchform" id="searchform" action="/web/search.php?lanstr=en">
-                        <input name="s" type="submit" class="search_btn" value="" /><input name="keywords" id="keywords" type="text" class="search_txt" /><span>Search：</span>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--head end-->
-    <!--menu start-->
-    <div class="menu">
-    	<ul>
-    		<li><a title="首 页" href="" class="bigli">首 页</a></li>
-    		<li class="mline"></li>
-    		<#if ((crossCol?size)>0)>
-	    		<#list crossCol as col>
-	    			<#if ((col.childColumn)?size)==0 >
-		    			<li><a class="bigli" href="${ctx}/${(col.url)!'#'}" title="${(col.name)!''}" 
-		    				id="${(col.code)!''}">${(col.name)!''}</a>
-		    			</li>
-		            <#else>
-		                <li class="bigli">
-			    			<a class="" href="${ctx}/${(col.url)!''}" title="${(col.name)!''}" id="${(col.code)!''}">${(col.name)!''}</a>
-				            	<ul style="display: none;">
-					    			<#list col.childColumn as childCol>
-					    				<li><a href="${ctx}/${(childCol.url)!''}" title="${(childCol.name)!''}" 
-				            			id="${(childCol.code)!''}">${(childCol.name)!''}</a></li>
-					    			</#list>
-				            	</ul>
-			            </li>
-	                </#if>
-	                <#if col_has_next>
-				        <li class="mline"></li>
-	                </#if>
-	    		</#list>
-    		</#if>
-        </ul>
-    </div>
-    <!--menu end-->
-    <!--banner start-->
-    <div class="banner">
-    	<ul>
-    		<#if indexAds?size &gt; 0>
-    			<#list indexAds as ad>
-				    <li style="background-image: url('${ctx}/resources/${ad.picUrl}');cursor:pointer;" 
-				    onclick='javascript:locationTo("${(ad.url)!}");'/>
-			    </#list>
-		    </#if>
-		</ul>
-    </div>
-    <!--banner end-->
-    <script type="text/javascript">
-	    $(function() {
-	        $('.banner').unslider({
-	        	speed: 500,               //  The speed to animate each slide (in milliseconds)
-				delay: 3000,              //  The delay between slide animations (in milliseconds)
-				complete: function() {},  //  A function that gets called after every slide animation
-				keys: true,               //  Enable keyboard (left, right) arrow shortcuts
-				dots: true,               //  Display dot navigation
-				fluid: false              //  Support responsive design. May break non-responsive designs
-	        });
-	    });
-    </script>
-    <!--center start-->
-    <div class="center">
-    <!--left start-->
-    <div class="left">
-    	<div class="left-top">${(parentCol.enName)!'--'}</div>
-	    <#if ((parentCol.childColumn)?size)&gt;0>
-	    	<ul class="left-menu">
-	    		<#list parentCol.childColumn as childColumn>
-	               <li>
-	               		<a href="${ctx}/${childColumn.url}" id="c_${childColumn.code}" title="${(childColumn.enName)!''}">${(childColumn.enName)!'--'}</a>
-	               		<#if (childColumn.categorys)?size &gt; 0>
-	               		<ul>
-	               			<#list childColumn.categorys as cate>
-					        	<li><a href='${ctx}/cate' title='${cate.enName}' id= >${cate.enName}</a></li>
-	               			</#list>
-			        	</ul>
-	               		</#if>
-	               </li>
-	    		</#list>
-	    	</ul>
-	    </#if>
-    	<div class="left-top m_t_10">CONTACT US</div>
-    	<div class="left-contact">
-	        <img alt="" width="204" height="52" src="${ctx}/resources/views/css/contact.jpg" /> Tel :${(company.telPhone)!''}<br />
-			Email :${(company.email)!'--'}<br>
-			Contact: ${(company.contactUser)!'--'}<br>
-			Shenzhen Office Address: ${(company.address)!''}
-    	</div>
-	</div>
-        <!--left end-->
-        <!--right start-->
-    <div class="right">
-    	<div class="sitemap">
-    		<h1>${category.enName}</h1><span></span>
-	    	<div>You are here: <a href='${ctx}'>Home</a> &gt;&gt; 
-			    <#if (parentCol.enName != column.enName)>
-			    	<a href="${ctx}/${(parentCol.url)!''}">${parentCol.enName}</a>&gt;&gt;
-			    </#if>
-	    		<a href='${ctx}/${(column.url)!''}'>${column.enName}</a>
-			    <#if (category.parent)??>
-				    <a href='${ctx}/${(column.url)!''}'>${category.parent.enName}</a> 
-			    </#if>
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>${(model.enName)!''} - ${(company.name)!''}</title>
+<!-- All in One SEO Pack 2.3.8 by Michael Torbert of Semper Fi Web Design[254,328] -->
+<meta name="description" itemprop="description" content="Methoxydienone Powder Quick Detail: Methoxydienone Synonyms: 13-beta-ethyl-3-methoxygona-2,5(10)-dien-17-one Methoxydienone CAS: 2322-77-2 Methoxydienone" />
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css' type='text/css' media='' />
+<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css' type='text/css' media='all' />
+<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css' type='text/css' media='only screen and (max-width: 768px)' />
+<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css' type='text/css' media='all' />
+<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css' type='text/css' media='all' />
+<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css' type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css' type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css' type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css' type='text/css' media='all' />
+<link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css?${style_v}' type='text/css' media='all' />
+<![endif]-->
+<style id='imax-extra-stylesheet-inline-css' type='text/css'>
+#sun h3 span {
+    background: none repeat scroll 0 0 #5fd6d8;
+}
+#sun h3 span::before {
+    border-bottom: 37px solid #5fd6d8;
+}
+.wpb_area_title{
+border-bottom: 3px solid #5fd6d8;
+}
+#woocommerce_product_categories-2 {
+    font-weight: bold;
+}
+</style>
+<script type='text/javascript' src='${ctx}/resources/js/jquery-1.11.1.min.js?${style_v}'></script>
+<script type='text/javascript' src='${ctx}/resources/js/jquery-migrate.min.js?${style_v}'></script>
+<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js"></script>
+<script type='text/javascript' src='${ctx}/resources/js/js.js'></script>
+<meta name="generator" content="WordPress 4.5.3" />
+<meta name="generator" content="WooCommerce 2.3.11" />
+<style type="text/css">
+.grid figcaption a, div.grid_no_animation figcaption a.button {background: #1abc9c!important;}
+.grid figcaption a:hover, div.grid_no_animation figcaption a.button:hover {background: #16a085!important;}
+.owl-theme .owl-controls .owl-page span {background: #8BCFC2;}
+.owl-theme .owl-controls .owl-page.active span,
+.owl-theme .owl-controls.clickable .owl-page:hover span{background: #16A085;}
+.owl-theme .owl-controls .owl-buttons div {background: #CCCCCC;}
+.owl-theme .owl-controls.clickable .owl-buttons div:hover{background:#999999;}
+div.grid_no_animation figcaption .pro_price_area .amount {text-decoration: none;color: #16A085;}
+</style>
+<link rel="alternate" type="application/rss+xml"  title="新产品" href="http://www.genuineraws.com/products/feed/" /><style type="text/css">
+a,a:visited,.blog-columns .comments-link a:hover {color: #5fd6d8;}input:focus,textarea:focus,.site-footer .widget-area .widget .wpcf7 .wpcf7-submit {border: 1px solid #5fd6d8;}button,input[type="submit"],input[type="button"],input[type="reset"],.tx-service.curved .tx-service-icon span,.tx-service.square .tx-service-icon span {background-color: #5fd6d8;}.nav-container .sub-menu,.nav-container .children {border-top: 2px solid #5fd6d8;}.ibanner,.da-dots span.da-dots-current,.tx-cta a.cta-button {background-color: #5fd6d8;}#ft-post .entry-thumbnail:hover > .comments-link,.tx-folio-img .folio-links .folio-linkico,.tx-folio-img .folio-links .folio-zoomico {background-color: #5fd6d8;}.entry-header h1.entry-title a:hover,.entry-header > .entry-meta a:hover {color: #5fd6d8;}.featured-area div.entry-summary > p > a.moretag:hover {background-color: #5fd6d8;}.site-content div.entry-thumbnail .stickyonimg,.site-content div.entry-thumbnail .dateonimg,.site-content div.entry-nothumb .stickyonimg,.site-content div.entry-nothumb .dateonimg {background-color: #5fd6d8;}.entry-meta a,.entry-content a,.comment-content a,.entry-content a:visited {color: #5fd6d8;}.format-status .entry-content .page-links a,.format-gallery .entry-content .page-links a,.format-chat .entry-content .page-links a,.format-quote .entry-content .page-links a,.page-links a {background: #5fd6d8;border: 1px solid #5fd6d8;color: #ffffff;}.format-gallery .entry-content .page-links a:hover,.format-audio .entry-content .page-links a:hover,.format-status .entry-content .page-links a:hover,.format-video .entry-content .page-links a:hover,.format-chat .entry-content .page-links a:hover,.format-quote .entry-content .page-links a:hover,.page-links a:hover {color: #5fd6d8;}.iheader.front {background-color: #5fd6d8;}.navigation a,.tx-post-row .tx-folio-title a:hover,.tx-blog .tx-blog-item h3.tx-post-title a:hover {color: #5fd6d8;}.paging-navigation div.navigation > ul > li a:hover,.paging-navigation div.navigation > ul > li.active > a {color: #5fd6d8;	border-color: #5fd6d8;}.comment-author .fn,.comment-author .url,.comment-reply-link,.comment-reply-login,.comment-body .reply a,.widget a:hover {color: #5fd6d8;}.widget_calendar a:hover {background-color: #5fd6d8;	color: #ffffff;	}.widget_calendar td#next a:hover,.widget_calendar td#prev a:hover {background-color: #5fd6d8;color: #ffffff;}.site-footer div.widget-area .widget a:hover {color: #5fd6d8;}.site-main div.widget-area .widget_calendar a:hover,.site-footer div.widget-area .widget_calendar a:hover {background-color: #5fd6d8;color: #ffffff;}.widget a:visited { color: #373737;}.widget a:hover,.entry-header h1.entry-title a:hover,.error404 .page-title:before,.tx-service-icon span i,.tx-post-comm:after {color: #5fd6d8;}.da-dots > span > span,.site-footer .widget-area .widget .wpcf7 .wpcf7-submit {background-color: #5fd6d8;}.iheader,.format-status,.tx-service:hover .tx-service-icon span,.ibanner .da-slider .owl-item .da-link:hover {background-color: #5fd6d8;}.tx-cta {border-left: 6px solid #5fd6d8;}.paging-navigation #posts-nav > span:hover, .paging-navigation #posts-nav > a:hover, .paging-navigation #posts-nav > span.current, .paging-navigation #posts-nav > a.current, .paging-navigation div.navigation > ul > li a:hover, .paging-navigation div.navigation > ul > li > span.current, .paging-navigation div.navigation > ul > li.active > a {border: 1px solid #5fd6d8;color: #5fd6d8;}.entry-title a { color: #141412;}.tx-service-icon span { border: 2px solid #5fd6d8;}.nav-container .current_page_item > a,.nav-container .current_page_ancestor > a,.nav-container .current-menu-item > a,.nav-container .current-menu-ancestor > a,.nav-container li a:hover,.nav-container li:hover > a,.nav-container li a:hover,ul.nav-container ul a:hover,.nav-container ul ul a:hover {background-color: #5fd6d8; }.tx-service.curved .tx-service-icon span,.tx-service.square .tx-service-icon span {border: 6px solid #e7e7e7; width: 100px; height: 100px;}.tx-service.curved .tx-service-icon span i,.tx-service.square .tx-service-icon span i {color: #FFFFFF;}.tx-service.curved:hover .tx-service-icon span,.tx-service.square:hover .tx-service-icon span {background-color: #e7e7e7;}.tx-service.curved:hover .tx-service-icon span i,.tx-service.square:hover .tx-service-icon span i,.folio-style-gallery.tx-post-row .tx-portfolio-item .tx-folio-title a:hover {color: #5fd6d8;}.site .tx-slider .tx-slide-button a,.ibanner .da-slider .owl-item.active .da-link  { background-color: #5fd6d8; color: #FFF; }.site .tx-slider .tx-slide-button a:hover  { background-color: #373737; color: #FFF; }</style>
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #e2e2e2; }
+</style>
+<link rel="icon" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" sizes="32x32" />
+<link rel="icon" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
+<meta name="msapplication-TileImage" content="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
+</head>
+<body class="single single-product postid-1066 custom-background woocommerce woocommerce-page sidebar nx-boxed onecol-blog no-avatars" style="  ">
+	<div id="page" class="hfeed site">
+    	<#include "headMenu.ftl">
+		<div id="main" class="site-main">
+	<div id="primary" class="content-area">
+		<div id="content" class="site-content" role="main">
+                <nav class="woocommerce-breadcrumb" itemprop="breadcrumb">
+                <a href="${ctx}/">Home</a>&nbsp;&#47;&nbsp;
+                <a href="http://www.genuineraws.com/product-catagory/prohormones-sarms/">${(category.enName)!''}</a>
+                &nbsp;&#47;&nbsp;${(category.parent.enName)!''}</nav>
+			<div itemscope itemtype="http://schema.org/Product" id="product-1066" class="post-1066 product type-product status-publish has-post-thumbnail product_cat-prohormones-sarms product_tag-methoxydienone-powder shipping-taxable product-type-simple product-cat-prohormones-sarms product-tag-methoxydienone-powder instock">
+			<div class="images">
+			<a href="${ctx}/${model.url}" itemprop="image" class="woocommerce-main-image zoom" title="" data-rel="prettyPhoto"><img width="500" height="500" src="${ctx}/${model.picUrl}" class="attachment-shop_single size-shop_single wp-post-image" alt="Methoxydienone Powder" title="Methoxydienone Powder" /></a>
 			</div>
-		</div>
-		<div class="con-panel">
-			<!--产品详细 start-->
-			<link href="${ctx}/resources/views/css/zoom.css?${style_v}" type="text/css" rel="stylesheet" />
-			<link href="${ctx}/resources/views/css/pro_one.css?${style_v}" type="text/css" rel="stylesheet" />
-			<script language="javascript" src="${ctx}/resources/views/images/zoom.js?${style_v}" type="text/javascript"></script>
-			<script language="javascript" src="${ctx}/resources/views/images/lib.js?${style_v}" type="text/javascript"></script>
-			<script language="javascript" src="${ctx}/resources/views/images/zoomcss.js?${style_v}" type="text/javascript"></script>
-			<!-- 产品多图展示  开始 -->
-			<div class="pro_detail">
-		   		<!-- 产品图片展示 开始 -->
-			   	<div class="pro_detail_pic pro_left" >
-			        	<div id=preview>
-			            	<div class=jqzoom id=spec-n1 style="line-height:227px;">
-			            		<IMG src="${ctx}/resources/${model.picUrl}" 
-			            			jqimg="${ctx}/resources/${model.picUrl}" width="300" height="227"/>
-			            	</div>
-			            	<#--
-		            		<div id=spec-n5>
-				                <div class=control id=spec-left>
-				                    <img src="/web/template/themes/default/skins/images/left.gif" />
-				                </div>
-			                	<div id=spec-list>
-			                    	<ul class=list-h>
-			                        	<li><img src="${ctx}/resources/${model.picUrl}" 
-			                        		bigpic="${ctx}/resources/${model.picUrl}"  class="on"  
-			                        		oripic="${ctx}/resources/${model.picUrl}" width="60" height="45"> 
-			                        	</li>
-			                        	<li><img src="${ctx}/resources/${model.picUrl}" 
-			                        		bigpic="${ctx}/resources/${model.picUrl}"  
-			                        		oripic="${ctx}/resources/${model.picUrl}" width="60" height="45"> 
-			                       	 	</li>
-			                        	<li><img src="/web/userfiles/product/thumb/HE623-2.png" 
-			                        		bigpic="/web/userfiles/product/middle/HE623-2.png"  
-			                        		oripic="/web/userfiles/product/big/HE623-2.png" width="60" height="45"> 
-			                        	</li>
-			                    	</ul>
-			                	</div>
-			                	<div class=control id=spec-right>
-			                    	<img src="/web/template/themes/default/skins/images/right.gif" />
-			                	</div>
-		            		</div>
-		            		-->
-		        		</div>
-		   			</div>
-			   		<!-- 产品图片展示 结束 -->
-			   		<div class="pro_detail_name pro_right" >
-			        	<div class="pro_name">Name：<b>${model.enName}</b></div>
-			        	<div class="pro_name">Category：<a href="/239/" title="Wireless charger transmitter">${model.category.enName}</a></div>
-			        	<div class="short_des">
-			            	<b class="tezheng">Brief：</b><br />
-			             	${model.introduce}
-			        	</div>
-			  		</div>
-			</div>
-	<!-- 产品多图展示 结束 -->
-	<!-- 详细介绍 开始 -->
-	<div class="prodes">
-	    <div class="pro_tab_nav">
-	        <span id="span1" class="span_on" onclick="gettab(1,2)">Description</span>
-	        <#--<span id="span2" onclick="gettab(2,2)">Parameter</span>-->
-	    </div>
-    	<div id="tab1" class="tab_con" style="display:block;">
-    		${(model.description)!'No description'}
-			<br type="_moz" />
-		</div>
-			    <#--
-			    <div id="tab2" class="tab_con">
-			    <span style="font-size: 18px;"><strong>Parameter:</strong></span><strong></strong><br />
-			<br />
-			<table class="aliDataTable" border="1" style="margin: 0px; padding: 0px; font-family: Arial, Helvetica, sans-senif; font-size: 12px; font-stretch: inherit; line-height: 18px; border-collapse: collapse; border-spacing: 0px; word-wrap: break-word; width: 684px; color: rgb(51, 51, 51); height: 318px;">
-			    <tbody style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Product name:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">HE-623 QI power bank wireless charger</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Input:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">micro USB 5V1A</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">2 USB output:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">DC5.0V2100mA</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Wireless output:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">5W(5v1a)</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Wireless standard:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">QI standard</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Wireless frequency:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">100-200kHz</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Power bank capacity:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">8000mAh li-polymer cell&nbsp;</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Weight:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">300g</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Size:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">155mm*75mm*15.5mm</td>
-			        </tr>
-			        <tr style="margin: 0px; padding: 0px; font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit;">
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">Color:</td>
-			            <td style="margin: 0px; padding: 1px; font-family: inherit; font-style: inherit; font-variant: inherit; font-stretch: inherit; line-height: inherit; float: none; word-wrap: break-word; color: rgb(0, 0, 0); border: 1px solid rgb(204, 204, 204);">white/black</td>
-			        </tr>
-			    </tbody>
-			</table>
-	    </div>
-	    -->
-	</div>
-<!--描述 end-->
-<#--
-<div class="recommand">
-	<div class="pro_tab_nav"><span class="span_on">Related Products</span></div>
-	<script type="text/javascript" src="/web/template/themes/default/skins/js/MSClass.js"></script>
-	<div id="pro_con">
-		<ul class="prolist" id="pro_list">
-        				<li>
-                <a href="/239/87.html" title="HE601 QI wireless charger transmitter " class="pro-img"><img src="/web/userfiles/product/-E6-97-A0-E7-BA-BF-E5-85-85-E7-94-B5-E5-99-A8/HE601/list/601-5.jpg" width="165" height="125" alt="HE601 QI wireless charger transmitter " /></a>
-                <a href="/239/87.html" title="HE601 QI wireless charger transmitter " style="font-size:12px;">HE601 QI wireless ch...</a>
-            </li>
-						<li>
-                <a href="/239/85.html" title="HE600 5W QI wireless charger transmitter " class="pro-img"><img src="/web/userfiles/product/-E6-97-A0-E7-BA-BF-E5-85-85-E7-94-B5-E5-99-A8/HE600/list/600-6.jpg" width="165" height="125" alt="HE600 5W QI wireless charger transmitter " /></a>
-                <a href="/239/85.html" title="HE600 5W QI wireless charger transmitter " style="font-size:12px;">HE600 5W QI wireless...</a>
-            </li>
-						<li>
-                <a href="/239/83.html" title="HE630 QI wireless charger rectangle shape" class="pro-img"><img src="/web/userfiles/product/-E6-97-A0-E7-BA-BF-E5-85-85-E7-94-B5-E5-99-A8/HE630/list/630AA6.JPG" width="165" height="125" alt="HE630 QI wireless charger rectangle shape" /></a>
-                <a href="/239/83.html" title="HE630 QI wireless charger rectangle shape" style="font-size:12px;">HE630 QI wireless ch...</a>
-            </li>
-						<li>
-                <a href="/239/81.html" title="HE636 QI standard wireless charger 5V1A" class="pro-img"><img src="/web/userfiles/product/-E6-97-A0-E7-BA-BF-E5-85-85-E7-94-B5-E5-99-A8/HE636/list/636A9.JPG" width="165" height="125" alt="HE636 QI standard wireless charger 5V1A" /></a>
-                <a href="/239/81.html" title="HE636 QI standard wireless charger 5V1A" style="font-size:12px;">HE636 QI standard wi...</a>
-            </li>
-						<li>
-                <a href="/239/79.html" title="HE633 5V1A wireless charger for mobile phone " class="pro-img"><img src="/web/userfiles/product/-E6-97-A0-E7-BA-BF-E5-85-85-E7-94-B5-E5-99-A8/HE633/list/633YJ2.jpg" width="165" height="125" alt="HE633 5V1A wireless charger for mobile phone " /></a>
-                <a href="/239/79.html" title="HE633 5V1A wireless charger for mobile phone " style="font-size:12px;">HE633 5V1A wireless ...</a>
-            </li>
-						<li>
-                <a href="/239/75.html" title="HE632 5V1A QI wireless charger ultra-thin design" class="pro-img"><img src="/web/userfiles/product/-E6-97-A0-E7-BA-BF-E5-85-85-E7-94-B5-E5-99-A8/HE632/list/632A5.jpg" width="165" height="125" alt="HE632 5V1A QI wireless charger ultra-thin design" /></a>
-                <a href="/239/75.html" title="HE632 5V1A QI wireless charger ultra-thin design" style="font-size:12px;">HE632 5V1A QI wirele...</a>
-            </li>
-			
-		</ul>
-	</div>
-	<script type="text/javascript"> 
-	var marqueediv1=new Marquee({
-		MSClass	  : ["pro_list","pro_con"],
-		Direction : 2,
-		Step	  : 0,
-		Width	  : 695,
-		Height	  : 176,
-		Timer	  : 20,
-		DelayTime : 0,
-		WaitTime  : 0,
-		ScrollStep: 170,
-		SwitchType: 0,
-		AutoStart : true
-		
-	});
-	</script>
+		<div class="summary entry-summary">
+		<h1 itemprop="name" class="product_title entry-title">${(model.enName)!''}</h1>
+<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+	<p class="price"></p>
+
+	<meta itemprop="price" content="" />
+	<meta itemprop="priceCurrency" content="GBP" />
+	<link itemprop="availability" href="http://schema.org/InStock" />
+
 </div>
--->
-<div class="back"><a href="javascript:history.back(-1)">Back >></a></div>
-<!--产品详细 end-->
-            </div>
-        </div>
-        <!--right end-->
-    </div>
-    <!--center end-->
-    <!--botnav start-->
-<div class="botnav">
-    	<div class="wd">
-            <ul>
-            	<li class="contact">
-            		<div class="hotline">
-                        ${(company.telPhone)!''}
-                    </div>
-            	</li>
-            	<li class="contact">
-            		<div class="email">
-                    	<a href="mailto:${(company.email)!''}" target="_blank" style="color:#2469e7;">${(company.email)!''}</a>
-                    </div>
-            	</li>
-                <li class="contact">
-                    <div class="dizhi">
-                    	${(company.address)!''}
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer">
-        <div class="wd">
-        	Copyright &copy; 2015 
-        	<#if .now?string("yyyy")!="2015">
-        		-${.now?string("yyyy")} 
-        	</#if>
-            Shenzhen hien technology co.,ltd . All rights reserved.<br>
-        </div>
-    </div>
-    <link href="${ctx}/resources/views/images/kefu.css" type="text/css" rel="stylesheet">
+<div class="product_meta" >
+	<span class="posted_in">Categories: <a href="${ctx}/" rel="tag">${category.enName}</a>.</span>
+	<div class="addthis_sharing_toolbox"></div>
+</div>
+	</div><!-- .summary -->
+	<div class="woocommerce-tabs">
+		<ul class="tabs">
+				<li class="description_tab">
+					<a href="#tab-description">Description</a>
+				</li>
+
+			
+				<li class="my_custom_tab_tab">
+					<a href="#tab-my_custom_tab">Inquiry Us</a>
+				</li>
+					</ul>
+			<div class="panel entry-content" id="tab-description">
+				${(product.description)!'no description!'}
+			</div>
+			<div class="panel entry-content" id="tab-my_custom_tab">
+				
+	<p><div role="form" class="wpcf7" id="wpcf7-f11-p1066-o1" lang="en-US" dir="ltr">
+<div class="screen-reader-response"></div>
+<form action="/product/methoxydienone-powder/#wpcf7-f11-p1066-o1" method="post" class="wpcf7-form" novalidate="novalidate">
+<div style="display: none;">
+<input type="hidden" name="_wpcf7" value="11" />
+<input type="hidden" name="_wpcf7_version" value="4.4.2" />
+<input type="hidden" name="_wpcf7_locale" value="en_US" />
+<input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f11-p1066-o1" />
+<input type="hidden" name="_wpnonce" value="5df51f3589" />
+</div>
+<p>Your Name <br />
+    <span class="wpcf7-form-control-wrap your-name"><input type="text" name="your-name" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" /></span> </p>
+<p>Your Email <br />
+    <span class="wpcf7-form-control-wrap your-email"><input type="email" name="your-email" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email" aria-required="true" aria-invalid="false" /></span> </p>
+<p>Inquiry Product<br />
+    <span class="wpcf7-form-control-wrap dynamictext-574"><input type="text" name="dynamictext-574" value="Methoxydienone Powder" size="40" class="wpcf7-form-control wpcf7dtx-dynamictext wpcf7-dynamictext wpcf7-validates-as-required" aria-required="true" aria-invalid="false" /></span></p>
+<p>Your Message<br />
+    <span class="wpcf7-form-control-wrap your-message"><textarea name="your-message" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"></textarea></span> </p>
+<p>Captcha<br />
+<span class="wpcf7-form-control-wrap quiz-483"><label><span class="wpcf7-quiz-label">24-3=?</span> <input type="text" name="quiz-483" size="40" class="wpcf7-form-control wpcf7-quiz" aria-required="true" aria-invalid="false" /></label><input type="hidden" name="_wpcf7_quiz_answer_quiz-483" value="032bf66528f6dd41187b2f4325571c0a" /></span> </p>
+<p><input type="submit" value="Send Email" class="wpcf7-form-control wpcf7-submit" /></p>
+<div class="wpcf7-response-output wpcf7-display-none"></div></form></div></p>
+
+			</div>
+
+			</div>
+
+	<div class="related products">
+	
+	  <div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart"><div id="sun" ><h3 class="wpb_area_title"><span>Related Product</span></h3></div><div class="supercat-des">
+			<a class="img-class" title=""></a>		
+			</div><div id="owl-demo-related" class="owl-carousel"><div class="item"><figure><a href="http://www.genuineraws.com/product/trestolone-acetate/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/Trestolone-Acetate-Powder.jpg" class="wpb_pro_img wp-post-image" alt="Trestolone-Acetate Powder" /></a><figcaption><h3 class="pro_title">Trestolone Acetate Prohormone Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/trestolone-acetate/" rel="nofollow" data-product_id="440" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/methylstenbolone/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/Methylstenbolone-Powder.jpg" class="wpb_pro_img wp-post-image" alt="Methylstenbolone Powder" /></a><figcaption><h3 class="pro_title">Methylstenbolone Prohormone Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/methylstenbolone/" rel="nofollow" data-product_id="442" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/trenavar-trendione/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/Trenavar-Prohormone-Powder.jpg" class="wpb_pro_img wp-post-image" alt="Trenavar Prohormone Powder" /></a><figcaption><h3 class="pro_title">Trenavar(Trendione) Prohormone Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/trenavar-trendione/" rel="nofollow" data-product_id="545" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/mebolazine-dymethazine/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/Mebolazine-Powder.jpg" class="wpb_pro_img wp-post-image" alt="Mebolazine Powder" /></a><figcaption><h3 class="pro_title">Mebolazine(Dymethazine) Prohormone Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/mebolazine-dymethazine/" rel="nofollow" data-product_id="547" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/halodrol-prohormone-powder/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/Halodrol-Powder.jpg" class="wpb_pro_img wp-post-image" alt="Halodrol Powder" /></a><figcaption><h3 class="pro_title">Halodrol Prohormone Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/halodrol-prohormone-powder/" rel="nofollow" data-product_id="706" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/epistane/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/Epistane-Powder.jpg" class="wpb_pro_img wp-post-image" alt="Epistane Powder" /></a><figcaption><h3 class="pro_title">Epistane Prohormone Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/epistane/" rel="nofollow" data-product_id="205" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/5a-hydroxy-laxogenin/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/5A-Hydroxy-Laxogenin-Powder.jpg" class="wpb_pro_img wp-post-image" alt="5A-Hydroxy-Laxogenin Powder" /></a><figcaption><h3 class="pro_title">5a-hydroxy laxogenin Prohormone Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/5a-hydroxy-laxogenin/" rel="nofollow" data-product_id="510" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/mk-2866-sarms-powder/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/MK-2866-Sarms-Powder.jpg" class="wpb_pro_img wp-post-image" alt="MK-2866 Sarms Powder" /></a><figcaption><h3 class="pro_title">MK-2866 Sarms Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+
+										
+			<a href="http://www.genuineraws.com/product/mk-2866-sarms-powder/" rel="nofollow" data-product_id="705" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div><div class="item"><figure><a href="http://www.genuineraws.com/product/gw-501516-powder/" class="lazyOwl"><img width="300" height="300" src="http://www.genuineraws.com/wp-content/uploads/GW-501516-powder.jpg" class="wpb_pro_img wp-post-image" alt="GW-501516 powder" /></a><figcaption><h3 class="pro_title">GW-501516 Sarms Powder</h3><div class="price_area_fix">		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+			<a href="http://www.genuineraws.com/product/gw-501516-powder/" rel="nofollow" data-product_id="703" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+		</p></div></figcaption></figure></div></div></div>	  
+	</div>
+	<meta itemprop="url" content="http://www.genuineraws.com/product/methoxydienone-powder/" />
+</div><!-- #product-1066 -->
+		</div><!-- #content -->
+		<#include "leftCate.ftl">
+	</div><!-- #primary -->
+<hr />
+<#include "bottom.ftl">
+	<script type="text/javascript">
+jQuery.noConflict();
+(function( $ ) {
+  $(function() {
+  
+$(document).ready(function() {
+	// carousel latest
+    $("#owl-demo").owlCarousel({
+		autoPlay: true,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 5,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+	}); 
+	// carousel feature
+	$("#owl-demo-feature").owlCarousel({
+		autoPlay: true,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 4,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+	});
+	
+// sidebar carousel latest
+
+    $("#owl-demo-side").owlCarousel({
+        autoPlay: true,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 4,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+    });
+	
+// sidebar carousel feature product
+	
+	$("#owl-demo-side-feature").owlCarousel({
+        autoPlay: false,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 4,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+    });
+	
+		// carousel related
+	$("#owl-demo-related").owlCarousel({
+		autoPlay: true,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 4,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+	});
+	
+//	
+		$("#owl-demo-la").owlCarousel({
+		autoPlay: true,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 1,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+	});
+	
+//	
+		$("#owl-demo-fe").owlCarousel({
+		autoPlay: false,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 5,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+	});
+	
+// sidebar carousel three product
+	
+	$("#owl-demo-side-three").owlCarousel({
+        autoPlay: false,
+		stopOnHover: false,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 4,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+    });
+		
+// sidebar carousel flash product
+	
+	$("#owl-demo-side-flash").owlCarousel({
+        autoPlay: false,
+		stopOnHover: false,
+		navigation: false,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 1,
+        itemsDesktop : [1199,1],
+        itemsDesktopSmall : [979,1],
+		itemsTablet: [768,1],
+      	itemsMobile:[479,1],
+		mouseDrag:false,
+		touchDrag:false,
+		transitionStyle:"fade",
+		lazyLoad : true,
+    });
+
+// sidebar carousel four product
+	
+	$("#owl-demo-side-four").owlCarousel({
+        autoPlay: true,
+		stopOnHover: true,
+		navigation: true,
+		navigationText: [
+        "<i class='fa fa-angle-left'></i>",
+        "<i class='fa fa-angle-right'></i> "
+        ],
+		slideSpeed: 1000,
+		paginationSpeed: 1000,
+		pagination:false,
+		paginationNumbers: false,
+        items : 4,
+        itemsDesktop : [1199,3],
+        itemsDesktopSmall : [979,3],
+		mouseDrag:false,
+		touchDrag:false,
+		lazyLoad : true,
+    });
+	
+	// slider style type for latest product general
+	$('.wpb_latest_pro_sli .owl-wrapper').addClass('grid cs-style-3');
+	// slider style type for feature product general
+	$('.wpb_feature_pro_sli .owl-wrapper').addClass('grid cs-style-3');
+	// slider style type for latest product sidebar
+	$('.widget_wpb_latest_class .owl-wrapper').addClass('grid cs-style-3');
+	// slider style type for feature product sidebar
+	$('.widget_wpb_feature_class .owl-wrapper').addClass('grid cs-style-3');
+		
+	$('.wpb_related_pro_sli .owl-wrapper').addClass('grid cs-style-3');
+	
+	$('.wpb_la_pro_sli .owl-wrapper').addClass('grid cs-style-3');
+	
+	$('.wpb_fe_pro_sli .owl-wrapper').addClass('grid cs-style-3');
+	
+	$('.widget_wpb_three_class .owl-wrapper').addClass('grid cs-style-3');
+	
+	$('.widget_wpb_flash_class .owl-wrapper').addClass('grid cs-style-3');
+	
+	$('.widget_wpb_four_class .owl-wrapper').addClass('grid cs-style-3');
+});	
+});
+})(jQuery);
+</script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js'></script>
+<script type='text/javascript' src='//www.xxgenuineraws.com/wp-content/plugins/woocommerce/assets/js/frontend/single-product.min.js?ver=2.3.11'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js'></script>
 </body>
 </html>
