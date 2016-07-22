@@ -208,6 +208,33 @@ public class NewsController {
 			return gson.toJson(entity);
 	}
 	
+	@RequestMapping(value="/{newsId}/release",method=RequestMethod.GET)
+	@ResponseBody
+	public String releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
+			News tempNews = newsService.loadNews(newsId);
+			User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+			String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();				
+			String url=basePath+"/admin/news/"+tempNews.getId();
+			HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
+			JsonEntity entity = new JsonEntity();
+			Gson gson = new Gson();
+			if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath(tempNews.getUrl()),loginUser.getUsername(),null)){
+				tempNews.setPublishDate(new Date());
+				LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
+				if(newsService.saveNews(tempNews)!=null){
+					entity.setKey("1");
+					entity.setValue(Tools.formatDate(tempNews.getPublishDate(), false));
+				}else{
+					entity.setKey("-1");
+				}
+			}else{
+				tempNews.setPublishDate(null);
+				entity.setKey("-1");
+			}
+			newsService.saveNews(tempNews);
+			return gson.toJson(entity);
+	}
+	
 	public PageRainier<News> getNews() {
 		return news;
 	}

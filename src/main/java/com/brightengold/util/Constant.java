@@ -9,4 +9,13 @@ public class Constant {
 	 * 一般用于表示状态为正常
 	 */
 	public static final int C_ONE = 1;
+	/**
+	 * 生成的产品页面路径，页面展示需要ssi嵌入
+	 */
+	public static final String PRODUCTPATH = "/views/html/product/detail/";
+	/**
+	 * 生成的新闻页面路径，页面展示需要ssi嵌入
+	 */
+	public static final String NEWSPATH = "/views/html/news/detail/";
+	
 }
