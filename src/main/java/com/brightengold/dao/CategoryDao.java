@@ -19,4 +19,6 @@ public interface CategoryDao extends AbstractDao<Category, Integer>{
 	long checkHasChildren(@Param("category") Category category);
 	@Query("select c from Category c where c.column.id = :colId or c.column.parentColumn.id = :colId")
 	List<Category> findCate(@Param("colId") Integer colId);
+	@Query("select c from Category c where c.parent = null")
+	List<Category> findAllParentCateList();
 }

@@ -19,7 +19,7 @@ public interface ProductDao extends AbstractDao<Product, Integer>{
 	long countByCateId(@Param("cateId") int cateId);
 	@Query("select pr from Product pr where pr.category.id = :cateId")
 	List<Product> findListByCateId(@Param("cateId") int cateId);
-	@Query("select pr from Product pr where pr.category.id = :cateId and pr.status is true and pr.publish is true order by hot,createDate")
+	@Query("select pr from Product pr where pr.category.id = :cateId and pr.status is true and pr.publish is true order by hot,createDate desc")
 	List<Product> findAllListByCateId(@Param("cateId") int catId);
 	@Modifying
 	@Query("update Product set status = :status where id = :id")

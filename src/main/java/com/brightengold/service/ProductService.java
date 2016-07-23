@@ -1,12 +1,17 @@
 package com.brightengold.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,6 +151,48 @@ public class ProductService {
 			flag = false;
 		}
 		return flag;
+	}
+
+	public List<Product> findRelatedProducts(Integer id, String keyWords, int maxSize) {
+		if(!StringUtils.isBlank(keyWords)){
+			String[] kws = keyWords.split(";");
+			List<Product> ps = new ArrayList<Product>();
+			List<Product> tps = new ArrayList<Product>();
+			List<Product> temp = null;
+			for(String kw : kws){
+				temp = productDao.findAll(findRelatedProductsSpec(id,kw),new Sort(Direction.DESC,"id","hot"));
+				if(CollectionUtils.isNotEmpty(temp)){
+					if(temp.size()>=maxSize){
+						ps.addAll(temp.subList(0, maxSize-1));
+						break;
+					}else{
+						ps.addAll(temp);
+					}
+				}
+			}
+			Set<Integer> tpId = new HashSet<Integer>();
+			for(Product p : ps){
+				if(tpId.contains(p.getId())){
+					continue;
+				}
+				tpId.add(p.getId());
+				tps.add(p);
+			}
+			ps.clear();
+			tpId.clear();
+			return tps;
+		}
+		return null;
+	}
+	private Specification<Product> findRelatedProductsSpec(final Integer id, final String kw) {
+		return new Specification<Product>(){
+			@Override
+			public Predicate toPredicate(Root<Product> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.like(root.<String>get("keyWords"), '%'+kw+'%'),
+						cb.notEqual(root.<Integer>get("id"), id));
+			}
+		};
 	}
 
 }

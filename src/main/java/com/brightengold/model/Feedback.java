@@ -41,7 +41,7 @@ public class Feedback implements Serializable {
 	/**
 	 * 备用字段
 	 */
-	private String temp1;
+	private String productName;
 	private String temp2;
 	
 	@Id
@@ -76,11 +76,11 @@ public class Feedback implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getTemp1() {
-		return temp1;
+	public String getProductName() {
+		return productName;
 	}
-	public void setTemp1(String temp1) {
-		this.temp1 = temp1;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	public String getTemp2() {
 		return temp2;

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -353,6 +354,12 @@ public class GennerateController {
 				 product.setPublish(true);
 				 map.put("model", product);
 				 map.put("parentCol", ((Column)map.get("column")).getParentColumn());
+				 //查找相关连产品，根据keyWords
+				 List<Product> products = 
+						 productService.findRelatedProducts(product.getId(),product.getKeyWords(),8);
+				 if(!CollectionUtils.isEmpty(products)){
+					 map.put("relatedProducts", products);
+				 }
 				 parentPath = parentPath+(i+1)+File.separator;
 				 product.setPageNum(i+1);
 				 FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl());
@@ -417,6 +424,12 @@ public class GennerateController {
 					 product.setPageNum(i+1);
 					 //product只要生成一个静态页面
 					 //TODO
+					 //查找相关连产品，根据keyWords
+					 List<Product> products = 
+							 productService.findRelatedProducts(product.getId(),product.getKeyWords(),8);
+					 if(!CollectionUtils.isEmpty(products)){
+						 map.put("relatedProducts", products);
+					 }
 					 if(!FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl())){
 						 logger.error("生成产品页面失败");
 					 }

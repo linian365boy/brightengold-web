@@ -100,6 +100,12 @@ $(document).ready(function(){
 				  </div>
 			  </div>
 			  <div class="form-group">
+			    <label for="keyWords" class="col-sm-1 control-label">关键字</label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control" id="keyWords" value="${model.keyWords }" name="keyWords" placeholder="商品关键字(以英文分号隔开不同的关键字)">
+			    </div>
+			  </div>
+			  <div class="form-group">
 			    <label for="description" class="col-sm-1 control-label">产品详情<span class="asterisk">*</span></label>
 			    <div class="col-sm-9">
 			      <textarea id="description" rows="16" name="description" class="form-control ckeditor">${model.description }</textarea>

@@ -51,9 +51,13 @@ public class FeedbackController {
 	@RequestMapping(value="/{id}/del",method=RequestMethod.GET)
 	public String delete(@PathVariable Integer id,Feedback feedback){
 		if (id != null) {
-			feedbackService.delete(id);
-			MsgUtil.setMsgDelete("success");
-			LogUtil.getInstance().log(LogType.DEL, "联系方式为"+feedback.getTelePhone());
+			try{
+				feedbackService.delete(id);
+				MsgUtil.setMsgDelete("success");
+				LogUtil.getInstance().log(LogType.DEL, "联系方式为"+feedback.getTelePhone());
+			}catch(Exception e){
+				logger.error("删除评论报错!",e);
+			}
 		}
 		return "redirect:/admin/feedback/feedbacks/1";
 	}
