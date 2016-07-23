@@ -495,7 +495,7 @@ public class GennerateController {
 		 }
 	}
 	
-	private void gennerateCommon(ModelMap map){
+	protected void gennerateCommon(ModelMap map){
 		//首页广告
 		List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
 		map.put("indexAds", ads);

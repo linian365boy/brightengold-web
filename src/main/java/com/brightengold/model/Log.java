@@ -15,7 +15,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import cn.rainier.nian.model.Menu;
-import cn.rainier.nian.model.User;
 
 @Entity
 @Table

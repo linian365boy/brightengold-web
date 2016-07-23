@@ -43,6 +43,8 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
 import com.brightengold.service.SystemConfig;
+import com.brightengold.util.Constant;
+import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 
@@ -85,6 +87,14 @@ public class ProductController {
 		return "admin/goods/product/update";
 	}
 	
+	/**
+	 * detail:预览产品页面，需要组装数据
+	 * @author tanfan 
+	 * @param productId
+	 * @param model
+	 * @return 
+	 * @since JDK 1.7
+	 */
 	@RequestMapping(value="/{productId}",method=RequestMethod.GET)
 	public String detail(@PathVariable Integer productId,ModelMap model) {
 		if (productId != null) {
@@ -215,6 +225,36 @@ public class ProductController {
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}
+	
+	@RequestMapping(value="/{productId}/release",method=RequestMethod.GET)
+	public String releaseProduct(HttpServletRequest request, @PathVariable Integer productId, ModelMap map){
+		if(productId!=null){
+			Product temp = productService.loadProductById(productId);
+			if(!checkPub(temp)){
+				String realPath = request.getSession().getServletContext().getRealPath("/");
+				String parentPath = Constant.PRODUCTPATH;
+				if(StringUtils.isNotBlank(temp.getUrl())){
+					temp.setUrl(temp.getUrl());
+				}else{
+					temp.setUrl(parentPath+Tools.getRndFilename()+".htm");
+				}
+				temp.setPublish(true);
+				//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
+				map.put("product", temp);
+				//生成唯一的产品页面路径，不需要根据页码生成页码
+				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath+parentPath, temp.getUrl())){
+					productService.saveProduct(temp);
+					MsgUtil.setMsg("success", "产品发布成功！");
+				}else{
+					MsgUtil.setMsg("error", "产品发布失败！");
+				}
+			}else{
+				MsgUtil.setMsg("error", "产品已发布！");
+			}
+		}
+		return "redirect:/admin/goods/product/products/1.html";
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value="/{id}/changeStatus",method = RequestMethod.POST)
