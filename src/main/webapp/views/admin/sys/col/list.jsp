@@ -107,7 +107,23 @@
 						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
 						<input type="image" name="${column.id }" onclick="setPublish(this);" 
 						src="${ctx }resources/images/icn_publish.png" data-toggle="tooltip" data-placement="top" 
-						title="发布设置（当前使用${column.type?'产品':'标题' }模式发布）．设置时，其子栏目也会一起设置"/>&nbsp;
+						title="发布设置（当前使用
+						<c:choose>
+							<c:when test="${column.type==1 }">
+								产品列表
+							</c:when>
+							<c:otherwise>
+								<c:choose>
+									<c:when test="${column.type==0 }">
+										信息列表
+									</c:when>
+									<c:otherwise>
+										文章标题
+									</c:otherwise>
+								</c:choose>
+							</c:otherwise>
+						</c:choose>
+						模式发布）．设置时，其子栏目也会一起设置"/>&nbsp;
 						<input type="image" name="${column.id }" data-toggle="tool1tip" data-placement="top" onclick="del(this);" 
 						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
 					</td>

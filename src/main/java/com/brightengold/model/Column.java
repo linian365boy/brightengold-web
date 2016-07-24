@@ -79,10 +79,11 @@ public class Column implements Serializable{
 	/**
 	 * 栏目页面发布的类型，
 	 * 区别即显示标题还是内容的页面
-	 * false　文章标题列表的页面
-	 * true　产品展示的页面
+	 * 0　info填充信息的页面
+	 * 1　产品列表展示的页面
+	 * 2  文章标题列表的页面
 	 */
-	private boolean type;
+	private int type;
 	
 	@Id
 	@GeneratedValue
@@ -147,10 +148,10 @@ public class Column implements Serializable{
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public boolean getType() {
+	public int getType() {
 		return type;
 	}
-	public void setType(boolean type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 	public int getDepth() {

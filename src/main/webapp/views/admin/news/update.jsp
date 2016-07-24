@@ -135,12 +135,12 @@
 		</header>
 		<div class="tab_container">
 		<div id="tab1" class="tab_content">
-		<form action="${ctx }news/${news.id}/update" class="form-horizontal" id="form" method="post">
+		<form action="${ctx }admin/news/${news.id}/update.html" class="form-horizontal" id="form" method="post">
 			<div class="form-group">
 			    <label for="title" class="col-sm-2 control-label">栏目<span class="asterisk">*</span></label>
 			    <div class="row">
 			    	<div class="col-xs-8" style="overflow:hidden;">
-			    			<select class="col-xs-3 selectpicker" name="parentCol" onchange="changeCol(this);">
+			    			<select class="col-xs-3 selectpicker" name="firstColId" onchange="changeCol(this);">
 			    				<option value="">--请选择--</option>
 			    				<c:forEach items="${parentCol }" var="col">
 				    				<c:choose>
@@ -168,7 +168,7 @@
 				    			</c:forEach>
 				      		</select>
 				      		<c:forEach items="${childs }" var="childColumn">
-					      		<select class="col-xs-3 selectpicker" name="secondCol" >
+					      		<select class="col-xs-3 selectpicker" name="secondColId" >
 				      				<c:choose>
 					      				<c:when test="${not empty (news.column.parentColumn) }">
 								      			<option value='${news.column.id }' selected="selected">${news.column.name }</option>

@@ -14,13 +14,13 @@
 	<#list categorys as pCategory>
 		<li class="cat-item cat-item-420 cat-parent">
 			<a href="${ctx}/views/html/col/${(pCategory.enName)?replace('\\s*','','ri')}.htm">${(pCategory.enName)!''}</a> 
-			<span class="count">(${((pCategory.products)?size)!0})</span>
+			<span class="count">(${(pCategory.productsSize)!0})</span>
 			<#if ((pCategory.children)?size>0)>
 				<ul class='children'>
 					<#list (pCategory.children) as cCategory>
 						<li class="cat-item cat-item-410">
 							<a href="${ctx}/views/html/col/${(cCategory.enName)?replace('\\s*','','ri')}.htm">${(cCategory.enName)!''}</a> 
-							<span class="count">(${((cCategory.products)?size)!0})</span>
+							<span class="count">(${(cCategory.productsSize)!0})</span>
 						</li>
 					</#list>
 				</ul>

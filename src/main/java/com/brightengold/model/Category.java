@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import cn.rainier.nian.model.User;
 
@@ -55,6 +56,9 @@ public class Category implements Serializable{
 	private List<Product> products;
 	//备注
 	private String remark;
+	
+	@Transient
+	private long productsSize;
 	
 	@Id
 	@GeneratedValue
@@ -128,5 +132,12 @@ public class Category implements Serializable{
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	@Transient
+	public long getProductsSize() {
+		return productsSize;
+	}
+	public void setProductsSize(long productsSize) {
+		this.productsSize = productsSize;
 	}
 }

@@ -84,22 +84,16 @@ body.custom-background { background-color: #e2e2e2; }
 		<div id="content" class="site-content" role="main">
                 <nav class="woocommerce-breadcrumb" itemprop="breadcrumb">
                 <a href="${ctx}/">Home</a>&nbsp;&#47;&nbsp;
-                <a href="http://www.genuineraws.com/product-catagory/prohormones-sarms/">${(category.enName)!''}</a>
+                <a href="${ctx}/views/html/col/${(category.enName)?replace('\\s*','','ri')}.htm">${(category.enName)!''}</a>
                 &nbsp;&#47;&nbsp;${(model.enName)!''}</nav>
-			<div itemscope itemtype="http://schema.org/Product" id="product-1066" class="post-1066 product type-product status-publish has-post-thumbnail product_cat-prohormones-sarms product_tag-methoxydienone-powder shipping-taxable product-type-simple product-cat-prohormones-sarms product-tag-methoxydienone-powder instock">
+			<div itemscope itemtype="${ctx}/resources/${model.picUrl}" id="product-1066" class="post-1066 product type-product status-publish has-post-thumbnail product_cat-prohormones-sarms product_tag-methoxydienone-powder shipping-taxable product-type-simple product-cat-prohormones-sarms product-tag-methoxydienone-powder instock">
 			<div class="images">
-			<a href="${ctx}/resources/${model.picUrl}" itemprop="image" class="woocommerce-main-image zoom" title="" data-rel="prettyPhoto"><img width="500" height="500" src="${ctx}/resources/${model.picUrl}" class="attachment-shop_single size-shop_single wp-post-image" alt="Methoxydienone Powder" title="Methoxydienone Powder" /></a>
+			<a href="${ctx}/resources/${model.picUrl}" itemprop="image" class="woocommerce-main-image zoom" title="" data-rel="prettyPhoto"><img width="500" height="500" src="${ctx}/resources/${model.picUrl}" class="attachment-shop_single size-shop_single wp-post-image" alt="${(model.enName)!''}" title="${(model.enName)!''}" /></a>
 			</div>
 		<div class="summary entry-summary">
 		<h1 itemprop="name" class="product_title entry-title">${(model.enName)!''}</h1>
-<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-
+<div itemprop="offers" itemscope itemtype="${ctx}/resources/${model.picUrl}">
 	<p class="price"></p>
-
-	<meta itemprop="price" content="" />
-	<meta itemprop="priceCurrency" content="GBP" />
-	<link itemprop="availability" href="http://schema.org/InStock" />
-
 </div>
 <div class="product_meta" >
 	<span class="posted_in">Categories: <a href="${ctx}/" rel="tag">${category.enName}</a>.</span>

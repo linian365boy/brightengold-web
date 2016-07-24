@@ -89,4 +89,5 @@ public class CategoryService {
 	public List<Category> findAllParentCateList() {
 		return categoryDao.findAllParentCateList();
 	}
+
 }

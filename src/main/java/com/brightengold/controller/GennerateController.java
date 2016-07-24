@@ -40,6 +40,7 @@ import com.brightengold.service.MsgUtil;
 import com.brightengold.service.NewsService;
 import com.brightengold.service.ProductService;
 import com.brightengold.service.SystemConfig;
+import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
 
 @Controller
@@ -175,7 +176,7 @@ public class GennerateController {
 						publishAllNews(request,col,map);
 						//PageRainier<News> page = newsService.findAllByColId(1, pageSize, col.getId(),col.getDepth()); //得到所有的新闻
 						//map.put("newsPage", page);
-						if(col.getType()){
+						if(1==col.getType() || 2==col.getType()){
 							templateName = "productTemplate.ftl";
 						}
 						//查找是否有相同code的Info，一起生成，填充column的内容页面
@@ -203,9 +204,6 @@ public class GennerateController {
 				String style_v = (String) request.getSession().getAttribute("style_v");
 				String path = request.getSession().getServletContext().getRealPath("/");
 				if(cate!=null){
-					//productService.findAllByCateId(pageNo, pageSize, cate.getId());
-					//Column col = null;
-					//Column parentCol = null;
 					map.put("style_v", style_v);
 					gennerateCommon(map);
 					map.put("ctx", basePath);
@@ -290,7 +288,6 @@ public class GennerateController {
 	private void publishAllProductsByStyle(HttpServletRequest request,
 			Column col, ModelMap map) {
 		List<Category> cates = categoryService.findCateByColId(col.getId());
-		//String fPath = null;
 		for(Category cate : cates){
 			 List<Product> productList = productService.findAllListByCateId(cate.getId());;
 			 //得到该栏目下所有的产品
@@ -302,9 +299,6 @@ public class GennerateController {
 			 			cate.getId()+File.separator;
 			 for(Product product : productList){
 				 if(product.isPublish()){
-					 //fPath = path +File.separator+"views"+File.separator+"html"+File.separator+"product"+
-					//		 	File.separator+cate.getId()+File.separator+product.getPageNum()+
-					//		 		File.separator+product.getUrl();
 					 FileUtil.delFile(parentPath+product.getUrl());
 				 }
 				 product.setPublish(true);
@@ -336,8 +330,7 @@ public class GennerateController {
 			 //得到该栏目下所有的产品
 			 page = productService.findAllByCateId((i+1), pageSize, cate.getId()); 
 			 map.put("productPage", page);
-			 parentPath = path + File.separator+"views"+File.separator+"html"+
-				 		File.separator+"product"+File.separator+
+			 parentPath = path + Constant.CATEGORYPRODUCTPATH +
 				 			cate.getId()+File.separator;
 			 //列表的页面生成
 			 FreemarkerUtil.fprint("categoryProductList.ftl", map, parentPath,(i+1)+".htm");
@@ -345,9 +338,6 @@ public class GennerateController {
 			 productList = page.getResult();
 			 for(Product product:productList){
 				 if(product.isPublish()){
-					 //fPath = path +File.separator+"views"+File.separator+"html"+File.separator+"product"+
-					//		 	File.separator+cate.getId()+File.separator+product.getPageNum()+
-					//		 		File.separator+product.getUrl();
 					 fPath = parentPath+(i+1)+File.separator+product.getUrl();
 					 FileUtil.delFile(fPath);
 				 }
@@ -363,8 +353,7 @@ public class GennerateController {
 				 parentPath = parentPath+(i+1)+File.separator;
 				 product.setPageNum(i+1);
 				 FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl());
-				 parentPath = path + File.separator+"views"+File.separator+"html"+
-						 		File.separator+"product"+File.separator+cate.getId()+File.separator;
+				 parentPath = path + Constant.CATEGORYDETAILPRODUCTPATH +cate.getId()+File.separator;
 				 tempProductList.add(product);
 			}
 		 }
@@ -377,7 +366,7 @@ public class GennerateController {
 		 Map<String,Object> map = new HashMap<String,Object>();
 		 //false　文章标题列表的页面
 		 //true　产品展示的页面
-		 if(col.getType()){
+		 if(1==col.getType()){
 			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
 					 productService.countByColId(col.getId())/this.pageSize));
 			 PageRainier<Product> page = null;
@@ -440,8 +429,9 @@ public class GennerateController {
 			 }
 			 //批量修改product;
 			 productService.insertOfBatch(tempProductList);
-		 }else{
-			 //查询最大页数
+		 }else if(2==col.getType()){
+		 	//按文章标题填充
+			//查询最大页数
 			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
 					 newsService.countByColId(col.getId(),col.getDepth())/this.pageSize));
 			 PageRainier<News> page = null;
@@ -469,9 +459,17 @@ public class GennerateController {
 				 map.put("column", col);
 				 FreemarkerUtil.fprint("list.ftl", map, parentPath,(i+1)+".htm");
 				 map.clear();
+				 map.put("ctx", modelMap.get("ctx"));
+				 map.put("style_v", modelMap.get("style_v"));
+				 map.put("crossCol", modelMap.get("crossCol"));
+				 map.put("indexAds", modelMap.get("indexAds"));
+				 map.put("company", modelMap.get("company"));
+				 map.put("parentCol", modelMap.get("parentCol"));
+				 map.put("column", col);
+				 map.put("categorys", modelMap.get("categorys"));
+				 map.put("indexNews", modelMap.get("indexNews"));
 				 newsList = page.getResult();
 				 for(News news:newsList){
-					 map.put("ctx", request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath());
 					 if(news.getPublishDate()!=null){
 						 fPath = path +File.separator+"views"+File.separator+"html"+File.separator+"news"+
 								 	File.separator+col.getCode()+File.separator+news.getPageNum()+
@@ -508,7 +506,18 @@ public class GennerateController {
 		//首页新闻
 		List<News> news = newsService.findIndexPic(systemConfig.getIndexNewsSize());
 		map.put("indexNews", news);
-		List<Category> categorysList = categoryService.findList();
+		//查询所有第一级分类
+		List<Category> categorysList = categoryService.findAllParentCateList();
+		long catProductsSize = 0;
+		if(!CollectionUtils.isEmpty(categorysList)){
+			for(Category cate : categorysList){
+				catProductsSize = productService.countByCateId(cate.getId());
+				logger.info("cate products size |{}",catProductsSize);
+				if(catProductsSize!=0){
+					cate.setProductsSize(catProductsSize);
+				}
+			}
+		}
 		map.put("categorys", categorysList);
  		//企业信息
 		Company company = companyService.loadCompany();

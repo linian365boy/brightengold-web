@@ -23,5 +23,5 @@ public interface ColumnDao extends AbstractDao<Column, Integer> {
 	List<Column> findFirstColumn();
 	@Modifying
 	@Query("update Column c set c.type = :type where c.id = :id or c.parentColumn.id = :id")
-	void updateColumnPublishContent(@Param("id") Integer id,@Param("type")  boolean type);
+	void updateColumnPublishContent(@Param("id") Integer id,@Param("type")  int type);
 }

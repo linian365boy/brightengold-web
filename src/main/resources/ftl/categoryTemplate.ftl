@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>${(column.enName)!''} - ${(company.name)!''}</title>
+	<title>${(category.enName)!''} - ${(company.name)!''}</title>
 <!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,309] -->
 <meta name="keywords" itemprop="keywords" content="testosterone acetate powder,testosterone acetate powder suppliers,testosterone acetate powder recipe,testosterone acetate powder for sale,testosterone acetate powder manufacturers,testosterone acetate powder price,testosterone enanthate,testosterone propionate powder,testosterone propionate powder manufacturers,testosterone propionate powder conversion,buy testosterone propionate powder,testosterone cypionate powder,testosterone cypionate powder manufacturers,testosterone cypionate powder price,testosterone cypionate powder conversion,testosterone cypionate powder for sale,testosterone phenylpropionate,test phenylpropionate,testosterone sustanon 250,sustanon 250,omnadren,testosterone blend,testosterone base,testosterone suspention,tte,methyltestosterone,testosterone undecanoate,andriol,testosterone isocaproate,proviron mesterolone powder, proviron mesterolone powder suppliers, proviron mesterolone powder side effects, buy proviron mesterolone powder,clostebol acetate,megagrisevit; 4-chlorotestosterone acetate,trenbolone acetate powder,trenbolone acetate powder wholesale,tren ace raw powder" />
 		<style type="text/css">
@@ -83,8 +83,8 @@ body.custom-background { background-color: #e2e2e2; }
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
                 <nav class="woocommerce-breadcrumb" >
-                <a href="http://www.genuineraws.com">Home</a>&nbsp;&#47;&nbsp;${(category.enName)!''}</nav>				
-				<h1 class="page-title">Products</h1>
+                <a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(category.enName)!''}</nav>				
+				<h1 class="page-title">${(column.code)!'--'}</h1>
 				<div id="productContent">
             	<#--virtual 相对路径-->
             	<!--#include virtual="../product/${category.id}/1.htm"-->

@@ -25,16 +25,13 @@
 		    </div>
 		  </div>
 		   <div class="form-group">
-		    <div class="col-sm-offset-2 col-sm-10">
-		      <div class="checkbox">
-		        <label>
-		          <input type="checkbox" name="type" 
-		          <c:if test="${column.type }">
-		          	checked="checked"
-		          </c:if>
-		          >页面使用产品填充（默认使用标题填充）
-		        </label>
-		      </div>
+		   	<label for="type" class="col-sm-2 control-label">页面填充</label>
+		    <div class="col-sm-8">       
+	        	<select class="form-control" name="type" id="type">
+	        		<option value="1" ${column.type==1?'selected':'' }>使用产品列表填充</option>
+	        		<option value="2" ${column.type==2?'selected':'' }>使用文章标题填充</option>
+	        		<option value="0" ${column.type==0?'selected':'' }>使用信息内容填充</option>
+	        	</select>
 		    </div>
 		  </div>
 	  <div class="form-group">

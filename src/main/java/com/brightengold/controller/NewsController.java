@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -73,10 +72,10 @@ public class NewsController {
 		news.setClicks(0);
 		news.setCreateDate(new Date());
 		news.setUrl(Tools.getRndFilename()+".htm");
-		if(StringUtils.isNotBlank(String.valueOf(thirdColId))){
+		if(thirdColId != null && thirdColId !=0 ){
 			news.setColumn(columnService.getById(thirdColId));
 			news.setDepth(firstColId+"-"+secondColId+"-"+thirdColId);
-		}else if(StringUtils.isNotBlank(String.valueOf(secondColId))){
+		}else if(secondColId !=null && secondColId !=0 ){
 			news.setColumn(columnService.getById(secondColId));
 			news.setDepth(firstColId+"-"+secondColId);
 		}else{
@@ -108,13 +107,20 @@ public class NewsController {
 	}
 	
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.POST)
-	public String update(@PathVariable Integer newsId,News news){
+	public String update(@PathVariable Integer newsId,News news, Integer firstColId, Integer secondColId){
 		if(newsId!=null){
 			StringBuilder content = new StringBuilder();
 			News temp = newsService.loadNews(newsId);
 			news.setCreateDate(temp.getCreateDate());
 			news.setClicks(temp.getClicks());
 			news.setUrl(temp.getUrl());
+			if(secondColId !=null && secondColId !=0 ){
+				news.setColumn(columnService.getById(secondColId));
+				news.setDepth(firstColId+"-"+secondColId);
+			}else{
+				news.setColumn(columnService.getById(firstColId));
+				news.setDepth(String.valueOf(firstColId));
+			}
 			newsService.saveNews(news);
 			if(!temp.getTitle().equals(news.getTitle())){
 				content.append("标题由\""+temp.getTitle()+"\"修改为\""+news.getTitle()+"\"");
@@ -128,7 +134,7 @@ public class NewsController {
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT, content.toString());
 		}
-		return "redirect:/admin/news/news/1";
+		return "redirect:/admin/news/news/1.html";
 	}
 	
 	@RequestMapping(value="/{newsId}",method=RequestMethod.GET)
@@ -142,7 +148,7 @@ public class NewsController {
 				return "admin_unless/news/details";
 			}
 		}
-		return "redirect:/admin/news/news/1";
+		return "redirect:/admin/news/news/1.html";
 	}
 	
 	@RequestMapping(value="/{newsId}/del",method=RequestMethod.GET)

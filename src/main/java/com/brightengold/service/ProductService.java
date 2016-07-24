@@ -128,7 +128,7 @@ public class ProductService {
 	public PageRainier<Product> findAllByCateId(int pageNo, Integer pageSize,
 			Integer cateId) {
 		PageRainier<Product> page = new PageRainier<Product>(countByCateId(cateId),pageNo,pageSize);
-		List<Product> products = productDao.findListByCateId(cateId);
+		List<Product> products = productDao.findAllListByCateId(cateId);
 		page.setResult(products);
 		return page;
 	}
@@ -194,5 +194,4 @@ public class ProductService {
 			}
 		};
 	}
-
 }

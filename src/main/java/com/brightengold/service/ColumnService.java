@@ -93,7 +93,7 @@ public class ColumnService {
 		return colList;
 	}
 
-	public void updateColumnPublishContent(Integer id, boolean type) {
+	public void updateColumnPublishContent(Integer id, int type) {
 		columnDao.updateColumnPublishContent(id,type);
 	}
 

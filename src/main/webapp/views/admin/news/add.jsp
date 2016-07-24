@@ -65,7 +65,7 @@
 			$(obj).next().remove();
 			var html = "";
 			if(json.length>0){
-				html+='<select class="col-xs-3 selectpicker" name="secondCol" >';
+				html+='<select class="col-xs-3 selectpicker" name="secondColId" >';
 				html+='<option value="">--请选择--</option>';
 				$.each(json,function(i,n){
 					html+="<option value='"+n[0]+"'>"+n[1]+"</option>";
@@ -140,7 +140,7 @@
 			    <div class="row">
 			    	<div class="col-xs-8" style="overflow:hidden;">
 			    		<c:if test="${fn:length(parentCol)>0 }">
-			    			<select class="col-xs-3 selectpicker" name="parentCol" onchange="changeCol(this);">
+			    			<select class="col-xs-3 selectpicker" name="firstColId" onchange="changeCol(this);">
 			    				<option value="">--请选择--</option>
 				    			<c:forEach items="${parentCol }" var="col">
 				    				<option value="${col[0] }">${col[1] }</option>

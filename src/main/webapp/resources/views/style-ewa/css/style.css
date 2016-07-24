@@ -346,3 +346,6 @@ transition: background .5s, opacity .5s;
 background: #fff;
 opacity: 1;
 }
+.newslist li{height:35px;line-height:35px;border-bottom:1px dashed #cccccc;}
+.newslist li a{display:block;height:35px;line-height:35px;width:600px;float:left;padding-left:10px;color:#373737;}
+.newslist li span{display:block; height:35px;line-height:35px;width:80px;float:right;}
