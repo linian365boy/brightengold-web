@@ -184,6 +184,7 @@ public class ProductService {
 		}
 		return null;
 	}
+	
 	private Specification<Product> findRelatedProductsSpec(final Integer id, final String kw) {
 		return new Specification<Product>(){
 			@Override
@@ -191,6 +192,23 @@ public class ProductService {
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return cb.and(cb.like(root.<String>get("keyWords"), '%'+kw+'%'),
 						cb.notEqual(root.<Integer>get("id"), id));
+			}
+		};
+	}
+
+	public PageRainier<Product> findAllReleaseProductByLikeKeyword(String keyword, int pageNo, int pageSize) {
+		Page<Product> tempPage = productDao.findAll(findAllReleaseProductByLikeKeywordSpec(keyword), 
+				new PageRequest(pageNo-1, pageSize, new Sort(Direction.DESC,"id","hot")));
+		PageRainier<Product> page = new PageRainier<Product>(tempPage.getTotalElements(),pageNo,pageSize);
+		page.setResult(tempPage.getContent());
+		return page;
+	}
+
+	private Specification<Product> findAllReleaseProductByLikeKeywordSpec(final String keyword) {
+		return new Specification<Product>(){
+			@Override
+			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.like(root.<String>get("enName"), '%'+keyword+'%');
 			}
 		};
 	}

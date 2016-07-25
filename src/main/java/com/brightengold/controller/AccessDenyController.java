@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/admin")
 @Scope("prototype")
 public class AccessDenyController {
-	private static Logger logger = LoggerFactory.getLogger(AccessDenyController.class);
-	
+	private Logger logger  = LoggerFactory.getLogger(AccessDenyController.class);
 	@RequestMapping(value="/accessDenied", method = RequestMethod.GET)
 	public String accessDenied(){
+		logger.warn("You enter accessDenied Page!");
 		return "403";
 	}
 	

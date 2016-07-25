@@ -211,9 +211,7 @@ public class ProductController {
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
 			if(!checkPub(temp)){
-				if(StringUtils.isNotBlank(temp.getUrl())){
-					temp.setUrl(temp.getUrl());
-				}else{
+				if(StringUtils.isBlank(temp.getUrl())){
 					temp.setUrl(Tools.getRndFilename()+".htm");
 				}
 				temp.setPublish(true);
@@ -241,7 +239,7 @@ public class ProductController {
 				temp.setPublish(true);
 				//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
 				map.put("product", temp);
-				//生成唯一的产品页面路径，不需要根据页码生成页码
+				//生成唯一的产品页面路径，不需要根据页码生成页面
 				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath+parentPath, temp.getUrl())){
 					productService.saveProduct(temp);
 					MsgUtil.setMsg("success", "产品发布成功！");

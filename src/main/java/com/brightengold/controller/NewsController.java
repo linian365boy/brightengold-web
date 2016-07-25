@@ -5,13 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -20,20 +20,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.utils.PageRainier;
-
 import com.brightengold.model.Column;
-import com.brightengold.model.JsonEntity;
 import com.brightengold.model.News;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.NewsService;
-import com.brightengold.util.HTMLGenerator;
+import com.brightengold.util.Constant;
+import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.google.gson.Gson;
+
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/news")
@@ -190,55 +189,44 @@ public class NewsController {
 	@RequestMapping(value="/{newsId}/publish",method=RequestMethod.GET)
 	@ResponseBody
 	public String publishNews(@PathVariable Integer newsId,HttpServletRequest request){
-			News tempNews = newsService.loadNews(newsId);
-			User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();				
-			String url=basePath+"/admin/news/"+tempNews.getId();
-			HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-			JsonEntity entity = new JsonEntity();
-			Gson gson = new Gson();
-			if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath(tempNews.getUrl()),loginUser.getUsername(),null)){
-				tempNews.setPublishDate(new Date());
-				LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
-				if(newsService.saveNews(tempNews)!=null){
-					entity.setKey("1");
-					entity.setValue(Tools.formatDate(tempNews.getPublishDate(), false));
-				}else{
-					entity.setKey("-1");
-				}
-			}else{
-				tempNews.setPublishDate(null);
-				entity.setKey("-1");
+		Gson gson = new Gson();
+		News tempNews = null;
+		if(newsId!=null){
+			tempNews = newsService.loadNews(newsId);
+			tempNews.setPublishDate(new Date());
+			if(StringUtils.isBlank(tempNews.getUrl())){
+				tempNews.setUrl(Tools.getRndFilename()+".htm");
 			}
-			newsService.saveNews(tempNews);
-			return gson.toJson(entity);
+			tempNews.setUrl(Tools.getRndFilename()+".htm");
+			LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
+			tempNews = newsService.saveNews(tempNews);
+			return gson.toJson(tempNews);
+		}
+		return gson.toJson(tempNews);
 	}
 	
 	@RequestMapping(value="/{newsId}/release",method=RequestMethod.GET)
 	@ResponseBody
 	public String releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
-			News tempNews = newsService.loadNews(newsId);
-			User loginUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();				
-			String url=basePath+"/admin/news/"+tempNews.getId();
-			HTMLGenerator htmlGenerator = new HTMLGenerator(basePath);
-			JsonEntity entity = new JsonEntity();
-			Gson gson = new Gson();
-			if(htmlGenerator.createHtmlPage(url,request.getSession().getServletContext().getRealPath(tempNews.getUrl()),loginUser.getUsername(),null)){
-				tempNews.setPublishDate(new Date());
-				LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
-				if(newsService.saveNews(tempNews)!=null){
-					entity.setKey("1");
-					entity.setValue(Tools.formatDate(tempNews.getPublishDate(), false));
-				}else{
-					entity.setKey("-1");
-				}
-			}else{
-				tempNews.setPublishDate(null);
-				entity.setKey("-1");
+		Gson gson = new Gson();
+		News tempNews = null;
+		if(newsId!=null){
+			String realPath = request.getSession().getServletContext().getRealPath("/");
+			String parentPath = Constant.NEWSPATH;
+			tempNews = newsService.loadNews(newsId);
+			tempNews.setPublishDate(new Date());
+			if(StringUtils.isBlank(tempNews.getUrl())){
+				tempNews.setUrl(Tools.getRndFilename()+".htm");
 			}
-			newsService.saveNews(tempNews);
-			return gson.toJson(entity);
+			tempNews.setUrl(Tools.getRndFilename()+".htm");
+			LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
+			//生成唯一的新闻页面路径，不需要根据页码生成页面
+			if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
+				newsService.saveNews(tempNews);
+			}
+			return gson.toJson(tempNews);
+		}
+		return gson.toJson(tempNews);
 	}
 	
 	public PageRainier<News> getNews() {

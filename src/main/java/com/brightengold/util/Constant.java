@@ -27,4 +27,6 @@ public class Constant {
 	 */
 	public static final String CATEGORYDETAILPRODUCTPATH = "/views/html/product/";
 	
+	public static final int PAGE_INDEX_SIZE = 16;
+	
 }

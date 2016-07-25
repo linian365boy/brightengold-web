@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ import com.brightengold.util.LogType;
  */
 @Controller
 @RequestMapping("/admin/sys/webconfig")
-@Scope("prototype")
 public class WebConfigController {
 	@Autowired
 	private WebConfigService webConfigService;
@@ -39,7 +37,7 @@ public class WebConfigController {
 	@RequestMapping(value={"/detail","/",""},method=RequestMethod.GET)
 	public String detail(Model model) {
 		model.addAttribute("model",webConfigService.loadSystemConfig());
-		return "admin/sys/system/detail";
+		return "admin/sys/webconfig/detail";
 	}
 	
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
