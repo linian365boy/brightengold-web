@@ -71,10 +71,6 @@ public class Product implements Serializable{
 	 */
 	private User createUser;
 	/**
-	 * 发布后的页码
-	 */
-	private int pageNum;
-	/**
 	 * 锁定或正常两种状态
 	 * true正常  false锁定
 	 */
@@ -153,12 +149,6 @@ public class Product implements Serializable{
 	}
 	public String getIntroduce() {
 		return introduce;
-	}
-	public int getPageNum() {
-		return pageNum;
-	}
-	public void setPageNum(int pageNum) {
-		this.pageNum = pageNum;
 	}
 	@Lob
 	public String getDescription() {
