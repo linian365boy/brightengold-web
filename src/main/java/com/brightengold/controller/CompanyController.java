@@ -60,23 +60,27 @@ public class CompanyController {
 			}else{
 				company.setLogo(temp.getLogo());
 			}
-			company.setCreateDate(temp.getCreateDate());
-			company = companyService.save(company);
-			StringBuilder content = new StringBuilder();
-			if(!temp.getName().equals(company.getName())){
-				content.append("公司名称由\""+temp.getName()+"\"修改为\""+company.getName()+"\"");
+			boolean flag = companyService.save(company);
+			if(flag){
+				StringBuilder content = new StringBuilder();
+				if(!temp.getName().equals(company.getName())){
+					content.append("公司名称由\""+temp.getName()+"\"修改为\""+company.getName()+"\"");
+				}
+				if(!temp.getLogo().equals(company.getLogo())){
+					content.append("公司logo由\""+temp.getLogo()+"\"修改为\""+company.getLogo()+"\"");
+				}
+				if(!temp.getEmail().equals(company.getEmail())){
+					content.append("公司邮箱由\""+temp.getEmail()+"\"修改为\""+company.getEmail()+"\"");
+				}
+				if(!temp.getTelPhone().equals(company.getTelPhone())){
+					content.append("公司联系方式由\""+temp.getTelPhone()+"\"修改为\""+company.getTelPhone()+"\"");
+				}
+				MsgUtil.setMsgUpdate("success");
+				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+			}else{
+				MsgUtil.setMsgUpdate("error");
+				logger.error("修改公司信息报错");
 			}
-			if(!temp.getLogo().equals(company.getLogo())){
-				content.append("公司logo由\""+temp.getLogo()+"\"修改为\""+company.getLogo()+"\"");
-			}
-			if(!temp.getEmail().equals(company.getEmail())){
-				content.append("公司邮箱由\""+temp.getEmail()+"\"修改为\""+company.getEmail()+"\"");
-			}
-			if(!temp.getTelPhone().equals(company.getTelPhone())){
-				content.append("公司联系方式由\""+temp.getTelPhone()+"\"修改为\""+company.getTelPhone()+"\"");
-			}
-			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT, content.toString());
 		}catch(Exception e){
 			logger.error("修改公司信息报错",e);
 		}
