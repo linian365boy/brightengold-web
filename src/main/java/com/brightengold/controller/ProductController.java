@@ -235,7 +235,7 @@ public class ProductController {
 				if(StringUtils.isNotBlank(temp.getUrl())){
 					temp.setUrl(temp.getUrl());
 				}else{
-					temp.setUrl(parentPath+Tools.getRndFilename()+".htm");
+					temp.setUrl(parentPath+File.separator+Tools.getRndFilename()+".htm");
 				}
 				temp.setPublish(true);
 				//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
@@ -247,7 +247,7 @@ public class ProductController {
 					map.put("relatedProducts", products);
 				}
 				if(temp.isPublish()){
-					Tools.delFile(realPath + Constant.PRODUCTPRE + temp.getCategory().getColumn().getCode() +temp.getUrl());
+					Tools.delFile(realPath + Constant.PRODUCTPATH +File.separator + temp.getUrl());
 				}
 				//生成唯一的产品页面路径，不需要根据页码生成页面
 				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){

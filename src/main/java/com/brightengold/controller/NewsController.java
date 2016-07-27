@@ -224,14 +224,14 @@ public class NewsController {
 			tempNews.setUrl(Tools.getRndFilename()+".htm");
 			LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
 			if(tempNews.getPublishDate()!=null){
-				 fPath = realPath +Constant.NEWSPRE+tempNews.getColumn().getCode()+File.separator+tempNews.getUrl();
+				 fPath = realPath +Constant.NEWSPATH+File.separator+tempNews.getUrl();
 				 FileUtil.delFile(fPath);
 			}
 			//生成唯一的新闻页面路径，不需要根据页码生成页面
 			if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
 				newsService.saveNews(tempNews);
+				return gson.toJson(tempNews);
 			}
-			return gson.toJson(tempNews);
 		}
 		return gson.toJson(tempNews);
 	}
