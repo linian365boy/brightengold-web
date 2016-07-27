@@ -1,5 +1,6 @@
 package com.brightengold.controller;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.google.gson.Gson;
 
+import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
 
 @Controller
@@ -210,6 +212,7 @@ public class NewsController {
 	public String releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
 		Gson gson = new Gson();
 		News tempNews = null;
+		String fPath = null;
 		if(newsId!=null){
 			String realPath = request.getSession().getServletContext().getRealPath("/");
 			String parentPath = Constant.NEWSPATH;
@@ -220,6 +223,10 @@ public class NewsController {
 			}
 			tempNews.setUrl(Tools.getRndFilename()+".htm");
 			LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
+			if(tempNews.getPublishDate()!=null){
+				 fPath = realPath +Constant.NEWSPRE+tempNews.getColumn().getCode()+File.separator+tempNews.getUrl();
+				 FileUtil.delFile(fPath);
+			}
 			//生成唯一的新闻页面路径，不需要根据页码生成页面
 			if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
 				newsService.saveNews(tempNews);

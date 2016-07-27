@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -239,8 +240,17 @@ public class ProductController {
 				temp.setPublish(true);
 				//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
 				map.put("product", temp);
+				//查找相关连产品，根据keyWords
+				List<Product> products = 
+					productService.findRelatedProducts(temp.getId(),temp.getKeyWords(),8);
+				if(!CollectionUtils.isEmpty(products)){
+					map.put("relatedProducts", products);
+				}
+				if(temp.isPublish()){
+					Tools.delFile(realPath + Constant.PRODUCTPRE + temp.getCategory().getColumn().getCode() +temp.getUrl());
+				}
 				//生成唯一的产品页面路径，不需要根据页码生成页面
-				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath+parentPath, temp.getUrl())){
+				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
 					productService.saveProduct(temp);
 					MsgUtil.setMsg("success", "产品发布成功！");
 				}else{

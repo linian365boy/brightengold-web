@@ -61,10 +61,6 @@ public class News implements Serializable {
 	 */
 	private String keyWords;
 	/**
-	 * 发布后的页码
-	 */
-	private int pageNum;
-	/**
 	 * 新闻发布所在的栏目下
 	 */
 	private com.brightengold.model.Column column;
@@ -148,12 +144,6 @@ public class News implements Serializable {
 	}
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
-	}
-	public int getPageNum() {
-		return pageNum;
-	}
-	public void setPageNum(int pageNum) {
-		this.pageNum = pageNum;
 	}
 	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
 	@JoinColumn(name="columnId")
