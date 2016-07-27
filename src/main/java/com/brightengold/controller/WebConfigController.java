@@ -1,7 +1,5 @@
 package com.brightengold.controller;
 
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -44,14 +42,17 @@ public class WebConfigController {
 	public String update(WebConfig config, HttpServletRequest request){
 		WebConfig webConfig = webConfigService.loadSystemConfig();
 		try{
-			config.setUpdateTime(new Date());
-			config = webConfigService.saveOrUpdateSystem(config);
-			StringBuilder content = new StringBuilder();
-			if(!webConfig.getKws().equals(config.getKws())){
-				content.append("网站关键字由\""+webConfig.getKws()+"\"修改为\""+config.getKws()+"\"");
+			boolean flag = webConfigService.saveOrUpdateSystem(config);
+			if(flag){
+				StringBuilder content = new StringBuilder();
+				if(!webConfig.getKeyword().equals(config.getKeyword())){
+					content.append("网站关键字由\""+webConfig.getKeyword()+"\"修改为\""+config.getKeyword()+"\"");
+				}
+				MsgUtil.setMsgUpdate("success");
+				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+			}else{
+				logger.error("修改网站关键字出错");
 			}
-			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT, content.toString());
 		}catch(Exception e){
 			logger.error("修改网站关键字报错",e);
 		}

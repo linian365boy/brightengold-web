@@ -5,10 +5,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Table
 @Entity
@@ -17,28 +18,19 @@ public class WebConfig implements Serializable {
 	 * @since JDK 1.7 
 	 */ 
 	private static final long serialVersionUID = 3408093442472626994L;
-	private Integer id;
 	//网站的关键字
-	private String kws;
+	private String keyword;
 	//网站bottom
 	private String bottom;
 	//修改时间
 	private Date updateTime;
 	
-	@Id
-	@GeneratedValue
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 	@Column(length=100)
-	public String getKws() {
-		return kws;
+	public String getKeyword() {
+		return keyword;
 	}
-	public void setKws(String kws) {
-		this.kws = kws;
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 	@Lob
 	public String getBottom() {
@@ -52,5 +44,10 @@ public class WebConfig implements Serializable {
 	}
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }
