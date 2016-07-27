@@ -8,39 +8,34 @@
             <section class="footer-block" id="informations_block_left_1">
             <h4 class="title_block">Products</h4>
             <ul class="toggle-footer" style="">
+            <#list categorys as cate>
                          <li class="link">
-                            <a title="How to Order" href="https://www.steroids4u.eu/how-to-order">
-                                How to Order
+                            <a title="${{cate.enName)!''}" href="${ctx}/views/html/col/${(pCategory.enName)?replace('\\s*','','ri')}.htm">
+                               ${{cate.enName)!''}
                             </a>
                         </li>
-                        <li class="link">
-                            <a title="How to Order" href="https://www.steroids4u.eu/how-to-order">
-                                How to Order
-                            </a>
-                        </li>
+                   </#list>
              </ul>
         </section>
-        <!-- /Block CMS module -->
-                                                                                    </div>
-                                                                                <div class="widget-2 col-lg-3 col-md-3 col-sm-6 col-xs-6 col-sp-12">
-                                                                                                    <!-- Block CMS module -->
+           </div>
+            <div class="widget-2 col-lg-3 col-md-3 col-sm-6 col-xs-6 col-sp-12">
             <section class="footer-block" id="informations_block_left_2">
             <h4 class="title_block">Follow Us</h4>
             <ul class="toggle-footer" style="">
          		<li class="link">
-                            <a title="Description of Medicaments" target="_blank" href="https://www.steroids4u.eu/description-of-medicaments">
+                            <a title="facebook" target="_blank" href="${(company.contactUserFacebook)!''}">
                             	<i class="fa fa-facebook"></i>
                             	<span>Facebook</span>
                             </a>
                 </li>
                 <li class="link">
-                            <a title="Side Effects of Anabolic Steroids" target="_blank" href="https://www.steroids4u.eu/side-effects-of-anabolic-steroids">
+                            <a title="twitter" target="_blank" href="${(company.contactUserTwitter)!''}">
                             	<i class="fa fa-twitter"></i>
                             	<span>Twitter</span>
                             </a>
                  </li>
                  <li class="link">
-                            <a title="Toxicity Of Oral Steroids" target="_blank" href="https://www.steroids4u.eu/toxicity-of-oral-steroids">
+                            <a title="google-plus" target="_blank" href="${(company.contactUsergooglePlus)!''}">
                             	<i class="fa fa-google-plus"></i>
                             	<span>Google Plus</span>
                             </a>
@@ -70,8 +65,8 @@
                     </ul>
     </div>
 </section>
-                                                                                    </div>
-                                                        </div>
+                   </div>
+       </div>
 						</div>
 					</div>
 				</section>

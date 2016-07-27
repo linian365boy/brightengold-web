@@ -3,22 +3,11 @@ package com.brightengold.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-@Entity
-@Table
 public class Company implements Serializable{
 	/**
-	 * 
+	 * 序列化
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer id;
 	/**
 	 * 公司名称
 	 */
@@ -63,36 +52,37 @@ public class Company implements Serializable{
 	 * 联系人
 	 */
 	private String contactUser;
-	@Id
-	@GeneratedValue
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	@Column(length=80)
+	/**
+	 * 联系人facebbook地址
+	 */
+	private String contactUserFacebook;
+	/**
+	 * 联系人Twitter地址
+	 */
+	private String contactUserTwitter;
+	/**
+	 * 联系人Google+地址
+	 */
+	private String contactUsergooglePlus;
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	@Column(length=14)
 	public String getTelPhone() {
 		return telPhone;
 	}
 	public void setTelPhone(String telPhone) {
 		this.telPhone = telPhone;
 	}
-	@Column(length=40)
 	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	@Column(length=30)
 	public String getEmail() {
 		return email;
 	}
@@ -105,14 +95,12 @@ public class Company implements Serializable{
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
 	}
-	@Column(length=200)
 	public String getLogo() {
 		return logo;
 	}
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
-	@Column(length=255)
 	public String getSlogan() {
 		return slogan;
 	}
@@ -125,7 +113,6 @@ public class Company implements Serializable{
 	public void setWebsite(String website) {
 		this.website = website;
 	}
-	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -143,5 +130,23 @@ public class Company implements Serializable{
 	}
 	public void setContactUser(String contactUser) {
 		this.contactUser = contactUser;
+	}
+	public String getContactUserFacebook() {
+		return contactUserFacebook;
+	}
+	public void setContactUserFacebook(String contactUserFacebook) {
+		this.contactUserFacebook = contactUserFacebook;
+	}
+	public String getContactUserTwitter() {
+		return contactUserTwitter;
+	}
+	public void setContactUserTwitter(String contactUserTwitter) {
+		this.contactUserTwitter = contactUserTwitter;
+	}
+	public String getContactUsergooglePlus() {
+		return contactUsergooglePlus;
+	}
+	public void setContactUsergooglePlus(String contactUsergooglePlus) {
+		this.contactUsergooglePlus = contactUsergooglePlus;
 	}
 }

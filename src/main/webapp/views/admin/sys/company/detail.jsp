@@ -124,7 +124,30 @@
 			      <input id="website" class="form-control" name="website" value="${model.website }"/>
 			    </div>
 		   </div>
-            <input type="hidden" name="id" value="${model.id }"/>
+		   <div class="form-group">
+			    <label for="contactUser" class="col-sm-2 control-label">公司联系人</label>
+			    <div class="col-sm-8">
+			      <input id="website" class="form-control" name="contactUser" value="${model.contactUser }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="contactUserFacebook" class="col-sm-2 control-label">联系人facebbook</label>
+			    <div class="col-sm-8">
+			      <input id="contactUserFacebook" class="form-control" name="contactUserFacebook" value="${model.contactUserFacebook }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="contactUserTwitter" class="col-sm-2 control-label">联系人Twitter</label>
+			    <div class="col-sm-8">
+			      <input id="contactUserTwitter" class="form-control" name="contactUserTwitter" value="${model.contactUserTwitter }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="contactUsergooglePlus" class="col-sm-2 control-label">联系人Google+</label>
+			    <div class="col-sm-8">
+			      <input id="contactUsergooglePlus" class="form-control" name="contactUsergooglePlus" value="${model.contactUsergooglePlus }"/>
+			    </div>
+		   </div>
             <div class="form-group">
 		    <div class="col-sm-offset-4 col-sm-8">
 		      <button type="submit" class="btn btn-primary">保存</button>

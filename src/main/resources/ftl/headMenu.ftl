@@ -37,9 +37,9 @@
 										<a href="${ctx}/views/html/col/${col.code}.htm">${col.enName}</a>
 										<#if ((col.childColumn)?size>0)>
 										<ul class="sub-menu">
-											<#list col.childColumn as cCol>
+											<#list col.categorys as cate>
 												<li id="menu-item-818" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-818">
-												<a href="${ctx}/views/html/col/${cCol.code}.htm">${(cCol.enName)!''}</a></li>													
+												<a href="${ctx}/views/html/col/${cate.id}.htm">${(cate.enName)!''}</a></li>													
 											</#list>
 										</ul>
 										</#if>

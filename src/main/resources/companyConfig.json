@@ -9,5 +9,8 @@
             "slogan":"",
             "website":"",
             "createDate":"",
-            "contactUser":""
+            "contactUser":"",
+            "contactUserFacebook":"",
+            "contactUserTwitter":"",
+            "contactUsergooglePlus":""
 }

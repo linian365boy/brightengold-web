@@ -34,12 +34,12 @@ public class Constant {
 	/**
 	 * 生成的分类产品列表页面路径，页面展示需要ssi嵌入
 	 */
-	//public static final String CATEGORYPRODUCTPATH = "/views/html/product/";
+	public static final String CATEGORYPRODUCTPATH = HTMLPRE + "/col";
 	
 	/**
 	 * 生成的分类产品详情页面路径
 	 */
-	//public static final String CATEGORYDETAILPRODUCTPATH = "/views/html/product/";
+	public static final String CATEGORYDETAILPRODUCTPATH = HTMLPRE + "/product";
 	
 	public static final int PAGE_INDEX_SIZE = 16;
 	

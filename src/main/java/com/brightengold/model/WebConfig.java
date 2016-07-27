@@ -15,8 +15,6 @@ public class WebConfig implements Serializable {
 	private String description;
 	//网站的关键字
 	private String keyword;
-	//网站bottom
-	private String bottom;
 	//修改时间
 	private Date updateTime;
 	
@@ -25,12 +23,6 @@ public class WebConfig implements Serializable {
 	}
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
-	}
-	public String getBottom() {
-		return bottom;
-	}
-	public void setBottom(String bottom) {
-		this.bottom = bottom;
 	}
 	public Date getUpdateTime() {
 		return updateTime;

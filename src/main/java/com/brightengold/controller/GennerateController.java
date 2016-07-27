@@ -204,33 +204,18 @@ public class GennerateController {
 				map.put("style_v", style_v);
 				gennerateCommon(map);
 				map.put("ctx", basePath);
-				//map.put("parentCol", parentCol);
 				map.put("category", cate);
 				map.put("column", cate.getColumn());
 				publishAllProducts(request,cate,map);
 				if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
-						path+Constant.COLUMNPATHPRE, code.replaceAll("\\s*", "")+".htm")){
+						path+Constant.CATEGORYPRODUCTPATH, 
+						code.replaceAll("\\s*", "")+".htm")){
 					logger.error("生成"+code+"页面失败！");
 					return "500";
 				}
 				return "200";
-			}else{
-				Info info = infoService.loadOneByCode(code);
-				if(info!=null){
-					gennerateCommon(map);
-					map.put("ctx", basePath);
-					map.put("style_v", style_v);
-					map.put("model", info);
-					if(!FreemarkerUtil.fprint("info.ftl", map, path+File.separator+"views"+
-							File.separator+"html"+File.separator+"info"+
-							File.separator,info.getCode()+".htm")){
-						logger.error("生成"+code+"页面失败！");
-						return "500";
-					}
-					return "200";
-				}
-				return "501";
 			}
+			return "501";
 		}
 	}
 	
