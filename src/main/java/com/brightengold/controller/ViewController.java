@@ -32,6 +32,6 @@ public class ViewController {
 			PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(keyword,pageNo,Constant.PAGE_INDEX_SIZE);
 			map.put("page", page);
 		}
-		return null;
+		return "views/html/search/list";
 	}
 }

@@ -6,7 +6,7 @@
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<title>${(column.enName)!''} - ${(company.name)!''}</title>
 <!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,315] -->
-<meta name="description" itemprop="description" content="About Us &nbsp; HongKong Shijingu Technology Co.,Ltd is one of the most professional pharmaceutical intermediates manufactures and exporters in China." />
+<meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
 <style type="text/css">
 img.wp-smiley,
 img.emoji {

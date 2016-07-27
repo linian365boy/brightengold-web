@@ -22,5 +22,7 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 16.分类下产品个数　									ok
 17.后台产品列表，预览页面								ok(不做)
 18.标题模式／产品模式/info模式								
+19.网站关键字
+20.网站底部设置
 
 

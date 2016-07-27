@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>Home - ${(company.name)!''}</title>
-<meta name="description" itemprop="description" content="China Pharmaceutical raw steroid powders,HomeBrew Injectable Solutions,Oral anabolics and Peptide Hormones Supplier-HongKong Shijingu Technology Co., Ltd" />
-<meta name="keywords" itemprop="keywords" content="Raw Steroid Powders,HomeBrew steroid Solutions,Oral anabolics,Peptide Hormones,Testosterone Cypionate,Trenbolone Acetate,Nandrolone Decaonate,Drostanolone Propionate,Methenolone Enanthate,Dianabol,Oxandrolone,Tadanafil,HongKong Shijingu Technology Co., Ltd" />
+<meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
+<meta name="keywords" itemprop="keywords" content="${(webConfig.keyword)!''}" />
 
 <link rel="canonical" href="${ctx}/" />
 		<style type="text/css">
