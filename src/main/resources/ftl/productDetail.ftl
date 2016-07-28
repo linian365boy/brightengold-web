@@ -2,15 +2,15 @@
                 <nav class="woocommerce-breadcrumb" itemprop="breadcrumb">
                 	<a href="${ctx}/">Home</a>&nbsp;&#47;&nbsp;
                 	<a href="${ctx}/views/html/col/${((product.category.enName)!'')?replace('\\s*','','ri')}.htm">${((product.category.enName)!'')!''}</a>
-                	&nbsp;&#47;&nbsp;${(model.enName)!''}
+                	&nbsp;&#47;&nbsp;${(product.enName)!''}
                 </nav>
-			<div itemscope itemtype="${ctx}/resources/${model.picUrl}" id="product-1066" class="post-1066 product type-product status-publish has-post-thumbnail product_cat-prohormones-sarms product_tag-methoxydienone-powder shipping-taxable product-type-simple product-cat-prohormones-sarms product-tag-methoxydienone-powder instock">
+			<div itemscope itemtype="${ctx}/resources/${product.picUrl}" id="product-1066" class="post-1066 product type-product status-publish has-post-thumbnail product_cat-prohormones-sarms product_tag-methoxydienone-powder shipping-taxable product-type-simple product-cat-prohormones-sarms product-tag-methoxydienone-powder instock">
 							<div class="images">
-							<a href="${ctx}/resources/${model.picUrl}" itemprop="image" class="woocommerce-main-image zoom" title="" data-rel="prettyPhoto"><img width="500" height="500" src="${ctx}/resources/${model.picUrl}" class="attachment-shop_single size-shop_single wp-post-image" alt="${(model.enName)!''}" title="${(model.enName)!''}" /></a>
+							<a href="${ctx}/resources/${product.picUrl}" itemprop="image" class="woocommerce-main-image zoom" title="" data-rel="prettyPhoto"><img width="500" height="500" src="${ctx}/resources/${product.picUrl}" class="attachment-shop_single size-shop_single wp-post-image" alt="${(product.enName)!''}" title="${(product.enName)!''}" /></a>
 							</div>
 								<div class="summary entry-summary">
-								<h1 itemprop="name" class="product_title entry-title">${(model.enName)!''}</h1>
-						<div itemprop="offers" itemscope itemtype="${ctx}/resources/${model.picUrl}">
+								<h1 itemprop="name" class="product_title entry-title">${(product.enName)!''}</h1>
+						<div itemprop="offers" itemscope itemtype="${ctx}/resources/${product.picUrl}">
 							<p class="price"></p>
 						</div>
 						<div class="product_meta" >
@@ -25,7 +25,7 @@
 									</li>
 										</ul>
 								<div class="panel entry-content" id="tab-description">
-									${(model.description)!'no description!'}
+									${(product.description)!'no description!'}
 								</div>
 								</div>
 									<div class="related products">
@@ -41,14 +41,14 @@
 												<#list relatedProducts as relatedp>
 														<div class="item">
 															<figure>
-																<a href="${ctx}/relatedp" class="lazyOwl">
+																<a href="${ctx}/views/html/product/${relatedp.url}" class="lazyOwl">
 																	<img width="300" height="300" src="${ctx }/resources/${relatedp.picUrl}" class="wpb_pro_img wp-post-image" alt="${relatedp.enName}" />
 																</a>
 																<figcaption>
 																	<h3 class="pro_title">${relatedp.enName}</h3>
 																	<div class="price_area_fix">		
 																		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
-																			<a href="${ctx}/relatedp" rel="nofollow" data-product_id="440" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+																			<a href="${ctx}/views/html/product/${relatedp.url}" rel="nofollow" data-product_id="440" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
 																		</p>
 																	</div>
 																</figcaption>

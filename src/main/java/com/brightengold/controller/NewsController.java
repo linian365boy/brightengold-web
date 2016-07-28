@@ -214,6 +214,8 @@ public class NewsController {
 		News tempNews = null;
 		String fPath = null;
 		if(newsId!=null){
+			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+					request.getServerPort()+request.getContextPath();
 			String realPath = request.getSession().getServletContext().getRealPath("/");
 			String parentPath = Constant.NEWSPATH;
 			tempNews = newsService.loadNews(newsId);
@@ -227,6 +229,8 @@ public class NewsController {
 				 fPath = realPath +Constant.NEWSPATH+File.separator+tempNews.getUrl();
 				 FileUtil.delFile(fPath);
 			}
+			map.put("ctx", basePath);
+			map.put("model", tempNews);
 			//生成唯一的新闻页面路径，不需要根据页码生成页面
 			if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
 				newsService.saveNews(tempNews);

@@ -238,6 +238,8 @@ public class ProductController {
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
 			if(!checkPub(temp)){
+				String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+						request.getServerPort()+request.getContextPath();
 				String realPath = request.getSession().getServletContext().getRealPath("/");
 				String parentPath = Constant.PRODUCTPATH;
 				if(StringUtils.isNotBlank(temp.getUrl())){
@@ -257,6 +259,7 @@ public class ProductController {
 				if(temp.isPublish()){
 					Tools.delFile(realPath + Constant.PRODUCTPATH +File.separator + temp.getUrl());
 				}
+				map.put("ctx", basePath);
 				//生成唯一的产品页面路径，不需要根据页码生成页面
 				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
 					productService.saveProduct(temp);

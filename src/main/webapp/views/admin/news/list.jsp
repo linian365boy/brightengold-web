@@ -49,7 +49,7 @@
 				}else{
 					art.dialog.confirm('确定发布此新闻？',function(){
 						var newsId = $(obj).attr("name");
-						$.getJSON("${ctx}admin/news/"+newsId+"/publish.html",function(data){
+						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
 							var json = $(data);
 							var dialog = art.dialog({
 								id:"publish",

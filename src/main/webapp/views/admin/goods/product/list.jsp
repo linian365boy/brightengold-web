@@ -30,7 +30,7 @@
 	var publish = function(obj){
 		var productId = $(obj).attr("name");
 		art.dialog.confirm('确定发布此商品？',function(){
-			var url = '${ctx}admin/goods/product/'+productId+'/publish.html';
+			var url = '${ctx}admin/goods/product/'+productId+'/release.html';
 			window.location.href=url;
 		});
 	}

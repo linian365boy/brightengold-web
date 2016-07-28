@@ -1,6 +1,6 @@
 <div id="content" class="site-content" role="main">
-		<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(column.code)!'--'}</nav>	
-		<h1 class="page-title">${(column.code)!'--'}</h1>
+		<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(model.column.code)!'--'}</nav>	
+		<h1 class="page-title">${(model.column.code)!'--'}</h1>
 		<h2>${model.title}</h2>
 		<div class="titBar">Hits:<span id="clickcount">0</span> | Publish Date:${model.publishDate?string("yyyy-MM-dd")}</div>
 		<p>&nbsp;</p>
