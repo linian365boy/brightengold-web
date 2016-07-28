@@ -28,12 +28,14 @@
                             <a class="screen-reader-text skip-link" href="#content" title="Skip to content">Skip to content</a>
                             <div class="nav-container">
                             <ul id="menu-%e8%8f%9c%e5%8d%952" class="nav-menu">
-                            	<li id="menu-item-680" class="menu-item menu-item-type-post_type menu-item-object-page　page_item page-item-75 menu-item-680 ${column!'current-menu-item current_page_item'}">
+                            	<li id="menu-item-680" class="menu-item menu-item-type-post_type menu-item-object-page　page_item page-item-75 
+                            	menu-item-680 ${empty column?'current-menu-item current_page_item':''}">
                             		<a href="${ctx}/">Home</a>
                             	</li>
                             	<c:if test="((crossCol.size)>0)">
 								<c:forEach items="${ crossCol}" var="col">
-									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-685 ${(column?? && (col.id)==(column.id))?string('current-menu-item current_page_item','')}">
+									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children 
+									menu-item-685 ${((!empty column) && (col.id)==(column.id))?'current-menu-item current_page_item':''}">
 										<a href="${ctx}/views/html/col/${col.code}.htm">${col.enName}</a>
 										<c:if test="((col.childColumn).size>0)">
 										<ul class="sub-menu">

@@ -3,7 +3,7 @@
 			<div class="widget-area" id="sidebar-widgets">
 				<aside id="woocommerce_product_search-2" class="widget woocommerce widget_product_search">
 				<div id="sun" ><h3 class="wpb_area_title"><span>Search Products</span></h3></div>
-<form role="search" method="get" class="woocommerce-product-search" action="${ctx}/views/products/search/">
+<form role="search" method="get" class="woocommerce-product-search" action="${ctx}/views/products/search.html">
 	<label class="screen-reader-text" for="s">Search for:</label>
 	<input type="search" class="search-field" placeholder="Search Products&hellip;" value="" name="keyword" title="Search for:" />
 	<input type="hidden" name="pageNo" value="1" />

@@ -36,6 +36,7 @@ img.emoji {
 <link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css' type='text/css' media='all' />
 <link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css' type='text/css' media='all' />
 <link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
+<link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/font-awesome.min.css?${style_v}' type='text/css' media='all'/>
 <!--[if lt IE 9]>
 <link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css' type='text/css' media='all' />
 <![endif]-->
@@ -104,7 +105,7 @@ body.custom-background { background-color: #e2e2e2; }
 					<#if (hotPro_index!=0) && (hotPro_index%4!=0)> 
 						<div class="item">
 							<figure>
-								<a href="${ctx}/views/html/product/${hotPro.pageNum}/${(hotPro.url)!''}" class="lazyOwl">
+								<a href="${ctx}/views/html/product/detail/${(hotPro.url)!''}" class="lazyOwl">
 								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="semi-finished steroids" /></a>
 								<figcaption>
 									<h3 class="pro_title">${(hotPro.enName)!''}</h3>

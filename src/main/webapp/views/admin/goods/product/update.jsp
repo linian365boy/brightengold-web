@@ -12,6 +12,23 @@
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.equalHeight.js"></script>
 <link rel="stylesheet" type="text/css" href="${ctx }resources/css/style.css" />
+<style type="text/css">
+	.selectpicker {
+		background-color: #fff;
+	    background-image: none;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	    color: #555;
+	    display: block;
+	    font-size: 14px;
+	    height: 34px;
+	    line-height: 1.42857;
+	    padding: 6px 12px;
+	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	    vertical-align: middle;
+	}
+</style>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#form").validate({
@@ -39,6 +56,25 @@ $(document).ready(function(){
 		}
 	});
 });
+	function changeCol(obj){
+		var cateId = $(obj).val();
+		var currentCateId = "${model.category.id}";
+		$.post("${ctx }admin/goods/category/getChildrenCate/"+cateId+".html",{
+			parentCateId:cateId
+		},function(json){
+			$(obj).next().remove();
+			var html = "";
+			if(json && json.length>0){
+				html+='<select class="col-xs-5 selectpicker" name="childrenC" >';
+				html+="<option value='0'>==请选择==</option>";
+				$.each(json,function(i,n){
+					html+="<option value='"+n[0]+"' >"+n[1]+"</option>";
+				});
+				html+="</select>";
+			}
+			$(obj).after(html);
+		},"json");
+	};
 </script>
 </head>
 <body>
@@ -72,18 +108,54 @@ $(document).ready(function(){
 			  </div>
 			  <div class="form-group">
 			    <label for="parents" class="col-sm-1 control-label">商品分类<span class="asterisk">*</span></label>
-			    <div class="col-sm-4">
-			      <select  name="parents" id="parents" class="form-control">
-			      <c:forEach items="${parents }" var="parent">
-	            	<option value="${parent[0] }"
-	            			<c:if test="${parent[0] eq model.category.id }">
-	            				selected="selected"
-	            			</c:if>
-	            		>
-	            			${parent[1] }
-	            		</option>
-	            </c:forEach>
-            		</select>
+			    <div class="col-sm-8">
+			    <c:set value="${model.category.parent }" var="parentCate" scope="page"/>
+	            <c:choose>
+	             	<c:when test="${empty parentCate }">
+	             	<!-- 一级分类 -->
+				      <select name="parents" id="parents" class="col-xs-5 selectpicker" onchange="changeCol(this);">
+					      <c:forEach items="${parents }" var="parent">
+		            			<option value="${parent[0] }"
+		            				<c:if test="${parent[0] eq model.category.id }">
+			            				selected="selected"
+			            			</c:if>
+			            			>
+		            			${parent[1] }
+		            			</option>
+		            		</c:forEach>
+	            		</select>
+	            		<select class="col-xs-5 selectpicker" name="childrenC">
+	           				<option value='0'>==请选择==</option>
+	           				<c:forEach items="${model.category.children }" var="childrenC">
+		      					<option value="${childrenC.id }" >${childrenC.enName }</option>
+		      				</c:forEach>
+	           			</select>
+	             	</c:when>
+	            	<c:otherwise>
+	            	<!-- 二级分类 -->
+	            		<select name="parents" id="parents" class="col-xs-5 selectpicker" onchange="changeCol(this);">
+					      <c:forEach items="${parents }" var="parent">
+		            			<option value="${parent[0] }"
+		            				<c:if test="${parent[0] eq parentCate.id }">
+			            				selected="selected"
+			            			</c:if>
+			            			>
+		            			${parent[1] }
+		            			</option>
+		            		</c:forEach>
+	            		</select>
+	            		<select class="col-xs-5 selectpicker" name="childrenC">
+	           				<option value='0'>==请选择==</option>
+	           				<c:forEach items="${model.category.parent.children }" var="childrenCate">
+		      					<option value="${childrenCate.id }" 
+		      					<c:if test="${childrenCate.id eq model.category.id }">
+		      						selected="selected"
+		      					</c:if>
+		      					>${childrenCate.enName }</option>
+		      				</c:forEach>
+	           			</select>
+	            	</c:otherwise>
+	            </c:choose>
 			    </div>
 			  </div>
 			  <div class="form-group">

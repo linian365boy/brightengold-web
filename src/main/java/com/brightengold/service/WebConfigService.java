@@ -7,8 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.brightengold.model.WebConfig;
+import com.brightengold.util.ConstantVariable;
 import com.brightengold.util.Tools;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Service
 public class WebConfigService {
@@ -17,7 +18,7 @@ public class WebConfigService {
 	
 	public boolean saveOrUpdateSystem(WebConfig system){
 		system.setUpdateTime(new Date());
-		String jsonStr = new Gson().toJson(system);
+		String jsonStr = new GsonBuilder().setDateFormat(ConstantVariable.DFTSTR).create().toJson(system);
 		logger.info("保存到classpath的json串为|{}",jsonStr);
 		boolean flag = false;
 		if(Tools.saveOrUpdateWebConfig("webConfig.json",jsonStr)){
@@ -32,18 +33,13 @@ public class WebConfigService {
 	public WebConfig loadSystemConfig() {
 		String jsonStr = Tools.getJsonStrFromPath("webConfig.json");
 		logger.info("从文件解析的json串为|{}",jsonStr);
-		return new Gson().fromJson(jsonStr, WebConfig.class);
+		return new GsonBuilder().setDateFormat(ConstantVariable.DFTSTR).create().fromJson(jsonStr, WebConfig.class);
 	}
 	
 	/*public static void main(String[] args) {
 		WebConfigService service = new WebConfigService();
-		WebConfig webConfig = new WebConfig();
-		webConfig.setBottom("test");
-		webConfig.setKeyword("test2");
-		webConfig.setUpdateTime(new Date());
-		boolean flag = service.saveOrUpdateSystem(webConfig);
-		System.out.println(flag);
-		
+		WebConfig config = service.loadSystemConfig();
+		System.out.println(config);
 	}*/
 	
 }

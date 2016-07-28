@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.utils.PageRainier;
 
 import com.brightengold.model.Advertisement;
 import com.brightengold.model.Column;
@@ -48,6 +43,9 @@ import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/goods/product")
@@ -128,7 +126,6 @@ public class ProductController {
 		try {
 			if(productId!=null){
 				Product tempProduct = productService.loadProductById(productId);
-				String categoryId = request.getParameter("parents");
 				if(!photo.isEmpty()){
 					String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 					String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
@@ -139,7 +136,13 @@ public class ProductController {
 					product.setPicUrl(tempProduct.getPicUrl());
 				}
 				content.append("产品名称："+product.getEnName());
-				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+				String categoryId = request.getParameter("parents");
+				String childCateId = request.getParameter("childrenC");
+				if(StringUtils.isNoneBlank(childCateId)){
+					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
+				}else{
+					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+				}
 				product.setCreateDate(tempProduct.getCreateDate());
 				product.setCreateUser(tempProduct.getCreateUser());
 				System.out.println(tempProduct.getUrl()+"-=-=");
@@ -174,7 +177,12 @@ public class ProductController {
 		StringBuilder sb = new StringBuilder();
 		try {
 			String categoryId = request.getParameter("parentC");
-			product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+			String childCateId = request.getParameter("childrenC");
+			if(StringUtils.isNoneBlank(childCateId)){
+				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
+			}else{
+				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+			}
 			String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 			String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
 			FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
@@ -187,9 +195,9 @@ public class ProductController {
 			MsgUtil.setMsgAdd("success");
 			sb.append("名称："+product.getEnName());
 			LogUtil.getInstance().log(LogType.ADD, sb.toString());
-			logger.info("新增产品{}成功！",ToStringBuilder.reflectionToString(product, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("新增产品{}成功！",product);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("新增产品发生错误。",e);
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}

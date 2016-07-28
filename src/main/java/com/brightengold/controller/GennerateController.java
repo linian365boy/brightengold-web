@@ -136,8 +136,7 @@ public class GennerateController {
 	
 	@ResponseBody
 	@RequestMapping(value={"/{code}/generate",""},method=RequestMethod.POST)
-	public String gennerateHtml(@PathVariable String code,int style,ModelMap map,
-			HttpServletRequest request){
+	public String gennerateHtml(@PathVariable String code,ModelMap map, HttpServletRequest request){
 		//检查code是否存在
 		long count = 0;
 		if("index".equals(code) || "home".equals(code)){

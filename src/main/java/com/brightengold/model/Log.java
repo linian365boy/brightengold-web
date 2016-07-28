@@ -14,6 +14,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import cn.rainier.nian.model.Menu;
 
 @Entity
@@ -114,5 +117,9 @@ public class Log implements Serializable {
 	}
 	public void setOperatorRealName(String operatorRealName) {
 		this.operatorRealName = operatorRealName;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

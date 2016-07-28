@@ -1,3 +1,4 @@
+<%@include file="../../commons/include.jsp" %>
 <footer class="sun" id="footer">
 	<section class="footer-center" id="footercenter">
 					<div class="container">
@@ -10,8 +11,8 @@
             <ul class="toggle-footer" style="">
             <c:forEach items="${categorys}" var="cate">
                          <li class="link">
-                            <a title="${{cate.enName)}" href="${ctx}/views/html/col/${(pCategory.enName)?replace('\\s*','','ri')}.htm">
-                               ${{cate.enName)}
+                            <a title="${(cate.enName)}" href="${ctx}/views/html/col/${fn:replace(pCategory.enName,'\\s*','')}.htm">
+                               ${(cate.enName)}
                             </a>
                         </li>
                    </c:forEach>

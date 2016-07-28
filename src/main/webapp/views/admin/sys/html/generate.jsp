@@ -7,13 +7,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>公司信息</title>
 <script type="text/javascript">
-	var style = "${style}";
 	function genneratePage(){
 		var code = $("#code").val();
 		if(code!=''){
 			$.ajax({
 				   type: "POST",
-				   data: "style="+style,
 				   url: "${ctx }admin/sys/html/"+code+"/generate.html",
 				   beforeSend: function(){
 					   art.dialog({
@@ -56,7 +54,6 @@
 	function gennerateAllPage(){
 			$.ajax({
 				   type: "POST",
-				   data: "style="+style,
 				   url: "${ctx }admin/sys/html/generateAll.html",
 				   beforeSend: function(){
 					   art.dialog({

@@ -3,6 +3,9 @@ package com.brightengold.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class Company implements Serializable{
 	/**
 	 * 序列化
@@ -148,5 +151,9 @@ public class Company implements Serializable{
 	}
 	public void setContactUsergooglePlus(String contactUsergooglePlus) {
 		this.contactUsergooglePlus = contactUsergooglePlus;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

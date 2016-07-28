@@ -1,3 +1,4 @@
+<%@include file="../../commons/include.jsp" %>
 <div id="tertiary" class="sidebar-container" role="complementary">
 		<div class="sidebar-inner">
 			<div class="widget-area" id="sidebar-widgets">
@@ -15,13 +16,13 @@
 <ul class="product-categories">
 	<c:forEach items="${categorys}" var="pCategory">
 		<li class="cat-item cat-item-420 cat-parent">
-			<a href="${ctx}/views/html/col/${(pCategory.enName)?replace('\\s*','','ri')}.htm">${(pCategory.enName)}</a> 
-			<span class="count">(${(pCategory.productsSize)!0})</span>
-			<c:if ((pCategory.children).size>0)>
+			<a href="${ctx}/views/html/col/${fn:replace(pCategory.enName,'\\s*','')}.htm">${(pCategory.enName)}</a> 
+			<span class="count">(${(pCategory.productsSize)})</span>
+			<c:if test="${((pCategory.children).size>0)}">
 				<ul class='children'>
 					<c:forEach items="${(pCategory.children)}" var="cCategory">
 						<li class="cat-item cat-item-410">
-							<a href="${ctx}/views/html/col/${(cCategory.enName)?replace('\\s*','','ri')}.htm">${(cCategory.enName)}</a> 
+							<a href="${ctx}/views/html/col/${fn:replace(cCategory.enName,'\\s*','')}.htm">${(cCategory.enName)}</a> 
 							<span class="count">(${(cCategory.productsSize)})</span>
 						</li>
 					</c:forEach>

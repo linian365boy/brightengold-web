@@ -1,14 +1,17 @@
 package com.brightengold.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.brightengold.model.Product;
 import com.brightengold.service.ProductService;
 import com.brightengold.util.Constant;
+
 import cn.rainier.nian.utils.PageRainier;
 
 /**
@@ -26,12 +29,20 @@ public class ViewController {
 	@Autowired
 	private ProductService productService;
 	
-	@RequestMapping(value="/products/search/{keyword}/{pageNo}")
-	public String searchProducts(@PathVariable String keyword,@PathVariable Integer pageNo,ModelMap map){
+	@RequestMapping(value="/products/search")
+	public String searchProducts(HttpServletRequest request, ModelMap map){
+		String keyword = request.getParameter("keyword");
+		String pageNoStr = request.getParameter("pageNo");
+		int pageNo = 1;
+		if(StringUtils.isNoneBlank(pageNoStr)){
+			pageNo = Integer.parseInt(pageNoStr);
+		}
 		if(StringUtils.isNotBlank(keyword)){
 			PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(keyword,pageNo,Constant.PAGE_INDEX_SIZE);
 			map.put("page", page);
 		}
-		return "views/html/search/list";
+		//生成公共部分内容
+		
+		return "html/search/list";
 	}
 }

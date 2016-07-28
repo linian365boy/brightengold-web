@@ -8,13 +8,13 @@
             <section class="footer-block" id="informations_block_left_1">
             <h4 class="title_block">Products</h4>
             <ul class="toggle-footer" style="">
-            <#list categorys as cate>
-                         <li class="link">
-                            <a title="${{cate.enName)!''}" href="${ctx}/views/html/col/${(pCategory.enName)?replace('\\s*','','ri')}.htm">
-                               ${{cate.enName)!''}
+             <li class="link">
+            		<#list categorys as cate>
+                            <a title="${(cate.enName)!''}" href="${ctx}/views/html/col/${(cate.enName)?replace('\\s*','','ri')}.htm">
+                               ${(cate.enName)!''}
                             </a>
-                        </li>
                    </#list>
+             </li>
              </ul>
         </section>
            </div>
@@ -24,19 +24,19 @@
             <ul class="toggle-footer" style="">
          		<li class="link">
                             <a title="facebook" target="_blank" href="${(company.contactUserFacebook)!''}">
-                            	<i class="fa fa-facebook"></i>
+                            	<i class="fa fa-facebook-square fa-2"></i>
                             	<span>Facebook</span>
                             </a>
                 </li>
                 <li class="link">
                             <a title="twitter" target="_blank" href="${(company.contactUserTwitter)!''}">
-                            	<i class="fa fa-twitter"></i>
+                            	<i class="fa fa-tumblr-square fa-2"></i>
                             	<span>Twitter</span>
                             </a>
                  </li>
                  <li class="link">
                             <a title="google-plus" target="_blank" href="${(company.contactUsergooglePlus)!''}">
-                            	<i class="fa fa-google-plus"></i>
+                            	<i class="fa fa-google-plus-square fa-2"></i>
                             	<span>Google Plus</span>
                             </a>
                         </li>
@@ -52,14 +52,14 @@
         <ul class="toggle-footer" style="">
             <li class="nohover">
             	<p>
-            	<i class="fa fa-envelope"></i>
+            	<i class="fa fa-envelope-square fa-2"></i>
             	Email:<a href="mailto:${(company.email)!''}">${(company.email)!''}</a>
             </p>
             </li>
                             <li>
                 </li>
                                                     <li>
-                    <i class="fa fa-envelope"></i>
+                    <i class="fa fa-phone-square fa-2"></i>
                     <span>Tel:${(company.telPhone)!''}</span>
                 </li>
                     </ul>

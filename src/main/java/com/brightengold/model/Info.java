@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * 前台菜单栏目表
  * @author li.n1
@@ -81,5 +84,9 @@ public class Info implements Serializable {
 	}
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

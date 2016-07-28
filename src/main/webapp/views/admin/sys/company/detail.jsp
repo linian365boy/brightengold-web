@@ -97,7 +97,7 @@
 			    <label for="createDate" class="col-sm-2 control-label">公司创建日期</label>
 			    <div class="col-sm-8">
 			      <input id="createDate" class="form-control" name="createDate" 
-			      class="Wdate" onfocus="WdatePicker({maxDate:'%y-%M-%d'})" value="${model.createDate }"/>
+			      class="Wdate" onfocus="WdatePicker({maxDate:'%y-%M-%d'})" value='<fmt:formatDate value="${model.createDate }" pattern="yyyy-MM-dd"/>'/>
 			    </div>
 		   </div>
 		   <div class="form-group">

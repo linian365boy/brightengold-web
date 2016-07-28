@@ -27,7 +27,7 @@
 			<div class="form-group">
 			    <label for="keyword" class="col-sm-2 control-label">网站关键字</label>
 			    <div class="col-sm-8">
-			      <input type="text" class="form-control" id="kws" value="${model.keyword }" name="keyword" placeholder="网站关键字">
+			      <input type="text" class="form-control" id="keyword" value="${model.keyword }" name="keyword" placeholder="网站关键字">
 			    </div>
 		   </div>
 		   <div class="form-group">
