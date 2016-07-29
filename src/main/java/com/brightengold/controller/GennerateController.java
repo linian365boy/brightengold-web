@@ -312,7 +312,7 @@ public class GennerateController {
 				//生成产品详情的公共部分
 				 for(News news : page.getResult()){
 					 map.put("news", news);
-					 FreemarkerUtil.fprint("news.ftl", map, path + Constant.NEWSPRE , news.getId()+".htm");
+					 FreemarkerUtil.fprint("news.ftl", map, path + Constant.NEWSPATH , news.getId()+".htm");
 				 }
 				 map.clear();
 			 }

@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<title>${(news.enName)!''} - ${(company.name)!''}</title>
+	<title>${(news.title)!''} - ${(company.name)!''}</title>
 <!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,315] -->
 <meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
 <style type="text/css">

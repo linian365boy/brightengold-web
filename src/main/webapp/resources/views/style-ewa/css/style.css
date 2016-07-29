@@ -85,7 +85,7 @@ p {
 	 padding-right:0px;
 }
 #content{
-	 padding-right:0px;
+	 padding-right:10px;
 
 }
 .site-main .sidebar-inner {
@@ -350,3 +350,28 @@ opacity: 1;
 .newslist li{height:35px;line-height:35px;border-bottom:1px dashed #cccccc;}
 .newslist li a{display:block;height:35px;line-height:35px;width:600px;float:left;padding-left:10px;color:#373737;}
 .newslist li span{display:block; height:35px;line-height:35px;width:80px;float:right;}
+.content_title{
+	font-size: 22px;
+    line-height: 40px;
+    margin-top: 12px;
+    text-align: center;
+}
+.news_data{
+	margin: 8px 0;
+    padding-right: 10px;
+    text-align: right;
+}
+.site-content .content{
+	clear: both;
+    font-size: 14px;
+    line-height: 28px;
+    overflow: hidden;
+    padding: 9px 15px;
+}
+.site-content .introduction{
+	background: #f6f6f6 none repeat scroll 0 0;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    margin-bottom: 20px;
+    padding: 15px 19px;
+}

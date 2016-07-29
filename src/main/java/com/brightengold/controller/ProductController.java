@@ -145,7 +145,9 @@ public class ProductController {
 				}
 				product.setCreateDate(tempProduct.getCreateDate());
 				product.setCreateUser(tempProduct.getCreateUser());
-				product.setUrl(tempProduct.getUrl());
+				if(StringUtils.isBlank(tempProduct.getUrl())){
+					product.setUrl(Tools.getRndFilename()+".htm");
+				}
 				product.setStatus(tempProduct.isStatus());
 				productService.saveProduct(product);
 				MsgUtil.setMsgUpdate("success");

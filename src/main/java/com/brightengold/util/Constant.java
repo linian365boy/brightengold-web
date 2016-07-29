@@ -42,5 +42,17 @@ public class Constant {
 	public static final String CATEGORYDETAILPRODUCTPATH = HTMLPRE + "/product";
 	
 	public static final int PAGE_INDEX_SIZE = 16;
+	/**
+	 * 成功返回码
+	 */
+	public static final int SUCCESS_CODE = 200;
+	/**
+	 * 失败返回码
+	 */
+	public static final int ERROR_CODE = 500;
+	/**
+	 * success
+	 */
+	public static final String SUCCESS_STR = "success";
 	
 }
