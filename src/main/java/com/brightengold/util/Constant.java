@@ -41,6 +41,11 @@ public class Constant {
 	 */
 	public static final String CATEGORYDETAILPRODUCTPATH = HTMLPRE + "/product";
 	
+	/**
+	 * 生成的分类列表页面路径
+	 */
+	public static final String CATEPRE = HTMLPRE+"/cat";
+	
 	public static final int PAGE_INDEX_SIZE = 16;
 	/**
 	 * 成功返回码

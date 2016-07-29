@@ -46,7 +46,7 @@
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
 		<header>
-		<h3 class="tabs_involved">商品分类列表<span style="color:red;">（*商品分类必须在二级栏目下，前台页面才起作用）</span></h3>
+		<h3 class="tabs_involved">商品分类列表<!-- <span style="color:red;">（*商品分类必须在二级栏目下，前台页面才起作用）</span> --></h3>
 		<ul class="tabs">
    			<li><a href="javascript:void(0);" onclick="tianjia();">新增分类</a></li>
 		</ul>

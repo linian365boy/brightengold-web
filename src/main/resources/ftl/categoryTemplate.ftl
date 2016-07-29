@@ -86,7 +86,7 @@ body.custom-background { background-color: #e2e2e2; }
 				<h1 class="page-title">${(column.code)!'--'}</h1>
 				<div id="productContent">
             	<#--virtual 相对路径-->
-            	<!--#include virtual="../product/${category.id}/1.htm"-->
+            	<!--#include virtual="../cat/${category.id}/1.htm"-->
 				</div>
 		</div><!-- #content -->
 		<#include "leftCate.ftl">

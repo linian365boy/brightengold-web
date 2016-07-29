@@ -41,6 +41,7 @@ import com.brightengold.service.SystemConfig;
 import com.brightengold.service.WebConfigService;
 import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
+import com.google.common.collect.Maps;
 
 import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
@@ -144,18 +145,18 @@ public class GennerateController {
 		}else{
 			count = columnService.countColumnByCode(code);
 		}
+		String style_v = (String) request.getSession().getAttribute("style_v");
+		String path = request.getSession().getServletContext().getRealPath("/");
+		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+				request.getServerPort()+request.getContextPath();
+		map.put("ctx", basePath);
+		map.put("style_v", style_v);
 		//按栏目代码查询
 		if(count>0){
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-					request.getServerPort()+request.getContextPath();
-			String path = request.getSession().getServletContext().getRealPath("/");
-			String style_v = (String) request.getSession().getAttribute("style_v");
 			Column col = null;
 			String templateName = "columnTemplate.ftl";
 			Column parentCol = null;
 			gennerateCommon(map);
-			map.put("ctx", basePath);
-			map.put("style_v", style_v);
 			try{
 				if("index".equals(code) || "home".equals(code)){
 					//生成首页的热销产品
@@ -195,14 +196,8 @@ public class GennerateController {
 		}else{
 			//按分类英文名称查询是否有记录
 			Category cate = categoryService.loadCategoryByEname(code);
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-					request.getServerPort()+request.getContextPath();
-			String style_v = (String) request.getSession().getAttribute("style_v");
-			String path = request.getSession().getServletContext().getRealPath("/");
 			if(cate!=null){
-				map.put("style_v", style_v);
 				gennerateCommon(map);
-				map.put("ctx", basePath);
 				map.put("category", cate);
 				map.put("column", cate.getColumn());
 				publishAllProducts(request,cate,map);
@@ -251,7 +246,8 @@ public class GennerateController {
 	}
 	
 	private void publishAllProducts(HttpServletRequest request, Category cate,
-			ModelMap map) {
+			ModelMap modelMap) {
+		 Map<String,Object> map = Maps.newHashMap(modelMap);
 		 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
 				 productService.countByCateId((cate.getId())/this.pageSize)));
 		 PageRainier<Product> page = null;
@@ -261,9 +257,9 @@ public class GennerateController {
 			 //得到该栏目下所有的产品
 			 page = productService.findAllByCateId((i+1), pageSize, cate.getId()); 
 			 map.put("productPage", page);
-			 parentPath = path + Constant.PRODUCTPRE ;
+			 parentPath = path + Constant.CATEPRE ;
 			 //列表的页面生成
-			 FreemarkerUtil.fprint("categoryProductList.ftl", map, parentPath,(i+1)+".htm");
+			 FreemarkerUtil.fprint("categoryProductList.ftl", map, parentPath+File.separator+cate.getId(),(i+1)+".htm");
 			 map.clear();
 		 }
 	}
@@ -334,13 +330,23 @@ public class GennerateController {
 		map.put("indexNews", news);
 		//查询所有第一级分类
 		List<Category> categorysList = categoryService.findAllParentCateList();
-		long catProductsSize = 0;
 		if(!CollectionUtils.isEmpty(categorysList)){
 			for(Category cate : categorysList){
-				catProductsSize = productService.countByCateId(cate.getId());
-				logger.info("cate products size |{}",catProductsSize);
+				long catProductsSize = productService.countByCateId(cate.getId());
 				if(catProductsSize!=0){
-					cate.setProductsSize(catProductsSize);
+					long parentCateProductSize = catProductsSize;
+					logger.info("cate products size |{}",catProductsSize);
+					if(!CollectionUtils.isEmpty(cate.getChildren())){
+						for(Category childCate : cate.getChildren()){
+							catProductsSize = productService.countByCateId(childCate.getId());
+							logger.info("childCate products size |{}",catProductsSize);
+							if(catProductsSize!=0){
+								childCate.setProductsSize(catProductsSize);
+								parentCateProductSize+=catProductsSize;
+							}
+						}
+					}
+					cate.setProductsSize(parentCateProductSize);
 				}
 			}
 		}
