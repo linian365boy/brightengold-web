@@ -35,11 +35,26 @@
 								<#list crossCol as col>
 									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-685 ${(column?? && (col.id)==(column.id))?string('current-menu-item current_page_item','')}">
 										<a href="${ctx}/views/html/col/${col.code}.htm">${col.enName}</a>
-										<#if ((col.childColumn)?size>0)>
+										<#if ((col.categorys)?size>0)>
 										<ul class="sub-menu">
 											<#list col.categorys as cate>
-												<li id="menu-item-818" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-818">
-												<a href="${ctx}/views/html/col/${cate.id}.htm">${(cate.enName)!''}</a></li>													
+												<#if (cate.parent)??>
+												<!--二级分类-->
+												<#else>
+												<!--一级分类-->
+													<li id="menu-item-${cate.id}" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-${cate.id}">
+														<a href="${ctx}/views/html/col/${cate.id}.htm">${(cate.enName)!''}</a>
+														<#if (((cate.children)?size)>0)>
+															<ul class="sub-menu" style="display: none;">
+																<#list cate.children as secondCate>
+																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-${secondCate.id}" id="menu-item-${secondCate.id}">
+																		<a href="${ctx}/views/html/col/${secondCate.id}.htm">${(secondCate.enName)!''}</a>
+																	</li>
+																</#list>
+															</ul>
+														</#if>
+													</li>
+												</#if>
 											</#list>
 										</ul>
 										</#if>

@@ -14,7 +14,7 @@
 							<p class="price"></p>
 						</div>
 						<div class="product_meta" >
-							<span class="posted_in">Categories: <a href="${ctx}/" rel="tag">${(product.category.enName)!''}</a>.</span>
+							<span class="posted_in">Categories: <a href="${ctx}/views/html/col/${((product.category.enName)!'')?replace('\\s*','','ri')}.htm" rel="tag">${(product.category.enName)!''}</a>.</span>
 							<div class="addthis_sharing_toolbox"></div>
 						</div>
 							</div><!-- .summary -->
@@ -41,14 +41,14 @@
 												<#list relatedProducts as relatedp>
 														<div class="item">
 															<figure>
-																<a href="${ctx}/views/html/product/${relatedp.url}" class="lazyOwl">
+																<a href="${ctx}/views/html/product/detail/${relatedp.id}.htm" class="lazyOwl">
 																	<img width="300" height="300" src="${ctx }/resources/${relatedp.picUrl}" class="wpb_pro_img wp-post-image" alt="${relatedp.enName}" />
 																</a>
 																<figcaption>
 																	<h3 class="pro_title">${relatedp.enName}</h3>
 																	<div class="price_area_fix">		
 																		<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
-																			<a href="${ctx}/views/html/product/${relatedp.url}" rel="nofollow" data-product_id="440" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+																			<a href="${ctx}/views/html/product/detail/${relatedp.id}.htm" rel="nofollow" data-product_id="440" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
 																		</p>
 																	</div>
 																</figcaption>

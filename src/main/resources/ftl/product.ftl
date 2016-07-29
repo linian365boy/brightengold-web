@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>${(model.enName)!''} - ${(company.name)!''}</title>
+	<title>${(product.enName)!''} - ${(company.name)!''}</title>
 <meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
 <style type="text/css">
 img.wp-smiley,
@@ -81,7 +81,7 @@ body.custom-background { background-color: #e2e2e2; }
 		<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 		<#--virtual 相对路径-->
-        <!--#include virtual="../product/detail/${product.url}.htm"-->
+        <!--#include virtual="${product.url}"-->
 		<#include "leftCate.ftl">
 	</div><!-- #primary -->
 <hr />

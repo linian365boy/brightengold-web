@@ -4,7 +4,7 @@
 <ul class="newslist">
 <#list newsPage.result as new>
     <li>
-    	<a title="${new.title}" href="${ctx}/views/html/news/detail/${new.url}">
+    	<a title="${new.title}" href="${ctx}/views/html/news/detail/${new.id}.htm">
     	${(newsPage.currentPageIndex-1)*newsPage.pageSize+new_index+1}&nbsp;&nbsp;
 	    	<#if (new.title?length>titleNum)>
 				${new.title[0..titleNum]}...

@@ -108,7 +108,8 @@ public class NewsController {
 	}
 	
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.POST)
-	public String update(@PathVariable Integer newsId,News news, Integer firstColId, Integer secondColId){
+	public String update(HttpServletRequest request,
+			@PathVariable Integer newsId,News news, Integer firstColId, Integer secondColId){
 		if(newsId!=null){
 			StringBuilder content = new StringBuilder();
 			News temp = newsService.loadNews(newsId);
@@ -134,6 +135,10 @@ public class NewsController {
 			}
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT, content.toString());
+			//删除页面
+			String path = request.getSession().getServletContext().getRealPath("/");
+			Tools.delFile(path + Constant.NEWSPATH + File.separator+news.getUrl());
+			Tools.delFile(path + Constant.NEWSPRE + File.separator+news.getId()+".htm");
 		}
 		return "redirect:/admin/news/news/1.html";
 	}

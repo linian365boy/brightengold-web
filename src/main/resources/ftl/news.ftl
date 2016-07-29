@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<title>${(column.enName)!''} - ${(company.name)!''}</title>
+	<title>${(news.enName)!''} - ${(company.name)!''}</title>
 <!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,315] -->
 <meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
 <style type="text/css">
@@ -84,7 +84,7 @@ body.custom-background { background-color: #e2e2e2; }
 	<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 	  <#--virtual 相对路径-->
-      <!--#include virtual="../news/detail/${news.url}.htm"-->
+      <!--#include virtual="${news.url}"-->
       <#include "leftCate.ftl">
 	</div><!-- #primary -->
 <hr />

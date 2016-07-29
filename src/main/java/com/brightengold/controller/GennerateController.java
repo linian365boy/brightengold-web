@@ -271,6 +271,7 @@ public class GennerateController {
 	
 	private void publishAllNews(HttpServletRequest request, Column col, ModelMap modelMap){
 		 Map<String,Object> map = new HashMap<String,Object>();
+		 map.putAll(modelMap);
 		 if(1==col.getType()){
 			 //1　产品展示的页面
 			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
@@ -284,8 +285,6 @@ public class GennerateController {
 				 map.put("productPage", page);
 				 parentPath = path + Constant.PRODUCTPRE + File.separator +col.getCode();
 				 //列表的页面生成
-				 map.put("ctx", modelMap.get("ctx"));
-				 map.put("column", col);
 				 if(!FreemarkerUtil.fprint("productList.ftl", map, parentPath,(i+1)+".htm")){
 					 logger.error("生成产品列表页面失败");
 				 }
@@ -309,8 +308,6 @@ public class GennerateController {
 				 map.put("newsPage", page);
 				 parentPath = path + Constant.NEWSPRE + File.separator +col.getCode();
 				 //列表的页面生成
-				 map.put("ctx", modelMap.get("ctx"));
-				 map.put("column", col);
 				 FreemarkerUtil.fprint("newsList.ftl", map, parentPath,(i+1)+".htm");
 				//生成产品详情的公共部分
 				 for(News news : page.getResult()){

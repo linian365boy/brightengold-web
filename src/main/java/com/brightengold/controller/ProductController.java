@@ -138,25 +138,22 @@ public class ProductController {
 				content.append("产品名称："+product.getEnName());
 				String categoryId = request.getParameter("parents");
 				String childCateId = request.getParameter("childrenC");
-				if(StringUtils.isNoneBlank(childCateId)){
+				if(StringUtils.isNoneBlank(childCateId) && Integer.parseInt(childCateId) >0 ){
 					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
 				}else{
 					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
 				}
 				product.setCreateDate(tempProduct.getCreateDate());
 				product.setCreateUser(tempProduct.getCreateUser());
-				System.out.println(tempProduct.getUrl()+"-=-=");
 				product.setUrl(tempProduct.getUrl());
 				product.setStatus(tempProduct.isStatus());
 				productService.saveProduct(product);
 				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 				//删除页面
-				System.out.println(product.getUrl()+"-=-=");
 				String path = request.getSession().getServletContext().getRealPath("/");
-				Tools.delFile(path + File.separator+"views"+File.separator+"html"+
-				 		File.separator+"product"+File.separator+
-			 			product.getCategory().getId()+File.separator+product.getUrl());
+				Tools.delFile(path + Constant.PRODUCTPRE + File.separator+productId+".htm");
+				Tools.delFile(path + Constant.PRODUCTPATH + File.separator+product.getUrl());
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -178,7 +175,7 @@ public class ProductController {
 		try {
 			String categoryId = request.getParameter("parentC");
 			String childCateId = request.getParameter("childrenC");
-			if(StringUtils.isNoneBlank(childCateId)){
+			if(StringUtils.isNoneBlank(childCateId) && Integer.parseInt(childCateId) >0 ){
 				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
 			}else{
 				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
