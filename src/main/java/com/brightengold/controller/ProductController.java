@@ -101,9 +101,9 @@ public class ProductController {
 			//首页广告
 			List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
 			//横条菜单，最深显示到二级菜单
-			List<Column> crossCol = columnService.findColumnsByDepth(systemConfig.getCrossMaxDepth());
+			List<Column> crossCol = columnService.findColumnsByDepth();
 			//首页侧边栏目，最深显示到三级菜单
-			List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
+			List<Column> verticalCol= columnService.findColumnsByDepth();
 			//info信息
 			List<Info> infos = infoService.getList();
 			//企业信息
@@ -218,16 +218,12 @@ public class ProductController {
 	public String publish(@PathVariable Integer productId){
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
-			if(!checkPub(temp)){
-				if(StringUtils.isBlank(temp.getUrl())){
-					temp.setUrl(Tools.getRndFilename()+".htm");
-				}
-				temp.setPublish(true);
-				productService.saveProduct(temp);
-				MsgUtil.setMsg("success", "产品发布成功！");
-			}else{
-				MsgUtil.setMsg("error", "产品已发布！");
+			if(StringUtils.isBlank(temp.getUrl())){
+				temp.setUrl(Tools.getRndFilename()+".htm");
 			}
+			temp.setPublish(true);
+			productService.saveProduct(temp);
+			MsgUtil.setMsg("success", "产品发布成功！");
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}
@@ -236,38 +232,34 @@ public class ProductController {
 	public String releaseProduct(HttpServletRequest request, @PathVariable Integer productId, ModelMap map){
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
-			if(!checkPub(temp)){
-				String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-						request.getServerPort()+request.getContextPath();
-				String realPath = request.getSession().getServletContext().getRealPath("/");
-				String parentPath = Constant.PRODUCTPATH;
-				if(StringUtils.isNotBlank(temp.getUrl())){
-					temp.setUrl(temp.getUrl());
-				}else{
-					temp.setUrl(parentPath+File.separator+Tools.getRndFilename()+".htm");
-				}
-				temp.setPublish(true);
-				//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
-				map.put("product", temp);
-				//查找相关连产品，根据keyWords
-				List<Product> products = 
-					productService.findRelatedProducts(temp.getId(),temp.getKeyWords(),8);
-				if(!CollectionUtils.isEmpty(products)){
-					map.put("relatedProducts", products);
-				}
-				if(temp.isPublish()){
-					Tools.delFile(realPath + Constant.PRODUCTPATH +File.separator + temp.getUrl());
-				}
-				map.put("ctx", basePath);
-				//生成唯一的产品页面路径，不需要根据页码生成页面
-				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
-					productService.saveProduct(temp);
-					MsgUtil.setMsg("success", "产品发布成功！");
-				}else{
-					MsgUtil.setMsg("error", "产品发布失败！");
-				}
+			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+					request.getServerPort()+request.getContextPath();
+			String realPath = request.getSession().getServletContext().getRealPath("/");
+			String parentPath = Constant.PRODUCTPATH;
+			if(StringUtils.isNotBlank(temp.getUrl())){
+				temp.setUrl(temp.getUrl());
 			}else{
-				MsgUtil.setMsg("error", "产品已发布！");
+				temp.setUrl(parentPath+File.separator+Tools.getRndFilename()+".htm");
+			}
+			temp.setPublish(true);
+			//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
+			map.put("product", temp);
+			//查找相关连产品，根据keyWords
+			List<Product> products = 
+				productService.findRelatedProducts(temp.getId(),temp.getKeyWords(),8);
+			if(!CollectionUtils.isEmpty(products)){
+				map.put("relatedProducts", products);
+			}
+			if(temp.isPublish()){
+				Tools.delFile(realPath + Constant.PRODUCTPATH +File.separator + temp.getUrl());
+			}
+			map.put("ctx", basePath);
+			//生成唯一的产品页面路径，不需要根据页码生成页面
+			if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
+				productService.saveProduct(temp);
+				MsgUtil.setMsg("success", "产品发布成功！");
+			}else{
+				MsgUtil.setMsg("error", "产品发布失败！");
 			}
 		}
 		return "redirect:/admin/goods/product/products/1.html";
@@ -284,12 +276,19 @@ public class ProductController {
 		}
 	}
 
-	private boolean checkPub(Product product) {
-		if(product.isPublish() && 
-				product.getUrl()!=null){
-			return true;
+	@RequestMapping(value="/{productId}/checkPub",method=RequestMethod.GET)
+	@ResponseBody
+	private String checkPub(@PathVariable Integer productId) {
+		if(productId!=null){
+			Product product = productService.loadProductById(productId);
+			if(product!=null && product.isPublish() && 
+					StringUtils.isNotBlank(product.getUrl())){
+				return "1";
+			}else{
+				return "-1";
+			}
 		}else{
-			return false;
+			return "0";
 		}
 	}
 

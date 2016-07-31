@@ -9,17 +9,17 @@ import com.brightengold.model.Column;
 
 public interface ColumnDao extends AbstractDao<Column, Integer> {
 	
-	@Query("select c.id,c.name from Column c where c.parentColumn = null")
+	@Query("select c.id,c.name from Column c where c.parentColumn = null order by c.priority desc,c.id desc")
 	List<Object[]> findParentByAjax();
 	@Query("select c from Column c where c.code = :code")
 	Column loadColumnByCode(@Param("code") String code);
-	@Query("select c.id,c.name from Column c where c.parentColumn.id = :pId")
+	@Query("select c.id,c.name from Column c where c.parentColumn.id = :pId order by c.priority desc,c.id desc")
 	List<Object[]> findChildrenByParentId(@Param("pId") Integer pId);
 	/**
 	 * 只获取一级菜单
 	 * @return
 	 */
-	@Query("select c from Column c where c.parentColumn = null")
+	@Query("select c from Column c where c.parentColumn = null order by c.priority desc,c.id desc")
 	List<Column> findFirstColumn();
 	@Modifying
 	@Query("update Column c set c.type = :type where c.id = :id or c.parentColumn.id = :id")

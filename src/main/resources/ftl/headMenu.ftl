@@ -43,12 +43,12 @@
 												<#else>
 												<!--一级分类-->
 													<li id="menu-item-${cate.id}" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-${cate.id}">
-														<a href="${ctx}/views/html/col/${cate.id}.htm">${(cate.enName)!''}</a>
+														<a href="${ctx}/views/html/col/${(cate.enName)?replace('\\s*','','ri')}.htm">${(cate.enName)!''}</a>
 														<#if (((cate.children)?size)>0)>
 															<ul class="sub-menu" style="display: none;">
 																<#list cate.children as secondCate>
 																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-${secondCate.id}" id="menu-item-${secondCate.id}">
-																		<a href="${ctx}/views/html/col/${secondCate.id}.htm">${(secondCate.enName)!''}</a>
+																		<a href="${ctx}/views/html/col/${(secondCate.enName)?replace('\\s*','','ri')}.htm">${(secondCate.enName)!''}</a>
 																	</li>
 																</#list>
 															</ul>

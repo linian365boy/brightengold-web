@@ -158,8 +158,8 @@ public class ColumnController {
 			List<Category> cates = categoryService.findCateByColId(temp.getId());
 			if(CollectionUtils.isNotEmpty(cates)){
 				vo.setCode(500);
-				vo.setMessage("删除失败，该栏目包含有未删除的"+cates.size()+"产品分类！");
-				logger.error("删除失败，该栏目包含有未删除的"+cates.size()+"产品分类！");
+				vo.setMessage("删除失败，该栏目包含有未删除的"+cates.size()+"个产品分类！");
+				logger.error("删除失败，该栏目包含有未删除的"+cates.size()+"个产品分类！");
 				return gson.toJson(vo);
 			}
 			columnService.delete(id);

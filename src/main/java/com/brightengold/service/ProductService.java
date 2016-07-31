@@ -68,23 +68,21 @@ public class ProductService {
 			@Override
 			public Predicate toPredicate(Root<Product> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.equal(root.<Boolean>get("publish"),true));
+				return cb.and(cb.equal(root.<Boolean>get("publish"),true),
+						cb.equal(root.<Boolean>get("status"), true));
 			}
 		};
 	}
-
+	
+	/**
+	 * 查询栏目下的已发布的，状态正常的产品
+	 * @param id
+	 * @return
+	 */
 	public long countByColId(Integer id) {
 		return productDao.countByColId(id);
 	}
 
-	public PageRainier<Product> findAllByColId(int pageNo, Integer pageSize,
-			Integer id) {
-		PageRainier<Product> page = new PageRainier<Product>(countByColId(id),pageNo,pageSize);
-		List<Product> products = productDao.findListByColId(id);
-		page.setResult(products);
-		return page;
-	}
-	
 	/**
 	 * 供前台查询，分页查询产品
 	 * @param pageNo
@@ -94,25 +92,30 @@ public class ProductService {
 	 */
 	public PageRainier<Product> findPageByColId(int pageNo, Integer pageSize,
 			Integer id) {
-		PageRainier<Product> page = new PageRainier<Product>(countIndexByColId(id),pageNo,pageSize);
-		Page<Product> tempPage = productDao.findAll(findPageByColIdSpec(), 
+		Page<Product> tempPage = productDao.findAll(findPageByColIdSpec(id), 
 				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id","hot")));
-		//List<Product> products = productDao.findListByColId(id);
+		PageRainier<Product> page = new PageRainier<Product>(tempPage.getTotalElements(),pageNo,pageSize);
 		page.setResult(tempPage.getContent());
 		return page;
 	}
 	
 	public long countIndexByColId(Integer id) {
-		return productDao.countIndexByColId(id);
+		return productDao.countByColId(id);
 	}
 
-	private Specification<Product> findPageByColIdSpec() {
+	private Specification<Product> findPageByColIdSpec(final Integer columnId) {
 		return new Specification<Product>(){
 			@Override
 			public Predicate toPredicate(Root<Product> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.isTrue(root.<Boolean>get("publish")),
-						cb.isTrue(root.<Boolean>get("status")));
+				return cb.and(
+						cb.or(
+								cb.equal(root.get("category").get("column").<Integer>get("id"), columnId),
+								cb.equal(root.get("category").get("column").get("parentColumn").<Integer>get("id"), columnId)
+							),
+						cb.isTrue(root.<Boolean>get("publish")),
+						cb.isTrue(root.<Boolean>get("status"))
+						);
 			}
 		};
 	}
@@ -125,12 +128,37 @@ public class ProductService {
 		return productDao.countByCateId(cateId);
 	}
 
+	/**
+	 * 查询该分类下所有已发布且状态正常的产品
+	 * @param pageNo
+	 * @param pageSize
+	 * @param cateId
+	 * @return
+	 */
 	public PageRainier<Product> findAllByCateId(int pageNo, Integer pageSize,
 			Integer cateId) {
-		PageRainier<Product> page = new PageRainier<Product>(countByCateId(cateId),pageNo,pageSize);
-		List<Product> products = productDao.findAllListByCateId(cateId);
-		page.setResult(products);
+		Page<Product> tempPage = productDao.findAll(findAllByCateIdSpec(cateId), 
+				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
+		PageRainier<Product> page = new PageRainier<Product>(tempPage.getTotalElements(),pageNo,pageSize);
+		page.setResult(tempPage.getContent());
 		return page;
+	}
+
+	private Specification<Product> findAllByCateIdSpec(final Integer cateId) {
+		return new Specification<Product>(){
+			@Override
+			public Predicate toPredicate(Root<Product> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(
+							cb.or(
+								cb.equal(root.get("category").<Integer>get("id"), cateId),
+								cb.equal(root.get("category").get("parent").<Integer>get("id"), cateId)
+							),
+							cb.isTrue(root.<Boolean>get("status")),
+							cb.isTrue(root.<Boolean>get("publish"))
+						);
+			}
+		};
 	}
 
 	public List<Product> findAllListByCateId(Integer catId) {

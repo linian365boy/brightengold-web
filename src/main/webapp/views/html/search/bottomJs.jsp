@@ -258,16 +258,16 @@ $(document).ready(function() {
 		jQuery("#productContent").load("/views/html/product/"+code+"/"+pageNo+".htm");
 	}
 </script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/jquery.form.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/scripts.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/slideset.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/jquery.blockUI.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/woocommerce.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/jquery.cookie.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/cart-fragments.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/jquery.masonry.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/waypoints.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/jquery.sidr.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/owl.carousel.min.js'></script>
+<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/functions.js'></script>

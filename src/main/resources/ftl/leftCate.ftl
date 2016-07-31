@@ -31,18 +31,20 @@
 	</#list>
 </ul>
 </aside>
+<#if ((indexNews?size)>0)>
 <aside id="text-2" class="widget widget_text">
 <div id="sun"><h3 class="wpb_area_title"><span>Lastest News</span></h3></div>			
 <div class="textwidget">
 <ul class="product-categories">
 	<#list indexNews as news>
 		<li class="cat-item cat-item-18">
-			<a href="${ctx}/">${(news.title)!''}</a> 
+			<a href="${ctx}/views/html/news/detail/${news.id}.htm">${(news.title)!''}</a> 
 		</li>
 	</#list>
 </ul>
 </div>
 </aside>
+</#if>
 					</div><!-- .widget-area -->
 		</div><!-- .sidebar-inner -->
 	</div><!-- #tertiary -->

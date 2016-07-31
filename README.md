@@ -26,5 +26,6 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 20.网站底部设置										ok
 21.添加、编辑商品分类增加两级								ok
 22.新闻链接在各个页面的正确设置		
-
+23.首页公司信息介绍展示优化
+24.首页新闻链接不对			
 

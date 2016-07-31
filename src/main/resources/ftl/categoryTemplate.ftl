@@ -20,22 +20,7 @@ img.emoji {
 	padding: 0 !important;
 }
 </style>
-<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css' type='text/css' media='' />
-<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css' type='text/css' media='only screen and (max-width: 768px)' />
-<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css' type='text/css' media='all' />
-<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css' type='text/css' media='all' />
-<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css' type='text/css' media='all' />
-<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
-<!--[if lt IE 9]>
-<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css' type='text/css' media='all' />
-<![endif]-->
+<#include "headCss.ftl">
 <style id='imax-extra-stylesheet-inline-css' type='text/css'>
 #sun h3 span {
     background: none repeat scroll 0 0 #5fd6d8;
@@ -82,7 +67,12 @@ body.custom-background { background-color: #e2e2e2; }
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
                 <nav class="woocommerce-breadcrumb" >
-                <a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(category.enName)!''}</nav>				
+                <a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;
+                <#if (category.parent)??>
+                	<a href="${ctx}/views/html/col/${(category.parent.enName)?replace('\\s*','','ri')}.htm">${(category.parent.enName)!''}</a>&nbsp;&#47;&nbsp;
+                </#if>
+                ${(category.enName)!''}
+                </nav>				
 				<h1 class="page-title">${(column.code)!'--'}</h1>
 				<div id="productContent">
             	<#--virtual 相对路径-->

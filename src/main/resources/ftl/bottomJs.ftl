@@ -44,31 +44,9 @@ $(document).ready(function() {
 		lazyLoad : true,
 	});
 	
-// sidebar carousel latest
-
-    $("#owl-demo-side").owlCarousel({
-        autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-    });
-	
 // sidebar carousel feature product
 	
-	$("#owl-demo-side-feature").owlCarousel({
+	$(".owl-demo-side-feature").owlCarousel({
         autoPlay: false,
 		stopOnHover: false,
 		navigation: true,

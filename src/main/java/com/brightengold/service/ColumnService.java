@@ -88,7 +88,7 @@ public class ColumnService {
 		return this.columnDao.findChildrenByParentId(pId);
 	}
 
-	public List<Column> findColumnsByDepth(int crossMaxDepth) {
+	public List<Column> findColumnsByDepth() {
 		List<Column> colList = columnDao.findFirstColumn();
 		return colList;
 	}

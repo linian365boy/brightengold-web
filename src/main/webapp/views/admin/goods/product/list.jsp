@@ -29,10 +29,19 @@
 	
 	var publish = function(obj){
 		var productId = $(obj).attr("name");
-		art.dialog.confirm('确定发布此商品？',function(){
-			var url = '${ctx}admin/goods/product/'+productId+'/release.html';
-			window.location.href=url;
-		});
+		$.get("${ctx}admin/goods/product/"+productId+"/checkPub.html",function(rs){
+			if(rs=="1"){
+				art.dialog.confirm('此商品已发布，确定重新发布？',function(){
+					var url = '${ctx}admin/goods/product/'+productId+'/release.html';
+					window.location.href=url;
+				});
+			}else{
+				art.dialog.confirm('确定发布此商品？',function(){
+					var url = '${ctx}admin/goods/product/'+productId+'/release.html';
+					window.location.href=url;
+				});
+			}
+		},"html");
 	}
 	
 	var changeStatus = function(id,status){

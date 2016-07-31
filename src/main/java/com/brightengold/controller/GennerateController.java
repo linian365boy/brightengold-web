@@ -50,7 +50,7 @@ import cn.rainier.nian.utils.PageRainier;
 @RequestMapping("/admin/sys/html")
 @Scope("prototype")
 public class GennerateController {
-	private Logger logger = LoggerFactory.getLogger(GennerateController.class);
+	private static final Logger logger = LoggerFactory.getLogger(GennerateController.class);
 	@Autowired
 	private ColumnService columnService;
 	@Autowired
@@ -248,14 +248,16 @@ public class GennerateController {
 	private void publishAllProducts(HttpServletRequest request, Category cate,
 			ModelMap modelMap) {
 		 Map<String,Object> map = Maps.newHashMap(modelMap);
-		 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
-				 productService.countByCateId((cate.getId())/this.pageSize)));
+		 long count = productService.countByCateId((cate.getId()));
+		 logger.info("分类Name|{}下共有{}个产品是已发布并且状态正常的.",cate.getName(),count);
+		 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * count/this.pageSize));
 		 PageRainier<Product> page = null;
 		 String path = request.getSession().getServletContext().getRealPath("/");
 		 String parentPath = "";
 		 for(int i=0;i<totalPageNum;i++){
 			 //得到该栏目下所有的产品
 			 page = productService.findAllByCateId((i+1), pageSize, cate.getId()); 
+			 logger.info("第{}页下共有{}个产品是已发布并且状态正常的.",(i+1),page.getResult().size());
 			 map.put("productPage", page);
 			 parentPath = path + Constant.CATEPRE ;
 			 //列表的页面生成
@@ -270,14 +272,16 @@ public class GennerateController {
 		 map.putAll(modelMap);
 		 if(1==col.getType()){
 			 //1　产品展示的页面
-			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
-					 productService.countByColId(col.getId())/this.pageSize));
+			 long count = productService.countByColId(col.getId());
+			 logger.info("栏目Name|{}下共有{}个产品是已发布并且状态正常的.",col.getEnName(),count);
+			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * count/this.pageSize));
 			 PageRainier<Product> page = null;
 			 String path = request.getSession().getServletContext().getRealPath("/");
 			 String parentPath = null;
 			 for(int i=0;i<totalPageNum;i++){
 				 //page = productService.findAllByColId((i+1), pageSize, col.getId()); //得到该栏目下所有的产品
 				 page = productService.findPageByColId((i+1), pageSize, col.getId()); //分页得到该栏目下所有的产品
+				 logger.info("第{}页共有{}个产品发布！",(i+1),page.getResult().size());
 				 map.put("productPage", page);
 				 parentPath = path + Constant.PRODUCTPRE + File.separator +col.getCode();
 				 //列表的页面生成
@@ -320,7 +324,7 @@ public class GennerateController {
 		List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
 		map.put("indexAds", ads);
 		//横条菜单，最深显示到二级菜单
-		List<Column> crossCol = columnService.findColumnsByDepth(systemConfig.getCrossMaxDepth());
+		List<Column> crossCol = columnService.findColumnsByDepth();
 		map.put("crossCol", crossCol);
 		//首页侧边栏目，最深显示到三级菜单
 		//List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
@@ -333,20 +337,15 @@ public class GennerateController {
 		if(!CollectionUtils.isEmpty(categorysList)){
 			for(Category cate : categorysList){
 				long catProductsSize = productService.countByCateId(cate.getId());
+				cate.setProductsSize(catProductsSize);
 				if(catProductsSize!=0){
-					long parentCateProductSize = catProductsSize;
-					logger.info("cate products size |{}",catProductsSize);
 					if(!CollectionUtils.isEmpty(cate.getChildren())){
 						for(Category childCate : cate.getChildren()){
 							catProductsSize = productService.countByCateId(childCate.getId());
 							logger.info("childCate products size |{}",catProductsSize);
-							if(catProductsSize!=0){
-								childCate.setProductsSize(catProductsSize);
-								parentCateProductSize+=catProductsSize;
-							}
+							childCate.setProductsSize(catProductsSize);
 						}
 					}
-					cate.setProductsSize(parentCateProductSize);
 				}
 			}
 		}

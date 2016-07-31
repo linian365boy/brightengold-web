@@ -72,13 +72,6 @@ public class Column implements Serializable{
 	//冗余字段
 	private int depth = 1;
 	
-	//发布时用到的一些设置
-	/**
-	 * 状态
-	 * 1未发布　２发布
-	 * 默认为1 未发布
-	 */
-	private int status;
 	/**
 	 * 栏目页面发布的类型，
 	 * 区别即显示标题还是内容的页面
@@ -144,12 +137,6 @@ public class Column implements Serializable{
 	}
 	public void setCode(String code) {
 		this.code = code;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
 	}
 	public int getType() {
 		return type;

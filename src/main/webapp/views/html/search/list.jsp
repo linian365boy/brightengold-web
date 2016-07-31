@@ -1,18 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@include file="../../commons/include.jsp" %>
+	pageEncoding="UTF-8"%>
+<%@include file="../../commons/include.jsp"%>
 <html lang="en-US">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width">
-	<title>Home - ${(company.name)}</title>
-<meta name="description" itemprop="description" content="${(webConfig.description)}" />
-<meta name="keywords" itemprop="keywords" content="${(webConfig.keyword)}" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Home - ${(company.name)}</title>
+<meta name="description" itemprop="description"
+	content="${(webConfig.description)}" />
+<meta name="keywords" itemprop="keywords"
+	content="${(webConfig.keyword)}" />
 
-<link rel="canonical" href="${ctx}/" />
-		<style type="text/css">
-img.wp-smiley,
-img.emoji {
+<link rel="canonical" href="${ctx}" />
+<style type="text/css">
+img.wp-smiley, img.emoji {
 	display: inline !important;
 	border: none !important;
 	box-shadow: none !important;
@@ -24,126 +25,401 @@ img.emoji {
 	padding: 0 !important;
 }
 </style>
-<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css' type='text/css' media='' />
-<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css' type='text/css' media='all' />
-<link rel='stylesheet' id='select2-css'  href='${ctx}/resources/views/style-ewa/css/select2.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css' type='text/css' media='only screen and (max-width: 768px)' />
-<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css' type='text/css' media='all' />
-<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css' type='text/css' media='all' />
-<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css' type='text/css' media='all' />
-<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
+<link rel='stylesheet' id='wpb_wps_owl_carousel-css'
+	href='${ctx}resources/views/style-ewa/css/slideset.css' type='text/css'
+	media='' />
+<link rel='stylesheet' id='contact-form-7-css'
+	href='${ctx}resources/views/style-ewa/css/styles.css' type='text/css'
+	media='all' />
+<link rel='stylesheet' id='select2-css'
+	href='${ctx}resources/views/style-ewa/css/select2.css' type='text/css'
+	media='all' />
+<link rel='stylesheet' id='woocommerce-layout-css'
+	href='${ctx}resources/views/style-ewa/css/woocommerce-layout.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='woocommerce-smallscreen-css'
+	href='${ctx}resources/views/style-ewa/css/woocommerce-smallscreen.css'
+	type='text/css' media='only screen and (max-width: 768px)' />
+<link rel='stylesheet' id='woocommerce-general-css'
+	href='${ctx}resources/views/style-ewa/css/woocommerce.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='imax-fonts-css'
+	href='${ctx}resources/views/style-ewa/css/css.css' type='text/css'
+	media='all' />
+<link rel='stylesheet' id='genericons-css'
+	href='${ctx}resources/views/style-ewa/css/genericons.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='animate-css'
+	href='${ctx}resources/views/style-ewa/css/animate.min.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='side-menu-css'
+	href='${ctx}resources/views/style-ewa/css/jquery.sidr.dark.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-css'
+	href='${ctx}resources/views/style-ewa/css/owl.carousel.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-theme-css'
+	href='${ctx}resources/views/style-ewa/css/owl.theme.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='owl-carousel-transitions-css'
+	href='${ctx}resources/views/style-ewa/css/owl.transitions.css'
+	type='text/css' media='all' />
+<link rel='stylesheet' id='imax-style-css'
+	href='${ctx}resources/views/style-ewa/css/style.css?${style_v}'
+	type='text/css' media='all' />
 <!--[if lt IE 9]>
-<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css' type='text/css' media='all' />
+<link rel='stylesheet' id='imax-ie-css'  href='${ctx}resources/views/style-ewa/css/ie.css' type='text/css' media='all' />
 <![endif]-->
 <style id='imax-extra-stylesheet-inline-css' type='text/css'>
 #sun h3 span {
-    background: none repeat scroll 0 0 #5fd6d8;
+	background: none repeat scroll 0 0 #5fd6d8;
 }
+
 #sun h3 span::before {
-    border-bottom: 37px solid #5fd6d8;
+	border-bottom: 37px solid #5fd6d8;
 }
-.wpb_area_title{
-border-bottom: 3px solid #5fd6d8;
+
+.wpb_area_title {
+	border-bottom: 3px solid #5fd6d8;
 }
+
 #woocommerce_product_categories-2 {
-    font-weight: bold;
+	font-weight: bold;
 }
 </style>
-<script type='text/javascript' src='${ctx}/resources/js/jquery-1.11.1.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/js/jquery-migrate.min.js'></script>
-<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js"></script>
+<script type='text/javascript'
+	src='${ctx}resources/js/jquery-1.11.1.min.js'></script>
+<script type='text/javascript'
+	src='${ctx}resources/js/jquery-migrate.min.js'></script>
+<script type="text/javascript"
+	src="${ctx}resources/js/unslider/unslider.min.js"></script>
 <meta name="generator" content="WordPress 4.5.3" />
 <meta name="generator" content="WooCommerce 2.3.11" />
-<link rel='shortlink' href='${ctx}/' />
+<link rel='shortlink' href='${ctx}' />
 <style type="text/css">
-.grid figcaption a, div.grid_no_animation figcaption a.button {background: #1abc9c!important;}
-.grid figcaption a:hover, div.grid_no_animation figcaption a.button:hover {background: #16a085!important;}
-.owl-theme .owl-controls .owl-page span {background: #8BCFC2;}
-.owl-theme .owl-controls .owl-page.active span,
-.owl-theme .owl-controls.clickable .owl-page:hover span{background: #16A085;}
-.owl-theme .owl-controls .owl-buttons div {background: #CCCCCC;}
-.owl-theme .owl-controls.clickable .owl-buttons div:hover{background:#999999;}
-div.grid_no_animation figcaption .pro_price_area .amount {text-decoration: none;color: #16A085;}
+.grid figcaption a, div.grid_no_animation figcaption a.button {
+	background: #1abc9c !important;
+}
+
+.grid figcaption a:hover, div.grid_no_animation figcaption a.button:hover
+	{
+	background: #16a085 !important;
+}
+
+.owl-theme .owl-controls .owl-page span {
+	background: #8BCFC2;
+}
+
+.owl-theme .owl-controls .owl-page.active span, .owl-theme .owl-controls.clickable .owl-page:hover span
+	{
+	background: #16A085;
+}
+
+.owl-theme .owl-controls .owl-buttons div {
+	background: #CCCCCC;
+}
+
+.owl-theme .owl-controls.clickable .owl-buttons div:hover {
+	background: #999999;
+}
+
+div.grid_no_animation figcaption .pro_price_area .amount {
+	text-decoration: none;
+	color: #16A085;
+}
 </style>
 <style type="text/css">
-a,a:visited,.blog-columns .comments-link a:hover {color: #5fd6d8;}input:focus,textarea:focus,.site-footer .widget-area .widget .wpcf7 .wpcf7-submit {border: 1px solid #5fd6d8;}button,input[type="submit"],input[type="button"],input[type="reset"],.tx-service.curved .tx-service-icon span,.tx-service.square .tx-service-icon span {background-color: #5fd6d8;}.nav-container .sub-menu,.nav-container .children {border-top: 2px solid #5fd6d8;}.ibanner,.da-dots span.da-dots-current,.tx-cta a.cta-button {background-color: #5fd6d8;}#ft-post .entry-thumbnail:hover > .comments-link,.tx-folio-img .folio-links .folio-linkico,.tx-folio-img .folio-links .folio-zoomico {background-color: #5fd6d8;}.entry-header h1.entry-title a:hover,.entry-header > .entry-meta a:hover {color: #5fd6d8;}.featured-area div.entry-summary > p > a.moretag:hover {background-color: #5fd6d8;}.site-content div.entry-thumbnail .stickyonimg,.site-content div.entry-thumbnail .dateonimg,.site-content div.entry-nothumb .stickyonimg,.site-content div.entry-nothumb .dateonimg {background-color: #5fd6d8;}.entry-meta a,.entry-content a,.comment-content a,.entry-content a:visited {color: #5fd6d8;}.format-status .entry-content .page-links a,.format-gallery .entry-content .page-links a,.format-chat .entry-content .page-links a,.format-quote .entry-content .page-links a,.page-links a {background: #5fd6d8;border: 1px solid #5fd6d8;color: #ffffff;}.format-gallery .entry-content .page-links a:hover,.format-audio .entry-content .page-links a:hover,.format-status .entry-content .page-links a:hover,.format-video .entry-content .page-links a:hover,.format-chat .entry-content .page-links a:hover,.format-quote .entry-content .page-links a:hover,.page-links a:hover {color: #5fd6d8;}.iheader.front {background-color: #5fd6d8;}.navigation a,.tx-post-row .tx-folio-title a:hover,.tx-blog .tx-blog-item h3.tx-post-title a:hover {color: #5fd6d8;}.paging-navigation div.navigation > ul > li a:hover,.paging-navigation div.navigation > ul > li.active > a {color: #5fd6d8;	border-color: #5fd6d8;}.comment-author .fn,.comment-author .url,.comment-reply-link,.comment-reply-login,.comment-body .reply a,.widget a:hover {color: #5fd6d8;}.widget_calendar a:hover {background-color: #5fd6d8;	color: #ffffff;	}.widget_calendar td#next a:hover,.widget_calendar td#prev a:hover {background-color: #5fd6d8;color: #ffffff;}.site-footer div.widget-area .widget a:hover {color: #5fd6d8;}.site-main div.widget-area .widget_calendar a:hover,.site-footer div.widget-area .widget_calendar a:hover {background-color: #5fd6d8;color: #ffffff;}.widget a:visited { color: #373737;}.widget a:hover,.entry-header h1.entry-title a:hover,.error404 .page-title:before,.tx-service-icon span i,.tx-post-comm:after {color: #5fd6d8;}.da-dots > span > span,.site-footer .widget-area .widget .wpcf7 .wpcf7-submit {background-color: #5fd6d8;}.iheader,.format-status,.tx-service:hover .tx-service-icon span,.ibanner .da-slider .owl-item .da-link:hover {background-color: #5fd6d8;}.tx-cta {border-left: 6px solid #5fd6d8;}.paging-navigation #posts-nav > span:hover, .paging-navigation #posts-nav > a:hover, .paging-navigation #posts-nav > span.current, .paging-navigation #posts-nav > a.current, .paging-navigation div.navigation > ul > li a:hover, .paging-navigation div.navigation > ul > li > span.current, .paging-navigation div.navigation > ul > li.active > a {border: 1px solid #5fd6d8;color: #5fd6d8;}.entry-title a { color: #141412;}.tx-service-icon span { border: 2px solid #5fd6d8;}.nav-container .current_page_item > a,.nav-container .current_page_ancestor > a,.nav-container .current-menu-item > a,.nav-container .current-menu-ancestor > a,.nav-container li a:hover,.nav-container li:hover > a,.nav-container li a:hover,ul.nav-container ul a:hover,.nav-container ul ul a:hover {background-color: #5fd6d8; }.tx-service.curved .tx-service-icon span,.tx-service.square .tx-service-icon span {border: 6px solid #e7e7e7; width: 100px; height: 100px;}.tx-service.curved .tx-service-icon span i,.tx-service.square .tx-service-icon span i {color: #FFFFFF;}.tx-service.curved:hover .tx-service-icon span,.tx-service.square:hover .tx-service-icon span {background-color: #e7e7e7;}.tx-service.curved:hover .tx-service-icon span i,.tx-service.square:hover .tx-service-icon span i,.folio-style-gallery.tx-post-row .tx-portfolio-item .tx-folio-title a:hover {color: #5fd6d8;}.site .tx-slider .tx-slide-button a,.ibanner .da-slider .owl-item.active .da-link  { background-color: #5fd6d8; color: #FFF; }.site .tx-slider .tx-slide-button a:hover  { background-color: #373737; color: #FFF; }</style>
+a, a:visited, .blog-columns .comments-link a:hover {
+	color: #5fd6d8;
+}
+
+input:focus, textarea:focus, .site-footer .widget-area .widget .wpcf7 .wpcf7-submit
+	{
+	border: 1px solid #5fd6d8;
+}
+
+button, input[type="submit"], input[type="button"], input[type="reset"],
+	.tx-service.curved .tx-service-icon span, .tx-service.square .tx-service-icon span
+	{
+	background-color: #5fd6d8;
+}
+
+.nav-container .sub-menu, .nav-container .children {
+	border-top: 2px solid #5fd6d8;
+}
+
+.ibanner, .da-dots span.da-dots-current, .tx-cta a.cta-button {
+	background-color: #5fd6d8;
+}
+
+#ft-post .entry-thumbnail:hover>.comments-link, .tx-folio-img .folio-links .folio-linkico,
+	.tx-folio-img .folio-links .folio-zoomico {
+	background-color: #5fd6d8;
+}
+
+.entry-header h1.entry-title a:hover, .entry-header>.entry-meta a:hover
+	{
+	color: #5fd6d8;
+}
+
+.featured-area div.entry-summary>p>a.moretag:hover {
+	background-color: #5fd6d8;
+}
+
+.site-content div.entry-thumbnail .stickyonimg, .site-content div.entry-thumbnail .dateonimg,
+	.site-content div.entry-nothumb .stickyonimg, .site-content div.entry-nothumb .dateonimg
+	{
+	background-color: #5fd6d8;
+}
+
+.entry-meta a, .entry-content a, .comment-content a, .entry-content a:visited
+	{
+	color: #5fd6d8;
+}
+
+.format-status .entry-content .page-links a, .format-gallery .entry-content .page-links a,
+	.format-chat .entry-content .page-links a, .format-quote .entry-content .page-links a,
+	.page-links a {
+	background: #5fd6d8;
+	border: 1px solid #5fd6d8;
+	color: #ffffff;
+}
+
+.format-gallery .entry-content .page-links a:hover, .format-audio .entry-content .page-links a:hover,
+	.format-status .entry-content .page-links a:hover, .format-video .entry-content .page-links a:hover,
+	.format-chat .entry-content .page-links a:hover, .format-quote .entry-content .page-links a:hover,
+	.page-links a:hover {
+	color: #5fd6d8;
+}
+
+.iheader.front {
+	background-color: #5fd6d8;
+}
+
+.navigation a, .tx-post-row .tx-folio-title a:hover, .tx-blog .tx-blog-item h3.tx-post-title a:hover
+	{
+	color: #5fd6d8;
+}
+
+.paging-navigation div.navigation>ul>li a:hover, .paging-navigation div.navigation>ul>li.active>a
+	{
+	color: #5fd6d8;
+	border-color: #5fd6d8;
+}
+
+.comment-author .fn, .comment-author .url, .comment-reply-link,
+	.comment-reply-login, .comment-body .reply a, .widget a:hover {
+	color: #5fd6d8;
+}
+
+.widget_calendar a:hover {
+	background-color: #5fd6d8;
+	color: #ffffff;
+}
+
+.widget_calendar td#next a:hover, .widget_calendar td#prev a:hover {
+	background-color: #5fd6d8;
+	color: #ffffff;
+}
+
+.site-footer div.widget-area .widget a:hover {
+	color: #5fd6d8;
+}
+
+.site-main div.widget-area .widget_calendar a:hover, .site-footer div.widget-area .widget_calendar a:hover
+	{
+	background-color: #5fd6d8;
+	color: #ffffff;
+}
+
+.widget a:visited {
+	color: #373737;
+}
+
+.widget a:hover, .entry-header h1.entry-title a:hover, .error404 .page-title:before,
+	.tx-service-icon span i, .tx-post-comm:after {
+	color: #5fd6d8;
+}
+
+.da-dots>span>span, .site-footer .widget-area .widget .wpcf7 .wpcf7-submit
+	{
+	background-color: #5fd6d8;
+}
+
+.iheader, .format-status, .tx-service:hover .tx-service-icon span,
+	.ibanner .da-slider .owl-item .da-link:hover {
+	background-color: #5fd6d8;
+}
+
+.tx-cta {
+	border-left: 6px solid #5fd6d8;
+}
+
+.paging-navigation #posts-nav>span:hover, .paging-navigation #posts-nav>a:hover,
+	.paging-navigation #posts-nav>span.current, .paging-navigation #posts-nav>a.current,
+	.paging-navigation div.navigation>ul>li a:hover, .paging-navigation div.navigation>ul>li>span.current,
+	.paging-navigation div.navigation>ul>li.active>a {
+	border: 1px solid #5fd6d8;
+	color: #5fd6d8;
+}
+
+.entry-title a {
+	color: #141412;
+}
+
+.tx-service-icon span {
+	border: 2px solid #5fd6d8;
+}
+
+.nav-container .current_page_item>a, .nav-container .current_page_ancestor>a,
+	.nav-container .current-menu-item>a, .nav-container .current-menu-ancestor>a,
+	.nav-container li a:hover, .nav-container li:hover>a, .nav-container li a:hover,
+	ul.nav-container ul a:hover, .nav-container ul ul a:hover {
+	background-color: #5fd6d8;
+}
+
+.tx-service.curved .tx-service-icon span, .tx-service.square .tx-service-icon span
+	{
+	border: 6px solid #e7e7e7;
+	width: 100px;
+	height: 100px;
+}
+
+.tx-service.curved .tx-service-icon span i, .tx-service.square .tx-service-icon span i
+	{
+	color: #FFFFFF;
+}
+
+.tx-service.curved:hover .tx-service-icon span, .tx-service.square:hover .tx-service-icon span
+	{
+	background-color: #e7e7e7;
+}
+
+.tx-service.curved:hover .tx-service-icon span i, .tx-service.square:hover .tx-service-icon span i,
+	.folio-style-gallery.tx-post-row .tx-portfolio-item .tx-folio-title a:hover
+	{
+	color: #5fd6d8;
+}
+
+.site .tx-slider .tx-slide-button a, .ibanner .da-slider .owl-item.active .da-link
+	{
+	background-color: #5fd6d8;
+	color: #FFF;
+}
+
+.site .tx-slider .tx-slide-button a:hover {
+	background-color: #373737;
+	color: #FFF;
+}
+</style>
 <style type="text/css" id="custom-background-css">
-body.custom-background { background-color: #e2e2e2; }
+body.custom-background {
+	background-color: #e2e2e2;
+}
 </style>
-<link rel="icon" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" sizes="32x32" />
-<link rel="icon" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" sizes="192x192" />
-<link rel="apple-touch-icon-precomposed" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
-<meta name="msapplication-TileImage" content="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
+<link rel="icon"
+	href="${ctx}resources/views/style-ewa/images/steroids-benefits.png"
+	sizes="32x32" />
+<link rel="icon"
+	href="${ctx}resources/views/style-ewa/images/steroids-benefits.png"
+	sizes="192x192" />
+<link rel="apple-touch-icon-precomposed"
+	href="${ctx}resources/views/style-ewa/images/steroids-benefits.png" />
+<meta name="msapplication-TileImage"
+	content="${ctx}resources/views/style-ewa/images/steroids-benefits.png" />
 </head>
-<body class="home page page-id-75 page-template-default custom-background sidebar nx-boxed onecol-blog no-avatars" style="  ">
+<body
+	class="home page page-id-75 page-template-default custom-background sidebar nx-boxed onecol-blog no-avatars"
+	style="">
 	<div id="page" class="hfeed site">
-    	<jsp:include page="headMenu.jsp"/>
-	<div id="main" class="site-main">
-	<div id="primary" class="content-area">
-		<div id="content" class="site-content" role="main">
-				<article id="post-75" class="post-75 page type-page status-publish hentry">
-					<div class="entry-content">
-						<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
-						<div id="sun" >
-						<h3 class="wpb_area_title"><span>Company Introduce</span></h3></div>
-						<div class="supercat-des">
-			<a class="img-class" title=""></a></div>
-			<div id="owl-demo-side">
-				${(company.introduce)}
-			</div></div>
-<c:if test="((hotProducts.size)>0)">
-		<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
-			<div id="sun" ><h3 class="wpb_area_title"><span>Hot Products</span></h3></div>
-			<div class="supercat-des"><a class="img-class" title=""></a></div>
-			<div id="owl-demo-side-feature" class="owl-carousel">
-				<c:forEach items="${hotProducts }" var="hotPro" varStatus="status">
-					<c:choose>
-						<c:when test="(status!=0) && (status%4!=0)">
-							<div class="item">
-								<figure>
-									<a href="${ctx}/views/html/product/${hotPro.pageNum}/${(hotPro.url)}" class="lazyOwl">
-									<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)}" class="wpb_pro_img wp-post-image" alt="semi-finished steroids" /></a>
-									<figcaption>
-										<h3 class="pro_title">${(hotPro.enName)}</h3>
-										<div class="price_area_fix">
-											<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
-												<a href="${ctx}/${(hotPro.url)}" rel="nofollow" data-product_id="462" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
-											</p>
-										</div>
-									</figcaption>
-								</figure>
-							</div>
-						</c:when>
-						<c:otherwise>
-							</div></div>
+		<jsp:include page="headMenu.jsp" />
+		<div id="main" class="site-main">
+			<div id="primary" class="content-area">
+				<div id="content" class="site-content" role="main">
+					<article id="post-75"
+						class="post-75 page type-page status-publish hentry">
+						<div class="entry-content">
 							<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
-							<div class="supercat-des"><a class="img-class" title=""></a></div>	
-							<div id="owl-demo-side-three" class="owl-carousel">
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
-</c:if>
-</div></div>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-											</div><!-- .entry-content -->
-					<footer class="entry-meta">
-											</footer><!-- .entry-meta -->
-				</article><!-- #post -->
-<div id="comments" class="comments-area">
-</div><!-- #comments -->			
-		</div><!-- #content -->
-        	<jsp:include page="leftCate.jsp"/>
-	</div><!-- #primary -->
-<hr />
-<jsp:include page="bottom.jsp"/>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/select2.min.js'></script>
-<jsp:include page="bottomJs.jsp"/>
+								<div id="sun">
+									<h3 class="wpb_area_title">
+										<span>Company Introduce</span>
+									</h3>
+								</div>
+								<div class="supercat-des">
+									<a class="img-class" title=""></a>
+								</div>
+								<div id="owl-demo-side">${(company.introduce)}</div>
+							</div>
+							<c:if test="${ fn:length(hotProducts)>0}">
+								<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
+									<div id="sun">
+										<h3 class="wpb_area_title">
+											<span>Hot Products</span>
+										</h3>
+									</div>
+									<div class="supercat-des">
+										<a class="img-class" title=""></a>
+									</div>
+									<div id="owl-demo-side-feature" class="owl-carousel">
+										<c:forEach items="${hotProducts }" var="hotPro"
+											varStatus="status">
+											<c:choose>
+												<c:when test="${(status eq 0) and !((status%4) eq 0)}">
+													<div class="item">
+														<figure>
+															<a
+																href="${ctx}views/html/product/${hotPro.pageNum}/${(hotPro.url)}"
+																class="lazyOwl"> <img width="300" height="300"
+																src="${ctx}resources/${(hotPro.picUrl)}"
+																class="wpb_pro_img wp-post-image"
+																alt="semi-finished steroids" /></a>
+															<figcaption>
+																<h3 class="pro_title">${(hotPro.enName)}</h3>
+																<div class="price_area_fix">
+																	<p class="product woocommerce add_to_cart_inline "
+																		style="border: 4px solid #ccc; padding: 12px;">
+																		<a href="${ctx}${(hotPro.url)}" rel="nofollow"
+																			data-product_id="462" data-product_sku=""
+																			data-quantity="1" class="button  product_type_simple">查看更多</a>
+																	</p>
+																</div>
+															</figcaption>
+														</figure>
+													</div>
+												</c:when>
+												<c:otherwise>
+														</div>
+													</div>
+													<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
+														<div class="supercat-des">
+															<a class="img-class" title=""></a>
+														</div>
+														<div id="owl-demo-side-three" class="owl-carousel">
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</div>
+							</c:if>
+						</div>
+						<p>&nbsp;</p>
+						<p>&nbsp;</p>
+						<!-- .entry-content -->
+						<footer class="entry-meta"> </footer>
+						<!-- .entry-meta -->
+						</article>
+						<!-- #post -->
+			<div id="comments" class="comments-area"></div>
+			<!-- #comments -->
+				</div>
+			<jsp:include page="leftCate.jsp" />
+		</div>
+		<!-- #content -->
+	</div>
+	<!-- #primary -->
+	<hr />
+	<jsp:include page="bottom.jsp" />
+	<script type='text/javascript'
+		src='${ctx}resources/views/style-ewa/js/select2.min.js'></script>
+	<jsp:include page="bottomJs.jsp" />
 </body>
 </html>

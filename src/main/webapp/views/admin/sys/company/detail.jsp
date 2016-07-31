@@ -131,7 +131,7 @@
 			    </div>
 		   </div>
 		   <div class="form-group">
-			    <label for="contactUserFacebook" class="col-sm-2 control-label">联系人facebbook</label>
+			    <label for="contactUserFacebook" class="col-sm-2 control-label">联系人facebook</label>
 			    <div class="col-sm-8">
 			      <input id="contactUserFacebook" class="form-control" name="contactUserFacebook" value="${model.contactUserFacebook }"/>
 			    </div>
