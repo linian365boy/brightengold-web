@@ -63,7 +63,7 @@ body.custom-background { background-color: #e2e2e2; }
 <link rel="apple-touch-icon-precomposed" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
 <meta name="msapplication-TileImage" content="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
 </head>
-<body class="page page-id-28 page-template-default custom-background sidebar nx-boxed onecol-blog no-avatars" style="  ">
+<body class="archive search search-results post-type-archive post-type-archive-product custom-background woocommerce woocommerce-page sidebar nx-boxed onecol-blog no-avatars" style="  ">
 	<div id="page" class="hfeed site">
     <#include "headMenu.ftl">
 	<div id="main" class="site-main">

@@ -38,6 +38,7 @@ border-bottom: 3px solid #5fd6d8;
 </style>
 <script type='text/javascript' src='${ctx}/resources/js/jquery-1.11.1.min.js?${style_v}'></script>
 <script type='text/javascript' src='${ctx}/resources/js/jquery-migrate.min.js?${style_v}'></script>
+<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js"></script>
 <meta name="generator" content="WordPress 4.5.3" />
 <meta name="generator" content="WooCommerce 2.3.11" />
 <link rel='shortlink' href='${ctx}/' />
@@ -61,22 +62,20 @@ body.custom-background { background-color: #e2e2e2; }
 <link rel="apple-touch-icon-precomposed" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
 <meta name="msapplication-TileImage" content="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
 </head>
-<body class="page page-id-28 page-template-default custom-background sidebar nx-boxed onecol-blog no-avatars" style="  ">
+<body class="archive post-type-archive post-type-archive-product custom-background woocommerce woocommerce-page sidebar nx-boxed onecol-blog no-avatars" style="  ">
 	<div id="page" class="hfeed site">
     <#include "headMenu.ftl">
 	<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
-
-						
+				<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(column.code)!'--'}</nav>	
 				<article id="post-28" class="post-28 page type-page status-publish hentry">
 					<div class="entry-content">
-					${(info.content)!'no content'}
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-	</div><!-- .entry-content -->
-					<footer class="entry-meta">
-											</footer><!-- .entry-meta -->
+						${(info.content)!'no content'}
+						<p>&nbsp;</p>
+						<p>&nbsp;</p>
+					</div><!-- .entry-content -->
+					<footer class="entry-meta"></footer><!-- .entry-meta -->
 				</article><!-- #post -->
 <div id="comments" class="comments-area">
 </div><!-- #comments -->			

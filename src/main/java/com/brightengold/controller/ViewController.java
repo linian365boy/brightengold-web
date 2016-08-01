@@ -80,6 +80,8 @@ public class ViewController {
 		if(StringUtils.isNotBlank(keyword)){
 			PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(keyword,pageNo,Constant.PAGE_INDEX_SIZE);
 			map.put("page", page);
+			map.put("keyword", keyword);
+			map.put("pageNo", pageNo);
 		}
 		return "html/search/list";
 	}

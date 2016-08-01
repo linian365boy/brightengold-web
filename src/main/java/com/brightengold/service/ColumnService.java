@@ -97,18 +97,8 @@ public class ColumnService {
 		columnDao.updateColumnPublishContent(id,type);
 	}
 
-	private Specification<Column> columnListSpec() {
-		return new Specification<Column>(){
-			@Override
-			public Predicate toPredicate(Root<Column> root,
-					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.equal(root.get("status"), 2);
-			}
-		};
-	}
-	
 	public List<Column> findList() {
-		return columnDao.findAll(columnListSpec());
+		return columnDao.findAll();
 	}
 
 }
