@@ -247,6 +247,13 @@ $(document).ready(function() {
 			}
 		});
 	}
+	function locationTo(url){
+		if(url!=''){
+			jQuery("#tempHref").attr("href",url);
+			jQuery("#spanlink").click();
+			jQuery("#tempHref").attr("href","javascript:void(0);");
+		}
+	}
 </script>
 <script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js'></script>
 <script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js'></script>

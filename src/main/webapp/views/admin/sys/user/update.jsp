@@ -10,6 +10,23 @@
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
 <link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="${ctx }resources/css/style.css" />
+<style type="text/css">
+	.selectpicker {
+		background-color: #fff;
+	    background-image: none;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	    color: #555;
+	    display: block;
+	    font-size: 14px;
+	    height: 34px;
+	    line-height: 1.42857;
+	    padding: 6px 12px;
+	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	    vertical-align: middle;
+	}
+</style>
 <script type="text/javascript">
 	$("#form").validate({
 			rules:{
@@ -73,7 +90,7 @@ function formSubmit(){
 		<div class="form-group">
 		    <label for="roles" class="col-sm-3 control-label">角色分配</label>
 		    	<div class="row col-xs-8" style="overflow:hidden;">
-		    		<select name="role" id="roles" style="width: 158px;margin-left: 0px;margin-bottom: 5px;">
+		    		<select name="role" id="roles" class="col-xs-7 selectpicker" style="width: 158px;margin-left: 0px;margin-bottom: 5px;">
 		            	<c:forEach items="${rolesAjax }" var="r">
 		            		<option value="${r[0] }"
 		            			<c:if test="${r[0] eq mr }">

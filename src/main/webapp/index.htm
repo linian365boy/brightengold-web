@@ -120,15 +120,9 @@ body.custom-background { background-color: #e2e2e2; }
 									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-685 ">
 										<a href="http://localhost:8081/views/html/col/product.htm">PRODUCTS</a>
 										<ul class="sub-menu">
-												<!--一级分类-->
-													<li id="menu-item-4" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-4">
-														<a href="http://localhost:8081/views/html/col/AmericastandardUSBwallsocket.htm">America standard USB wall socket</a>
-															<ul class="sub-menu" style="display: none;">
-																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-7" id="menu-item-7">
-																		<a href="http://localhost:8081/views/html/col/Ameriacastand1-1.htm">Ameriaca stand1-1</a>
-																	</li>
-															</ul>
-													</li>
+												<!--二级分类-->
+												<!--二级分类-->
+												<!--二级分类-->
 												<!--一级分类-->
 													<li id="menu-item-2" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-2">
 														<a href="http://localhost:8081/views/html/col/niangecategory.htm">niange category</a>
@@ -139,9 +133,6 @@ body.custom-background { background-color: #e2e2e2; }
 															</ul>
 													</li>
 												<!--二级分类-->
-												<!--二级分类-->
-												<!--二级分类-->
-												<!--二级分类-->
 												<!--一级分类-->
 													<li id="menu-item-1" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1">
 														<a href="http://localhost:8081/views/html/col/lilycategory.htm">lily category</a>
@@ -151,6 +142,15 @@ body.custom-background { background-color: #e2e2e2; }
 																	</li>
 																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-8" id="menu-item-8">
 																		<a href="http://localhost:8081/views/html/col/lilyCategor1-2.htm">lily Categor1-2</a>
+																	</li>
+															</ul>
+													</li>
+												<!--一级分类-->
+													<li id="menu-item-4" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-4">
+														<a href="http://localhost:8081/views/html/col/AmericastandardUSBwallsocket.htm">America standard USB wall socket</a>
+															<ul class="sub-menu" style="display: none;">
+																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-7" id="menu-item-7">
+																		<a href="http://localhost:8081/views/html/col/Ameriacastand1-1.htm">Ameriaca stand1-1</a>
 																	</li>
 															</ul>
 													</li>
@@ -546,7 +546,10 @@ body.custom-background { background-color: #e2e2e2; }
 						</div>
 					</div>
 				</section>
-</footer><script type='text/javascript' src='http://localhost:8081/resources/views/style-ewa/js/select2.min.js'></script>
+</footer>
+<a href="javascript:void(0);" id="tempHref" target="_blank" style="display:none;">
+    	<span id="spanlink">slink</span>
+    </a><script type='text/javascript' src='http://localhost:8081/resources/views/style-ewa/js/select2.min.js'></script>
 	<script type="text/javascript">
 jQuery.noConflict();
 (function( $ ) {
@@ -795,6 +798,13 @@ $(document).ready(function() {
 				jQuery(".fa-angle-double-down").hide();
 			}
 		});
+	}
+	function locationTo(url){
+		if(url!=''){
+			jQuery("#tempHref").attr("href",url);
+			jQuery("#spanlink").click();
+			jQuery("#tempHref").attr("href","javascript:void(0);");
+		}
 	}
 </script>
 <script type='text/javascript' src='http://localhost:8081/resources/views/style-ewa/js/jquery.form.min.js'></script>

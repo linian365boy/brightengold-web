@@ -145,7 +145,7 @@ public class UserController {
 					ToStringBuilder.reflectionToString(user, ToStringStyle.SHORT_PREFIX_STYLE, true)
 					);
 		}
-		return "redirect:/admin/sys/user/users/1";
+		return "redirect:/admin/sys/user/users/1.html";
 	}
 	
 	@RequestMapping(value="/existUser",method=RequestMethod.POST)
@@ -220,7 +220,7 @@ public class UserController {
 			LogUtil.getInstance().log(LogType.NSUBSCTIBE, user.getUsername()+"被注销了");
 			logger.warn("用户：{}，注销成功",user.getUsername());
 		}
-		return "redirect:/admin/sys/user/users/1";
+		return "redirect:/admin/sys/user/users/1.html";
 	}
 	
 	@ResponseBody

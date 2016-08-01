@@ -71,3 +71,6 @@
 					</div>
 				</section>
 </footer>
+<a href="javascript:void(0);" id="tempHref" target="_blank" style="display:none;">
+    	<span id="spanlink">slink</span>
+    </a>

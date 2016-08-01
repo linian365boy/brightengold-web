@@ -53,7 +53,7 @@
 		<header>
 		<h3 class="tabs_involved">角色列表</h3>
 		<ul class="tabs">
-			<c:url value="${ctx }sys/role/export" var="exportUrl" scope="page"/>
+			<c:url value="${ctx }admin/sys/role/export.html" var="exportUrl" scope="page"/>
    			<li><a href="javascript:void(0);" onclick="tianjia();">新增角色</a></li>
    			<li><a href="javascript:void(0);" onclick="exportToCSV('${exportUrl}');">导出</a></li>
    			<li><a href="javascript:void(0);" onclick="qxfp();">权限分配</a></li>

@@ -97,7 +97,7 @@ public class RoleController {
 			MsgUtil.setMsgAdd("error");
 			logger.error("添加角色发生错误：{}",e);
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/role/roles/1";
+		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/role/roles/1.html";
 	}
 	
 	@RequestMapping(value="/{roleName}/update",method=RequestMethod.GET)
@@ -118,7 +118,7 @@ public class RoleController {
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT,"角色由\""+ryName+"\"修改为：\""+temp.getDesc()+"\"");
 		}
-		return "redirect:/admin/sys/role/roles/1";
+		return "redirect:/admin/sys/role/roles/1.html";
 	}
 	
 	@RequestMapping(value="/{roleName}/del",method=RequestMethod.GET)
@@ -133,7 +133,7 @@ public class RoleController {
 			LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDesc());
 			logger.warn("删除角色为{}",role.getDesc());
 		}
-		return "redirect:/admin/admin/sys/role/roles/1";
+		return "redirect:/admin/sys/role/roles/1.html";
 	}
 	
 	@RequestMapping(value="/qxfp",method=RequestMethod.GET)
@@ -197,7 +197,7 @@ public class RoleController {
 			MsgUtil.setMsg("error", "分配权限失败！");
 			logger.error("角色{}分配权限失败，发生错误：{}！",roleName,e);
 		}
-		return "redirect:/admin/sys/role/roles/1";
+		return "redirect:/admin/sys/role/roles/1.html";
 	}
 	@RequestMapping(value="/export",method=RequestMethod.GET)
 	public void exportToCSV(HttpServletResponse response){
@@ -213,7 +213,7 @@ public class RoleController {
 			roleService.exportToCSVExNoDisplay(roles,fileName,headers,response);
 			LogUtil.getInstance().log(LogType.EXPORT,"导出角色表："+fileName);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("导出角色信息报错",e);
 		}
 	}
 
