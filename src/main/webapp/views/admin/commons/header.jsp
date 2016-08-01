@@ -33,6 +33,7 @@
 					$.ajax({
 						type:'POST',
 						url:url,
+						dataType:'json',
 						data:$('#form').serialize(),
 						success:function(res){
 							var dialog = art.dialog({

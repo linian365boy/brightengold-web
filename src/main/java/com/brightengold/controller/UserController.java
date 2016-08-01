@@ -224,7 +224,7 @@ public class UserController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/modifyPass",method=RequestMethod.GET)
+	@RequestMapping(value="/modifyPass",method=RequestMethod.POST)
 	public String modifyPass(String oldPassword,
 			String newPassword1,
 			String newPassword2){
@@ -242,22 +242,22 @@ public class UserController {
 							password = new Md5PasswordEncoder().encodePassword(newPassword1,null);
 							userService.changePassword(oldPassword, password, authentication);
 						}else{
-							actionMsg = "-4";//字母需数字、字母
+							actionMsg = "密码修改失败，密码为数字或字母组成！";//字母需数字、字母
 						}
 					}else{
-						actionMsg = "-3";//长度不一致
+						actionMsg = "密码修改失败，新密码长度在6-12位！";//长度不一致
 					}
 				}else{
-					actionMsg = "-1";
+					actionMsg = "密码修改失败，密码输入不能为空或两次新密码输入不一致！";
 				}
 			}else{
-				actionMsg = "-2";
+				actionMsg = "密码修改失败，原密码输入错误！";
 			}
 		} catch (Exception e) {
-			actionMsg = "error";
+			actionMsg = "密码修改失败！";
 			logger.error("修改密码出错："+e);
 		}
-		return null;
+		return actionMsg;
 	}
 
 	public PageRainier<User> getUsers() {

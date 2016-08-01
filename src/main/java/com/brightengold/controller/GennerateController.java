@@ -84,7 +84,7 @@ public class GennerateController {
 	
 	@ResponseBody
 	@RequestMapping(value={"/generateAll"},method=RequestMethod.POST)
-	public String generateAll(int style,ModelMap map,HttpServletRequest request){
+	public String generateAll(ModelMap map, HttpServletRequest request){
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
 		String path = request.getSession().getServletContext().getRealPath("/");
@@ -95,7 +95,11 @@ public class GennerateController {
 		map.put("ctx", basePath);
 		map.put("style_v", style_v);
 		//1　生成首页
-		FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm");
+		List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
+		map.put("hotProducts", products);
+		if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
+			logger.error("生成index页面失败。");
+		}
 		//2　获取所有的正常的可发布的栏目code
 		List<Column> columnList = columnService.findList();
 		for(Column col : columnList){
@@ -113,16 +117,21 @@ public class GennerateController {
 					map.put("info", info);
 				}
 			}
-			FreemarkerUtil.fprint(templateName, map, 
-					path+Constant.COLUMNPATHPRE, col.getCode()+".htm");
+			if(!FreemarkerUtil.fprint(templateName, map, 
+					path+Constant.COLUMNPATHPRE, col.getCode()+".htm")){
+				logger.error("生成{}产品页面失败",col.getEnName());
+			}
 		}
 		//3　获取所有分类的英文名称
 		List<Category> cateList = categoryService.findList();
 		for(Category cate : cateList){
 			map.put("category", cate);
 			map.put("column", cate.getColumn());
-			FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
-					path+Constant.CATEGORYPRODUCTPATH, cate.getEnName().replaceAll("\\s*", "")+".htm");
+			publishAllProducts(request,cate,map);
+			if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
+					path+Constant.CATEGORYPRODUCTPATH, cate.getEnName().replaceAll("\\s*", "")+".htm")){
+				logger.error("生成{}分类页面失败",cate.getEnName());
+			}
 		}
 		return "200";
 	}
@@ -190,7 +199,7 @@ public class GennerateController {
 			//按分类英文名称查询是否有记录
 			Category cate = categoryService.loadCategoryByEname(code);
 			if(cate!=null){
-				//gennerateCommon(map);
+				gennerateCommon(map);
 				map.put("category", cate);
 				map.put("column", cate.getColumn());
 				publishAllProducts(request,cate,map);

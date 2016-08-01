@@ -79,7 +79,20 @@ body.custom-background { background-color: #e2e2e2; }
 							<div class="supercat-des">
 								<a class="img-class" title=""></a>
 							</div>
-							<div id="owl-demo-side">${(company.introduce)!''}</div>
+							<div id="owl-demo-side">
+								<#if (company.introduce)??>
+									<#if (company.introduce)?length lt 550>
+										${(company.introduce)}
+									<#else>
+										${(company.introduce[0..551])}
+										<a href="javascript:expansionOrClose(this);" class="button  product_type_simple" title="expand">
+										<i class="fa fa-angle-double-down fa-lg"></i></a>
+										<span style="display:none;" id="leftWord">${(company.introduce[551..])}</span>
+										<a href="javascript:expansionOrClose(this);" class="button  product_type_simple" title="collapse">
+										<i class="fa fa-angle-double-up fa-lg" style="display:none;"></i></a>
+									</#if>
+								</#if>
+							</div>
 						</div>
 		<#if ((hotProducts?size)>0)>
 		<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">

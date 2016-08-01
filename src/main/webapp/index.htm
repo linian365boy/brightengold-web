@@ -121,18 +121,14 @@ body.custom-background { background-color: #e2e2e2; }
 										<a href="http://localhost:8081/views/html/col/product.htm">PRODUCTS</a>
 										<ul class="sub-menu">
 												<!--一级分类-->
-													<li id="menu-item-1" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1">
-														<a href="http://localhost:8081/views/html/col/lilycategory.htm">lily category</a>
+													<li id="menu-item-4" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-4">
+														<a href="http://localhost:8081/views/html/col/AmericastandardUSBwallsocket.htm">America standard USB wall socket</a>
 															<ul class="sub-menu" style="display: none;">
-																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-5" id="menu-item-5">
-																		<a href="http://localhost:8081/views/html/col/lilyCategory1-1.htm">lily Category1-1</a>
-																	</li>
-																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-8" id="menu-item-8">
-																		<a href="http://localhost:8081/views/html/col/lilyCategor1-2.htm">lily Categor1-2</a>
+																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-7" id="menu-item-7">
+																		<a href="http://localhost:8081/views/html/col/Ameriacastand1-1.htm">Ameriaca stand1-1</a>
 																	</li>
 															</ul>
 													</li>
-												<!--二级分类-->
 												<!--一级分类-->
 													<li id="menu-item-2" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-2">
 														<a href="http://localhost:8081/views/html/col/niangecategory.htm">niange category</a>
@@ -145,12 +141,16 @@ body.custom-background { background-color: #e2e2e2; }
 												<!--二级分类-->
 												<!--二级分类-->
 												<!--二级分类-->
+												<!--二级分类-->
 												<!--一级分类-->
-													<li id="menu-item-4" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-4">
-														<a href="http://localhost:8081/views/html/col/AmericastandardUSBwallsocket.htm">America standard USB wall socket</a>
+													<li id="menu-item-1" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1">
+														<a href="http://localhost:8081/views/html/col/lilycategory.htm">lily category</a>
 															<ul class="sub-menu" style="display: none;">
-																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-7" id="menu-item-7">
-																		<a href="http://localhost:8081/views/html/col/Ameriacastand1-1.htm">Ameriaca stand1-1</a>
+																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-5" id="menu-item-5">
+																		<a href="http://localhost:8081/views/html/col/lilyCategory1-1.htm">lily Category1-1</a>
+																	</li>
+																	<li class="menu-item menu-item-type-post_type menu-item-object-product menu-item-8" id="menu-item-8">
+																		<a href="http://localhost:8081/views/html/col/lilyCategor1-2.htm">lily Categor1-2</a>
 																	</li>
 															</ul>
 													</li>
@@ -200,7 +200,15 @@ body.custom-background { background-color: #e2e2e2; }
 							<div class="supercat-des">
 								<a class="img-class" title=""></a>
 							</div>
-							<div id="owl-demo-side">Shenzhen Hien technology co.,ltd was founded in 2009,formerly Shenzhen Huaen technology co.,ltd,with the devolopment needs,officially changed the company name as Shenzhen Hien technology co.,ltd in 2011.</div>
+							<div id="owl-demo-side">
+										<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Welcome to Rock Echo Group Anabolic Steroids SupplierRock Echo Group is located in Wuhan, China, which is specializing in researching, manufacturing, and marketing of Active Pharmaceutical Ingredient(APIs), hormone steroids powders, oral/ injectable steroids, human growth hormone, peptides, ect for bodybuilding Group Anabolic Steroids SupplierRock Echo Group is located in Wuhan, China, which is specializing in researching, manufacturing, and marketing of Active Pharmaceutical Ingredient(APIs), hormone stero
+										<a href="javascript:expansionOrClose(this);" class="button  product_type_simple" title="expand">
+										<i class="fa fa-angle-double-down fa-lg"></i></a>
+										<span style="display:none;" id="leftWord">oids powders, oral/ injectable steroids, human growth hormone, peptides, ect for bodybuilding Group Anabolic Steroids SupplierRock Echo Group is located in Wuhan, China, which is specializing in researching, manufacturing, and marketing of Active Pharmaceutical Ingredient(APIs), hormone steroids powders, oral/ injectable steroids, human growth hormone, peptides, ect for bodybuilding Group Anabolic Steroids SupplierRock Echo Group is located in Wuhan, China, which is specializing in researching, manufacturing, and marketing of Active Pharmaceutical Ingredient(APIs), hormone steroids powders, oral/ injectable steroids, human growth hormone, peptides, ect for bodybuilding</p>
+</span>
+										<a href="javascript:expansionOrClose(this);" class="button  product_type_simple" title="collapse">
+										<i class="fa fa-angle-double-up fa-lg" style="display:none;"></i></a>
+							</div>
 						</div>
 		<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
 			<div id="sun" ><h3 class="wpb_area_title"><span>Hot Products</span></h3></div>
@@ -775,6 +783,18 @@ $(document).ready(function() {
 
 	function goPage(pageNo,code){
 		jQuery("#productContent").load("/views/html/product/"+code+"/"+pageNo+".htm");
+	}
+	
+	function expansionOrClose(obj){
+		jQuery("#leftWord").toggle(function(){
+			if (jQuery(this).is(':hidden')) {
+				jQuery(".fa-angle-double-up").hide();
+				jQuery(".fa-angle-double-down").show();
+			}else{
+				jQuery(".fa-angle-double-up").show();
+				jQuery(".fa-angle-double-down").hide();
+			}
+		});
 	}
 </script>
 <script type='text/javascript' src='http://localhost:8081/resources/views/style-ewa/js/jquery.form.min.js'></script>

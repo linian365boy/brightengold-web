@@ -9,6 +9,8 @@
 <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/ckEditor/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx }resources/js/ckEditor/lang/zh-cn.js"></script>
 <link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="${ctx }resources/css/style.css" rel="stylesheet"/>
 <title>公司信息</title>
@@ -88,12 +90,6 @@
 			    </div>
 		   </div>
 		   <div class="form-group">
-			    <label for="introduce" class="col-sm-2 control-label">公司介绍</label>
-			    <div class="col-sm-8">
-			      <textarea rows="3" class="form-control" id="introduce" name="introduce">${model.introduce }</textarea>
-			    </div>
-		   </div>
-		   <div class="form-group">
 			    <label for="createDate" class="col-sm-2 control-label">公司创建日期</label>
 			    <div class="col-sm-8">
 			      <input id="createDate" class="form-control" name="createDate" 
@@ -146,6 +142,12 @@
 			    <label for="contactUsergooglePlus" class="col-sm-2 control-label">联系人Google+</label>
 			    <div class="col-sm-8">
 			      <input id="contactUsergooglePlus" class="form-control" name="contactUsergooglePlus" value="${model.contactUsergooglePlus }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
+			    <label for="introduce" class="col-sm-2 control-label">公司介绍</label>
+			    <div class="col-sm-8">
+			      <textarea rows="3" id="introduce" name="introduce" class="form-control ckeditor">${model.introduce }</textarea>
 			    </div>
 		   </div>
             <div class="form-group">

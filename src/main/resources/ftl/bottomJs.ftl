@@ -235,6 +235,18 @@ $(document).ready(function() {
 	function goPage(pageNo,code){
 		jQuery("#productContent").load("/views/html/product/"+code+"/"+pageNo+".htm");
 	}
+	
+	function expansionOrClose(obj){
+		jQuery("#leftWord").toggle(function(){
+			if (jQuery(this).is(':hidden')) {
+				jQuery(".fa-angle-double-up").hide();
+				jQuery(".fa-angle-double-down").show();
+			}else{
+				jQuery(".fa-angle-double-up").show();
+				jQuery(".fa-angle-double-down").hide();
+			}
+		});
+	}
 </script>
 <script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js'></script>
 <script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js'></script>
