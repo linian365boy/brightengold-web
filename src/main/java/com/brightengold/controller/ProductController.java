@@ -190,6 +190,7 @@ public class ProductController {
 			product.setPublish(false);
 			product.setCreateDate(new Date());
 			product.setCreateUser(u);
+			product.setUrl(Tools.getRndFilename()+".htm");
 			productService.saveProduct(product);
 			MsgUtil.setMsgAdd("success");
 			sb.append("名称："+product.getEnName());
@@ -239,7 +240,7 @@ public class ProductController {
 			if(StringUtils.isNotBlank(temp.getUrl())){
 				temp.setUrl(temp.getUrl());
 			}else{
-				temp.setUrl(parentPath+File.separator+Tools.getRndFilename()+".htm");
+				temp.setUrl(Tools.getRndFilename()+".htm");
 			}
 			temp.setPublish(true);
 			//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
