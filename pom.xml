@@ -6,7 +6,7 @@
 	<artifactId>web</artifactId>
 	<name>brightengold-web</name>
 	<packaging>war</packaging>
-	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<version>1.0.0${app.version.type}</version>
 	
 	<properties>
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -14,6 +14,9 @@
 	    <org.springSecurityframework-version>3.2.3.RELEASE</org.springSecurityframework-version>
 	    <org.aspectj-version>1.7.1</org.aspectj-version>
 	    <org.slf4j-version>1.6.6</org.slf4j-version>
+	    <timestamp>${maven.build.timestamp}</timestamp>
+	    <dev.version.type>-SNAPSHOT</dev.version.type>
+	    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
   	</properties>
   
 	<dependencies>
@@ -272,8 +275,16 @@
 	      <scope>test</scope>
 	    </dependency>
 	</dependencies>
+	
+	
 	<build>
     <finalName>brightengold-web</finalName>
+    <resources>
+		<resource>
+			<directory>src/main/resources</directory>
+			<filtering>true</filtering>
+		</resource>
+	</resources>
     <!-- 插件 -->
 	<pluginManagement>
 		<plugins>
@@ -331,4 +342,48 @@
     </pluginManagement>
 	<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
   </build>
+  
+  <profiles>
+  		<!-- 本地，默认激活 ，实现本地测试资源自动替换 -->
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>env</name>
+					<value>local</value>
+				</property>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/assembly/local.properties</filter>
+				</filters>
+			</build>
+			<properties>
+				<app.version.type>${dev.version.type}</app.version.type>
+				<juanpi.sdk.version.type>${dev.version.type}</juanpi.sdk.version.type>
+				<spi.version.type>${dev.version.type}</spi.version.type>
+			</properties>
+		</profile>
+		<!-- 生产环境打包：mvn -Denv=prd package -->
+		<profile>
+			<id>prd</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>prd</value>
+				</property>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/assembly/prd.properties</filter>
+				</filters>
+			</build>
+			<properties>
+				<app.version.type></app.version.type>
+				<juanpi.sdk.version.type></juanpi.sdk.version.type>
+				<spi.version.type></spi.version.type>
+			</properties>
+		</profile>
+  </profiles>
 </project>
