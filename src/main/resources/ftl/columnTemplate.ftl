@@ -68,7 +68,7 @@ body.custom-background { background-color: #e2e2e2; }
 	<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
-				<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(column.code)!'--'}</nav>	
+				<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(column.enName)!'--'}</nav>	
 				<article id="post-28" class="post-28 page type-page status-publish hentry">
 					<div class="entry-content">
 						${(info.content)!'no content'}
