@@ -18,6 +18,23 @@
 <!--引入JS-->
 <script type="text/javascript" src="${ctx }resources/js/plugins/webuploader/webuploader.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/upload.js"></script>
+<style type="text/css">
+	.selectpicker {
+		background-color: #fff;
+	    background-image: none;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	    color: #555;
+	    display: block;
+	    font-size: 14px;
+	    height: 34px;
+	    line-height: 1.42857;
+	    padding: 6px 12px;
+	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	    vertical-align: middle;
+	}
+</style>
 <title>添加新闻</title>
 <script type="text/javascript">
 	var uploader;
