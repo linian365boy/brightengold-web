@@ -65,7 +65,7 @@ public class Log implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=100)
+	@Column(length=500)
 	public String getContent() {
 		return content;
 	}

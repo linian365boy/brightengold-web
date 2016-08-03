@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -125,6 +126,7 @@ public class Column implements Serializable{
 		this.createDate = createDate;
 	}
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy="parentColumn",fetch=FetchType.LAZY)
+	@OrderBy("priority desc")
 	public Set<Column> getChildColumn() {
 		return childColumn;
 	}
@@ -157,6 +159,7 @@ public class Column implements Serializable{
 		this.enName = enName;
 	}
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy="column",fetch=FetchType.LAZY)
+	@OrderBy("createDate asc")
 	public Set<Category> getCategorys() {
 		return categorys;
 	}

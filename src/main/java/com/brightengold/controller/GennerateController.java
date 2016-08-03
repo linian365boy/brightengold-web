@@ -111,6 +111,7 @@ public class GennerateController {
 				publishAllNews(request, col, map);
 				templateName = "productTemplate.ftl";
 			}else{
+				templateName = "columnTemplate.ftl";
 				//查找是否有相同code的Info，一起生成，填充column的内容页面
 				Info info = infoService.loadOneByCode(col.getCode());
 				if(info!=null){

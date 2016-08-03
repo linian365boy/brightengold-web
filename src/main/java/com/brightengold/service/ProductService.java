@@ -236,7 +236,11 @@ public class ProductService {
 		return new Specification<Product>(){
 			@Override
 			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.like(root.<String>get("enName"), '%'+keyword+'%');
+				if(StringUtils.isNotBlank(keyword)){
+					return cb.like(root.<String>get("enName"), '%'+keyword+'%');
+				}else{
+					return null;
+				}
 			}
 		};
 	}

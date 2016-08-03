@@ -79,15 +79,37 @@ body.custom-background { background-color: #e2e2e2; }
 					<c:choose>
 						<c:when test="${fn:length(page.result)>0 }">
 							<ul class="products">
-								<c:forEach items="${page.result }" var="product">
-									<li class="first post-113 product type-product status-publish has-post-thumbnail product_cat-raw-steroid-powders product_cat-testosterone-series product_tag-buy-testosterone-propionate-powder product_tag-testosterone-propionate-powder product_tag-testosterone-propionate-powder-conversion product_tag-testosterone-propionate-powder-manufacturers shipping-taxable product-type-simple product-cat-raw-steroid-powders product-cat-testosterone-series product-tag-buy-testosterone-propionate-powder product-tag-testosterone-propionate-powder product-tag-testosterone-propionate-powder-conversion product-tag-testosterone-propionate-powder-manufacturers instock">
-										<a href="${ctx}views/html/product/detail/${product.id}.htm">
+								<c:forEach items="${page.result }" var="product" varStatus="status">
+									<li class="${(status.index%4==0)?'first':'' } ${((status.index+1)%4==0)?'last':'' } post-113 product type-product status-publish has-post-thumbnail product_cat-raw-steroid-powders product_cat-testosterone-series product_tag-buy-testosterone-propionate-powder product_tag-testosterone-propionate-powder product_tag-testosterone-propionate-powder-conversion product_tag-testosterone-propionate-powder-manufacturers shipping-taxable product-type-simple product-cat-raw-steroid-powders product-cat-testosterone-series product-tag-buy-testosterone-propionate-powder product-tag-testosterone-propionate-powder product-tag-testosterone-propionate-powder-conversion product-tag-testosterone-propionate-powder-manufacturers instock">
+									 		<a href="${ctx}views/html/product/detail/${product.id}.htm">
 											<img width="500" height="500" src="${ctx }resources/${product.picUrl}" class="attachment-shop_catalog size-shop_catalog wp-post-image" alt="${product.enName }" />
 											<h3>${product.enName }</h3>
 										</a>
 									</li>
 								</c:forEach>
 							</ul>
+							<c:if test="${page.totalPageNum>1 }">
+								<nav class="woocommerce-pagination">
+									<ul class="page-numbers">
+										<c:if test="${pageNo>1 }">
+											<li><a href="${ctx}views/products/search.html?pageNo=${pageNo-1}&keyword=${keyword}" class="prev page-numbers">←</a></li>
+										</c:if>
+										<c:forEach var="index" begin="1" end="${page.totalPageNum }" step="1">
+											<c:choose>
+												<c:when test="${pageNo==index }">
+													<li><span class="page-numbers current">${index }</span></li>
+												</c:when>
+												<c:otherwise>
+													<li><a href="${ctx}views/products/search.html?pageNo=${index}&keyword=${keyword}" class="page-numbers">${index }</a></li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										<c:if test="${pageNo<page.totalPageNum }">
+											<li><a href="${ctx}views/products/search.html?pageNo=${pageNo+1}&keyword=${keyword}" class="next page-numbers">→</a></li>
+										</c:if>
+									</ul>
+								</nav>
+							</c:if>
 						</c:when>
 						<c:otherwise>
 							<i class="fa fa-warning"></i><span>&nbsp;No Result</span>

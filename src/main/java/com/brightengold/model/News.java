@@ -88,7 +88,7 @@ public class News implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=50)
+	@Column(length=300)
 	public String getTitle() {
 		return title;
 	}

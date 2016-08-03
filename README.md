@@ -29,12 +29,12 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 23.首页公司信息介绍展示优化								ok
 24.首页新闻链接不对									ok
 
-25.search　关键字为空的处理
-26.info页面的，面包屑
-27.product页面的分类顺序
-28.hot商品的分类
-29.全部生成页面info页面的bug
-30.修改公司信息，content过长记录日志报错
-31.新闻添加出错．
-32.控制台错误信息打印
-
+25.search　关键字为空的处理								ok
+26.info页面的，面包屑									ok
+27.product页面的分类顺序								ok
+28.hot商品的分类									ok
+29.全部生成页面info页面的bug							ok
+30.修改公司信息，content过长记录日志报错					ok(已有的数据库表需要修改)
+31.新闻添加出错．										ok(title字段长度到300)
+32.控制台错误信息打印									ok(不处理)								
+33.replay表单										

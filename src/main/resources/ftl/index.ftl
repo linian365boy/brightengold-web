@@ -104,7 +104,7 @@ body.custom-background { background-color: #e2e2e2; }
 						<div class="item">
 							<figure>
 								<a href="${ctx}/views/html/product/detail/${(hotPro.id)!''}.htm" class="lazyOwl">
-								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="semi-finished steroids" /></a>
+								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="${(hotPro.enName)!''}" /></a>
 								<figcaption>
 									<h3 class="pro_title">${(hotPro.enName)!''}</h3>
 									<div class="price_area_fix">
@@ -121,7 +121,7 @@ body.custom-background { background-color: #e2e2e2; }
 						<div class="item">
 							<figure>
 								<a href="${ctx}/views/html/product/detail/${hotPro.id}.htm" class="lazyOwl">
-								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="semi-finished steroids" /></a>
+								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="${(hotPro.enName)!''}" /></a>
 								<figcaption>
 									<h3 class="pro_title">${(hotPro.enName)!''}</h3>
 									<div class="price_area_fix">
