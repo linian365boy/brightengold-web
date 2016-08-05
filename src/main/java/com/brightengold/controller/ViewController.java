@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -20,6 +21,7 @@ import com.brightengold.model.Advertisement;
 import com.brightengold.model.Category;
 import com.brightengold.model.Column;
 import com.brightengold.model.Company;
+import com.brightengold.model.Feedback;
 import com.brightengold.model.Info;
 import com.brightengold.model.News;
 import com.brightengold.model.Product;
@@ -28,6 +30,7 @@ import com.brightengold.service.AdvertisementService;
 import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.CompanyService;
+import com.brightengold.service.FeedbackService;
 import com.brightengold.service.InfoService;
 import com.brightengold.service.NewsService;
 import com.brightengold.service.ProductService;
@@ -66,6 +69,8 @@ public class ViewController {
 	private InfoService infoService;
 	@Resource
 	private WebConfigService configService;
+	@Autowired
+	private FeedbackService feedbackService;
 	
 	@RequestMapping(value="/products/search")
 	public String searchProducts(HttpServletRequest request, ModelMap map){
@@ -129,5 +134,21 @@ public class ViewController {
 		//网站关键字
 		WebConfig webConfig = configService.loadSystemConfig();
 		map.put("webConfig", webConfig);
+	}
+	
+	/**
+	 * addFeedback:客户留言反馈 
+	 * @author tanfan 
+	 * @return 
+	 * @since JDK 1.7
+	 */
+	@RequestMapping(value="/feedback/add",method=RequestMethod.POST)
+	public void addFeedback(Feedback feedback){
+		try{
+			feedbackService.addFeedback(feedback);
+			logger.info("客户留言信息|{}",feedback);
+		}catch(Exception e){
+			logger.error("客户留言出现错误！！！",e);
+		}
 	}
 }

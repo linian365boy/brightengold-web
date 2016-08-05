@@ -53,13 +53,14 @@ public class FeedbackController {
 		if (id != null) {
 			try{
 				feedbackService.delete(id);
+				logger.warn("删除id|{}的评论",id);
 				MsgUtil.setMsgDelete("success");
 				LogUtil.getInstance().log(LogType.DEL, "联系方式为"+feedback.getTelePhone());
 			}catch(Exception e){
 				logger.error("删除评论报错!",e);
 			}
 		}
-		return "redirect:/admin/feedback/feedbacks/1";
+		return "redirect:/admin/feedback/feedbacks/1.html";
 	}
 
 	public Integer getPageSize() {

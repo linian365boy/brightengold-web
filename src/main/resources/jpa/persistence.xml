@@ -14,7 +14,6 @@
 		
 		<!-- 权限外的模块 -->
 		<class>com.brightengold.model.News</class>
-		<class>com.brightengold.model.Company</class>
 		<class>com.brightengold.model.Log</class>
 		<class>com.brightengold.model.Feedback</class>
 		<class>com.brightengold.model.Category</class>
@@ -24,9 +23,9 @@
 		<class>com.brightengold.model.Info</class>
 		
 		<properties>
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.format_sql" value="${hibernate.format_sql}"/>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/> 
 		</properties>
 	</persistence-unit>

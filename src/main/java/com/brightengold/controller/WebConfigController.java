@@ -49,6 +49,7 @@ public class WebConfigController {
 					content.append("网站关键字由\""+webConfig.getKeyword()+"\"修改为\""+config.getKeyword()+"\"");
 				}
 				MsgUtil.setMsgUpdate("success");
+				logger.info("修改web配置信息成功|{}",config);
 				LogUtil.getInstance().log(LogType.EDIT, content.toString());
 			}else{
 				logger.error("修改网站关键字出错");

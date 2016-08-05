@@ -150,6 +150,7 @@ public class ProductController {
 				}
 				product.setStatus(tempProduct.isStatus());
 				productService.saveProduct(product);
+				logger.info("修改产品信息|{}",product);
 				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 				//删除页面
@@ -158,9 +159,9 @@ public class ProductController {
 				Tools.delFile(path + Constant.PRODUCTPATH + File.separator+product.getUrl());
 			}
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			logger.error("修改产品信息报错",e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("修改产品信息报错",e);
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}
@@ -208,6 +209,7 @@ public class ProductController {
 			StringBuilder sb = new StringBuilder();
 			product = productService.loadProductById(productId);
 			productService.delProduct(product);
+			logger.warn("删除了产品|{}",product);
 			sb.append("名称："+product.getEnName());
 			MsgUtil.setMsgDelete("success");
 			LogUtil.getInstance().log(LogType.DEL, sb.toString());
@@ -215,6 +217,7 @@ public class ProductController {
 		return "redirect:/admin/goods/product/products/1.html";
 	}
 	
+	@Deprecated
 	@RequestMapping(value="/{productId}/publish",method=RequestMethod.GET)
 	public String publish(@PathVariable Integer productId){
 		if(productId!=null){
@@ -258,6 +261,7 @@ public class ProductController {
 			//生成唯一的产品页面路径，不需要根据页码生成页面
 			if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
 				productService.saveProduct(temp);
+				logger.info("生成产品|{}页面成功",temp.getEnName());
 				MsgUtil.setMsg("success", "产品发布成功！");
 			}else{
 				MsgUtil.setMsg("error", "产品发布失败！");

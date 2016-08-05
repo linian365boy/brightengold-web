@@ -127,7 +127,7 @@ public class ColumnController {
 					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
 		} catch (Exception e) {
 			MsgUtil.setMsgUpdate("success");
-			logger.info("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！！",
+			logger.error("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！！",
 					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
 					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
 		}
@@ -200,6 +200,7 @@ public class ColumnController {
 	public String doPublishContent(@PathVariable Integer id,Column column, ModelMap map){
 		try{
 			columnService.updateColumnPublishContent(id,column.getType());
+			logger.info("修改栏目的发布方式|{}",column);
 			MsgUtil.setMsgUpdate("success");
 		}catch(Exception e){
 			logger.error("设置发布模式发生错误！",e);

@@ -29,5 +29,9 @@ public class FeedbackService {
 	public void delete(Integer id) {
 		feedbackDao.delete(id);
 	}
+
+	public void addFeedback(Feedback feedback) {
+		feedbackDao.save(feedback);
+	}
 	
 }

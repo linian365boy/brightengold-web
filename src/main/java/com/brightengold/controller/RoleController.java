@@ -58,7 +58,7 @@ public class RoleController {
 	 * @FunName: getRolesByAjax
 	 * @Description:  通过ajax请求获得角色标识与描述
 	 * @return
-	 * @Author: 李年
+	 * @Author: tanfan
 	 */
 	@RequestMapping(value="/getRolesByAjax",method=RequestMethod.GET)
 	@ResponseBody
@@ -115,6 +115,7 @@ public class RoleController {
 			String ryName = temp.getDesc();
 			temp.setDesc(role.getDesc());
 			roleService.saveRole(temp);
+			logger.info("修改角色信息|{}",temp);
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT,"角色由\""+ryName+"\"修改为：\""+temp.getDesc()+"\"");
 		}

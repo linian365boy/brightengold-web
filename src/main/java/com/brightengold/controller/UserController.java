@@ -171,7 +171,7 @@ public class UserController {
 				out.flush();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("existUser方法报错",e);
 		}finally{
 			if(out!=null){
 				out.close();
@@ -201,7 +201,7 @@ public class UserController {
 				out.flush();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("用户名|{},密码重置方法报错",username,e);
 		}finally{
 			if(out!=null){
 				out.close();
@@ -241,6 +241,7 @@ public class UserController {
 						if(Pattern.matches("^[0-9a-zA-Z]{6,12}$", newPassword1)){
 							password = new Md5PasswordEncoder().encodePassword(newPassword1,null);
 							userService.changePassword(oldPassword, password, authentication);
+							logger.warn("用户|{}，成功修改密码",u.getUsername());
 						}else{
 							actionMsg = "密码修改失败，密码为数字或字母组成！";//字母需数字、字母
 						}

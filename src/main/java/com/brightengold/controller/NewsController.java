@@ -123,6 +123,9 @@ public class NewsController {
 				news.setDepth(String.valueOf(firstColId));
 			}
 			newsService.saveNews(news);
+			logger.info("修改前新闻信息|{}，修改后新闻信息|{}",
+					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
+					ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
 			if(!temp.getTitle().equals(news.getTitle())){
 				content.append("标题由\""+temp.getTitle()+"\"修改为\""+news.getTitle()+"\"");
 			}
@@ -167,6 +170,7 @@ public class NewsController {
 					Tools.delFile(path);
 				}
 				MsgUtil.setMsgDelete("success");
+				logger.warn("删除了新闻|{}",ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
 			}
 			LogUtil.getInstance().log(LogType.DEL, "标题："+news.getTitle());
 		}
@@ -192,6 +196,7 @@ public class NewsController {
 		}
 	}
 	
+	@Deprecated
 	@RequestMapping(value="/{newsId}/publish",method=RequestMethod.GET)
 	@ResponseBody
 	public String publishNews(@PathVariable Integer newsId,HttpServletRequest request){
@@ -239,6 +244,7 @@ public class NewsController {
 				newsService.saveNews(tempNews);
 				vo.setCode(Constant.SUCCESS_CODE);
 				vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
+				logger.info("发布成功新闻|{}",tempNews.getTitle());
 				return gson.toJson(vo);
 			}
 		}

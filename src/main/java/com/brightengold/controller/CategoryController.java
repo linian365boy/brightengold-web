@@ -197,7 +197,7 @@ public class CategoryController {
 				out.flush();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("查询是否存在相同分类发生错误",e);
 		}finally{
 			if(out!=null){
 				out.close();
@@ -218,6 +218,7 @@ public class CategoryController {
 				if(count>0){
 					MsgUtil.setMsg("error", "请先删除该分类下的"+count+"个产品！");
 				}else{
+					logger.info("删除分类|{}",ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE));
 					categoryService.delCategory(categoryId);
 					MsgUtil.setMsg("success", "删除分类成功！");
 					//日志记录

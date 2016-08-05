@@ -14,7 +14,6 @@
 		
 		<!-- 权限外的模块 -->
 		<class>com.brightengold.model.News</class>
-		<class>com.brightengold.model.Company</class>
 		<class>com.brightengold.model.Log</class>
 		<class>com.brightengold.model.Feedback</class>
 		<class>com.brightengold.model.Category</class>
