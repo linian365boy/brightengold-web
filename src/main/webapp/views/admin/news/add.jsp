@@ -173,17 +173,6 @@
 			      <input type="text" class="form-control" id="title" name="title" placeholder="标题">
 			    </div>
 		   </div>
-		   <div class="form-group">
-		   		 <label class="col-sm-2 control-label"></label>
-				  <label class="radio-inline">
-				    <input type="radio" name="type" id="type1" value="1" checked onchange="changeContent(this);"/>
-				    图文模式
-				    </label>
-				  <!-- <label class="radio-inline">
-				    <input type="radio" name="type" id="type2" value="2" onchange="changeContent(this);"/>
-				    产品模式
-				    </label>  -->
-			</div>
 			<div class="typeclass">
 		   <div class="form-group">
 		   		<div class="form-group">

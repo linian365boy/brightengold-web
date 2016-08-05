@@ -199,8 +199,8 @@ public class ColumnController {
 	@RequestMapping(value={"/{id}/setPublishContent"},method = RequestMethod.POST)
 	public String doPublishContent(@PathVariable Integer id,Column column, ModelMap map){
 		try{
-			columnService.updateColumnPublishContent(id,column.getType());
-			logger.info("修改栏目的发布方式|{}",column);
+			columnService.updateColumnPublishContent(id,column);
+			logger.info("修改栏目的发布方式|{}",ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
 			MsgUtil.setMsgUpdate("success");
 		}catch(Exception e){
 			logger.error("设置发布模式发生错误！",e);

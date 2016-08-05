@@ -80,6 +80,12 @@ public class Column implements Serializable{
 	 */
 	private int type;
 	
+	/**
+	 * false: 默认不需要表单嵌入
+	 * true: 栏目发布的页面嵌入表单
+	 */
+	private boolean hasNeedForm = false;
+	
 	@Id
 	@GeneratedValue
 	public Integer getId() {
@@ -163,5 +169,11 @@ public class Column implements Serializable{
 	}
 	public void setCategorys(Set<Category> categorys) {
 		this.categorys = categorys;
+	}
+	public boolean isHasNeedForm() {
+		return hasNeedForm;
+	}
+	public void setHasNeedForm(boolean hasNeedForm) {
+		this.hasNeedForm = hasNeedForm;
 	}
 }

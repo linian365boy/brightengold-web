@@ -75,6 +75,9 @@ body.custom-background { background-color: #e2e2e2; }
 						<p>&nbsp;</p>
 						<p>&nbsp;</p>
 					</div><!-- .entry-content -->
+					<#if ((hasNeedForm??) && hasNeedForm)>
+						<#include "form.ftl">
+					</#if>
 					<footer class="entry-meta"></footer><!-- .entry-meta -->
 				</article><!-- #post -->
 <div id="comments" class="comments-area">

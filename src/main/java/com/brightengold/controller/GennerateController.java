@@ -99,6 +99,8 @@ public class GennerateController {
 		map.put("hotProducts", products);
 		if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
 			logger.error("生成index页面失败。");
+		}else{
+			logger.info("生成index产品页面成功");
 		}
 		//2　获取所有的正常的可发布的栏目code
 		List<Column> columnList = columnService.findList();
@@ -121,6 +123,8 @@ public class GennerateController {
 			if(!FreemarkerUtil.fprint(templateName, map, 
 					path+Constant.COLUMNPATHPRE, col.getCode()+".htm")){
 				logger.error("生成{}产品页面失败",col.getEnName());
+			}else{
+				logger.info("生成{}产品页面成功",col.getEnName());
 			}
 		}
 		//3　获取所有分类的英文名称
@@ -132,6 +136,8 @@ public class GennerateController {
 			if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 					path+Constant.CATEGORYPRODUCTPATH, cate.getEnName().replaceAll("\\s*", "")+".htm")){
 				logger.error("生成{}分类页面失败",cate.getEnName());
+			}else{
+				logger.info("生成{}分类页面成功",cate.getEnName());
 			}
 		}
 		return "200";
@@ -166,8 +172,10 @@ public class GennerateController {
 					List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
 					map.put("hotProducts", products);
 					if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
-						logger.error("生成"+code+"页面失败！");
+						logger.error("生成{}页面失败！",code);
 						return "500";
+					}else{
+						logger.info("生成{}页面成功！",code);
 					}
 				}else{
 					//当前栏目
@@ -187,12 +195,14 @@ public class GennerateController {
 					}
 					if(!FreemarkerUtil.fprint(templateName, map, 
 							path+Constant.COLUMNPATHPRE, code+".htm")){
-						logger.error("生成"+code+"页面失败！");
+						logger.error("生成{}页面失败！",code);
 						return "500";
+					}else{
+						logger.info("生成{}页面成功！",code);
 					}
 				}
 			}catch(Exception e){
-				logger.error("生成"+code+"页面失败！",e);
+				logger.error("生成{}页面失败！",code,e);
 				return "500";
 			}
 			return "200";
@@ -207,8 +217,10 @@ public class GennerateController {
 				if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 						path+Constant.CATEGORYPRODUCTPATH, 
 						cate.getEnName().replaceAll("\\s*", "")+".htm")){
-					logger.error("生成"+code+"页面失败！");
+					logger.error("生成{}页面失败！",code);
 					return "500";
+				}else{
+					logger.info("生成{}页面成功",code);
 				}
 				return "200";
 			}
@@ -257,12 +269,18 @@ public class GennerateController {
 				 parentPath = path + Constant.PRODUCTPRE + File.separator +col.getCode();
 				 //列表的页面生成
 				 if(!FreemarkerUtil.fprint("productList.ftl", map, parentPath,(i+1)+".htm")){
-					 logger.error("生成产品列表页面失败");
+					 logger.error("生成产品列表页面|{}失败",(i+1));
+				 }else{
+					 logger.info("生成产品列表页面|{}成功",(i+1));
 				 }
 				 //生成产品详情的公共部分
 				 for(Product product : page.getResult()){
 					 map.put("product", product);
-					 FreemarkerUtil.fprint("product.ftl", map, path + Constant.PRODUCTPATH , product.getId()+".htm");
+					 if(!FreemarkerUtil.fprint("product.ftl", map, path + Constant.PRODUCTPATH , product.getId()+".htm")){
+						 logger.error("生成产品详情页面|{}失败",product.getEnName());
+					 }else{
+						 logger.info("生成产品详情页面|{}成功",product.getEnName());
+					 }
 				 }
 				 map.clear();
 			 }
@@ -280,11 +298,19 @@ public class GennerateController {
 				 map.put("newsPage", page);
 				 parentPath = path + Constant.NEWSPRE + File.separator +col.getCode();
 				 //列表的页面生成
-				 FreemarkerUtil.fprint("newsList.ftl", map, parentPath,(i+1)+".htm");
+				 if(!FreemarkerUtil.fprint("newsList.ftl", map, parentPath,(i+1)+".htm")){
+					 logger.info("生成新闻列表页面|{}失败",(i+1));
+				 }else{
+					 logger.info("生成新闻列表页面|{}成功",(i+1));
+				 }
 				//生成产品详情的公共部分
 				 for(News news : page.getResult()){
 					 map.put("news", news);
-					 FreemarkerUtil.fprint("news.ftl", map, path + Constant.NEWSPATH , news.getId()+".htm");
+					 if(!FreemarkerUtil.fprint("news.ftl", map, path + Constant.NEWSPATH , news.getId()+".htm")){
+						 logger.error("生成新闻详情|{}失败",news.getTitle());
+					 }else{
+						 logger.info("生成新闻详情|{}页面成功",news.getTitle());
+					 }
 				 }
 				 map.clear();
 			 }
@@ -346,7 +372,7 @@ public class GennerateController {
 			logger.info("生成首页成功！");
 		}catch(Exception e){
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
-			logger.error("生成页面发生错误：{}",new Object[]{e});
+			logger.error("生成页面发生错误",e);
 		}
 		return "redirect:/admin/sys/html/generate.html";
 	}

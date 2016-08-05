@@ -93,8 +93,8 @@ public class ColumnService {
 		return colList;
 	}
 
-	public void updateColumnPublishContent(Integer id, int type) {
-		columnDao.updateColumnPublishContent(id,type);
+	public void updateColumnPublishContent(Integer id, Column column) {
+		columnDao.updateColumnPublishContent(id,column.getType(),column.isHasNeedForm());
 	}
 
 	public List<Column> findList() {
