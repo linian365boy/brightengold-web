@@ -36,26 +36,7 @@
 	<definition name="admin/goods/*/*" extends="baselayout">
 		<put-attribute name="main" value="/views/admin/goods/{1}/{2}.jsp" />
 	</definition>
-	
-	<definition name="manage/wms/supplyStockInput/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/wms/supplyStockInput/{1}.ftl" />
-	</definition>
-	<definition name="manage/wms/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/wms/{1}.ftl" />
-	</definition>
-	<definition name="manage/notice/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/notice/{1}.ftl" />
-	</definition>
-	<definition name="manage/comm/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/comm/{1}.ftl" />
-	</definition>
-	<definition name="/manage/pics/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/pics/{1}.ftl" />
-	</definition>
-	<definition name="/manage/taobao/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/taobao/{1}.ftl" />
-	</definition>
-	<definition name="/manage/fss/*" extends="baselayout">
-		<put-attribute name="main" value="/manage/fss/{1}.ftl" />
+	<definition name="admin/feedback/*" extends="baselayout">
+		<put-attribute name="main" value="/views/admin/feedback/{1}.jsp" />
 	</definition>
 </tiles-definitions>

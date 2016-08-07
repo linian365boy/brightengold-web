@@ -1,12 +1,16 @@
 package com.brightengold.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
+
 import cn.rainier.nian.utils.PageRainier;
+
 import com.brightengold.dao.FeedbackDao;
 import com.brightengold.model.Feedback;
 
@@ -31,6 +35,7 @@ public class FeedbackService {
 	}
 
 	public void addFeedback(Feedback feedback) {
+		feedback.setCreateTime(new Date());
 		feedbackDao.save(feedback);
 	}
 	

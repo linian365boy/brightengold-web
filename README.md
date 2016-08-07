@@ -4,7 +4,7 @@ nian
 Brightengold furniture web project with Java.It is benifit for us to Develop and manage project.
 
 @TODO
-1.搜索 search Products
+1.搜索 search Products							ok
 2.分类下的产品size									ok
 3.首页广告滚动										ok
 4.每个页面的title									ok
@@ -37,4 +37,5 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 30.修改公司信息，content过长记录日志报错					ok(已有的数据库表需要修改)
 31.新闻添加出错．										ok(title字段长度到300)
 32.控制台错误信息打印									ok(不处理)								
-33.replay表单										
+33.replay表单										ok
+34.小图标icon											ok(暂不处理)

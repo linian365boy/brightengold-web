@@ -45,7 +45,7 @@ public class FeedbackController {
 		if(id!=null){
 			model.addAttribute("model",feedbackService.loadOne(id));
 		}
-		return "admin/feedback/detail";
+		return "admin_unless/feedback/detail";
 	}
 	
 	@RequestMapping(value="/{id}/del",method=RequestMethod.GET)

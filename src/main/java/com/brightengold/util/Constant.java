@@ -59,5 +59,8 @@ public class Constant {
 	 * success
 	 */
 	public static final String SUCCESS_STR = "success";
-	
+	/**
+	 * 验证码key
+	 */
+	public static final String VERIFY_CODE_KEY = "verifyCode";
 }
