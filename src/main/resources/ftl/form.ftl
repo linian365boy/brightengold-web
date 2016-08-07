@@ -20,7 +20,7 @@
 					    		<span class="wpcf7-form-control-wrap captcha">
 					    			<input name="kaptcha" required type="text" id="kaptcha" maxlength="4" class="chknumber_input" />
 								    <img src="${ctx}/views/getVerifyCode.html" id="kaptchaImage"  style="margin-bottom: -3px"/>  
-								    <a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">看不清?换一张</a>
+								    <a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">Refresh the code</a>
 					    		</span>
 					    	</p>
 					    	<p class="cred">* Required information</p>
