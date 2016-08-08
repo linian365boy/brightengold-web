@@ -73,7 +73,7 @@ body.custom-background { background-color: #e2e2e2; }
 					<div class="entry-content">
 						${(info.content)!'no content'}
 						<p>&nbsp;</p>
-						<#if ((column.hasNeedForm)?string)?? && ((column.hasNeedForm)?string)=="true">
+						<#if ((column.hasNeedForm)?string)=="true" || ((column.hasNeedForm)?string)=="1">
 							<#include "form.ftl">
 						</#if>
 					</div><!-- .entry-content -->

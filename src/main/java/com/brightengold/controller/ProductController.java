@@ -71,8 +71,8 @@ public class ProductController {
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@RequestMapping(value={"/products/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		products = productService.findAll(pageNo, pageSize);
+	public String list(@PathVariable Integer pageNo,Model model,String keyword){
+		products = productService.findAll(pageNo, pageSize, keyword);
 		model.addAttribute("page",products);//map
 		return "admin/goods/product/list";
 	}
@@ -143,6 +143,9 @@ public class ProductController {
 				}else{
 					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
 				}
+				if(product.getPriority()==null){
+					product.setPriority(0);
+				}
 				product.setCreateDate(tempProduct.getCreateDate());
 				product.setCreateUser(tempProduct.getCreateUser());
 				if(StringUtils.isBlank(tempProduct.getUrl())){
@@ -192,6 +195,9 @@ public class ProductController {
 			product.setCreateDate(new Date());
 			product.setCreateUser(u);
 			product.setUrl(Tools.getRndFilename()+".htm");
+			if(product.getPriority()==null){
+				product.setPriority(0);
+			}
 			productService.saveProduct(product);
 			MsgUtil.setMsgAdd("success");
 			sb.append("名称："+product.getEnName());

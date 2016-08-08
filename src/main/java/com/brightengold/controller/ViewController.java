@@ -201,7 +201,7 @@ public class ViewController {
 				sb.append(String.format("Message：%s<br/>",feedback.getContent()));
 				//异步sendEmail
 				mailService.sendHtmlEmails(
-						String.format("客户通过网站向您留言咯----%s",feedback.getName()), 
+						String.format("inquiry----%s",feedback.getName()), 
 								sb.toString());
 				logger.info("客户留言信息|{}",feedback);
 				vo.setCode(200);

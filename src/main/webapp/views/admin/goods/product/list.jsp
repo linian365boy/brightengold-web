@@ -72,6 +72,17 @@
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
+		<form class="form-inline" id="searchForm">
+		  <div class="form-group">
+		    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+		    <div class="input-group">
+		      <div class="input-group-addon">关键字</div>
+		      <input type="text" class="form-control" name="keyword" value="${param.keyword }" id="exampleInputAmount" placeholder="请输入关键字搜索">
+		      <div class="input-group-addon"></div>
+		    </div>
+		  </div>
+		  <button type="submit" class="btn btn-primary">搜索</button>
+		</form>
 		<header>
 		<h3 class="tabs_involved">商品列表</h3>
 		<ul class="tabs">
@@ -91,7 +102,7 @@
 					<th >是否热门</th>
 					<th >是否发布</th>
 					<th >状态</th>
-					<th >创建人</th>
+					<th >排序号</th>
 					<th >操作</th>
 				</tr> 
 			</thead> 
@@ -100,8 +111,7 @@
 				<tr>
 					<td>${(pageNo*pageSize)+status.index+1 }</td>
 					<td>
-						<img src="${ctx }resources/${product.picUrl }" 
-						title="${product.enName }" alt="${product.enName }" 
+						<img src="${ctx }resources/${product.picUrl }" title="${product.enName }" alt="${product.enName }" 
 						name="picUrl" width="50" height="50"/>
 					</td>
 					<td>${product.enName }</td>
@@ -110,7 +120,7 @@
 					<td>${product.publish?"<span class='label label-info' title='发布'>发布</span>":"<span class='label label-default' title='未发布'>未发布</span>" }</td>
 					<td onclick="changeStatus(${product.id},${product.status });" id="status_${product.id }" 
 					style="cursor: pointer;">${product.status?"<span class='label label-info' title='点击修改状态'>正常</span>":"<span class='label label-default' title='点击修改状态'>锁定</span>" }</td>
-					<td>${product.createUser.realName }(${product.createUser.username })</td>
+					<td>${product.priority }</td>
 					<td>
 						<input type="image" name="${product.id }" onclick="update(this);"
 						src="${ctx }resources/images/icn_edit.png" title="修改"/>

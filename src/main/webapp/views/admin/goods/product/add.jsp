@@ -44,6 +44,9 @@
 				},
 				"description":{
 					required:true
+				},
+				"priority":{
+					number:true
 				}
 			},
 			messages:{
@@ -58,6 +61,9 @@
 				},
 				"description":{
 					required:"详情不能为空！"
+				},
+				"priority":{
+					number:"请输入数字！"
 				}
 			},
 			highlight: function(element) {
@@ -148,6 +154,12 @@
 			    <label for="keyWords" class="col-sm-1 control-label">关键字</label>
 			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="keyWords" name="keyWords" placeholder="商品关键字(以英文分号隔开不同的关键字)">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="priority" class="col-sm-1 control-label">排序号</label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control" id="priority" name="priority" placeholder="排序号，越大排名越前">
 			    </div>
 			  </div>
 			  <div class="form-group">

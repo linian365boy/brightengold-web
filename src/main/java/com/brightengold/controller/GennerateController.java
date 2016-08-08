@@ -125,6 +125,8 @@ public class GennerateController {
 				logger.error("生成{}产品页面失败",col.getEnName());
 			}else{
 				logger.info("生成{}产品页面成功",col.getEnName());
+				//避免覆盖，删除map中已存在的值
+				map.remove("info");
 			}
 		}
 		//3　获取所有分类的英文名称

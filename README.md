@@ -39,3 +39,7 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 32.控制台错误信息打印									ok(不处理)								
 33.replay表单										ok
 34.小图标icon											ok(暂不处理)
+
+35.产品自定义排序					
+36.非热门产品出现在热门产品里
+

@@ -79,6 +79,10 @@ public class Product implements Serializable{
 	 * 产品关键字，相关产品显示需要，分号隔开不同的关键字
 	 */
 	private String keyWords;
+	/**
+	 * 排序值（越大排名越前，默认为0）
+	 */
+	private Integer priority;
 	
 	@Id
 	@GeneratedValue
@@ -170,6 +174,12 @@ public class Product implements Serializable{
 		this.keyWords = keyWords;
 	}
 	
+	public Integer getPriority() {
+		return priority;
+	}
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
