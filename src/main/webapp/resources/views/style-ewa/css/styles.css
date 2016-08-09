@@ -80,14 +80,3 @@ div.wpcf7 .placeheld {
 	color: #f00;
 	font-size: 1em;
 }
-
-div#owl-demo-side{ 
-max-height:140px; 
-overflow:hidden; 
-white-space:nowrap; 
-text-overflow:ellipsis; 
-text-overflow: ellipsis;/* IE/Safari */ 
--ms-text-overflow: ellipsis; 
--o-text-overflow: ellipsis;/* Opera */ 
--moz-binding: url("ellipsis.xml#ellipsis");/*FireFox*/ 
-} 

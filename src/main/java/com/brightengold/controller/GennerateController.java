@@ -40,6 +40,7 @@ import com.brightengold.service.SystemConfig;
 import com.brightengold.service.WebConfigService;
 import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
+import com.brightengold.util.HtmlStringUtil;
 import com.google.common.collect.Maps;
 
 import cn.rainier.nian.utils.PageRainier;
@@ -352,6 +353,10 @@ public class GennerateController {
 		map.put("categorys", categorysList);
  		//企业信息
 		Company company = companyService.loadCompany();
+		//对公司描述信息introduce（含html代码）进行截取
+		company.setIntroduce(
+				HtmlStringUtil.subStringHTML(company.getIntroduce(), 500, 
+						"<a href='"+company.getWebsite()+"' class='button  product_type_simple' title='more infomation' target='_blank'>&nbsp;more"));
 		map.put("company", company);
 		//info信息
 		List<Info> infos = infoService.getList();

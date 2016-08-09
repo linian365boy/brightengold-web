@@ -41,5 +41,5 @@ Brightengold furniture web project with Java.It is benifit for us to Develop and
 34.小图标icon											ok(暂不处理)
 
 35.产品自定义排序					
-36.非热门产品出现在热门产品里
-
+36.非热门产品出现在热门产品里								ok
+37.留言内容长度控制

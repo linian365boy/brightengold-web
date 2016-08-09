@@ -21,6 +21,9 @@ public class SystemConfig {
 	//邮件收件人
 	@Value("#{configProperties['email.to']}")
 	private String to;
+	//前端页面展示的公司介绍长度
+	@Value("#{configProperties['company.length']}")
+	private String companyLength;
 	
 	/**
 	 * 首页滚动图片最大数量
