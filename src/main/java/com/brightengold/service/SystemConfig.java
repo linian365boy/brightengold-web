@@ -23,7 +23,7 @@ public class SystemConfig {
 	private String to;
 	//前端页面展示的公司介绍长度
 	@Value("#{configProperties['company.length']}")
-	private String companyLength;
+	private int companyLength = 500;
 	
 	/**
 	 * 首页滚动图片最大数量
@@ -71,6 +71,12 @@ public class SystemConfig {
 	}
 	public void setTo(String to) {
 		this.to = to;
+	}
+	public int getCompanyLength() {
+		return companyLength;
+	}
+	public void setCompanyLength(int companyLength) {
+		this.companyLength = companyLength;
 	}
 	
 }
