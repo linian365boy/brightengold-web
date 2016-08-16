@@ -233,7 +233,7 @@ public class GennerateController {
 	
 	private void publishAllProducts(HttpServletRequest request, Category cate,
 			ModelMap modelMap) {
-		 Map<String,Object> map = Maps.newHashMap(modelMap);
+		 Map<String,Object> map = null;
 		 long count = productService.countByCateId((cate.getId()));
 		 logger.info("分类Name|{}下共有{}个产品是已发布并且状态正常的.",cate.getName(),count);
 		 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * count/this.pageSize));
@@ -241,6 +241,7 @@ public class GennerateController {
 		 String path = request.getSession().getServletContext().getRealPath("/");
 		 String parentPath = "";
 		 for(int i=0;i<totalPageNum;i++){
+			 map = Maps.newHashMap(modelMap);
 			 //得到该栏目下所有的产品
 			 page = productService.findAllByCateId((i+1), pageSize, cate.getId()); 
 			 logger.info("第{}页下共有{}个产品是已发布并且状态正常的.",(i+1),page.getResult().size());
