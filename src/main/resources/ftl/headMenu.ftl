@@ -28,7 +28,7 @@
                             <a class="screen-reader-text skip-link" href="#content" title="Skip to content">Skip to content</a>
                             <div class="nav-container">
                             <ul id="menu-%e8%8f%9c%e5%8d%952" class="nav-menu">
-                            	<li id="menu-item-680" class="menu-item menu-item-type-post_type menu-item-object-page　page_item page-item-75 menu-item-680 ${column!'current-menu-item current_page_item'}">
+                            	<li id="menu-item-680" class="menu-item menu-item-type-post_type menu-item-object-page page_item page-item-75 menu-item-680 ${column!'current-menu-item current_page_item'}">
                             		<a href="${ctx}/">Home</a>
                             	</li>
                             	<#if ((crossCol?size)>0)>
