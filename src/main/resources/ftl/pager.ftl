@@ -5,7 +5,7 @@
 <#if (halfPage>=curPage)>
 	<#if (curPage<=1)>
 	<#else>
-		<li><a href="javascript:void(0);" onclick="goPage(${curPage-1},'${column.code}');" class="prev page-numbers"><i class="fa fa-long-arrow-left"></i></a><li>
+		<li><a href="javascript:void(0);" onclick="goPage(${curPage-1},'${column.code}');" class="prev page-numbers">&larr;</a><li>
 	</#if>
 	<@showPage start=1 end=curPage curPage=curPage url=url class=class/>
 	<#if (curPage+halfPage>totalPage)>
@@ -18,12 +18,12 @@
 	</#if>
 	<#if (curPage>=totalPage)>
 	<#else>
-		<a href="javascript:void(0);" onclick="goPage(${curPage+1},'${column.code}');" class="next page-numbers"><i class="fa fa-long-arrow-right"></i></a>
+		<li><a href="javascript:void(0);" onclick="goPage(${curPage+1},'${column.code}');" class="next page-numbers">&rarr;</a><li>
 	</#if>
 <#else>
 	<#if (curPage<=1)>
 	<#else>
-		<li><a href="javascript:void(0);" onclick="goPage(${curPage-1},'${column.code}');" class="prev page-numbers"><i class="fa fa-long-arrow-left"></i></a><li>
+		<li><a href="javascript:void(0);" onclick="goPage(${curPage-1},'${column.code}');" class="prev page-numbers">&larr;</a><li>
 	</#if>
 	<@showPage start=curPage-halfPage end=curPage curPage=curPage url=url class=class/>
 	<#if (curPage+halfPage>totalPage)>
@@ -36,7 +36,7 @@
 	</#if>
 	<#if (curPage>=totalPage)>
 	<#else>
-		<a href="javascript:void(0);" onclick="goPage(${curPage+1},'${column.code}');" class="next page-numbers"><i class="fa fa-long-arrow-right"></i></a>
+		<li><a href="javascript:void(0);" onclick="goPage(${curPage+1},'${column.code}');" class="next page-numbers">&rarr;</a><li>
 	</#if>
 </#if>
 </ul>
