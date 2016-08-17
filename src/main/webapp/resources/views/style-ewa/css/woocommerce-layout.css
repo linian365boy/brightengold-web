@@ -43,10 +43,6 @@
 	clear: both
 }
 
-.woocommerce-page ul.products li.product {
-	clear: none
-}
-
 .woocommerce .col2-set, .woocommerce-page .col2-set {
 	width: 100%
 }

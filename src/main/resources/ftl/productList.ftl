@@ -14,4 +14,9 @@
 <@showNews cid="1" titleNum=70>
 </@showNews>
 <#import "pager.ftl" as my/>
-<@my.pager url="#" totalPage=productPage.totalPageNum curPage=productPage.currentPageIndex class="pagers" showPageNum=10/>
+<@my.pager url="/views/html/product/" totalPage=productPage.totalPageNum curPage=productPage.currentPageIndex class="pagers" showPageNum=10 isCategory="false"/>
+<script type="text/javascript">
+		function goPage(urlPre,pageNo){
+			jQuery("#productContent").load(urlPre+"/"+pageNo+".htm");
+		}
+</script>

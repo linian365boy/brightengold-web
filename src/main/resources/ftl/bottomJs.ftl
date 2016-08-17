@@ -232,10 +232,6 @@ $(document).ready(function() {
 });
 })(jQuery);
 
-	function goPage(pageNo,code){
-		jQuery("#productContent").load("/views/html/product/"+code+"/"+pageNo+".htm");
-	}
-	
 	function expansionOrClose(obj){
 		jQuery("#leftWord").toggle(function(){
 			if (jQuery(this).is(':hidden')) {
