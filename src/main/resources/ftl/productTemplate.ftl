@@ -67,8 +67,8 @@ body.custom-background { background-color: #e2e2e2; }
 		<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
-                <nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(column.code)!'--'}</nav>				
-				<h1 class="page-title">${(column.code)!'--'}</h1>
+                <nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(column.enName)!'--'}</nav>				
+				<h1 class="page-title">${(column.enName)!'--'}</h1>
 				<div id="productContent">
 				<#--virtual 相对路径-->
 				<#if (column?? && column.type=1)>

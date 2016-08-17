@@ -73,7 +73,7 @@ body.custom-background { background-color: #e2e2e2; }
                 </#if>
                 ${(category.enName)!''}
                 </nav>				
-				<h1 class="page-title">${(column.code)!'--'}</h1>
+				<h1 class="page-title">${(category.enName)!'--'}</h1>
 				<div id="productContent">
             	<#--virtual 相对路径-->
             	<!--#include virtual="../cat/${category.id}/1.htm"-->

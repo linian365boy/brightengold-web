@@ -1,6 +1,6 @@
 <div id="content" class="site-content" role="main">
-		<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(model.column.code)!'--'}</nav>	
-		<h1 class="page-title">${(model.column.code)!'--'}</h1>
+		<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(model.column.enName)!'--'}</nav>	
+		<h1 class="page-title">${(model.column.enName)!'--'}</h1>
 		<h2 class="content_title">${model.title}</h2>
 		<p class="news_data">Publish Date:&nbsp;&nbsp;${model.publishDate?string("yyyy-MM-dd")}</p>
 		<p>&nbsp;</p>
