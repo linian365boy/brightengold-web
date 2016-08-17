@@ -357,7 +357,7 @@ public class GennerateController {
 		//对公司描述信息introduce（含html代码）进行截取
 		company.setIntroduce(
 				HtmlStringUtil.subStringHTML(company.getIntroduce(), systemConfig.getCompanyLength(), 
-						"<a href='"+company.getWebsite()+"' class='button  product_type_simple' title='more infomation' target='_blank'>&nbsp;more"));
+						"<a href='"+company.getWebsite()+"' class='button  product_type_simple' title='more infomation'>&nbsp;more"));
 		map.put("company", company);
 		//info信息
 		List<Info> infos = infoService.getList();

@@ -145,6 +145,12 @@
 			    </div>
 		   </div>
 		   <div class="form-group">
+			    <label for="contactUserinstagram" class="col-sm-2 control-label">联系人Instagram</label>
+			    <div class="col-sm-8">
+			      <input id="contactUserinstagram" class="form-control" name="contactUserinstagram" value="${model.contactUserinstagram }"/>
+			    </div>
+		   </div>
+		   <div class="form-group">
 			    <label for="introduce" class="col-sm-2 control-label">公司介绍</label>
 			    <div class="col-sm-8">
 			      <textarea rows="3" id="introduce" name="introduce" class="form-control ckeditor">${model.introduce }</textarea>

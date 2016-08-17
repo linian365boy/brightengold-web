@@ -39,7 +39,13 @@
                             	<i class="fa fa-google-plus-square fa-2"></i>
                             	<span>Google Plus</span>
                             </a>
-                        </li>
+                 </li>
+                 <li class="link">
+                            <a title="Instagram" target="_blank" href="${(company.contactUserinstagram)!''}">
+                            	<i class="fa fa-instagram fa-2"></i>
+                            	<span>Instagram</span>
+                            </a>
+                  </li>
                  </ul>
         </section>
         <!-- /Block CMS module -->

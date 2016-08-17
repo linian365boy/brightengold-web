@@ -9,13 +9,13 @@
             <section class="footer-block" id="informations_block_left_1">
             <h4 class="title_block">Products</h4>
             <ul class="toggle-footer" style="">
-            <c:forEach items="${categorys}" var="cate">
-                         <li class="link">
-                            <a title="${(cate.enName)}" href="${ctx}views/html/col/${fn:replace(pCategory.enName,'\\s*','')}.htm">
+                <li class="link">
+            		<c:forEach items="${categorys}" var="cate">
+                          <a title="${(cate.enName)}" href="${ctx}views/html/col/${fn:replace(pCategory.enName,'\\s*','')}.htm">
                                ${(cate.enName)}
-                            </a>
-                        </li>
+                          </a>
                    </c:forEach>
+                </li>
              </ul>
         </section>
            </div>
@@ -40,7 +40,13 @@
                             	<i class="fa fa-google-plus"></i>
                             	<span>Google Plus</span>
                             </a>
-                        </li>
+                 </li>
+                  <li class="link">
+                            <a title="Instagram" target="_blank" href="${(company.contactUserinstagram)}">
+                            	<i class="fa fa-instagram fa-2"></i>
+                            	<span>Instagram</span>
+                            </a>
+                  </li>
                  </ul>
         </section>
         <!-- /Block CMS module -->
