@@ -5,7 +5,11 @@
 <#if (halfPage>=curPage)>
 	<#if (curPage<=1)>
 	<#else>
-		<li><a href="javascript:void(0);" onclick="goPage(${curPage-1},'${column.code}');" class="prev page-numbers">&larr;</a><li>
+		<#if isCategory=="true">
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${category.id}',${curPage-1});" class="prev page-numbers">&larr;</a><li>
+		<#else>
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${column.code}',${curPage-1});" class="prev page-numbers">&larr;</a><li>
+		</#if>
 	</#if>
 	<@showPage start=1 end=curPage curPage=curPage url=url class=class isCategory=isCategory/>
 	<#if (curPage+halfPage>totalPage)>
@@ -18,12 +22,20 @@
 	</#if>
 	<#if (curPage>=totalPage)>
 	<#else>
-		<li><a href="javascript:void(0);" onclick="goPage(${curPage+1},'${column.code}');" class="next page-numbers">&rarr;</a><li>
+		<#if isCategory=="true">
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${category.id}',${curPage+1});" class="next page-numbers">&rarr;</a><li>
+		<#else>
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${column.code}',${curPage+1});" class="next page-numbers">&rarr;</a><li>
+		</#if>
 	</#if>
 <#else>
 	<#if (curPage<=1)>
 	<#else>
-		<li><a href="javascript:void(0);" onclick="goPage(${curPage-1},'${column.code}');" class="prev page-numbers">&larr;</a><li>
+		<#if isCategory=="true">
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${category.id}',${curPage-1});" class="prev page-numbers">&larr;</a><li>
+		<#else>
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${column.code}',${curPage-1});" class="prev page-numbers">&larr;</a><li>
+		</#if>
 	</#if>
 	<@showPage start=curPage-halfPage end=curPage curPage=curPage url=url class=class isCategory=isCategory/>
 	<#if (curPage+halfPage>totalPage)>
@@ -36,7 +48,11 @@
 	</#if>
 	<#if (curPage>=totalPage)>
 	<#else>
-		<li><a href="javascript:void(0);" onclick="goPage(${curPage+1},'${column.code}');" class="next page-numbers">&rarr;</a><li>
+		<#if isCategory=="true">
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${category.id}',${curPage+1});" class="next page-numbers">&rarr;</a><li>
+		<#else>
+			<li><a href="javascript:void(0);" onclick="goPage('${url}${column.code}',${curPage+1});" class="next page-numbers">&rarr;</a><li>
+		</#if>
 	</#if>
 </#if>
 </ul>
