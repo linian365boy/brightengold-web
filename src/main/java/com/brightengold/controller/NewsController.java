@@ -59,7 +59,7 @@ public class NewsController {
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String add(ModelMap map){
 		//获取一级栏目
-		List<Object[]> parentCol = columnService.findParentByAjax();
+		List<Column> parentCol = columnService.findParentByAjax();
 		map.put("parentCol", parentCol);
 		return "admin/news/add";
 	}
@@ -73,13 +73,13 @@ public class NewsController {
 		news.setCreateDate(new Date());
 		news.setUrl(Tools.getRndFilename()+".htm");
 		if(thirdColId != null && thirdColId !=0 ){
-			news.setColumn(columnService.getById(thirdColId));
+			news.setColumnId(thirdColId);
 			news.setDepth(firstColId+"-"+secondColId+"-"+thirdColId);
 		}else if(secondColId !=null && secondColId !=0 ){
-			news.setColumn(columnService.getById(secondColId));
+			news.setColumnId(secondColId);
 			news.setDepth(firstColId+"-"+secondColId);
 		}else{
-			news.setColumn(columnService.getById(firstColId));
+			news.setColumnId(firstColId);
 			news.setDepth(String.valueOf(firstColId));
 		}
 		newsService.saveNews(news);
@@ -93,15 +93,15 @@ public class NewsController {
 	public String update(@PathVariable Integer newsId,ModelMap map){
 		if(newsId!=null){
 			News news = newsService.loadNews(newsId);
-			Column temp = news.getColumn();
-			if(temp.getParentColumn()==null){
-				map.addAttribute("childs",columnService.findChildrenByParentId(temp.getId()));
-			}else{
-				map.addAttribute("childs",columnService.findChildrenByParentId(temp.getParentColumn().getId()));
-			}
+			//Column temp = news.getColumn();
+			//if(temp.getParentColumn()==null){
+			//	map.addAttribute("childs",columnService.findChildrenByParentId(temp.getId()));
+			//}else{
+			//	map.addAttribute("childs",columnService.findChildrenByParentId(temp.getParentColumn().getId()));
+			//}
 			map.addAttribute("news", news);
 		}
-		List<Object[]> parentCol = columnService.findParentByAjax();
+		List<Column> parentCol = columnService.findParentByAjax();
 		map.put("parentCol", parentCol);
 		return "admin/news/update";
 	}
@@ -115,13 +115,13 @@ public class NewsController {
 			news.setCreateDate(temp.getCreateDate());
 			news.setClicks(temp.getClicks());
 			news.setUrl(temp.getUrl());
-			if(secondColId !=null && secondColId !=0 ){
+			/*if(secondColId !=null && secondColId !=0 ){
 				news.setColumn(columnService.getById(secondColId));
 				news.setDepth(firstColId+"-"+secondColId);
 			}else{
 				news.setColumn(columnService.getById(firstColId));
 				news.setDepth(String.valueOf(firstColId));
-			}
+			}*/
 			newsService.saveNews(news);
 			logger.info("修改前新闻信息|{}，修改后新闻信息|{}",
 					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
@@ -164,7 +164,7 @@ public class NewsController {
 		if(newsId!=null){
 			news = newsService.loadNews(newsId);
 			String htmlUrl = news.getUrl();
-			if(newsService.delNews(news)){
+			if(newsService.delNews(newsId)){
 				if(htmlUrl!=null){
 					String path = request.getSession().getServletContext().getRealPath("/"+htmlUrl);
 					Tools.delFile(path);
@@ -194,26 +194,6 @@ public class NewsController {
 		}else{
 			return "0";
 		}
-	}
-	
-	@Deprecated
-	@RequestMapping(value="/{newsId}/publish",method=RequestMethod.GET)
-	@ResponseBody
-	public String publishNews(@PathVariable Integer newsId,HttpServletRequest request){
-		Gson gson = new Gson();
-		News tempNews = null;
-		if(newsId!=null){
-			tempNews = newsService.loadNews(newsId);
-			tempNews.setPublishDate(new Date());
-			if(StringUtils.isBlank(tempNews.getUrl())){
-				tempNews.setUrl(Tools.getRndFilename()+".htm");
-			}
-			tempNews.setUrl(Tools.getRndFilename()+".htm");
-			LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
-			tempNews = newsService.saveNews(tempNews);
-			return gson.toJson(tempNews);
-		}
-		return gson.toJson(tempNews);
 	}
 	
 	@RequestMapping(value="/{newsId}/release",method=RequestMethod.GET)

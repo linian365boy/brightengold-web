@@ -1,9 +1,9 @@
 package com.brightengold.controller;
 
 import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import cn.rainier.nian.utils.FileUtil;
-import cn.rainier.nian.utils.PageRainier;
+
 import com.brightengold.model.Info;
 import com.brightengold.service.InfoService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+
+import cn.rainier.nian.utils.FileUtil;
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/sys/info")
@@ -51,11 +53,11 @@ public class InfoController {
 		StringBuilder sb = new StringBuilder();
 		try {
 			info.setUrl("views/html/info/"+info.getCode()+".htm");
-			info = infoService.save(info);
+			infoService.save(info);
 			sb.append("信息名称："+info.getName());
 			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD, sb.toString());
-			logger.info("新增信息{}成功！",ToStringBuilder.reflectionToString(info, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("新增信息{}成功！",info);
 		} catch (Exception e) {
 			logger.error("新增信息失败",e);
 		}

@@ -25,10 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.utils.PageRainier;
-
 import com.brightengold.model.Category;
+import com.brightengold.model.Column;
 import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
@@ -36,6 +34,9 @@ import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
 import com.brightengold.util.LogType;
 import com.google.gson.Gson;
+
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/goods/category")
@@ -64,7 +65,7 @@ public class CategoryController {
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String add(ModelMap map) {
 		//获取一级栏目
-		List<Object[]> parentCol = columnService.findParentByAjax();
+		List<Column> parentCol = columnService.findParentByAjax();
 		map.put("parentCol", parentCol);
 		return "admin_unless/goods/category/add";
 	}
@@ -77,18 +78,18 @@ public class CategoryController {
 			if(StringUtils.isNotBlank(secondColStr) 
 					&& !("0".equals(secondColStr))){
 				//有二级栏目
-				category.setColumn(columnService.getById(Integer.parseInt(secondColStr)));
+				category.setColumnId(Integer.parseInt(secondColStr));
 			}else{
 				//只选择一级栏目
-				category.setColumn(columnService.getById(Integer.parseInt(request.getParameter("parentCol"))));
+				category.setColumnId(Integer.parseInt(request.getParameter("parentCol")));
 			}
 			if(Integer.parseInt(request.getParameter("parentC"))==0){
-				category.setParent(null);
+				category.setParentId(null);
 			}else{
-				category.setParent(categoryService.loadCategoryById(Integer.parseInt(request.getParameter("parentC"))));
+				category.setParentId(Integer.parseInt(request.getParameter("parentC")));
 			}
 			category.setCreateDate(new Date());
-			category.setCreateUser(u);
+			category.setCreateUserId(u.getId());
 			categoryService.saveCategory(category);
 			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD,"名称："+category.getEnName());
@@ -105,9 +106,9 @@ public class CategoryController {
 	@ResponseBody
 	public String getParentByAjax(@PathVariable Integer flag){
 		Gson gson = new Gson();
-		List<Object[]> parentsByAjax = categoryService.findParentByAjax();
+		List<Category> parentsByAjax = categoryService.findParentByAjax();
 		if(flag!=0){
-			parentsByAjax.add(0, new Object[]{0,"根节点"});
+			parentsByAjax.add(0, new Category(0,"根节点",null));
 		}
 		return gson.toJson(parentsByAjax);
 	}
@@ -117,10 +118,10 @@ public class CategoryController {
 		if (categoryId != null) {
 			Category category = categoryService.loadCategoryById(categoryId);
 			model.addAttribute("model",category);
-			List<Object[]> parentsByAjax = categoryService.findParentByAjax();
-			parentsByAjax.add(0, new Object[]{0,"根节点"});
+			List<Category> parentsByAjax = categoryService.findParentByAjax();
+			parentsByAjax.add(0, new Category(0,"根节点",null));
 			//获取一级栏目
-			List<Object[]> parentCol = columnService.findParentByAjax();
+			List<Column> parentCol = columnService.findParentByAjax();
 			model.addAttribute("parentCol", parentCol);
 			model.addAttribute("parents", parentsByAjax);
 		}
@@ -138,30 +139,30 @@ public class CategoryController {
 				if(StringUtils.isNotBlank(secondColStr) 
 						&& !("0".equals(secondColStr))){
 					//有二级栏目
-					category.setColumn(columnService.getById(Integer.parseInt(secondColStr)));
+					category.setColumnId(Integer.parseInt(secondColStr));
 				}else{
 					//只选择一级栏目
-					category.setColumn(columnService.getById(Integer.parseInt(request.getParameter("parentCol"))));
+					category.setColumnId(Integer.parseInt(request.getParameter("parentCol")));
 				}
 				if(parentIds!=null){
-					category.setParent(categoryService.loadCategoryById(Integer.parseInt(parentIds)));
+					category.setParentId(Integer.parseInt(parentIds));
 				}
 				if(!temp.getEnName().equals(category.getEnName())){
 					content.append("名称由\""+temp.getEnName()+"\"修改为\""+category.getEnName()+"\"");
 				}else{
 					content.append("名称："+temp.getEnName());
 				}
-				if(temp.getParent()!=null&&!temp.getParent().equals(category.getParent())){
-					content.append("一级分类由\""+temp.getParent().getEnName()+"\"修改为\""+category.getParent().getEnName()+"\"");
+				/*if(temp.getParentId()!=null&&!temp.getParentId().equals(category.getParentId())){
+					content.append("一级分类由\""+temp.getParentId().getEnName()+"\"修改为\""+category.getParentId().getEnName()+"\"");
 				}else if(temp.getParent()==null&&parentIds!=null){
 					//content.append("一级分类由\"无\"修改为\""+category.getParent().getEnName()+"\"");
 				}else{
 					if(temp.getParent()!=null){
 						content.append("一级分类："+temp.getParent().getEnName());
 					}
-				}
+				}*/
 				category.setCreateDate(temp.getCreateDate());
-				category.setCreateUser(temp.getCreateUser());
+				category.setCreateUserId(temp.getCreateUserId());
 				categoryService.saveCategory(category);
 				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
@@ -210,7 +211,7 @@ public class CategoryController {
 	public String del(@PathVariable Integer categoryId){
 		if(categoryId!=null){
 			Category temp = categoryService.loadCategoryById(categoryId);
-			if(categoryService.checkHasChildren(temp)){
+			if(categoryService.checkHasChildren(categoryId)){
 				MsgUtil.setMsg("error", "请先删除该分类下的子分类");
 			}else{
 				//判断分类下是否有产品

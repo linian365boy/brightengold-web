@@ -1,24 +1,14 @@
 package com.brightengold.model;
 
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * 前台菜单栏目表
+ * 前台菜单栏目信息
  * @author li.n1
  *
  */
-@Entity
-@Table(name="information")
 public class Info implements Serializable {
 	/**
 	 * 序列化
@@ -45,8 +35,7 @@ public class Info implements Serializable {
 	 * 优先值
 	 */
 	private int priority;
-	@Id
-	@GeneratedValue
+	
 	public Integer getId() {
 		return id;
 	}
@@ -56,7 +45,6 @@ public class Info implements Serializable {
 	public String getCode() {
 		return code;
 	}
-	@Lob
 	public String getContent() {
 		return content;
 	}
@@ -72,7 +60,6 @@ public class Info implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	@Column(length=100)
 	public String getUrl() {
 		return url;
 	}

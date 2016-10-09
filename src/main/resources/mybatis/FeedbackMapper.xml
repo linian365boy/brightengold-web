@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.brightengold.dao.FeedbackDao">
+	<select id="findOne" parameterType="int">
+		select * from tb_feedback where id=#{id}
+	</select>
+	
+	<delete id="delete" parameterType="id">
+		delete from tb_feedback where id=#{id}
+	</delete>
+	
+	<select id="findAllCount">
+		select count(*) from tb_feedback
+	</select>
+	
+	<select id="findList">
+		select * from tb_feedback order by id desc limit #{start},#{pageSize}
+	</select>
+	
+	<insert id="save">
+		insert into tb_feedback(id,name,telePhone,email,content,createTime,productName) 
+		values(null,#{name},#{telePhone},#{email},#{content},#{createTime},#{productName})
+	</insert>
+</mapper>
