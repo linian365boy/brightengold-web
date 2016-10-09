@@ -18,6 +18,23 @@
 <!--引入JS-->
 <script type="text/javascript" src="${ctx }resources/js/plugins/webuploader/webuploader.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/upload.js"></script>
+<style type="text/css">
+	.selectpicker {
+		background-color: #fff;
+	    background-image: none;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	    color: #555;
+	    display: block;
+	    font-size: 14px;
+	    height: 34px;
+	    line-height: 1.42857;
+	    padding: 6px 12px;
+	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	    vertical-align: middle;
+	}
+</style>
 <title>添加新闻</title>
 <script type="text/javascript">
 	var uploader;
@@ -156,17 +173,6 @@
 			      <input type="text" class="form-control" id="title" name="title" placeholder="标题">
 			    </div>
 		   </div>
-		   <div class="form-group">
-		   		 <label class="col-sm-2 control-label"></label>
-				  <label class="radio-inline">
-				    <input type="radio" name="type" id="type1" value="1" checked onchange="changeContent(this);"/>
-				    图文模式
-				    </label>
-				  <!-- <label class="radio-inline">
-				    <input type="radio" name="type" id="type2" value="2" onchange="changeContent(this);"/>
-				    产品模式
-				    </label>  -->
-			</div>
 			<div class="typeclass">
 		   <div class="form-group">
 		   		<div class="form-group">
@@ -196,30 +202,6 @@
 			      <textarea id="content" name="content" class="form-control ckeditor"></textarea>
 			    </div>
 		   </div>
-		   </div>
-		   <div class="typeclassb">
-			   <div class="form-group">
-			   	<label for="content" class="col-sm-1 control-label"></label>
-			   	<div class="col-sm-10">
-				    <div id="uploader">
-						<div class="queueList">
-						<div id="dndArea" class="placeholder">
-						<div id="filePicker"></div>
-						<p>或将照片拖到这里，单次最多可选100张</p>
-						</div>
-						</div>
-						<div class="statusBar" style="display:none;">
-						<div class="progress">
-						<span class="text">0%</span>
-						<span class="percentage"></span>
-						</div><div class="info"></div>
-						<div class="btns">
-						<div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
-						</div>
-						</div>
-					</div>
-					</div>
-			   </div>
 		   </div>
 		   <div class="form-group">
 		    <div class="col-sm-offset-4 col-sm-8">

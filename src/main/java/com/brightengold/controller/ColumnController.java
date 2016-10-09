@@ -127,7 +127,7 @@ public class ColumnController {
 					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
 		} catch (Exception e) {
 			MsgUtil.setMsgUpdate("success");
-			logger.info("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！！",
+			logger.error("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！！",
 					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
 					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
 		}
@@ -158,8 +158,8 @@ public class ColumnController {
 			List<Category> cates = categoryService.findCateByColId(temp.getId());
 			if(CollectionUtils.isNotEmpty(cates)){
 				vo.setCode(500);
-				vo.setMessage("删除失败，该栏目包含有未删除的"+cates.size()+"产品分类！");
-				logger.error("删除失败，该栏目包含有未删除的"+cates.size()+"产品分类！");
+				vo.setMessage("删除失败，该栏目包含有未删除的"+cates.size()+"个产品分类！");
+				logger.error("删除失败，该栏目包含有未删除的"+cates.size()+"个产品分类！");
 				return gson.toJson(vo);
 			}
 			columnService.delete(id);
@@ -199,7 +199,8 @@ public class ColumnController {
 	@RequestMapping(value={"/{id}/setPublishContent"},method = RequestMethod.POST)
 	public String doPublishContent(@PathVariable Integer id,Column column, ModelMap map){
 		try{
-			columnService.updateColumnPublishContent(id,column.getType());
+			columnService.updateColumnPublishContent(id,column);
+			logger.info("修改栏目的发布方式|{}",ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
 			MsgUtil.setMsgUpdate("success");
 		}catch(Exception e){
 			logger.error("设置发布模式发生错误！",e);

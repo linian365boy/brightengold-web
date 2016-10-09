@@ -1,26 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="../../commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+    <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <%@include file="/views/admin/commons/listJsCss.jsp" %>
- <%@include file="/views/admin/commons/jsCss.jsp" %>
- <script type="text/javascript" src="${ctx }resources/js/system.js"></script>
-<title>反馈管理</title>
-
+<title>客户留言</title>
 <script type="text/javascript">
-	
 	var detail = function(id){
 		var myDialog = art.dialog({
 			id:'detail',
-			title:'反馈详情',
-			width:500,
+			title:'留言详情',
+			width:600,
 			resize: false
 		});
 		jQuery.ajax({
-			url:'${ctx}admin/feedback/'+id,
+			url:'${ctx}admin/feedback/'+id+'.html',
 			type:'GET',
 			success:function(data){
 				myDialog.content(data);
@@ -34,8 +29,8 @@
 	
 		var del = function(obj){
 			var feedbackId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此新闻',function(){
-				var url = '${ctx}admin/feedback/'+feedbackId+'/del';
+			art.dialog.confirm('确定删除此留言?',function(){
+				var url = '${ctx}admin/feedback/'+feedbackId+'/del.html';
 				window.location.href=url;
 			});
 		};
@@ -43,16 +38,11 @@
 </script>
 </head>
 <body>
-	<jsp:include page="/views/admin/commons/header.jsp"/>
-	<jsp:include page="/views/admin/commons/left.jsp">
-		<jsp:param value="12" name="menuId"/>
-		<jsp:param value="反馈管理" name="menuName"/>
-	</jsp:include>
 	<section id="main" class="column">
 	<jsp:include page="/views/admin/commons/message.jsp"/>
 		<article class="module width_full">
 		<header>
-		<h3 class="tabs_involved">反馈列表</h3>
+		<h3 class="tabs_involved">留言列表</h3>
 		</header>
 
 		<div class="tab_container">
@@ -62,7 +52,6 @@
 				<tr> 
     				<th >序号</th>
 					<th >姓名</th>
-					<th >联系方式</th>
 					<th >邮箱</th>
 					<th >反馈时间</th>
 					<th >操作</th>
@@ -73,7 +62,6 @@
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td>${feedback.name }</td>
-					<td>${feedback.telePhone }</td>
 					<td>${feedback.email }</td>
 					<td><fmt:formatDate value="${feedback.createTime }" type="both"/></td>
 					<td>

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -196,7 +197,7 @@ public class CategoryController {
 				out.flush();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("查询是否存在相同分类发生错误",e);
 		}finally{
 			if(out!=null){
 				out.close();
@@ -215,8 +216,9 @@ public class CategoryController {
 				//判断分类下是否有产品
 				long count = productService.countByCateId(categoryId);
 				if(count>0){
-					MsgUtil.setMsg("error", "请先删除该分类下的"+count+"产品！");
+					MsgUtil.setMsg("error", "请先删除该分类下的"+count+"个产品！");
 				}else{
+					logger.info("删除分类|{}",ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE));
 					categoryService.delCategory(categoryId);
 					MsgUtil.setMsg("success", "删除分类成功！");
 					//日志记录
@@ -227,6 +229,17 @@ public class CategoryController {
 		return "redirect:/admin/goods/category/categorys/1.html";
 	}
 
+	@RequestMapping(value="/getChildrenCate/{parentCateId}",method=RequestMethod.POST)
+	@ResponseBody
+	public String getChildrenCate(@PathVariable Integer parentCateId){
+		Gson gson = new Gson();
+		List<Object[]> childrenCateArr = categoryService.findChildrenByParentCateId(parentCateId);
+		if(!CollectionUtils.isEmpty(childrenCateArr)){
+			return gson.toJson(childrenCateArr);
+		}
+		return gson.toJson(null);
+	}
+	
 	public PageRainier<Category> getCategorys() {
 		return categorys;
 	}

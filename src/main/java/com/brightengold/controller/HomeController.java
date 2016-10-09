@@ -22,7 +22,7 @@ public class HomeController {
 	
 	@RequestMapping(value={"/index"}, method = RequestMethod.GET)
 	public String home(Model model) {
-		logger.info("enter Index page!!");
+		logger.debug("enter Index page!!");
 		return "admin/index";
 	}
 	

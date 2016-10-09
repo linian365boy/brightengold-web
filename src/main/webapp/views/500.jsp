@@ -24,7 +24,7 @@
 				<div style="position: absolute; top:30%; left:100%;border:0px;width:500px;padding:40px;border-left:1px dashed #375a90;">
 				<div align="left">
 					<h2>
-						<img src="${ctx}resources/images/error.png" style="padding-top:10px"/><strong style="color:red;position: absolute; top:25%;padding-left:10px;">Server Has Happend Error！</strong>
+						<img src="${ctx}resources/images/error.png" style="padding-top:10px"/><strong style="color:red;position: absolute; top:25%;padding-left:10px;">Server Happend Error！</strong>
 					</h2><br />
 					<font> The current server has an internal error, please contact the administrator to check the system log.
 Or do the following.

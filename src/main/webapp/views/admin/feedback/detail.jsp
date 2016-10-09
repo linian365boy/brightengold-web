@@ -5,21 +5,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>反馈详情</title>
+<title>留言详情</title>
 </head>
 <body>
 	<form id="form" action="..." method="post">
 			<div id="label"><label for="name">姓名：</label>
             	<input type="text"  disabled="disabled" id="inputyc" value="${model.name }"/>
             </div>
-            <div id="label"><label for="telePhone">联系方式：</label>
-	            <input type="text" disabled="disabled" id="inputyc" value="${model.telePhone }"/>
-            </div>
 			<div id="label"> <label for="email">邮箱：</label>
 				<input type="text" disabled="disabled" id="inputyc" value="${model.email }"/>
 			</div>
 			<div id="label"> <label for="content">内容：</label>
-				<textarea disabled="disabled" id="inputyc" style="width:300px;">${model.content }</textarea>
+				<textarea disabled="disabled" id="inputyc" rows="10" cols="40">${model.content }</textarea>
 			</div>
 			<div id="label"> <label for="createTime">反馈时间：</label>
 				<input type="text" disabled="disabled" id="inputyc" value="<fmt:formatDate value="${model.createTime }" type="both"/>"/>

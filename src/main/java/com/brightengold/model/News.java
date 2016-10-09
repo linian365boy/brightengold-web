@@ -16,6 +16,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 @Entity
 @Table
 public class News implements Serializable {
@@ -85,7 +88,7 @@ public class News implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=50)
+	@Column(length=300)
 	public String getTitle() {
 		return title;
 	}
@@ -165,5 +168,8 @@ public class News implements Serializable {
 	public void setDepth(String depth) {
 		this.depth = depth;
 	}
-	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 }

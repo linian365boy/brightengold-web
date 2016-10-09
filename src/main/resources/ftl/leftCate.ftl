@@ -3,11 +3,11 @@
 			<div class="widget-area" id="sidebar-widgets">
 				<aside id="woocommerce_product_search-2" class="widget woocommerce widget_product_search">
 				<div id="sun" ><h3 class="wpb_area_title"><span>Search Products</span></h3></div>
-<form role="search" method="get" class="woocommerce-product-search" action="${ctx}/">
+<form role="search" method="get" class="woocommerce-product-search" action="${ctx}/views/products/search.html">
 	<label class="screen-reader-text" for="s">Search for:</label>
-	<input type="search" class="search-field" placeholder="Search Products&hellip;" value="" name="s" title="Search for:" />
+	<input type="search" class="search-field" placeholder="Search Products&hellip;" value="" name="keyword" title="Search for:" />
+	<input type="hidden" name="pageNo" value="1" />
 	<input type="submit" value="Search" />
-	<input type="hidden" name="post_type" value="product" />
 </form>
 </aside>
 <aside id="woocommerce_product_categories-2" class="widget woocommerce widget_product_categories">
@@ -31,18 +31,20 @@
 	</#list>
 </ul>
 </aside>
+<#if ((indexNews?size)>0)>
 <aside id="text-2" class="widget widget_text">
 <div id="sun"><h3 class="wpb_area_title"><span>Lastest News</span></h3></div>			
 <div class="textwidget">
 <ul class="product-categories">
 	<#list indexNews as news>
 		<li class="cat-item cat-item-18">
-			<a href="${ctx}/">${(news.title)!''}</a> 
+			<a href="${ctx}/views/html/news/detail/${news.id}.htm">${(news.title)!''}</a> 
 		</li>
 	</#list>
 </ul>
 </div>
 </aside>
+</#if>
 					</div><!-- .widget-area -->
 		</div><!-- .sidebar-inner -->
 	</div><!-- #tertiary -->

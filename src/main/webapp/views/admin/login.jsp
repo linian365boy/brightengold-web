@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <meta http-equiv="description" content="brigtengold login"> 
 <meta http-equiv="author" content="brigtengold"> 
-<title>sunshinecig login</title>
+<title>rockechogroup login</title>
 <link rel="icon" href="${ctx }resources/images/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="${ctx }resources/images/favicon.ico" type="image/x-icon" />
 <link href="${ctx }resources/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>

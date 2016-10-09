@@ -3,10 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
-	<title>${(model.enName)!''} - ${(company.name)!''}</title>
-<!-- All in One SEO Pack 2.3.8 by Michael Torbert of Semper Fi Web Design[254,328] -->
-<meta name="description" itemprop="description" content="Methoxydienone Powder Quick Detail: Methoxydienone Synonyms: 13-beta-ethyl-3-methoxygona-2,5(10)-dien-17-one Methoxydienone CAS: 2322-77-2 Methoxydienone" />
-		<style type="text/css">
+	<title>${(product.enName)!''} - ${(company.name)!''}</title>
+<meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
+<style type="text/css">
 img.wp-smiley,
 img.emoji {
 	display: inline !important;
@@ -20,22 +19,7 @@ img.emoji {
 	padding: 0 !important;
 }
 </style>
-<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css' type='text/css' media='' />
-<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css' type='text/css' media='only screen and (max-width: 768px)' />
-<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css' type='text/css' media='all' />
-<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css' type='text/css' media='all' />
-<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css' type='text/css' media='all' />
-<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
-<!--[if lt IE 9]>
-<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css?${style_v}' type='text/css' media='all' />
-<![endif]-->
+<#include "headCss.ftl">
 <style id='imax-extra-stylesheet-inline-css' type='text/css'>
 #sun h3 span {
     background: none repeat scroll 0 0 #5fd6d8;
@@ -66,7 +50,7 @@ border-bottom: 3px solid #5fd6d8;
 .owl-theme .owl-controls.clickable .owl-buttons div:hover{background:#999999;}
 div.grid_no_animation figcaption .pro_price_area .amount {text-decoration: none;color: #16A085;}
 </style>
-<link rel="alternate" type="application/rss+xml"  title="新产品" href="http://www.genuineraws.com/products/feed/" /><style type="text/css">
+<style type="text/css">
 a,a:visited,.blog-columns .comments-link a:hover {color: #5fd6d8;}input:focus,textarea:focus,.site-footer .widget-area .widget .wpcf7 .wpcf7-submit {border: 1px solid #5fd6d8;}button,input[type="submit"],input[type="button"],input[type="reset"],.tx-service.curved .tx-service-icon span,.tx-service.square .tx-service-icon span {background-color: #5fd6d8;}.nav-container .sub-menu,.nav-container .children {border-top: 2px solid #5fd6d8;}.ibanner,.da-dots span.da-dots-current,.tx-cta a.cta-button {background-color: #5fd6d8;}#ft-post .entry-thumbnail:hover > .comments-link,.tx-folio-img .folio-links .folio-linkico,.tx-folio-img .folio-links .folio-zoomico {background-color: #5fd6d8;}.entry-header h1.entry-title a:hover,.entry-header > .entry-meta a:hover {color: #5fd6d8;}.featured-area div.entry-summary > p > a.moretag:hover {background-color: #5fd6d8;}.site-content div.entry-thumbnail .stickyonimg,.site-content div.entry-thumbnail .dateonimg,.site-content div.entry-nothumb .stickyonimg,.site-content div.entry-nothumb .dateonimg {background-color: #5fd6d8;}.entry-meta a,.entry-content a,.comment-content a,.entry-content a:visited {color: #5fd6d8;}.format-status .entry-content .page-links a,.format-gallery .entry-content .page-links a,.format-chat .entry-content .page-links a,.format-quote .entry-content .page-links a,.page-links a {background: #5fd6d8;border: 1px solid #5fd6d8;color: #ffffff;}.format-gallery .entry-content .page-links a:hover,.format-audio .entry-content .page-links a:hover,.format-status .entry-content .page-links a:hover,.format-video .entry-content .page-links a:hover,.format-chat .entry-content .page-links a:hover,.format-quote .entry-content .page-links a:hover,.page-links a:hover {color: #5fd6d8;}.iheader.front {background-color: #5fd6d8;}.navigation a,.tx-post-row .tx-folio-title a:hover,.tx-blog .tx-blog-item h3.tx-post-title a:hover {color: #5fd6d8;}.paging-navigation div.navigation > ul > li a:hover,.paging-navigation div.navigation > ul > li.active > a {color: #5fd6d8;	border-color: #5fd6d8;}.comment-author .fn,.comment-author .url,.comment-reply-link,.comment-reply-login,.comment-body .reply a,.widget a:hover {color: #5fd6d8;}.widget_calendar a:hover {background-color: #5fd6d8;	color: #ffffff;	}.widget_calendar td#next a:hover,.widget_calendar td#prev a:hover {background-color: #5fd6d8;color: #ffffff;}.site-footer div.widget-area .widget a:hover {color: #5fd6d8;}.site-main div.widget-area .widget_calendar a:hover,.site-footer div.widget-area .widget_calendar a:hover {background-color: #5fd6d8;color: #ffffff;}.widget a:visited { color: #373737;}.widget a:hover,.entry-header h1.entry-title a:hover,.error404 .page-title:before,.tx-service-icon span i,.tx-post-comm:after {color: #5fd6d8;}.da-dots > span > span,.site-footer .widget-area .widget .wpcf7 .wpcf7-submit {background-color: #5fd6d8;}.iheader,.format-status,.tx-service:hover .tx-service-icon span,.ibanner .da-slider .owl-item .da-link:hover {background-color: #5fd6d8;}.tx-cta {border-left: 6px solid #5fd6d8;}.paging-navigation #posts-nav > span:hover, .paging-navigation #posts-nav > a:hover, .paging-navigation #posts-nav > span.current, .paging-navigation #posts-nav > a.current, .paging-navigation div.navigation > ul > li a:hover, .paging-navigation div.navigation > ul > li > span.current, .paging-navigation div.navigation > ul > li.active > a {border: 1px solid #5fd6d8;color: #5fd6d8;}.entry-title a { color: #141412;}.tx-service-icon span { border: 2px solid #5fd6d8;}.nav-container .current_page_item > a,.nav-container .current_page_ancestor > a,.nav-container .current-menu-item > a,.nav-container .current-menu-ancestor > a,.nav-container li a:hover,.nav-container li:hover > a,.nav-container li a:hover,ul.nav-container ul a:hover,.nav-container ul ul a:hover {background-color: #5fd6d8; }.tx-service.curved .tx-service-icon span,.tx-service.square .tx-service-icon span {border: 6px solid #e7e7e7; width: 100px; height: 100px;}.tx-service.curved .tx-service-icon span i,.tx-service.square .tx-service-icon span i {color: #FFFFFF;}.tx-service.curved:hover .tx-service-icon span,.tx-service.square:hover .tx-service-icon span {background-color: #e7e7e7;}.tx-service.curved:hover .tx-service-icon span i,.tx-service.square:hover .tx-service-icon span i,.folio-style-gallery.tx-post-row .tx-portfolio-item .tx-folio-title a:hover {color: #5fd6d8;}.site .tx-slider .tx-slide-button a,.ibanner .da-slider .owl-item.active .da-link  { background-color: #5fd6d8; color: #FFF; }.site .tx-slider .tx-slide-button a:hover  { background-color: #373737; color: #FFF; }</style>
 <style type="text/css" id="custom-background-css">
 body.custom-background { background-color: #e2e2e2; }
@@ -81,68 +65,8 @@ body.custom-background { background-color: #e2e2e2; }
     	<#include "headMenu.ftl">
 		<div id="main" class="site-main">
 	<div id="primary" class="content-area">
-		<div id="content" class="site-content" role="main">
-                <nav class="woocommerce-breadcrumb" itemprop="breadcrumb">
-                <a href="${ctx}/">Home</a>&nbsp;&#47;&nbsp;
-                <a href="${ctx}/views/html/col/${(category.enName)?replace('\\s*','','ri')}.htm">${(category.enName)!''}</a>
-                &nbsp;&#47;&nbsp;${(model.enName)!''}</nav>
-			<div itemscope itemtype="${ctx}/resources/${model.picUrl}" id="product-1066" class="post-1066 product type-product status-publish has-post-thumbnail product_cat-prohormones-sarms product_tag-methoxydienone-powder shipping-taxable product-type-simple product-cat-prohormones-sarms product-tag-methoxydienone-powder instock">
-			<div class="images">
-			<a href="${ctx}/resources/${model.picUrl}" itemprop="image" class="woocommerce-main-image zoom" title="" data-rel="prettyPhoto"><img width="500" height="500" src="${ctx}/resources/${model.picUrl}" class="attachment-shop_single size-shop_single wp-post-image" alt="${(model.enName)!''}" title="${(model.enName)!''}" /></a>
-			</div>
-		<div class="summary entry-summary">
-		<h1 itemprop="name" class="product_title entry-title">${(model.enName)!''}</h1>
-<div itemprop="offers" itemscope itemtype="${ctx}/resources/${model.picUrl}">
-	<p class="price"></p>
-</div>
-<div class="product_meta" >
-	<span class="posted_in">Categories: <a href="${ctx}/" rel="tag">${category.enName}</a>.</span>
-	<div class="addthis_sharing_toolbox"></div>
-</div>
-	</div><!-- .summary -->
-	<div class="woocommerce-tabs">
-		<ul class="tabs">
-				<li class="description_tab">
-					<a href="#tab-description">Description</a>
-				</li>
-					</ul>
-			<div class="panel entry-content" id="tab-description">
-				${(model.description)!'no description!'}
-			</div>
-			</div>
-	<div class="related products">
-	<#if (relatedProducts?? && (relatedProducts?size>0))>
-	  <div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
-	  	<div id="sun" >
-	  		<h3 class="wpb_area_title"><span>Related Product</span></h3>
-	  	</div>
-	  	<div class="supercat-des">
-			<a class="img-class" title=""></a>		
-		</div>
-			<div id="owl-demo-related" class="owl-carousel">
-				<#list relatedProducts as relatedp>
-						<div class="item">
-							<figure>
-								<a href="${ctx}/relatedp" class="lazyOwl">
-									<img width="300" height="300" src="${ctx }/resources/${relatedp.picUrl}" class="wpb_pro_img wp-post-image" alt="${relatedp.enName}" />
-								</a>
-								<figcaption>
-									<h3 class="pro_title">${relatedp.enName}</h3>
-									<div class="price_area_fix">		
-										<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
-											<a href="${ctx}/relatedp" rel="nofollow" data-product_id="440" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
-										</p>
-									</div>
-								</figcaption>
-							</figure>
-						</div>
-					</#list>			
-				</div>
-			</div>	 
-		</#if> 
-	</div>
-</div><!-- #product-1066 -->
-		</div><!-- #content -->
+		<#--virtual 相对路径-->
+        <!--#include virtual="${product.url}"-->
 		<#include "leftCate.ftl">
 	</div><!-- #primary -->
 <hr />

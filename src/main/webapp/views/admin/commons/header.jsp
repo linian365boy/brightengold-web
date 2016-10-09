@@ -14,8 +14,8 @@
     <body>
 	<header id="header">
 		<hgroup>
-			<h1 class="site_title"><a href="${ctx }admin">Sunshinecig</a></h1>
-			<h2 class="section_title">Sunshinecig Management System</h2>
+			<h1 class="site_title"><a href="${ctx }admin">rockechogroup</a></h1>
+			<h2 class="section_title">rockechogroup Management System</h2>
 			<div class="btn_view_site"><a><sec:authentication property="principal.realName"/>(<sec:authentication property="principal.username"/>)&nbsp;</a></div>
 			<a href="javascript:void(0);" onclick="modifyPass();" style="color:white;">修改密码</a>
 			&nbsp;&nbsp;&nbsp;
@@ -33,6 +33,7 @@
 					$.ajax({
 						type:'POST',
 						url:url,
+						dataType:'json',
 						data:$('#form').serialize(),
 						success:function(res){
 							var dialog = art.dialog({

@@ -3,12 +3,11 @@ package com.brightengold.controller;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.brightengold.model.Column;
 import com.brightengold.model.News;
 import com.brightengold.service.ColumnService;
@@ -28,11 +26,12 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.NewsService;
 import com.brightengold.util.Constant;
+import com.brightengold.util.ConstantVariable;
 import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+import com.brightengold.vo.MessageVo;
 import com.google.gson.Gson;
-
 import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
 
@@ -108,7 +107,8 @@ public class NewsController {
 	}
 	
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.POST)
-	public String update(@PathVariable Integer newsId,News news, Integer firstColId, Integer secondColId){
+	public String update(HttpServletRequest request,
+			@PathVariable Integer newsId,News news, Integer firstColId, Integer secondColId){
 		if(newsId!=null){
 			StringBuilder content = new StringBuilder();
 			News temp = newsService.loadNews(newsId);
@@ -123,6 +123,9 @@ public class NewsController {
 				news.setDepth(String.valueOf(firstColId));
 			}
 			newsService.saveNews(news);
+			logger.info("修改前新闻信息|{}，修改后新闻信息|{}",
+					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
+					ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
 			if(!temp.getTitle().equals(news.getTitle())){
 				content.append("标题由\""+temp.getTitle()+"\"修改为\""+news.getTitle()+"\"");
 			}
@@ -134,6 +137,10 @@ public class NewsController {
 			}
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT, content.toString());
+			//删除页面
+			String path = request.getSession().getServletContext().getRealPath("/");
+			Tools.delFile(path + Constant.NEWSPATH + File.separator+news.getUrl());
+			Tools.delFile(path + Constant.NEWSPRE + File.separator+news.getId()+".htm");
 		}
 		return "redirect:/admin/news/news/1.html";
 	}
@@ -163,6 +170,7 @@ public class NewsController {
 					Tools.delFile(path);
 				}
 				MsgUtil.setMsgDelete("success");
+				logger.warn("删除了新闻|{}",ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
 			}
 			LogUtil.getInstance().log(LogType.DEL, "标题："+news.getTitle());
 		}
@@ -188,6 +196,7 @@ public class NewsController {
 		}
 	}
 	
+	@Deprecated
 	@RequestMapping(value="/{newsId}/publish",method=RequestMethod.GET)
 	@ResponseBody
 	public String publishNews(@PathVariable Integer newsId,HttpServletRequest request){
@@ -211,29 +220,37 @@ public class NewsController {
 	@ResponseBody
 	public String releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
 		Gson gson = new Gson();
-		News tempNews = null;
+		MessageVo vo = new MessageVo();
 		String fPath = null;
 		if(newsId!=null){
+			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+					request.getServerPort()+request.getContextPath();
 			String realPath = request.getSession().getServletContext().getRealPath("/");
 			String parentPath = Constant.NEWSPATH;
-			tempNews = newsService.loadNews(newsId);
+			News tempNews = newsService.loadNews(newsId);
 			tempNews.setPublishDate(new Date());
 			if(StringUtils.isBlank(tempNews.getUrl())){
 				tempNews.setUrl(Tools.getRndFilename()+".htm");
 			}
-			tempNews.setUrl(Tools.getRndFilename()+".htm");
 			LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
 			if(tempNews.getPublishDate()!=null){
-				 fPath = realPath +Constant.NEWSPRE+tempNews.getColumn().getCode()+File.separator+tempNews.getUrl();
+				 fPath = realPath +Constant.NEWSPATH+File.separator+tempNews.getUrl();
 				 FileUtil.delFile(fPath);
 			}
+			map.put("ctx", basePath);
+			map.put("model", tempNews);
 			//生成唯一的新闻页面路径，不需要根据页码生成页面
 			if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
 				newsService.saveNews(tempNews);
+				vo.setCode(Constant.SUCCESS_CODE);
+				vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
+				logger.info("发布成功新闻|{}",tempNews.getTitle());
+				return gson.toJson(vo);
 			}
-			return gson.toJson(tempNews);
 		}
-		return gson.toJson(tempNews);
+		vo.setCode(Constant.ERROR_CODE);
+		vo.setMessage("新闻id不存在");
+		return gson.toJson(vo);
 	}
 	
 	public PageRainier<News> getNews() {

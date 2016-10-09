@@ -21,9 +21,9 @@
     				<th width="10%">序号</th>
 	                <th width="16%">操作</th>
 	                <th width="12%">操作员</th>
-	                <th width="16%">模块</th>
+	                <!-- <th width="16%">模块</th> -->
 	                <th width="16%">操作日期</th>
-	                <th width="30%">内容</th>
+	                <th>内容</th>
 				</tr> 
 			</thead> 
 			<tbody id="dataContent">
@@ -36,7 +36,7 @@
 								<td title="员工号：${log.operator }&nbsp;&nbsp;姓名：${log.operatorRealName}">
 									${log.operatorRealName }
 								</td>
-								<td>${log.menu.name }</td>
+								<%-- <td>${log.menu.name }</td> --%>
 								<td>
 									<fmt:formatDate value="${log.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/>
 								</td>

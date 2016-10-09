@@ -12,6 +12,23 @@
 <script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx }resources/js/jquery.equalHeight.js"></script>
 <link rel="stylesheet" type="text/css" href="${ctx }resources/css/style.css?${style_v}" />
+<style type="text/css">
+	.selectpicker {
+		background-color: #fff;
+	    background-image: none;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	    color: #555;
+	    display: block;
+	    font-size: 14px;
+	    height: 34px;
+	    line-height: 1.42857;
+	    padding: 6px 12px;
+	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	    vertical-align: middle;
+	}
+</style>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$("#form").validate({
@@ -27,6 +44,9 @@
 				},
 				"description":{
 					required:true
+				},
+				"priority":{
+					number:true
 				}
 			},
 			messages:{
@@ -41,6 +61,9 @@
 				},
 				"description":{
 					required:"详情不能为空！"
+				},
+				"priority":{
+					number:"请输入数字！"
 				}
 			},
 			highlight: function(element) {
@@ -58,8 +81,28 @@
 				str+="<option value="+json.get(i)[0]+">"+json.get(i)[1]+"</option>";
 			}
 			$("#parentCs").append(str);
+			changeCol($("#parentCs"));
 		});
 	});
+	
+	function changeCol(obj){
+		var cateId = $(obj).val();
+		$.post("${ctx }admin/goods/category/getChildrenCate/"+cateId+".html",{
+			parentCateId:cateId
+		},function(json){
+			$(obj).next().remove();
+			var html = "";
+			if(json && json.length>0){
+				html+='<select class="col-xs-5 selectpicker" name="childrenC" >';
+				html+="<option value='0'>==请选择==</option>";
+				$.each(json,function(i,n){
+					html+="<option value='"+n[0]+"'>"+n[1]+"</option>";
+				});
+				html+="</select>";
+			}
+			$(obj).after(html);
+		},"json");
+	};
 	</script>
 </head>
 <body>
@@ -92,16 +135,17 @@
 			  </div>
 			  <div class="form-group">
 			    <label for="parentCs" class="col-sm-1 control-label">商品分类<span class="asterisk">*</span></label>
-			    <div class="col-sm-4">
-			      <select name="parentC" id="parentCs" class="form-control">
+			    <div class="col-sm-8">
+			      <select name="parentC" id="parentCs" class="col-xs-5 selectpicker" onchange="changeCol(this);">
             		</select>
 			    </div>
 			  </div>
 			  <div class="form-group">
-			  	<div class="col-sm-offset-1 col-sm-8">
+			  	<label for="parentCs" class="col-sm-1 control-label">是否热门</label>
+			  	<div class="col-sm-8">
 				  <div class="checkbox">
 				  	<label>
-				      <input type="checkbox" name="hot"> 是否热门（勾选表示热门，否则非热门商品）
+				      <input type="checkbox" name="hot"> （勾选表示热门，否则非热门商品）
 				    </label>
 				  </div>
 				  </div>
@@ -110,6 +154,12 @@
 			    <label for="keyWords" class="col-sm-1 control-label">关键字</label>
 			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="keyWords" name="keyWords" placeholder="商品关键字(以英文分号隔开不同的关键字)">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="priority" class="col-sm-1 control-label">排序号</label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control" id="priority" name="priority" placeholder="排序号，越大排名越前">
 			    </div>
 			  </div>
 			  <div class="form-group">

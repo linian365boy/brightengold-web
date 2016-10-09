@@ -6,7 +6,7 @@
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<title>${(column.enName)!''} - ${(company.name)!''}</title>
 <!-- All in One SEO Pack 2.3.6 by Michael Torbert of Semper Fi Web Design[254,315] -->
-<meta name="description" itemprop="description" content="About Us &nbsp; HongKong Shijingu Technology Co.,Ltd is one of the most professional pharmaceutical intermediates manufactures and exporters in China." />
+<meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
 <style type="text/css">
 img.wp-smiley,
 img.emoji {
@@ -21,23 +21,7 @@ img.emoji {
 	padding: 0 !important;
 }
 </style>
-<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css?${style_v}' type='text/css' media='' />
-<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='select2-css'  href='${ctx}/resources/views/style-ewa/css/select2.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css?${style_v}' type='text/css' media='only screen and (max-width: 768px)' />
-<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css?${style_v}' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
-<!--[if lt IE 9]>
-<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css?${style_v}' type='text/css' media='all' />
-<![endif]-->
+<#include "headCss.ftl">
 <style id='imax-extra-stylesheet-inline-css' type='text/css'>
 #sun h3 span {
     background: none repeat scroll 0 0 #5fd6d8;
@@ -54,6 +38,7 @@ border-bottom: 3px solid #5fd6d8;
 </style>
 <script type='text/javascript' src='${ctx}/resources/js/jquery-1.11.1.min.js?${style_v}'></script>
 <script type='text/javascript' src='${ctx}/resources/js/jquery-migrate.min.js?${style_v}'></script>
+<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js"></script>
 <meta name="generator" content="WordPress 4.5.3" />
 <meta name="generator" content="WooCommerce 2.3.11" />
 <link rel='shortlink' href='${ctx}/' />
@@ -77,22 +62,22 @@ body.custom-background { background-color: #e2e2e2; }
 <link rel="apple-touch-icon-precomposed" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
 <meta name="msapplication-TileImage" content="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
 </head>
-<body class="page page-id-28 page-template-default custom-background sidebar nx-boxed onecol-blog no-avatars" style="  ">
+<body class="archive post-type-archive post-type-archive-product custom-background woocommerce woocommerce-page sidebar nx-boxed onecol-blog no-avatars" style="  ">
 	<div id="page" class="hfeed site">
     <#include "headMenu.ftl">
 	<div id="main" class="site-main">
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
-
-						
+				<nav class="woocommerce-breadcrumb" ><a href="${ctx}">Home</a>&nbsp;&#47;&nbsp;${(column.enName)!'--'}</nav>	
 				<article id="post-28" class="post-28 page type-page status-publish hentry">
 					<div class="entry-content">
-					${(info.content)!'no content'}
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-	</div><!-- .entry-content -->
-					<footer class="entry-meta">
-											</footer><!-- .entry-meta -->
+						${(info.content)!'no content'}
+						<p>&nbsp;</p>
+						<#if ((column.hasNeedForm)?string)=="true" || ((column.hasNeedForm)?string)=="1">
+							<#include "form.ftl">
+						</#if>
+					</div><!-- .entry-content -->
+					<footer class="entry-meta"></footer><!-- .entry-meta -->
 				</article><!-- #post -->
 <div id="comments" class="comments-area">
 </div><!-- #comments -->			
@@ -101,246 +86,6 @@ body.custom-background { background-color: #e2e2e2; }
 	</div><!-- #primary -->
 <hr />
 <#include "bottom.ftl">
-<script type="text/javascript">
-jQuery.noConflict();
-(function( $ ) {
-  $(function() {
-  
-$(document).ready(function() {
-	// carousel latest
-    $("#owl-demo").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 5,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	}); 
-	// carousel feature
-	$("#owl-demo-feature").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-// sidebar carousel feature product
-	
-	$("#owl-demo-side-feature").owlCarousel({
-        autoPlay: false,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-    });
-	
-		// carousel related
-	$("#owl-demo-related").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-//	
-		$("#owl-demo-la").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 1,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-//	
-		$("#owl-demo-fe").owlCarousel({
-		autoPlay: false,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 5,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-// sidebar carousel three product
-	
-	$("#owl-demo-side-three").owlCarousel({
-        autoPlay: false,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-    });
-		
-// sidebar carousel flash product
-	
-	$("#owl-demo-side-flash").owlCarousel({
-        autoPlay: false,
-		stopOnHover: false,
-		navigation: false,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 1,
-        itemsDesktop : [1199,1],
-        itemsDesktopSmall : [979,1],
-		itemsTablet: [768,1],
-      	itemsMobile:[479,1],
-		mouseDrag:false,
-		touchDrag:false,
-		transitionStyle:"fade",
-		lazyLoad : true,
-    });
-
-// sidebar carousel four product
-	
-	$("#owl-demo-side-four").owlCarousel({
-        autoPlay: true,
-		stopOnHover: true,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-    });
-	
-	// slider style type for latest product general
-	$('.wpb_latest_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	// slider style type for feature product general
-	$('.wpb_feature_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	// slider style type for latest product sidebar
-	$('.widget_wpb_latest_class .owl-wrapper').addClass('grid cs-style-3');
-	// slider style type for feature product sidebar
-	$('.widget_wpb_feature_class .owl-wrapper').addClass('grid cs-style-3');
-		
-	$('.wpb_related_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.wpb_la_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.wpb_fe_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.widget_wpb_three_class .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.widget_wpb_flash_class .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.widget_wpb_four_class .owl-wrapper').addClass('grid cs-style-3');
-});	
-
-
-});
-})(jQuery);
-</script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/select2.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js?${style_v}'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js?${style_v}'></script>
+<#include "bottomJs.ftl">
 </body>
 </html>

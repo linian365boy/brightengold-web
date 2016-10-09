@@ -1,7 +1,6 @@
 package com.brightengold.controller;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,15 +40,16 @@ import com.brightengold.service.SystemConfig;
 import com.brightengold.service.WebConfigService;
 import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
+import com.brightengold.util.HtmlStringUtil;
+import com.google.common.collect.Maps;
 
-import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/sys/html")
 @Scope("prototype")
 public class GennerateController {
-	private Logger logger = LoggerFactory.getLogger(GennerateController.class);
+	private static final Logger logger = LoggerFactory.getLogger(GennerateController.class);
 	@Autowired
 	private ColumnService columnService;
 	@Autowired
@@ -85,7 +85,7 @@ public class GennerateController {
 	
 	@ResponseBody
 	@RequestMapping(value={"/generateAll"},method=RequestMethod.POST)
-	public String generateAll(int style,ModelMap map,HttpServletRequest request){
+	public String generateAll(ModelMap map, HttpServletRequest request){
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
 		String path = request.getSession().getServletContext().getRealPath("/");
@@ -95,49 +95,60 @@ public class GennerateController {
 		gennerateCommon(map);
 		map.put("ctx", basePath);
 		map.put("style_v", style_v);
-		//１　生成首页
-		FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm");
-		//２　获取所有的栏目code
+		//1　生成首页
+		List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
+		map.put("hotProducts", products);
+		if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
+			logger.error("生成index页面失败。");
+		}else{
+			logger.info("生成index产品页面成功");
+		}
+		//2　获取所有的正常的可发布的栏目code
 		List<Column> columnList = columnService.findList();
 		for(Column col : columnList){
 			//当前栏目
 			parentCol = col.getParentColumn()==null?col:col.getParentColumn();
 			map.put("parentCol", parentCol);
 			map.put("column", col);
-			publishAllProductsByStyle(request,col,map);
-			FreemarkerUtil.fprint(templateName, map, 
-					path+File.separator+"views"+File.separator+"html"+
-							File.separator+"col"+File.separator, col.getCode()+".htm");
+			if(1==col.getType() || 2==col.getType()){
+				publishAllNews(request, col, map);
+				templateName = "productTemplate.ftl";
+			}else{
+				templateName = "columnTemplate.ftl";
+				//查找是否有相同code的Info，一起生成，填充column的内容页面
+				Info info = infoService.loadOneByCode(col.getCode());
+				if(info!=null){
+					map.put("info", info);
+				}
+			}
+			if(!FreemarkerUtil.fprint(templateName, map, 
+					path+Constant.COLUMNPATHPRE, col.getCode()+".htm")){
+				logger.error("生成{}产品页面失败",col.getEnName());
+			}else{
+				logger.info("生成{}产品页面成功",col.getEnName());
+				//避免覆盖，删除map中已存在的值
+				map.remove("info");
+			}
 		}
-		//３　获取所有分类的英文名称
+		//3　获取所有分类的英文名称
 		List<Category> cateList = categoryService.findList();
 		for(Category cate : cateList){
-			gennerateCommon(map);
-			map.put("ctx", basePath);
-			map.put("style_v", style_v);
 			map.put("category", cate);
-			FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
-					path+File.separator+"views"+File.separator+"html"+
-							File.separator+"col"+File.separator, cate.getEnName().replaceAll("\\s*", "")+".htm");
-		}
-		//４　获取所有info　page code
-		List<Info> infoList = infoService.findList();
-		for(Info info : infoList){
-			gennerateCommon(map);
-			map.put("ctx", basePath);
-			map.put("style_v", style_v);
-			map.put("model", info);
-			FreemarkerUtil.fprint("info.ftl", map, path+File.separator+"views"+
-					File.separator+"html"+File.separator+"info"+
-					File.separator,info.getCode()+".htm");
+			map.put("column", cate.getColumn());
+			publishAllProducts(request,cate,map);
+			if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
+					path+Constant.CATEGORYPRODUCTPATH, cate.getEnName().replaceAll("\\s*", "")+".htm")){
+				logger.error("生成{}分类页面失败",cate.getEnName());
+			}else{
+				logger.info("生成{}分类页面成功",cate.getEnName());
+			}
 		}
 		return "200";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value={"/{code}/generate",""},method=RequestMethod.POST)
-	public String gennerateHtml(@PathVariable String code,int style,ModelMap map,
-			HttpServletRequest request){
+	public String gennerateHtml(@PathVariable String code,ModelMap map, HttpServletRequest request){
 		//检查code是否存在
 		long count = 0;
 		if("index".equals(code) || "home".equals(code)){
@@ -145,18 +156,18 @@ public class GennerateController {
 		}else{
 			count = columnService.countColumnByCode(code);
 		}
+		String style_v = (String) request.getSession().getAttribute("style_v");
+		String path = request.getSession().getServletContext().getRealPath("/");
+		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+				request.getServerPort()+request.getContextPath();
+		map.put("ctx", basePath);
+		map.put("style_v", style_v);
 		//按栏目代码查询
 		if(count>0){
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-					request.getServerPort()+request.getContextPath();
-			String path = request.getSession().getServletContext().getRealPath("/");
-			String style_v = (String) request.getSession().getAttribute("style_v");
 			Column col = null;
 			String templateName = "columnTemplate.ftl";
 			Column parentCol = null;
 			gennerateCommon(map);
-			map.put("ctx", basePath);
-			map.put("style_v", style_v);
 			try{
 				if("index".equals(code) || "home".equals(code)){
 					//生成首页的热销产品
@@ -164,8 +175,10 @@ public class GennerateController {
 					List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
 					map.put("hotProducts", products);
 					if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
-						logger.error("生成"+code+"页面失败！");
+						logger.error("生成{}页面失败！",code);
 						return "500";
+					}else{
+						logger.info("生成{}页面成功！",code);
 					}
 				}else{
 					//当前栏目
@@ -173,164 +186,105 @@ public class GennerateController {
 					parentCol = col.getParentColumn()==null?col:col.getParentColumn();
 					map.put("parentCol", parentCol);
 					map.put("column", col);
-					publishAllNews(request,col,map);
 					if(1==col.getType() || 2==col.getType()){
+						publishAllNews(request,col,map);
 						templateName = "productTemplate.ftl";
-					}
-					//查找是否有相同code的Info，一起生成，填充column的内容页面
-					Info info = infoService.loadOneByCode(code);
-					if(info!=null){
-						map.put("info", info);
+					}else{
+						//查找是否有相同code的Info，一起生成，填充column的内容页面
+						Info info = infoService.loadOneByCode(code);
+						if(info!=null){
+							map.put("info", info);
+						}
 					}
 					if(!FreemarkerUtil.fprint(templateName, map, 
 							path+Constant.COLUMNPATHPRE, code+".htm")){
-						logger.error("生成"+code+"页面失败！");
+						logger.error("生成{}页面失败！",code);
 						return "500";
+					}else{
+						logger.info("生成{}页面成功！",code);
 					}
 				}
 			}catch(Exception e){
-				logger.error("生成"+code+"页面失败！",e);
+				logger.error("生成{}页面失败！",code,e);
 				return "500";
 			}
 			return "200";
 		}else{
 			//按分类英文名称查询是否有记录
 			Category cate = categoryService.loadCategoryByEname(code);
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-					request.getServerPort()+request.getContextPath();
-			String style_v = (String) request.getSession().getAttribute("style_v");
-			String path = request.getSession().getServletContext().getRealPath("/");
 			if(cate!=null){
-				map.put("style_v", style_v);
 				gennerateCommon(map);
-				map.put("ctx", basePath);
-				//map.put("parentCol", parentCol);
 				map.put("category", cate);
 				map.put("column", cate.getColumn());
 				publishAllProducts(request,cate,map);
 				if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
-						path+Constant.COLUMNPATHPRE, code.replaceAll("\\s*", "")+".htm")){
-					logger.error("生成"+code+"页面失败！");
+						path+Constant.CATEGORYPRODUCTPATH, 
+						cate.getEnName().replaceAll("\\s*", "")+".htm")){
+					logger.error("生成{}页面失败！",code);
 					return "500";
+				}else{
+					logger.info("生成{}页面成功",code);
 				}
 				return "200";
-			}else{
-				Info info = infoService.loadOneByCode(code);
-				if(info!=null){
-					gennerateCommon(map);
-					map.put("ctx", basePath);
-					map.put("style_v", style_v);
-					map.put("model", info);
-					if(!FreemarkerUtil.fprint("info.ftl", map, path+File.separator+"views"+
-							File.separator+"html"+File.separator+"info"+
-							File.separator,info.getCode()+".htm")){
-						logger.error("生成"+code+"页面失败！");
-						return "500";
-					}
-					return "200";
-				}
-				return "501";
 			}
+			return "501";
 		}
-	}
-	
-	
-	private void publishAllProductsByStyle(HttpServletRequest request,
-			Column col, ModelMap map) {
-		List<Category> cates = categoryService.findCateByColId(col.getId());
-		for(Category cate : cates){
-			 List<Product> productList = productService.findAllListByCateId(cate.getId());;
-			 //得到该栏目下所有的产品
-			 //批量修改product;
-			 List<Product> tempProductList = new ArrayList<Product>();
-			 String path = request.getSession().getServletContext().getRealPath("/");
-			 String parentPath = path + File.separator+"views"+File.separator+"html"+
-				 		File.separator+"product"+File.separator+
-			 			cate.getId()+File.separator;
-			 for(Product product : productList){
-				 if(product.isPublish()){
-					 FileUtil.delFile(parentPath+product.getUrl());
-				 }
-				 product.setPublish(true);
-				 map.put("model", product);
-				 map.put("parentCol", ((Column)map.get("column")).getParentColumn());
-				 map.put("relateProducts", productList);
-				 FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl());
-				 tempProductList.add(product);
-			 }
-			 if(tempProductList.size()>0){
-				 productService.insertOfBatch(tempProductList);
-			 }
-			 //pMap.put(cate, productList);
-		}
-		map.put("cates", cates);
 	}
 	
 	private void publishAllProducts(HttpServletRequest request, Category cate,
-			ModelMap map) {
-		 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
-				 productService.countByCateId((cate.getId())/this.pageSize)));
+			ModelMap modelMap) {
+		 Map<String,Object> map = null;
+		 long count = productService.countByCateId((cate.getId()));
+		 logger.info("分类Name|{}下共有{}个产品是已发布并且状态正常的.",cate.getName(),count);
+		 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * count/this.pageSize));
 		 PageRainier<Product> page = null;
 		 String path = request.getSession().getServletContext().getRealPath("/");
 		 String parentPath = "";
-		 List<Product> productList = null;
-		 String fPath = null;
-		 List<Product> tempProductList = new ArrayList<Product>();
 		 for(int i=0;i<totalPageNum;i++){
+			 map = Maps.newHashMap(modelMap);
 			 //得到该栏目下所有的产品
 			 page = productService.findAllByCateId((i+1), pageSize, cate.getId()); 
+			 logger.info("第{}页下共有{}个产品是已发布并且状态正常的.",(i+1),page.getResult().size());
 			 map.put("productPage", page);
-			 parentPath = path + Constant.CATEGORYPRODUCTPATH +
-				 			cate.getId()+File.separator;
+			 parentPath = path + Constant.CATEPRE ;
 			 //列表的页面生成
-			 FreemarkerUtil.fprint("categoryProductList.ftl", map, parentPath,(i+1)+".htm");
-			 //map.clear();
-			 productList = page.getResult();
-			 for(Product product:productList){
-				 if(product.isPublish()){
-					 fPath = parentPath+(i+1)+File.separator+product.getUrl();
-					 FileUtil.delFile(fPath);
-				 }
-				 product.setPublish(true);
-				 map.put("model", product);
-				 map.put("parentCol", ((Column)map.get("column")).getParentColumn());
-				 //查找相关连产品，根据keyWords
-				 List<Product> products = 
-						 productService.findRelatedProducts(product.getId(),product.getKeyWords(),8);
-				 if(!CollectionUtils.isEmpty(products)){
-					 map.put("relatedProducts", products);
-				 }
-				 parentPath = parentPath+(i+1)+File.separator;
-				 FreemarkerUtil.fprint("product.ftl", map, parentPath,product.getUrl());
-				 parentPath = path + Constant.CATEGORYDETAILPRODUCTPATH +cate.getId()+File.separator;
-				 tempProductList.add(product);
-			}
+			 FreemarkerUtil.fprint("categoryProductList.ftl", map, parentPath+File.separator+cate.getId(),(i+1)+".htm");
+			 map.clear();
 		 }
-		 //批量修改product;
-		 productService.insertOfBatch(tempProductList);
 	}
 
-	//发布某栏目下所有的新闻
+	
 	private void publishAllNews(HttpServletRequest request, Column col, ModelMap modelMap){
 		 Map<String,Object> map = new HashMap<String,Object>();
-		 //false　文章标题列表的页面
-		 //true　产品展示的页面
 		 if(1==col.getType()){
-			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
-					 productService.countByColId(col.getId())/this.pageSize));
+			 //1　产品展示的页面
+			 long count = productService.countByColId(col.getId());
+			 logger.info("栏目Name|{}下共有{}个产品是已发布并且状态正常的.",col.getEnName(),count);
+			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * count/this.pageSize));
 			 PageRainier<Product> page = null;
 			 String path = request.getSession().getServletContext().getRealPath("/");
-			 String parentPath = "";
+			 String parentPath = null;
 			 for(int i=0;i<totalPageNum;i++){
+				 map.putAll(modelMap);
 				 //page = productService.findAllByColId((i+1), pageSize, col.getId()); //得到该栏目下所有的产品
 				 page = productService.findPageByColId((i+1), pageSize, col.getId()); //分页得到该栏目下所有的产品
+				 logger.info("第{}页共有{}个产品发布！",(i+1),page.getResult().size());
 				 map.put("productPage", page);
-				 parentPath = path + Constant.PRODUCTPRE + col.getCode();
+				 parentPath = path + Constant.PRODUCTPRE + File.separator +col.getCode();
 				 //列表的页面生成
-				 map.put("ctx", modelMap.get("ctx"));
-				 map.put("column", col);
 				 if(!FreemarkerUtil.fprint("productList.ftl", map, parentPath,(i+1)+".htm")){
-					 logger.error("生成产品列表页面失败");
+					 logger.error("生成产品列表页面|{}失败",(i+1));
+				 }else{
+					 logger.info("生成产品列表页面|{}成功",(i+1));
+				 }
+				 //生成产品详情的公共部分
+				 for(Product product : page.getResult()){
+					 map.put("product", product);
+					 if(!FreemarkerUtil.fprint("product.ftl", map, path + Constant.PRODUCTPATH , product.getId()+".htm")){
+						 logger.error("生成产品详情页面|{}失败",product.getEnName());
+					 }else{
+						 logger.info("生成产品详情页面|{}成功",product.getEnName());
+					 }
 				 }
 				 map.clear();
 			 }
@@ -343,13 +297,25 @@ public class GennerateController {
 			 String path = request.getSession().getServletContext().getRealPath("/");
 			 String parentPath = "";
 			 for(int i=0;i<totalPageNum;i++){
+				 map.putAll(modelMap);
 				 page = newsService.findAllByColId((i+1), pageSize, col.getId(),col.getDepth()); //得到所有的新闻
 				 map.put("newsPage", page);
-				 parentPath = path + Constant.NEWSPRE + col.getCode();
+				 parentPath = path + Constant.NEWSPRE + File.separator +col.getCode();
 				 //列表的页面生成
-				 map.put("ctx", modelMap.get("ctx"));
-				 map.put("column", col);
-				 FreemarkerUtil.fprint("newsList.ftl", map, parentPath,(i+1)+".htm");
+				 if(!FreemarkerUtil.fprint("newsList.ftl", map, parentPath,(i+1)+".htm")){
+					 logger.info("生成新闻列表页面|{}失败",(i+1));
+				 }else{
+					 logger.info("生成新闻列表页面|{}成功",(i+1));
+				 }
+				//生成产品详情的公共部分
+				 for(News news : page.getResult()){
+					 map.put("news", news);
+					 if(!FreemarkerUtil.fprint("news.ftl", map, path + Constant.NEWSPATH , news.getId()+".htm")){
+						 logger.error("生成新闻详情|{}失败",news.getTitle());
+					 }else{
+						 logger.info("生成新闻详情|{}页面成功",news.getTitle());
+					 }
+				 }
 				 map.clear();
 			 }
 		 }
@@ -360,7 +326,7 @@ public class GennerateController {
 		List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
 		map.put("indexAds", ads);
 		//横条菜单，最深显示到二级菜单
-		List<Column> crossCol = columnService.findColumnsByDepth(systemConfig.getCrossMaxDepth());
+		List<Column> crossCol = columnService.findColumnsByDepth();
 		map.put("crossCol", crossCol);
 		//首页侧边栏目，最深显示到三级菜单
 		//List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
@@ -370,19 +336,28 @@ public class GennerateController {
 		map.put("indexNews", news);
 		//查询所有第一级分类
 		List<Category> categorysList = categoryService.findAllParentCateList();
-		long catProductsSize = 0;
 		if(!CollectionUtils.isEmpty(categorysList)){
 			for(Category cate : categorysList){
-				catProductsSize = productService.countByCateId(cate.getId());
-				logger.info("cate products size |{}",catProductsSize);
+				long catProductsSize = productService.countByCateId(cate.getId());
+				cate.setProductsSize(catProductsSize);
 				if(catProductsSize!=0){
-					cate.setProductsSize(catProductsSize);
+					if(!CollectionUtils.isEmpty(cate.getChildren())){
+						for(Category childCate : cate.getChildren()){
+							catProductsSize = productService.countByCateId(childCate.getId());
+							logger.info("childCate products size |{}",catProductsSize);
+							childCate.setProductsSize(catProductsSize);
+						}
+					}
 				}
 			}
 		}
 		map.put("categorys", categorysList);
  		//企业信息
 		Company company = companyService.loadCompany();
+		//对公司描述信息introduce（含html代码）进行截取
+		company.setIntroduce(
+				HtmlStringUtil.subStringHTML(company.getIntroduce(), systemConfig.getCompanyLength(), 
+						"<a href='"+company.getWebsite()+"' class='button  product_type_simple' title='more infomation'>&nbsp;more"));
 		map.put("company", company);
 		//info信息
 		List<Info> infos = infoService.getList();
@@ -405,7 +380,7 @@ public class GennerateController {
 			logger.info("生成首页成功！");
 		}catch(Exception e){
 			MsgUtil.setMsg("error", "对不起，生成首页失败！");
-			logger.error("生成页面发生错误：{}",new Object[]{e});
+			logger.error("生成页面发生错误",e);
 		}
 		return "redirect:/admin/sys/html/generate.html";
 	}

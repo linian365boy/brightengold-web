@@ -46,7 +46,6 @@ public class LogService {
 			public Predicate toPredicate(Root<Log> root, CriteriaQuery<?> query,
 					CriteriaBuilder cb) {
 				Path<String> path = null;
-				//System.out.println(field+"/"+condition);
 				if("type".equals(field)){
 					path = root.get("type");
 				}else if("operator".equals(field)){

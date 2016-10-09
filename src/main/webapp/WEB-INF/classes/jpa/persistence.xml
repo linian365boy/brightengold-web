@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0">
 	<!-- Keep this file empty, Spring will scan the @Entity classes -->
-	<persistence-unit name="sunshinecig" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="rockechogroup" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<!-- 引入auth_core中的model -->
 		<class>cn.rainier.nian.model.User</class> 
@@ -14,7 +14,6 @@
 		
 		<!-- 权限外的模块 -->
 		<class>com.brightengold.model.News</class>
-		<class>com.brightengold.model.Company</class>
 		<class>com.brightengold.model.Log</class>
 		<class>com.brightengold.model.Feedback</class>
 		<class>com.brightengold.model.Category</class>

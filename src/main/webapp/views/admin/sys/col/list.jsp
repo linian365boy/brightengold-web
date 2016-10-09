@@ -49,7 +49,7 @@
 				title:'发布内容设置',
 				id:'setPublish',
 				width: 550,
-				height: 235,
+				height: 300,
 				resize: false
 			});
 		};

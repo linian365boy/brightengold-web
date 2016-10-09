@@ -32,6 +32,12 @@ public class ColumnService {
 	public PageRainier<Column> findAll(Integer pageNo, Integer pageSize, String keyword){
 		Page<Column> tempPage = columnDao.findAll(columnSpec(keyword),
 				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
+		//如果查询的页面大于最大页数，查询第一页数据
+		if(tempPage.getTotalPages()<pageNo){
+			pageNo = 1;
+			tempPage = columnDao.findAll(columnSpec(keyword),
+					new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
+		}
 		PageRainier<Column> page = new PageRainier<Column>(tempPage.getTotalElements(),pageNo,pageSize);
 		page.setResult(tempPage.getContent());
 		return page;
@@ -88,27 +94,17 @@ public class ColumnService {
 		return this.columnDao.findChildrenByParentId(pId);
 	}
 
-	public List<Column> findColumnsByDepth(int crossMaxDepth) {
+	public List<Column> findColumnsByDepth() {
 		List<Column> colList = columnDao.findFirstColumn();
 		return colList;
 	}
 
-	public void updateColumnPublishContent(Integer id, int type) {
-		columnDao.updateColumnPublishContent(id,type);
+	public void updateColumnPublishContent(Integer id, Column column) {
+		columnDao.updateColumnPublishContent(id,column.getType(),column.isHasNeedForm());
 	}
 
-	private Specification<Column> columnListSpec() {
-		return new Specification<Column>(){
-			@Override
-			public Predicate toPredicate(Root<Column> root,
-					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.equal(root.get("status"), 2);
-			}
-		};
-	}
-	
 	public List<Column> findList() {
-		return columnDao.findAll(columnListSpec());
+		return columnDao.findAll();
 	}
 
 }

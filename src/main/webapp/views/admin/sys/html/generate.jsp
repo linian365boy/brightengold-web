@@ -7,13 +7,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>公司信息</title>
 <script type="text/javascript">
-	var style = "${style}";
 	function genneratePage(){
 		var code = $("#code").val();
 		if(code!=''){
 			$.ajax({
 				   type: "POST",
-				   data: "style="+style,
 				   url: "${ctx }admin/sys/html/"+code+"/generate.html",
 				   beforeSend: function(){
 					   art.dialog({
@@ -56,7 +54,6 @@
 	function gennerateAllPage(){
 			$.ajax({
 				   type: "POST",
-				   data: "style="+style,
 				   url: "${ctx }admin/sys/html/generateAll.html",
 				   beforeSend: function(){
 					   art.dialog({
@@ -118,6 +115,7 @@
 			  		<p class="text-left">1．生成首页请使用"index"或"home"代码</p>
 			  		<p class="text-left">2．生成商品分类页请使用分类英文名称</p>
 			  		<p class="text-left">3．栏目代码与分类英文名称相同时，优先生成栏目页面，不生成分类页面</p>
+			  		<p class="text-left">4．栏目代码与信息代码大小写一致时，才能准确生成信息页面</p>
 			  		<p class="text-left"><button type="button" onclick="gennerateAllPage();" class="btn btn-danger">一键生成所有页面</button></p>
 				</div>
 			</div>

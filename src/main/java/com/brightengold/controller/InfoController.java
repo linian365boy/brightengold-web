@@ -84,6 +84,7 @@ public class InfoController {
 					info.setUrl(tinfo.getUrl());
 				}
 				infoService.save(info);
+				logger.info("修改信息内容|{}",info);
 				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 			}
@@ -99,6 +100,7 @@ public class InfoController {
 			StringBuilder sb = new StringBuilder();
 			Info info = infoService.loadOne(infoId);
 			infoService.deleteInfo(info);
+			logger.warn("删除信息内容|{}",info);
 			String path = request.getSession().getServletContext().getRealPath("/");
 			FileUtil.delFile(path +File.separator+info.getUrl());
 			sb.append("名称："+info.getName());

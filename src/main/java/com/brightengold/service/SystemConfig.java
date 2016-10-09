@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component("systemConfig")
 public class SystemConfig {
-	
 	@Value("#{configProperties['index.ads.size']}")
 	private int indexAdsSize = 5;
 	@Value("#{configProperties['cross.max.depth']}")
@@ -16,6 +15,15 @@ public class SystemConfig {
 	private int indexProductSize = 12;
 	@Value("#{configProperties['index.news.size']}")
 	private int indexNewsSize = 8;
+	//邮件发件人
+	@Value("#{configProperties['email.from']}")
+	private String from;
+	//邮件收件人
+	@Value("#{configProperties['email.to']}")
+	private String to;
+	//前端页面展示的公司介绍长度
+	@Value("#{configProperties['company.length']}")
+	private int companyLength = 500;
 	
 	/**
 	 * 首页滚动图片最大数量
@@ -52,6 +60,25 @@ public class SystemConfig {
 	public int getIndexNewsSize() {
 		return indexNewsSize;
 	}
+	public String getFrom() {
+		return from;
+	}
+	public void setFrom(String from) {
+		this.from = from;
+	}
+	public String getTo() {
+		return to;
+	}
+	public void setTo(String to) {
+		this.to = to;
+	}
+	public int getCompanyLength() {
+		return companyLength;
+	}
+	public void setCompanyLength(int companyLength) {
+		this.companyLength = companyLength;
+	}
+	
 }
 
 	

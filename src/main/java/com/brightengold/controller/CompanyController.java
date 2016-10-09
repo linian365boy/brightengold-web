@@ -61,6 +61,7 @@ public class CompanyController {
 				company.setLogo(temp.getLogo());
 			}
 			boolean flag = companyService.save(company);
+			logger.info("修改公司前信息|{}，修改公司后信息|{}",temp,company);
 			if(flag){
 				StringBuilder content = new StringBuilder();
 				if(!temp.getName().equals(company.getName())){

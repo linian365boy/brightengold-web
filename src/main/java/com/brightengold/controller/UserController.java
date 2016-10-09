@@ -145,7 +145,7 @@ public class UserController {
 					ToStringBuilder.reflectionToString(user, ToStringStyle.SHORT_PREFIX_STYLE, true)
 					);
 		}
-		return "redirect:/admin/sys/user/users/1";
+		return "redirect:/admin/sys/user/users/1.html";
 	}
 	
 	@RequestMapping(value="/existUser",method=RequestMethod.POST)
@@ -171,7 +171,7 @@ public class UserController {
 				out.flush();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("existUser方法报错",e);
 		}finally{
 			if(out!=null){
 				out.close();
@@ -201,7 +201,7 @@ public class UserController {
 				out.flush();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("用户名|{},密码重置方法报错",username,e);
 		}finally{
 			if(out!=null){
 				out.close();
@@ -220,11 +220,11 @@ public class UserController {
 			LogUtil.getInstance().log(LogType.NSUBSCTIBE, user.getUsername()+"被注销了");
 			logger.warn("用户：{}，注销成功",user.getUsername());
 		}
-		return "redirect:/admin/sys/user/users/1";
+		return "redirect:/admin/sys/user/users/1.html";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/modifyPass",method=RequestMethod.GET)
+	@RequestMapping(value="/modifyPass",method=RequestMethod.POST)
 	public String modifyPass(String oldPassword,
 			String newPassword1,
 			String newPassword2){
@@ -241,23 +241,24 @@ public class UserController {
 						if(Pattern.matches("^[0-9a-zA-Z]{6,12}$", newPassword1)){
 							password = new Md5PasswordEncoder().encodePassword(newPassword1,null);
 							userService.changePassword(oldPassword, password, authentication);
+							logger.warn("用户|{}，成功修改密码",u.getUsername());
 						}else{
-							actionMsg = "-4";//字母需数字、字母
+							actionMsg = "密码修改失败，密码为数字或字母组成！";//字母需数字、字母
 						}
 					}else{
-						actionMsg = "-3";//长度不一致
+						actionMsg = "密码修改失败，新密码长度在6-12位！";//长度不一致
 					}
 				}else{
-					actionMsg = "-1";
+					actionMsg = "密码修改失败，密码输入不能为空或两次新密码输入不一致！";
 				}
 			}else{
-				actionMsg = "-2";
+				actionMsg = "密码修改失败，原密码输入错误！";
 			}
 		} catch (Exception e) {
-			actionMsg = "error";
+			actionMsg = "密码修改失败！";
 			logger.error("修改密码出错："+e);
 		}
-		return null;
+		return actionMsg;
 	}
 
 	public PageRainier<User> getUsers() {

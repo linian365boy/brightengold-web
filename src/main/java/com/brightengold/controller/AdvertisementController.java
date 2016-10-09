@@ -61,7 +61,7 @@ public class AdvertisementController {
 				String url = newFileName.substring(realPath.lastIndexOf("upload"));
 				ad.setPicUrl(url.replace("\\", "/"));
 			}else{
-				logger.error(ad.getName()+"上传图片不能为空！");
+				logger.error("{}上传图片不能为空！",ad.getName());
 			}
 			if(StringUtils.isBlank(ad.getUrl())){
 				ad.setUrl("javascript:void();");
@@ -79,7 +79,7 @@ public class AdvertisementController {
 		}catch(Exception e){
 			MsgUtil.setMsgAdd("error");
 			LogUtil.getInstance().log(LogType.ADD, "新增滚动图片"+ad.getName()+"失败!");
-			logger.error("新增滚动图片发生错误：{}",e);
+			logger.error("新增滚动图片发生错误",e);
 		}
 		return "redirect:/admin/ad/ads/1.html";
 	}
@@ -122,7 +122,7 @@ public class AdvertisementController {
 					ToStringBuilder.reflectionToString(ad, ToStringStyle.SHORT_PREFIX_STYLE));
 		}catch(Exception e){
 			MsgUtil.setMsgUpdate("error");
-			logger.error("修改滚动图片信息发生错误：",e);
+			logger.error("修改滚动图片信息发生错误",e);
 		}
 		return "redirect:/admin/ad/ads/1.html";
 	}
@@ -139,7 +139,7 @@ public class AdvertisementController {
 		}catch(Exception e){
 			vo.setCode(500);
 			vo.setMessage("修改状态失败！");
-			logger.error("修改状态失败！{}",e);
+			logger.error("修改状态失败！",e);
 		}
 		return gson.toJson(vo);
 	}
@@ -160,7 +160,7 @@ public class AdvertisementController {
 		}catch(Exception e){
 			vo.setCode(500);
 			vo.setMessage("删除信息失败！");
-			logger.error("删除图片信息发生错误{}",e);
+			logger.error("删除图片信息发生错误",e);
 		}
 		return gson.toJson(vo);
 	}

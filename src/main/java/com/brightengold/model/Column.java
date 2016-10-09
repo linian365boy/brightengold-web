@@ -3,6 +3,7 @@ package com.brightengold.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -69,13 +71,6 @@ public class Column implements Serializable{
 	//冗余字段
 	private int depth = 1;
 	
-	//发布时用到的一些设置
-	/**
-	 * 状态
-	 * 1未发布　２发布
-	 * 默认为1 未发布
-	 */
-	private int status;
 	/**
 	 * 栏目页面发布的类型，
 	 * 区别即显示标题还是内容的页面
@@ -84,6 +79,12 @@ public class Column implements Serializable{
 	 * 2  文章标题列表的页面
 	 */
 	private int type;
+	
+	/**
+	 * false: 默认不需要表单嵌入
+	 * true: 栏目发布的页面嵌入表单
+	 */
+	private boolean hasNeedForm = false;
 	
 	@Id
 	@GeneratedValue
@@ -129,6 +130,7 @@ public class Column implements Serializable{
 		this.createDate = createDate;
 	}
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy="parentColumn",fetch=FetchType.LAZY)
+	@OrderBy("priority desc")
 	public Set<Column> getChildColumn() {
 		return childColumn;
 	}
@@ -141,12 +143,6 @@ public class Column implements Serializable{
 	}
 	public void setCode(String code) {
 		this.code = code;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
 	}
 	public int getType() {
 		return type;
@@ -167,10 +163,17 @@ public class Column implements Serializable{
 		this.enName = enName;
 	}
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy="column",fetch=FetchType.LAZY)
+	@OrderBy("createDate asc")
 	public Set<Category> getCategorys() {
 		return categorys;
 	}
 	public void setCategorys(Set<Category> categorys) {
 		this.categorys = categorys;
+	}
+	public boolean isHasNeedForm() {
+		return hasNeedForm;
+	}
+	public void setHasNeedForm(boolean hasNeedForm) {
+		this.hasNeedForm = hasNeedForm;
 	}
 }

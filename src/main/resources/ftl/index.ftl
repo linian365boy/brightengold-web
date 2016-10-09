@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>Home - ${(company.name)!''}</title>
-<meta name="description" itemprop="description" content="China Pharmaceutical raw steroid powders,HomeBrew Injectable Solutions,Oral anabolics and Peptide Hormones Supplier-HongKong Shijingu Technology Co., Ltd" />
-<meta name="keywords" itemprop="keywords" content="Raw Steroid Powders,HomeBrew steroid Solutions,Oral anabolics,Peptide Hormones,Testosterone Cypionate,Trenbolone Acetate,Nandrolone Decaonate,Drostanolone Propionate,Methenolone Enanthate,Dianabol,Oxandrolone,Tadanafil,HongKong Shijingu Technology Co., Ltd" />
+<meta name="description" itemprop="description" content="${(webConfig.description)!''}" />
+<meta name="keywords" itemprop="keywords" content="${(webConfig.keyword)!''}" />
 
 <link rel="canonical" href="${ctx}/" />
 		<style type="text/css">
@@ -22,23 +22,8 @@ img.emoji {
 	padding: 0 !important;
 }
 </style>
-<link rel='stylesheet' id='wpb_wps_owl_carousel-css'  href='${ctx}/resources/views/style-ewa/css/slideset.css' type='text/css' media='' />
-<link rel='stylesheet' id='contact-form-7-css'  href='${ctx}/resources/views/style-ewa/css/styles.css' type='text/css' media='all' />
-<link rel='stylesheet' id='select2-css'  href='${ctx}/resources/views/style-ewa/css/select2.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-layout-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-layout.css' type='text/css' media='all' />
-<link rel='stylesheet' id='woocommerce-smallscreen-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce-smallscreen.css' type='text/css' media='only screen and (max-width: 768px)' />
-<link rel='stylesheet' id='woocommerce-general-css'  href='${ctx}/resources/views/style-ewa/css/woocommerce.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-fonts-css'  href='${ctx}/resources/views/style-ewa/css/css.css' type='text/css' media='all' />
-<link rel='stylesheet' id='genericons-css'  href='${ctx}/resources/views/style-ewa/css/genericons.css' type='text/css' media='all' />
-<link rel='stylesheet' id='animate-css'  href='${ctx}/resources/views/style-ewa/css/animate.min.css' type='text/css' media='all' />
-<link rel='stylesheet' id='side-menu-css'  href='${ctx}/resources/views/style-ewa/css/jquery.sidr.dark.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-css'  href='${ctx}/resources/views/style-ewa/css/owl.carousel.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-theme-css'  href='${ctx}/resources/views/style-ewa/css/owl.theme.css' type='text/css' media='all' />
-<link rel='stylesheet' id='owl-carousel-transitions-css'  href='${ctx}/resources/views/style-ewa/css/owl.transitions.css' type='text/css' media='all' />
-<link rel='stylesheet' id='imax-style-css'  href='${ctx}/resources/views/style-ewa/css/style.css?${style_v}' type='text/css' media='all' />
-<!--[if lt IE 9]>
-<link rel='stylesheet' id='imax-ie-css'  href='${ctx}/resources/views/style-ewa/css/ie.css' type='text/css' media='all' />
-<![endif]-->
+<link rel='stylesheet' id='select2-css' href='${ctx}/resources/views/style-ewa/css/select2.css' type='text/css' media='all' />
+<#include "headCss.ftl">
 <style id='imax-extra-stylesheet-inline-css' type='text/css'>
 #sun h3 span {
     background: none repeat scroll 0 0 #5fd6d8;
@@ -88,306 +73,74 @@ body.custom-background { background-color: #e2e2e2; }
 				<article id="post-75" class="post-75 page type-page status-publish hentry">
 					<div class="entry-content">
 						<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
-						<div id="sun" >
-						<h3 class="wpb_area_title"><span>Company Introduce</span></h3></div>
-						<div class="supercat-des">
-			<a class="img-class" title=""></a></div>
-			<div id="owl-demo-side">
-				${(company.introduce)!''}
-			</div></div>
-<#if ((hotProducts?size)>0)>
+							<div id="sun">
+								<h3 class="wpb_area_title"><span>Company Introduce</span></h3>
+							</div>
+							<div class="supercat-des">
+								<a class="img-class" title=""></a>
+							</div>
+							<div id="owl-demo-side">
+								<#if (company.introduce)??>
+									${(company.introduce)}
+								</#if>
+							</div>
+						</div>
+		<#if ((hotProducts?size)>0)>
 		<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
 			<div id="sun" ><h3 class="wpb_area_title"><span>Hot Products</span></h3></div>
 			<div class="supercat-des"><a class="img-class" title=""></a></div>
-			<div id="owl-demo-side-feature" class="owl-carousel">
+			<div id="owl-demo-side-feature" class="owl-carousel owl-demo-side-feature">
 				<#list hotProducts as hotPro>
-					<#if (hotPro_index!=0) && (hotPro_index%4!=0)> 
+					<#if (hotPro_index==0) || (hotPro_index%4!=0)> 
 						<div class="item">
 							<figure>
-								<a href="${ctx}/views/html/product/${hotPro.pageNum}/${(hotPro.url)!''}" class="lazyOwl">
-								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="semi-finished steroids" /></a>
+								<a href="${ctx}/views/html/product/detail/${(hotPro.id)!''}.htm" class="lazyOwl">
+								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="${(hotPro.enName)!''}" /></a>
 								<figcaption>
 									<h3 class="pro_title">${(hotPro.enName)!''}</h3>
 									<div class="price_area_fix">
 										<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
-											<a href="${ctx}/${(hotPro.url)!''}" rel="nofollow" data-product_id="462" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+											<a href="${ctx}/views/html/product/detail/${(hotPro.id)!''}.htm" rel="nofollow" data-product_id="462" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
 										</p>
 									</div>
 								</figcaption>
 							</figure>
 						</div>
 						<#else>
-						</div></div>
-						<div class="wpb_slider_area wpb_latest_pro_sli wpb_fix_cart">
-						<div class="supercat-des"><a class="img-class" title=""></a></div>	
-						<div id="owl-demo-side-three" class="owl-carousel">
+						</div>
+						<div id="owl-demo-side-feature-${(hotPro_index)!''}" class="owl-carousel owl-demo-side-feature">
+						<div class="item">
+							<figure>
+								<a href="${ctx}/views/html/product/detail/${hotPro.id}.htm" class="lazyOwl">
+								<img width="300" height="300" src="${ctx}/resources/${(hotPro.picUrl)!''}" class="wpb_pro_img wp-post-image" alt="${(hotPro.enName)!''}" /></a>
+								<figcaption>
+									<h3 class="pro_title">${(hotPro.enName)!''}</h3>
+									<div class="price_area_fix">
+										<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
+											<a href="${ctx}/views/html/product/detail/${hotPro.id}.htm" rel="nofollow" data-product_id="462" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
+										</p>
+									</div>
+								</figcaption>
+							</figure>
+						</div>
 					</#if>
 				</#list>
-</#if>
-</div></div>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-											</div><!-- .entry-content -->
-					<footer class="entry-meta">
-											</footer><!-- .entry-meta -->
-				</article><!-- #post -->
-<div id="comments" class="comments-area">
-</div><!-- #comments -->			
-		</div><!-- #content -->
-        	<#include "leftCate.ftl">
+			</div>
+		</div>
+	</#if>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	</div><!-- .entry-content -->
+	<footer class="entry-meta"></footer><!-- .entry-meta -->
+</article><!-- #post -->
+	<div id="comments" class="comments-area"></div><!-- #comments -->			
+</div><!-- #content -->
+    <#include "leftCate.ftl">
 	</div><!-- #primary -->
 
 <hr />
 <#include "bottom.ftl">
-	<script type="text/javascript">
-jQuery.noConflict();
-(function( $ ) {
-  $(function() {
-  
-$(document).ready(function() {
-	// carousel latest
-    $("#owl-demo").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 5,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	}); 
-	// carousel feature
-	$("#owl-demo-feature").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-// sidebar carousel feature product
-	$("#owl-demo-side-feature").owlCarousel({
-        autoPlay: false,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-    });
-	
-		// carousel related
-	$("#owl-demo-related").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-//	
-		$("#owl-demo-la").owlCarousel({
-		autoPlay: true,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 1,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-//	
-		$("#owl-demo-fe").owlCarousel({
-		autoPlay: false,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 5,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-	});
-	
-// sidebar carousel three product
-	
-	$("#owl-demo-side-three").owlCarousel({
-        autoPlay: false,
-		stopOnHover: false,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-    });
-		
-// sidebar carousel flash product
-	
-	$("#owl-demo-side-flash").owlCarousel({
-        autoPlay: false,
-		stopOnHover: false,
-		navigation: false,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 1,
-        itemsDesktop : [1199,1],
-        itemsDesktopSmall : [979,1],
-		itemsTablet: [768,1],
-      	itemsMobile:[479,1],
-		mouseDrag:false,
-		touchDrag:false,
-		transitionStyle:"fade",
-		lazyLoad : true,
-    });
-
-// sidebar carousel four product
-	
-	$("#owl-demo-side-four").owlCarousel({
-        autoPlay: true,
-		stopOnHover: true,
-		navigation: true,
-		navigationText: [
-        "<i class='fa fa-angle-left'></i>",
-        "<i class='fa fa-angle-right'></i> "
-        ],
-		slideSpeed: 1000,
-		paginationSpeed: 1000,
-		pagination:false,
-		paginationNumbers: false,
-        items : 4,
-        itemsDesktop : [1199,3],
-        itemsDesktopSmall : [979,3],
-		mouseDrag:false,
-		touchDrag:false,
-		lazyLoad : true,
-    });
-	
-	// slider style type for latest product general
-	$('.wpb_latest_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	// slider style type for feature product general
-	$('.wpb_feature_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	// slider style type for latest product sidebar
-	$('.widget_wpb_latest_class .owl-wrapper').addClass('grid cs-style-3');
-	// slider style type for feature product sidebar
-	$('.widget_wpb_feature_class .owl-wrapper').addClass('grid cs-style-3');
-		
-	$('.wpb_related_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.wpb_la_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.wpb_fe_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.widget_wpb_three_class .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.widget_wpb_flash_class .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.widget_wpb_four_class .owl-wrapper').addClass('grid cs-style-3');
-	
-	$('.banner').unslider({
-		speed: 500, // The speed to animate each slide (in milliseconds)
-		delay: 3000, // The delay between slide animations (in milliseconds)
-		complete: function() {}, // A function that gets called after every slide animation
-		keys: true, // Enable keyboard (left, right) arrow shortcuts
-		dots: true, // Display dot navigation
-		fluid: false // Support responsive design. May break non-responsive designs
-	});
-	
-});	
-
-
-});
-})(jQuery);
-</script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.form.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/scripts.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/slideset.js'></script>
 <script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/select2.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.blockUI.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/woocommerce.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.cookie.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/cart-fragments.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/masonry.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.masonry.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/waypoints.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/jquery.sidr.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/owl.carousel.min.js'></script>
-<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/functions.js'></script>
+<#include "bottomJs.ftl">
 </body>
 </html>

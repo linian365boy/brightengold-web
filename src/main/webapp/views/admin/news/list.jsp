@@ -32,15 +32,14 @@
 			$.get("${ctx}admin/news/"+newsId+"/checkPub.html",function(rs){
 				if(rs=="1"){
 					art.dialog.confirm('此新闻已发布，确定重新发布？',function(){
-						$.getJSON("${ctx}admin/news/"+newsId+"/publish.html",function(data){
-							var json = $(data);
+						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
 							var dialog = art.dialog({
 								id:"publish",
 								lock:true
 							});
-							if(json[0].key==1){
+							if(data.code==200){
 								dialog.content('恭喜您，发布成功！').time(2.5);
-								$("#"+newsId).html(json[0].value);
+								$("#"+newsId).html(data.data);
 							}else{
 								dialog.content('对不起，发布失败！').time(2.5);
 							}
@@ -49,15 +48,14 @@
 				}else{
 					art.dialog.confirm('确定发布此新闻？',function(){
 						var newsId = $(obj).attr("name");
-						$.getJSON("${ctx}admin/news/"+newsId+"/publish.html",function(data){
-							var json = $(data);
+						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
 							var dialog = art.dialog({
 								id:"publish",
 								lock:true
 							});
-							 if(json[0].key==1){
+							 if(data.code==200){
 								dialog.content('恭喜您，发布成功！').time(2.5);
-								$("#"+newsId).html(json[0].value);
+								$("#"+newsId).html(data.data);
 							}else{
 								dialog.content('对不起，发布失败！').time(2.5);
 							} 

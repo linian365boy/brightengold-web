@@ -10,37 +10,57 @@ public class Constant {
 	 */
 	public static final int C_ONE = 1;
 	
-	public static final String HTMLPRE = "/views/html/";
+	public static final String HTMLPRE = "/views/html";
 	/**
 	 * 栏目路径前缀
 	 */
-	public static final String COLUMNPATHPRE = HTMLPRE+"col/";
+	public static final String COLUMNPATHPRE = HTMLPRE+"/col";
 	/**
-	 * 生成的产品相关页面路径前缀
+	 * 生成的产品相关页面路径
 	 */
-	public static final String PRODUCTPRE = HTMLPRE+"product/";
+	public static final String PRODUCTPRE = HTMLPRE+"/product";
 	/**
 	 * 生成的产品页面路径，页面展示需要ssi嵌入
 	 */
-	public static final String PRODUCTPATH = PRODUCTPRE + "detail/";
+	public static final String PRODUCTPATH = PRODUCTPRE + "/detail";
 	/**
 	 * 生成的新闻相关页面路径前缀
 	 */
-	public static final String NEWSPRE = HTMLPRE + "news/";
+	public static final String NEWSPRE = HTMLPRE + "/news";
 	/**
 	 * 生成的新闻页面路径，页面展示需要ssi嵌入
 	 */
-	public static final String NEWSPATH = NEWSPRE + "detail/";
+	public static final String NEWSPATH = NEWSPRE + "/detail";
 	/**
 	 * 生成的分类产品列表页面路径，页面展示需要ssi嵌入
 	 */
-	public static final String CATEGORYPRODUCTPATH = "/views/html/product/";
+	public static final String CATEGORYPRODUCTPATH = HTMLPRE + "/col";
 	
 	/**
 	 * 生成的分类产品详情页面路径
 	 */
-	public static final String CATEGORYDETAILPRODUCTPATH = "/views/html/product/";
+	public static final String CATEGORYDETAILPRODUCTPATH = HTMLPRE + "/product";
+	
+	/**
+	 * 生成的分类列表页面路径
+	 */
+	public static final String CATEPRE = HTMLPRE+"/cat";
 	
 	public static final int PAGE_INDEX_SIZE = 16;
-	
+	/**
+	 * 成功返回码
+	 */
+	public static final int SUCCESS_CODE = 200;
+	/**
+	 * 失败返回码
+	 */
+	public static final int ERROR_CODE = 500;
+	/**
+	 * success
+	 */
+	public static final String SUCCESS_STR = "success";
+	/**
+	 * 验证码key
+	 */
+	public static final String VERIFY_CODE_KEY = "verifyCode";
 }

@@ -35,6 +35,10 @@ public class CategoryService {
 	public List<Object[]> findParentByAjax() {
 		return this.categoryDao.findParentByAjax();
 	}
+	
+	public List<Object[]> findChildrenByParentCateId(int parentCateId){
+		return categoryDao.findChildrenByParentCateId(parentCateId);
+	}
 
 	public Category loadCategoryById(Integer categoryId) {
 		return categoryDao.findOne(categoryId);

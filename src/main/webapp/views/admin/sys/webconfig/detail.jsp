@@ -23,21 +23,25 @@
 		</header>
 		<div class="tab_container">
 		<div id="tab1" class="tab_content">
-	<form id="form" action="${ctx }admin/sys/webconfig/update.html" method="post" 
-	enctype="multipart/form-data" class="form-horizontal">
+	<form id="form" action="${ctx }admin/sys/webconfig/update.html" method="post" class="form-horizontal">
 			<div class="form-group">
-			    <label for="name" class="col-sm-2 control-label">网站关键字</label>
+			    <label for="keyword" class="col-sm-2 control-label">网站关键字</label>
 			    <div class="col-sm-8">
-			      <input type="text" class="form-control" id="kws" value="${model.kws }" name="kws" placeholder="网站关键字">
+			      <input type="text" class="form-control" id="keyword" value="${model.keyword }" name="keyword" placeholder="网站关键字">
 			    </div>
 		   </div>
 		   <div class="form-group">
+			    <label for="description" class="col-sm-2 control-label">网站描述信息</label>
+			    <div class="col-sm-8">
+			      <input type="text" class="form-control" id="description" value="${model.description }" name="description" placeholder="网站描述信息">
+			    </div>
+		   </div>
+		   <!-- <div class="form-group">
 		   		<label for="content" class="col-sm-1 control-label">网站底部</label>
 			    <div class="col-sm-9">
 			      <textarea id="content" rows="16" name="content" class="form-control ckeditor"></textarea>
 			    </div>
-		   </div>
-            <input type="hidden" name="id" value="${model.id }"/>
+		   </div> -->
             <div class="form-group">
 		    <div class="col-sm-offset-4 col-sm-8">
 		      <button type="submit" class="btn btn-primary">保存</button>

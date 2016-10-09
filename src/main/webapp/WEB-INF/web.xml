@@ -2,10 +2,10 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-  	<display-name>sunshin</display-name>
+  	<display-name>brightengold-eva</display-name>
 	<context-param>
 	    <param-name>webAppRootKey</param-name>
-	    <param-value>sunshin.root</param-value>
+	    <param-value>brightengold-eva.root</param-value>
 	</context-param>
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>

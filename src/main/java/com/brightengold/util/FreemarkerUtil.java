@@ -26,7 +26,7 @@ public class FreemarkerUtil {
 			Template temp = cfg.getTemplate(name);
 			return temp;
 		}catch(IOException e){
-			e.printStackTrace();
+			logger.error("FreemarkerUtil getTemplate error",e);
 		}
 		return null;
 	}
@@ -40,7 +40,6 @@ public class FreemarkerUtil {
 		}
 	}
 	
-	//FreemarkerUtil.fprint("category.ftl", root, path+File.separator+"fireworksweb"+File.separator, "category.html");
 	public static boolean fprint(String name,Map<String,Object> root,String outFile,String fileName) {
 		Writer out = null;
 		boolean flag = false;
@@ -49,7 +48,6 @@ public class FreemarkerUtil {
 			if(!file.exists()){
 				file.mkdirs();
 			}
-			//out = new BufferedWriter(file+File.separator+fileName);
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file+File.separator+fileName),"UTF-8"));
 			Template temp = getTemplate(name);
 			temp.setEncoding("UTF-8");
@@ -64,7 +62,7 @@ public class FreemarkerUtil {
 				try {
 					out.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("freemarker fprint Writer close error",e);
 				}
 		}
 		return flag;

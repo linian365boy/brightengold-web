@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.utils.PageRainier;
 
 import com.brightengold.model.Advertisement;
 import com.brightengold.model.Column;
@@ -48,6 +43,9 @@ import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/goods/product")
@@ -73,8 +71,8 @@ public class ProductController {
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@RequestMapping(value={"/products/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		products = productService.findAll(pageNo, pageSize);
+	public String list(@PathVariable Integer pageNo,Model model,String keyword){
+		products = productService.findAll(pageNo, pageSize, keyword);
 		model.addAttribute("page",products);//map
 		return "admin/goods/product/list";
 	}
@@ -103,9 +101,9 @@ public class ProductController {
 			//首页广告
 			List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
 			//横条菜单，最深显示到二级菜单
-			List<Column> crossCol = columnService.findColumnsByDepth(systemConfig.getCrossMaxDepth());
+			List<Column> crossCol = columnService.findColumnsByDepth();
 			//首页侧边栏目，最深显示到三级菜单
-			List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
+			List<Column> verticalCol= columnService.findColumnsByDepth();
 			//info信息
 			List<Info> infos = infoService.getList();
 			//企业信息
@@ -128,7 +126,6 @@ public class ProductController {
 		try {
 			if(productId!=null){
 				Product tempProduct = productService.loadProductById(productId);
-				String categoryId = request.getParameter("parents");
 				if(!photo.isEmpty()){
 					String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 					String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
@@ -139,26 +136,35 @@ public class ProductController {
 					product.setPicUrl(tempProduct.getPicUrl());
 				}
 				content.append("产品名称："+product.getEnName());
-				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+				String categoryId = request.getParameter("parents");
+				String childCateId = request.getParameter("childrenC");
+				if(StringUtils.isNoneBlank(childCateId) && Integer.parseInt(childCateId) >0 ){
+					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
+				}else{
+					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+				}
+				if(product.getPriority()==null){
+					product.setPriority(0);
+				}
 				product.setCreateDate(tempProduct.getCreateDate());
 				product.setCreateUser(tempProduct.getCreateUser());
-				System.out.println(tempProduct.getUrl()+"-=-=");
-				product.setUrl(tempProduct.getUrl());
+				if(StringUtils.isBlank(tempProduct.getUrl())){
+					product.setUrl(Tools.getRndFilename()+".htm");
+				}
 				product.setStatus(tempProduct.isStatus());
 				productService.saveProduct(product);
+				logger.info("修改产品信息|{}",product);
 				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 				//删除页面
-				System.out.println(product.getUrl()+"-=-=");
 				String path = request.getSession().getServletContext().getRealPath("/");
-				Tools.delFile(path + File.separator+"views"+File.separator+"html"+
-				 		File.separator+"product"+File.separator+
-			 			product.getCategory().getId()+File.separator+product.getUrl());
+				Tools.delFile(path + Constant.PRODUCTPRE + File.separator+productId+".htm");
+				Tools.delFile(path + Constant.PRODUCTPATH + File.separator+product.getUrl());
 			}
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			logger.error("修改产品信息报错",e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("修改产品信息报错",e);
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}
@@ -174,7 +180,12 @@ public class ProductController {
 		StringBuilder sb = new StringBuilder();
 		try {
 			String categoryId = request.getParameter("parentC");
-			product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+			String childCateId = request.getParameter("childrenC");
+			if(StringUtils.isNoneBlank(childCateId) && Integer.parseInt(childCateId) >0 ){
+				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
+			}else{
+				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+			}
 			String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 			String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
 			FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
@@ -183,13 +194,17 @@ public class ProductController {
 			product.setPublish(false);
 			product.setCreateDate(new Date());
 			product.setCreateUser(u);
+			product.setUrl(Tools.getRndFilename()+".htm");
+			if(product.getPriority()==null){
+				product.setPriority(0);
+			}
 			productService.saveProduct(product);
 			MsgUtil.setMsgAdd("success");
 			sb.append("名称："+product.getEnName());
 			LogUtil.getInstance().log(LogType.ADD, sb.toString());
-			logger.info("新增产品{}成功！",ToStringBuilder.reflectionToString(product, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("新增产品{}成功！",product);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("新增产品发生错误。",e);
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}
@@ -200,6 +215,7 @@ public class ProductController {
 			StringBuilder sb = new StringBuilder();
 			product = productService.loadProductById(productId);
 			productService.delProduct(product);
+			logger.warn("删除了产品|{}",product);
 			sb.append("名称："+product.getEnName());
 			MsgUtil.setMsgDelete("success");
 			LogUtil.getInstance().log(LogType.DEL, sb.toString());
@@ -207,20 +223,17 @@ public class ProductController {
 		return "redirect:/admin/goods/product/products/1.html";
 	}
 	
+	@Deprecated
 	@RequestMapping(value="/{productId}/publish",method=RequestMethod.GET)
 	public String publish(@PathVariable Integer productId){
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
-			if(!checkPub(temp)){
-				if(StringUtils.isBlank(temp.getUrl())){
-					temp.setUrl(Tools.getRndFilename()+".htm");
-				}
-				temp.setPublish(true);
-				productService.saveProduct(temp);
-				MsgUtil.setMsg("success", "产品发布成功！");
-			}else{
-				MsgUtil.setMsg("error", "产品已发布！");
+			if(StringUtils.isBlank(temp.getUrl())){
+				temp.setUrl(Tools.getRndFilename()+".htm");
 			}
+			temp.setPublish(true);
+			productService.saveProduct(temp);
+			MsgUtil.setMsg("success", "产品发布成功！");
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}
@@ -229,35 +242,35 @@ public class ProductController {
 	public String releaseProduct(HttpServletRequest request, @PathVariable Integer productId, ModelMap map){
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
-			if(!checkPub(temp)){
-				String realPath = request.getSession().getServletContext().getRealPath("/");
-				String parentPath = Constant.PRODUCTPATH;
-				if(StringUtils.isNotBlank(temp.getUrl())){
-					temp.setUrl(temp.getUrl());
-				}else{
-					temp.setUrl(parentPath+Tools.getRndFilename()+".htm");
-				}
-				temp.setPublish(true);
-				//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
-				map.put("product", temp);
-				//查找相关连产品，根据keyWords
-				List<Product> products = 
-					productService.findRelatedProducts(temp.getId(),temp.getKeyWords(),8);
-				if(!CollectionUtils.isEmpty(products)){
-					map.put("relatedProducts", products);
-				}
-				if(temp.isPublish()){
-					Tools.delFile(realPath + Constant.PRODUCTPRE + temp.getCategory().getColumn().getCode() +temp.getUrl());
-				}
-				//生成唯一的产品页面路径，不需要根据页码生成页面
-				if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
-					productService.saveProduct(temp);
-					MsgUtil.setMsg("success", "产品发布成功！");
-				}else{
-					MsgUtil.setMsg("error", "产品发布失败！");
-				}
+			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+					request.getServerPort()+request.getContextPath();
+			String realPath = request.getSession().getServletContext().getRealPath("/");
+			String parentPath = Constant.PRODUCTPATH;
+			if(StringUtils.isNotBlank(temp.getUrl())){
+				temp.setUrl(temp.getUrl());
 			}else{
-				MsgUtil.setMsg("error", "产品已发布！");
+				temp.setUrl(Tools.getRndFilename()+".htm");
+			}
+			temp.setPublish(true);
+			//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
+			map.put("product", temp);
+			//查找相关连产品，根据keyWords
+			List<Product> products = 
+				productService.findRelatedProducts(temp.getId(),temp.getKeyWords(),8);
+			if(!CollectionUtils.isEmpty(products)){
+				map.put("relatedProducts", products);
+			}
+			if(temp.isPublish()){
+				Tools.delFile(realPath + Constant.PRODUCTPATH +File.separator + temp.getUrl());
+			}
+			map.put("ctx", basePath);
+			//生成唯一的产品页面路径，不需要根据页码生成页面
+			if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
+				productService.saveProduct(temp);
+				logger.info("生成产品|{}页面成功",temp.getEnName());
+				MsgUtil.setMsg("success", "产品发布成功！");
+			}else{
+				MsgUtil.setMsg("error", "产品发布失败！");
 			}
 		}
 		return "redirect:/admin/goods/product/products/1.html";
@@ -274,12 +287,19 @@ public class ProductController {
 		}
 	}
 
-	private boolean checkPub(Product product) {
-		if(product.isPublish() && 
-				product.getUrl()!=null){
-			return true;
+	@RequestMapping(value="/{productId}/checkPub",method=RequestMethod.GET)
+	@ResponseBody
+	private String checkPub(@PathVariable Integer productId) {
+		if(productId!=null){
+			Product product = productService.loadProductById(productId);
+			if(product!=null && product.isPublish() && 
+					StringUtils.isNotBlank(product.getUrl())){
+				return "1";
+			}else{
+				return "-1";
+			}
 		}else{
-			return false;
+			return "0";
 		}
 	}
 
