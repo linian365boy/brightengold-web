@@ -105,7 +105,7 @@ public class ProductController {
 			//首页侧边栏目，最深显示到三级菜单
 			List<Column> verticalCol= columnService.findColumnsByDepth();
 			//info信息
-			List<Info> infos = infoService.getList();
+			List<Info> infos = infoService.findList();
 			//企业信息
 			Company company = companyService.loadCompany();
 			model.put("infos", infos);
@@ -139,15 +139,15 @@ public class ProductController {
 				String categoryId = request.getParameter("parents");
 				String childCateId = request.getParameter("childrenC");
 				if(StringUtils.isNoneBlank(childCateId) && Integer.parseInt(childCateId) >0 ){
-					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
+					product.setCategoryId(Integer.parseInt(childCateId));
 				}else{
-					product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+					product.setCategoryId(Integer.parseInt(categoryId));
 				}
 				if(product.getPriority()==null){
 					product.setPriority(0);
 				}
 				product.setCreateDate(tempProduct.getCreateDate());
-				product.setCreateUser(tempProduct.getCreateUser());
+				product.setCreateUserId(tempProduct.getCreateUserId());
 				if(StringUtils.isBlank(tempProduct.getUrl())){
 					product.setUrl(Tools.getRndFilename()+".htm");
 				}
@@ -182,9 +182,9 @@ public class ProductController {
 			String categoryId = request.getParameter("parentC");
 			String childCateId = request.getParameter("childrenC");
 			if(StringUtils.isNoneBlank(childCateId) && Integer.parseInt(childCateId) >0 ){
-				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(childCateId)));
+				product.setCategoryId(Integer.parseInt(childCateId));
 			}else{
-				product.setCategory(categoryService.loadCategoryById(Integer.parseInt(categoryId)));
+				product.setCategoryId(Integer.parseInt(categoryId));
 			}
 			String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 			String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
@@ -193,7 +193,7 @@ public class ProductController {
 			product.setPicUrl(url.replace("\\", "/"));
 			product.setPublish(false);
 			product.setCreateDate(new Date());
-			product.setCreateUser(u);
+			product.setCreateUserId(u.getId());
 			product.setUrl(Tools.getRndFilename()+".htm");
 			if(product.getPriority()==null){
 				product.setPriority(0);
@@ -214,7 +214,7 @@ public class ProductController {
 		if(productId!=null){
 			StringBuilder sb = new StringBuilder();
 			product = productService.loadProductById(productId);
-			productService.delProduct(product);
+			productService.delProduct(productId);
 			logger.warn("删除了产品|{}",product);
 			sb.append("名称："+product.getEnName());
 			MsgUtil.setMsgDelete("success");

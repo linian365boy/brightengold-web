@@ -2,26 +2,10 @@ package com.brightengold.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import cn.rainier.nian.model.User;
-
-@Entity
-@Table
 public class Category implements Serializable{
 	/**
 	 * 
@@ -39,7 +23,7 @@ public class Category implements Serializable{
 	/**
 	 * 产品父类型
 	 */
-	private Category parent;
+	private Integer parentId;
 	/**
 	 * 产品创建日期
 	 */
@@ -47,28 +31,28 @@ public class Category implements Serializable{
 	/**
 	 * 产品创建人
 	 */
-	private User createUser;
+	private Integer createUserId;
 	/**
 	 * 分类所在的栏目下
 	 */
-	private com.brightengold.model.Column column;
-	private List<Category> children;
-	private List<Product> products;
+	private Integer columnId;
 	//备注
 	private String remark;
 	
-	@Transient
-	private long productsSize;
+	private transient long productsSize;
 	
-	@Id
-	@GeneratedValue
+	public Category(int id, String name, String enName) {
+		this.id = id;
+		this.name = name;
+		this.enName = enName;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=25)
 	public String getEnName() {
 		return enName;
 	}
@@ -76,50 +60,11 @@ public class Category implements Serializable{
 		this.enName = enName;
 	}
 	
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
-	@JoinColumn(name="pid")
-	public Category getParent() {
-		return parent;
-	}
-	public void setParent(Category parent) {
-		this.parent = parent;
-	}
-	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
-	}
-	@ManyToOne(cascade={CascadeType.MERGE})
-	@JoinColumn(name="createUserId")
-	public User getCreateUser() {
-		return createUser;
-	}
-	public void setCreateUser(User createUser) {
-		this.createUser = createUser;
-	}
-	@OneToMany(cascade={CascadeType.MERGE},mappedBy="parent",fetch=FetchType.LAZY)
-	public List<Category> getChildren() {
-		return children;
-	}
-	public void setChildren(List<Category> children) {
-		this.children = children;
-	}
-	@OneToMany(cascade={CascadeType.MERGE},mappedBy="category",fetch=FetchType.LAZY)
-	public List<Product> getProducts() {
-		return products;
-	}
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
-	@JoinColumn(name="columnId")
-	public com.brightengold.model.Column getColumn() {
-		return column;
-	}
-	public void setColumn(com.brightengold.model.Column column) {
-		this.column = column;
 	}
 	public String getName() {
 		return name;
@@ -133,11 +78,32 @@ public class Category implements Serializable{
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	@Transient
 	public long getProductsSize() {
 		return productsSize;
 	}
 	public void setProductsSize(long productsSize) {
 		this.productsSize = productsSize;
+	}
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+	public Integer getCreateUserId() {
+		return createUserId;
+	}
+	public void setCreateUserId(Integer createUserId) {
+		this.createUserId = createUserId;
+	}
+	public Integer getColumnId() {
+		return columnId;
+	}
+	public void setColumnId(Integer columnId) {
+		this.columnId = columnId;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

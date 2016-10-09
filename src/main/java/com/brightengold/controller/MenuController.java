@@ -2,17 +2,17 @@ package com.brightengold.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -21,14 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+
 import cn.rainier.nian.model.Menu;
-import cn.rainier.nian.model.Resource;
-import cn.rainier.nian.model.User;
 import cn.rainier.nian.service.impl.MenuServiceImpl;
-import cn.rainier.nian.service.impl.ResourceServiceImpl;
 import cn.rainier.nian.utils.PageRainier;
 
 @Controller
@@ -38,8 +37,6 @@ import cn.rainier.nian.utils.PageRainier;
 public class MenuController {
 	@Autowired
 	private MenuServiceImpl menuService;
-	@Autowired
-	private ResourceServiceImpl resourceService;
 	private PageRainier<Menu> menus;
 	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(MenuController.class);
@@ -96,6 +93,14 @@ public class MenuController {
 		return output;
 	}
 	
+	private String generateTreeNodeXmlString(long parseLong, String roleName) {
+		return null;
+	}
+
+	private String generateInitTreeString(ModelMap model, String roleName, boolean parseBoolean) {
+		return null;
+	}
+
 	@RequestMapping(value="/findMenuByRole",method=RequestMethod.GET)
 	public void findMenuByRole(HttpServletRequest request,HttpServletResponse response,ModelMap model){
 		PrintWriter out = null;
@@ -123,7 +128,7 @@ public class MenuController {
 	 * @Author: 李年
 	 * @CreateDate: 2013-5-9
 	 */
-	public String generateInitTreeString(ModelMap model,String name,boolean flag){
+	/*public String generateInitTreeString(ModelMap model,String name,boolean flag){
 		Iterator<Menu> it = null;
 		List<Menu> children = null;
 		String menuXml = null;
@@ -183,7 +188,7 @@ public class MenuController {
 			model.addAttribute("menuXml", menuXml);
 		}
 		return menuXml;
-	}
+	}*/
 	
 	/**
 	 * @FunName: generateTreeNodeXmlString
@@ -194,7 +199,7 @@ public class MenuController {
 	 * @Author: 李年
 	 * @CreateDate: 2013-5-9
 	 */
-	public String generateTreeNodeXmlString(Long menuId,String name){
+	/*public String generateTreeNodeXmlString(Long menuId,String name){
 		StringBuilder sb = new StringBuilder();
 		List<Resource> resources = resourceService.findResourceByParentId(menuId);
 		List<Resource> resourceNames = resourceService.findResourceByRole(name);
@@ -205,7 +210,7 @@ public class MenuController {
 		for(Iterator<Resource>  resIt = resources.iterator();resIt.hasNext();){
 			res = resIt.next();
 			for(Iterator<Resource> it=resourceNames.iterator();it.hasNext();){
-				Long id = it.next().getId();
+				Integer id = it.next().getId();
 				if(res.getId()==id){
 					flag = true;
 					sb.append("<item id='r_"+res.getId()+"' text='"+res.getDescn()+"' checked='1'/>");
@@ -219,7 +224,7 @@ public class MenuController {
 		}
 		sb.append("</tree>");
 		return sb.toString();
-	}
+	}*/
 
 	public PageRainier<Menu> getMenus() {
 		return menus;

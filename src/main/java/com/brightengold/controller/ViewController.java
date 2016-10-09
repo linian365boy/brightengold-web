@@ -128,7 +128,7 @@ public class ViewController {
 				if(catProductsSize!=0){
 					long parentCateProductSize = catProductsSize;
 					logger.info("cate products size |{}",catProductsSize);
-					if(!CollectionUtils.isEmpty(cate.getChildren())){
+					/*if(!CollectionUtils.isEmpty(cate.getChildren())){
 						for(Category childCate : cate.getChildren()){
 							catProductsSize = productService.countByCateId(childCate.getId());
 							logger.info("childCate products size |{}",catProductsSize);
@@ -137,7 +137,7 @@ public class ViewController {
 								parentCateProductSize+=catProductsSize;
 							}
 						}
-					}
+					}*/
 					cate.setProductsSize(parentCateProductSize);
 				}
 			}
@@ -147,7 +147,7 @@ public class ViewController {
 		Company company = companyService.loadCompany();
 		map.put("company", company);
 		//info信息
-		List<Info> infos = infoService.getList();
+		List<Info> infos = infoService.findList();
 		map.put("infos", infos);
 		//网站关键字
 		WebConfig webConfig = configService.loadSystemConfig();

@@ -1,49 +1,54 @@
 package com.brightengold.service;
 
 import java.util.List;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import org.apache.commons.lang3.StringUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-import cn.rainier.nian.utils.PageRainier;
+import org.springframework.stereotype.Service;
+
 import com.brightengold.dao.ColumnDao;
 import com.brightengold.model.Column;
 
-@Component("columnService")
+import cn.rainier.nian.utils.PageRainier;
+
+@Service("columnService")
 public class ColumnService {
 	@Autowired
 	private ColumnDao columnDao;
+	private static Logger logger = LoggerFactory.getLogger(ColumnService.class);
+	
 	public Column getById(Integer id){
 		return columnDao.findOne(id);
 	}
 	
-	public Column save(Column column){
-		return columnDao.save(column);
+	public boolean save(Column column){
+		boolean flag = false;
+		try{
+			columnDao.save(column);
+			flag = true;
+		}catch(Exception e){
+			logger.error("新增栏目报错",e);
+		}
+		return flag;
 	}
 	
 	public PageRainier<Column> findAll(Integer pageNo, Integer pageSize, String keyword){
-		Page<Column> tempPage = columnDao.findAll(columnSpec(keyword),
-				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
+		//Page<Column> tempPage = columnDao.findAll(columnSpec(keyword),
+		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
 		//如果查询的页面大于最大页数，查询第一页数据
-		if(tempPage.getTotalPages()<pageNo){
-			pageNo = 1;
-			tempPage = columnDao.findAll(columnSpec(keyword),
-					new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
-		}
-		PageRainier<Column> page = new PageRainier<Column>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+		//if(tempPage.getTotalPages()<pageNo){
+		//	pageNo = 1;
+		//	tempPage = columnDao.findAll(columnSpec(keyword),
+		//			new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
+		//}
+		long count = columnDao.findAllCount(keyword);
+		PageRainier<Column> page = new PageRainier<Column>(count);
+		page.setResult(columnDao.findList(keyword,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
 
-	private Specification<Column> columnSpec(final String keyword) {
+	/*private Specification<Column> columnSpec(final String keyword) {
 		if(StringUtils.isNotBlank(keyword)){
 			return new Specification<Column>(){
 				@Override
@@ -57,13 +62,13 @@ public class ColumnService {
 		}else{
 			return null;
 		}
-	}
+	}*/
 
 	public void delete(Integer id) {
 		columnDao.delete(id);
 	}
 
-	public List<Object[]> findParentByAjax() {
+	public List<Column> findParentByAjax() {
 		return this.columnDao.findParentByAjax();
 	}
 
@@ -73,10 +78,10 @@ public class ColumnService {
 	 * @return
 	 */
 	public Long countColumnByCode(String code) {
-		return columnDao.count(countSpec(code));
+		return columnDao.countColumnByCode(code);
 	}
 
-	private Specification<Column> countSpec(final String code) {
+	/*private Specification<Column> countSpec(final String code) {
 		return new Specification<Column>(){
 			@Override
 			public Predicate toPredicate(Root<Column> root,
@@ -84,18 +89,18 @@ public class ColumnService {
 				return cb.equal(root.<String>get("code"), code);
 			}
 		};
-	}
+	}*/
 
 	public Column loadColumnByCode(String code) {
 		return columnDao.loadColumnByCode(code);
 	}
 
-	public List<Object[]> findChildrenByParentId(Integer pId) {
+	public List<Column> findChildrenByParentId(Integer pId) {
 		return this.columnDao.findChildrenByParentId(pId);
 	}
 
 	public List<Column> findColumnsByDepth() {
-		List<Column> colList = columnDao.findFirstColumn();
+		List<Column> colList = columnDao.findParentByAjax();
 		return colList;
 	}
 

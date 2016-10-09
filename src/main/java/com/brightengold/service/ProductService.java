@@ -1,25 +1,10 @@
 package com.brightengold.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.brightengold.dao.ProductDao;
@@ -34,20 +19,21 @@ public class ProductService {
 	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
 	public PageRainier<Product> findAll(Integer pageNo, Integer pageSize, String keyword) {
-		Page<Product> tempPage = productDao.findAll(findAllSpec(keyword),
-				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
+		//Page<Product> tempPage = productDao.findAll(findAllSpec(keyword),
+		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
 		//如果查询的页面大于最大页数，查询第一页数据
-		if(tempPage.getTotalPages()<pageNo){
-			pageNo = 1;
-			tempPage = productDao.findAll(findAllSpec(keyword),
-					new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
-		}
-		PageRainier<Product> page = new PageRainier<Product>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+		//if(tempPage.getTotalPages()<pageNo){
+		//	pageNo = 1;
+		//	tempPage = productDao.findAll(findAllSpec(keyword),
+		//			new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
+		//}
+		long count = productDao.findAllCount(keyword);
+		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
+		page.setResult(productDao.findList(keyword,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
 
-	private Specification<Product> findAllSpec(final String keyword) {
+	/*private Specification<Product> findAllSpec(final String keyword) {
 		if(StringUtils.isNotBlank(keyword)){
 			return new Specification<Product>(){
 				@Override
@@ -61,22 +47,18 @@ public class ProductService {
 		}else{
 			return null;
 		}
-	}
+	}*/
 
 	public Product loadProductById(Integer productId) {
 		return productDao.findOne(productId);
 	}
 
-	public Product saveProduct(Product product) {
-		return productDao.save(product);
+	public void saveProduct(Product product) {
+		productDao.save(product);
 	}
 
 	public void delProduct(Integer productId) {
 		productDao.delete(productId);
-	}
-	
-	public void delProduct(Product product) {
-		productDao.delete(product);
 	}
 	
 	/**
@@ -87,9 +69,10 @@ public class ProductService {
 	 * @since JDK 1.7
 	 */
 	public List<Product> findIndexPic(int pageSize){
-		Page<Product> tempPage = productDao.findAll(findIndexPicSpec(), 
-				new PageRequest(0,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
-		return tempPage.getContent();
+		//Page<Product> tempPage = productDao.findAll(findIndexPicSpec(), 
+		//		new PageRequest(0,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
+		//return tempPage.getContent();
+		return productDao.findIndexPic(pageSize);
 	}
 	
 	/**
@@ -98,7 +81,7 @@ public class ProductService {
 	 * @return 
 	 * @since JDK 1.7
 	 */
-	private Specification<Product> findIndexPicSpec() {
+	/*private Specification<Product> findIndexPicSpec() {
 		return new Specification<Product>(){
 			@Override
 			public Predicate toPredicate(Root<Product> root,
@@ -109,7 +92,7 @@ public class ProductService {
 						cb.equal(root.<Boolean>get("hot"), true));
 			}
 		};
-	}
+	}*/
 	
 	/**
 	 * 查询栏目下的已发布的，状态正常的产品
@@ -128,11 +111,12 @@ public class ProductService {
 	 * @return
 	 */
 	public PageRainier<Product> findPageByColId(int pageNo, Integer pageSize,
-			Integer id) {
-		Page<Product> tempPage = productDao.findAll(findPageByColIdSpec(id), 
-				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC, "priority","hot","id")));
-		PageRainier<Product> page = new PageRainier<Product>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+			Integer colId) {
+		//Page<Product> tempPage = productDao.findAll(findPageByColIdSpec(id), 
+		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC, "priority","hot","id")));
+		long count = productDao.countByColId(colId);
+		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
+		page.setResult(productDao.findListByColId(colId,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
 	
@@ -140,7 +124,7 @@ public class ProductService {
 		return productDao.countByColId(id);
 	}
 
-	private Specification<Product> findPageByColIdSpec(final Integer columnId) {
+	/*private Specification<Product> findPageByColIdSpec(final Integer columnId) {
 		return new Specification<Product>(){
 			@Override
 			public Predicate toPredicate(Root<Product> root,
@@ -155,7 +139,7 @@ public class ProductService {
 						);
 			}
 		};
-	}
+	}*/
 
 	public void insertOfBatch(List<Product> productList) {
 		productDao.save(productList);
@@ -174,14 +158,15 @@ public class ProductService {
 	 */
 	public PageRainier<Product> findAllByCateId(int pageNo, Integer pageSize,
 			Integer cateId) {
-		Page<Product> tempPage = productDao.findAll(findAllByCateIdSpec(cateId), 
-				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
-		PageRainier<Product> page = new PageRainier<Product>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+		//Page<Product> tempPage = productDao.findAll(findAllByCateIdSpec(cateId), 
+		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
+		long count = productDao.countByCateId(cateId);
+		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
+		page.setResult(productDao.findAllListByCateId(cateId,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
 
-	private Specification<Product> findAllByCateIdSpec(final Integer cateId) {
+	/*private Specification<Product> findAllByCateIdSpec(final Integer cateId) {
 		return new Specification<Product>(){
 			@Override
 			public Predicate toPredicate(Root<Product> root,
@@ -196,11 +181,7 @@ public class ProductService {
 						);
 			}
 		};
-	}
-
-	public List<Product> findAllListByCateId(Integer catId) {
-		return productDao.findAllListByCateId(catId);
-	}
+	}*/
 
 	public boolean updateStatus(Integer id, boolean status) {
 		if(status){
@@ -219,7 +200,7 @@ public class ProductService {
 	}
 
 	public List<Product> findRelatedProducts(Integer id, String keyWords, int maxSize) {
-		if(!StringUtils.isBlank(keyWords)){
+		/*if(!StringUtils.isBlank(keyWords)){
 			String[] kws = keyWords.split(";");
 			List<Product> ps = new ArrayList<Product>();
 			List<Product> tps = new ArrayList<Product>();
@@ -246,11 +227,11 @@ public class ProductService {
 			ps.clear();
 			tpId.clear();
 			return tps;
-		}
+		}*/
 		return null;
 	}
 	
-	private Specification<Product> findRelatedProductsSpec(final Integer id, final String kw) {
+	/*private Specification<Product> findRelatedProductsSpec(final Integer id, final String kw) {
 		return new Specification<Product>(){
 			@Override
 			public Predicate toPredicate(Root<Product> root,
@@ -259,17 +240,19 @@ public class ProductService {
 						cb.notEqual(root.<Integer>get("id"), id));
 			}
 		};
-	}
+	}*/
 
 	public PageRainier<Product> findAllReleaseProductByLikeKeyword(String keyword, int pageNo, int pageSize) {
-		Page<Product> tempPage = productDao.findAll(findAllReleaseProductByLikeKeywordSpec(keyword), 
-				new PageRequest(pageNo-1, pageSize, new Sort(Direction.DESC,"priority","hot","id")));
-		PageRainier<Product> page = new PageRainier<Product>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+		//Page<Product> tempPage = productDao.findAll(findAllReleaseProductByLikeKeywordSpec(keyword), 
+		//		new PageRequest(pageNo-1, pageSize, new Sort(Direction.DESC,"priority","hot","id")));
+		
+		long count = productDao.countAllReleaseProductByLikeKeyword(keyword);
+		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
+		page.setResult(productDao.findAllReleaseProductByLikeKeyWordList(keyword,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
 
-	private Specification<Product> findAllReleaseProductByLikeKeywordSpec(final String keyword) {
+	/*private Specification<Product> findAllReleaseProductByLikeKeywordSpec(final String keyword) {
 		return new Specification<Product>(){
 			@Override
 			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -280,5 +263,5 @@ public class ProductService {
 				}
 			}
 		};
-	}
+	}*/
 }

@@ -126,9 +126,9 @@ public class RoleController {
 	public String del(@PathVariable String roleName){
 		if(roleName!=null){
 			Role role = roleService.loadRoleByName(roleName);
-			for(User u : role.getUsers()){
+			/*for(User u : role.getUsers()){
 				u.getRoles().remove(role);
-			}
+			}*/
 			roleService.delRole(role);
 			MsgUtil.setMsgDelete("success");
 			LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDesc());
@@ -163,27 +163,27 @@ public class RoleController {
 							ress.add(res);
 						}else{
 							menu = menuService.loadMenuById(Long.parseLong(str));
-							resources = resourceService.findResourceByParentId(menu.getId());
-							if(menu.getParentMenu()!=null&&resources!=null&&resources.size()==0){
-								ress.addAll(resourceService.findAllResourceByParentId(menu.getId()));
-							}
+							//resources = resourceService.findResourceByParentId(menu.getId());
+							//if(menu.getParentMenu()!=null&&resources!=null&&resources.size()==0){
+							//	ress.addAll(resourceService.findAllResourceByParentId(menu.getId()));
+							//}
 							menus.add(menu);
 						}
 					}
-					model.setResources(ress);
-					model.setMenus(menus);
+					//model.setResources(ress);
+					//model.setMenus(menus);
 				}else{
 					if(strIds!=null){
-						model.setResources(null);
-						model.setMenus(null);
+						//model.setResources(null);
+						//model.setMenus(null);
 					}
 				}
 				roleService.saveRole(model);
 				MsgUtil.setMsg("success", "成功分配【"+model.getDesc()+"】权限！");
 				LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDesc()+"的权限");
-				logger.warn("角色{}重新分配了权限{}",model.getDesc(),
-						ToStringBuilder.reflectionToString(model.getResources(), 
-								ToStringStyle.SHORT_PREFIX_STYLE));
+				//logger.warn("角色{}重新分配了权限{}",model.getDesc(),
+				//		ToStringBuilder.reflectionToString(model.getResources(), 
+				//				ToStringStyle.SHORT_PREFIX_STYLE));
 				try {
 					resourceDetailsMonitor.afterPropertiesSet();
 					session.removeAttribute("menuXml");
@@ -211,7 +211,7 @@ public class RoleController {
 			response.setHeader("Content-Disposition","attachment; filename="+fileName);
 			//注意：先权限jar包里的（按属性顺序下来的），再扩展的属性
 			String[] headers = {"角色","权限"};
-			roleService.exportToCSVExNoDisplay(roles,fileName,headers,response);
+			//roleService.exportToCSVExNoDisplay(roles,fileName,headers,response);
 			LogUtil.getInstance().log(LogType.EXPORT,"导出角色表："+fileName);
 		} catch (Exception e) {
 			logger.error("导出角色信息报错",e);

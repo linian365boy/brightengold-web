@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.brightengold.dao.AdvertisementDao">
+	
+	<select id="loadAdvertisement" parameterType="int" resultType="Advertisement">
+		select * from tb_advertisement a where a.id = #{id}
+	</select>
+	
+	<update id="updateStatus">
+		update tb_advertisement set status = #{status} where id = #{id} 
+	</update>
+	
+	<insert id="save" parameterType="Advertisement">
+		insert into tb_advertisement(id,name,picUrl,width,height,url,priority,createDate,status) 
+		values(null,#{name},#{picUrl},#{width},#{height},#{url},#{priority},#{createDate},#{status})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_advertisement where id=#{id}
+	</delete>
+	
+	<!-- 后台系统展示 -->
+	<select id="findAllCount" resultType="long">
+		select count(*) from tb_advertisement
+	</select>
+	
+	<!-- 后台系统展示 -->
+	<select id="findList" resultType="Advertisement">
+		select * from tb_advertisement order by priority desc,id desc limit #{start},#{pageSize}
+	</select>
+	
+	<select id="findIndexAds" parameterType="int" resultType="Advertisement">
+		select * from tb_advertisement where status=1 order by priority desc,id desc limit #{indexAdsSize}
+	</select>
+	
+</mapper>

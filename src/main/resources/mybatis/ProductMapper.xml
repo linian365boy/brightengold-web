@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.brightengold.dao.ProductDao">
+	<select id="countByColId" parameterType="int" resultType="long">
+		select count(*) from tb_product pr inner join tb_category ca on (pr.categoryId=ca.id) 
+		inner join tb_column co on (ca.columnId = co.id) 
+		where (co.id = #{id} or co.parentId = #{id}) and pr.status is true and pr.publish is true
+	</select>
+	
+	<select id="findListByColId" parameterType="int" resultType="Product">
+		select * from tb_product pr join tb_category ca on (pr.categoryId=ca.id) join tb_column 
+		co on (ca.columnId = co.id) where 
+		co.id = #{id} or co.parentId = #{id} order by pr.priority desc,pr.hot desc,pr.id desc
+	</select>
+	
+	<select id="countByCateId" parameterType="int" resultType="long">
+		select count(pr.id) from tb_product pr inner join tb_category ca on (pr.categoryId=ca.id)  
+		where (pr.categoryId = #{cateId} or ca.parentId = #{cateId}) and pr.status is true and pr.publish is true
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_product where id=#{id}
+	</delete>
+	
+	<insert id="save">
+		insert into tb_product(id,enName,categoryId,picUrl,introduce,description,hot,url,publish,
+		createDate,createUserId,status,keyWords,priority) 
+		values(null,#{enName},#{categoryId},#{picUrl},#{introduce},#{description},#{hot},#{url},
+		#{publish},#{createDate},#{createUserId},#{status},#{keyWords},#{priority})
+	</insert>
+	
+	<select id="findAllListByCateId" resultType="Product">
+		select * from tb_product pr where pr.categoryId = #{cateId} and pr.status is true and 
+		pr.publish is true order by pr.priority desc,pr.hot desc,pr.id desc limit #{start},#{pageSize}
+	</select>
+	
+	<update id="updateStatus">
+		update tb_product set status = #{status} where id = #{id}
+	</update>
+	
+	<select id="findOne">
+		select * from tb_product where id=#{productId}
+	</select>
+	
+	<select id="findIndexPic" resultType="Product" parameterType="int">
+		select * from tb_product where publish is true and status is true and hot is true order by priority desc,hot desc,id desc limit #{pageSize}
+	</select>
+	
+	<select id="findList" resultType="Product">
+		select * from tb_product where enName like concat('%',#{keyword},'%') order by priority desc,hot desc,id desc limit #{start},#{pageSize}
+	</select>
+	
+	<select id="findAllReleaseProductByLikeKeyWordList" resultType="Product">
+		select * from tb_product where enName like concat('%',#{keyword},'%') and publish is true and status is true order by priority desc,hot desc,id desc limit #{start},#{pageSize}
+	</select>
+	
+	<select id="countAllReleaseProductByLikeKeyword" resultType="long">
+		select count(*) from tb_product where enName like concat('%',#{keyword},'%') and publish is true and status is true
+	</select>
+	
+	<select id="findListByColId" resultType="Product">
+		select * from tb_product pr inner join tb_category ca on (pr.categoryId=ca.id) inner join tb_column co on(ca.columnId=co.id)
+		where pr.publish is true and pr.status is true and (ca.columnId=#{colId} or co.parentId=#{colId}) order by priority desc,hot desc,id desc
+	</select>
+	
+	<select id="findAllCount" resultType="long">
+		select * from tb_product where enName like concat('%',#{keyword},'%') order by priority desc,hot desc,id desc
+	</select>
+</mapper>

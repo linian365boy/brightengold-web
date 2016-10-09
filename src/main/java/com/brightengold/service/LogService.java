@@ -5,43 +5,27 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import cn.rainier.nian.model.Menu;
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.utils.DateConverter;
-import cn.rainier.nian.utils.PageRainier;
+import org.springframework.stereotype.Service;
 
 import com.brightengold.dao.LogDao;
 import com.brightengold.model.Log;
 import com.brightengold.util.LogType;
 
-@Component("logService")
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.utils.PageRainier;
+
+@Service("logService")
 public class LogService {
 	@Autowired
 	private LogDao logDao;
 
-	public Log saveLog(Log log){
-		return logDao.save(log);
+	public void saveLog(Log log){
+		logDao.save(log);
 	}
 
-	private static Specification<Log> findLogSpeci(final String field,final String condition){
+	/*private static Specification<Log> findLogSpeci(final String field,final String condition){
 		return new Specification<Log>() {
 			public Predicate toPredicate(Root<Log> root, CriteriaQuery<?> query,
 					CriteriaBuilder cb) {
@@ -60,13 +44,13 @@ public class LogService {
 				return cb.like(path, '%'+condition+'%');
 			}
 		};
-	}
+	}*/
 
 
 	/**
 	 *@see 根据用户选中的条件查找日志
 	 */
-	public PageRainier<Log> findLog(String field,String condition,String condition2,Integer pageNo,Integer pageSize){
+	/*public PageRainier<Log> findLog(String field,String condition,String condition2,Integer pageNo,Integer pageSize){
 		PageRainier<Log> page = null;
 		Page<Log> tempPage = null;
 		if("logDate".equals(field)){
@@ -88,12 +72,13 @@ public class LogService {
 			page.setResult(tempPage.getContent());
 		}
 		return page;
-	}
+	}*/
 
 	public PageRainier<Log> findAll(Integer pageNo, Integer pageSize) {
-		Page<Log> tempPage = logDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
-		PageRainier<Log> page = new PageRainier<Log>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+		//Page<Log> tempPage = logDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
+		long count = logDao.findAllCount();
+		PageRainier<Log> page = new PageRainier<Log>(count,pageNo,pageSize);
+		page.setResult(logDao.findList((pageNo-1)*pageSize,pageSize));
 		return page;
 	}
 
@@ -104,9 +89,9 @@ public class LogService {
 		log.setType(type.getName());
 		log.setContent(content);
 		log.setCreateTime(new Date());
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
-			      .getRequestAttributes()).getRequest();
-		log.setMenu((Menu)request.getSession().getAttribute("menu"));
+		//HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
+		//	      .getRequestAttributes()).getRequest();
+		//log.setMenu((Menu)request.getSession().getAttribute("menu"));
 		log.setOperator(u.getUsername());
 		log.setOperatorRealName(u.getRealName());
 		logDao.save(log);

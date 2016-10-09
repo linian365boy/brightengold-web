@@ -3,7 +3,6 @@ package com.brightengold.controller;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -18,15 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.rainier.nian.utils.PageRainier;
-
-import com.brightengold.model.Category;
 import com.brightengold.model.Column;
-import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.vo.ResultVo;
 import com.google.gson.Gson;
+
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/sys/col")
@@ -36,8 +33,6 @@ public class ColumnController {
 	private ColumnService columnService;
 	private PageRainier<Column> columns;
 	private Integer pageSize = 10;
-	@Autowired
-	private CategoryService categoryService;
 	private static Logger logger = LoggerFactory.getLogger(ColumnController.class);
 	
 	@RequestMapping(value={"/cols/{pageNo}"})
@@ -51,7 +46,7 @@ public class ColumnController {
 	@RequestMapping(value={"/getChildren/{pId}"},method = RequestMethod.POST)
 	public String getChildrenbyParentId(@PathVariable Integer pId){
 		Gson gson = new Gson();
-		List<Object[]> childByAjax = columnService.findChildrenByParentId(pId);
+		List<Column> childByAjax = columnService.findChildrenByParentId(pId);
 		return gson.toJson(childByAjax);
 	}
 	
@@ -59,9 +54,9 @@ public class ColumnController {
 	@ResponseBody
 	public String getParentByAjax(@PathVariable Integer flag){
 		Gson gson = new Gson();
-		List<Object[]> parentsByAjax = columnService.findParentByAjax();
+		List<Column> parentsByAjax = columnService.findParentByAjax();
 		if(flag!=0){
-			parentsByAjax.add(0, new Object[]{0,"根节点"});
+			parentsByAjax.add(0, new Column(0,"根节点",null));
 		}
 		return gson.toJson(parentsByAjax);
 	}
@@ -75,19 +70,18 @@ public class ColumnController {
 		}
 		column.setCreateDate(new Date());
 		if(secondColumnId!=null){
-			column.setParentColumn(columnService.getById(secondColumnId));
+			column.setParentId(secondColumnId);
 			column.setDepth(3);
 		}else{
 			if(firstColumnId!=null){
-				column.setParentColumn(columnService.getById(firstColumnId));
+				column.setParentId(firstColumnId);
 				column.setDepth(2);
 			}else{
 				column.setDepth(1);
 			}
 		}
 		column.setUrl("views/html/col/"+column.getCode()+".htm");
-		Column temp = columnService.save(column);
-		if(temp!=null){
+		if(columnService.save(column)){
 			MsgUtil.setMsgAdd("success");
 			logger.info("新增栏目:{}成功！",
 					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
@@ -109,18 +103,18 @@ public class ColumnController {
 		Column temp = null;
 		try {
 			temp = columnService.getById(id);
-			if(column.getParentColumn().getId()!=0){
-				column.setParentColumn(columnService.getById(column.getParentColumn().getId()));
-			}else{
-				column.setParentColumn(null);
-			}
+			//if(column.getParentColumn().getId()!=0){
+			//	column.setParentColumn(columnService.getById(column.getParentColumn().getId()));
+			//}else{
+			//	column.setParentColumn(null);
+			//}
 			column.setCreateDate(temp.getCreateDate());
 			if(!(column.getCode().equals(temp.getCode()))){
 				column.setUrl("views/html/col/"+column.getCode()+".htm");
 			}else{
 				column.setUrl(temp.getUrl());
 			}
-			column = columnService.save(column);
+			columnService.save(column);
 			MsgUtil.setMsgUpdate("success");
 			logger.info("修改栏目成功，原栏目信息：{}，修改后栏目信息：{}！",
 					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
@@ -147,7 +141,7 @@ public class ColumnController {
 		Column temp = columnService.getById(id);
 		Gson gson = new Gson();
 		ResultVo<String> vo = new ResultVo<String>();
-		if(temp.getChildColumn()!=null && temp.getChildColumn().size()>0){
+		/*if(temp.getChildColumn()!=null && temp.getChildColumn().size()>0){
 			//还有子节点，不能删除
 			//MsgUtil.setMsg("error","删除失败，该节点包含有"+temp.getChildColumn().size()+"个子节点，请先删除该节点下的子节点！");
 			vo.setCode(500);
@@ -166,7 +160,7 @@ public class ColumnController {
 			vo.setCode(200);
 			vo.setMessage("删除成功！");
 			logger.warn("删除栏目信息：{}成功",temp);
-		}
+		}*/
 		return gson.toJson(vo);
 	}
 	

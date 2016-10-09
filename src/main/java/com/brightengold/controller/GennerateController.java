@@ -107,7 +107,7 @@ public class GennerateController {
 		List<Column> columnList = columnService.findList();
 		for(Column col : columnList){
 			//当前栏目
-			parentCol = col.getParentColumn()==null?col:col.getParentColumn();
+			//parentCol = col.getParentColumn()==null?col:col.getParentColumn();
 			map.put("parentCol", parentCol);
 			map.put("column", col);
 			if(1==col.getType() || 2==col.getType()){
@@ -134,7 +134,7 @@ public class GennerateController {
 		List<Category> cateList = categoryService.findList();
 		for(Category cate : cateList){
 			map.put("category", cate);
-			map.put("column", cate.getColumn());
+			//map.put("column", cate.getColumn());
 			publishAllProducts(request,cate,map);
 			if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 					path+Constant.CATEGORYPRODUCTPATH, cate.getEnName().replaceAll("\\s*", "")+".htm")){
@@ -183,7 +183,7 @@ public class GennerateController {
 				}else{
 					//当前栏目
 					col = columnService.loadColumnByCode(code);
-					parentCol = col.getParentColumn()==null?col:col.getParentColumn();
+					//parentCol = col.getParentColumn()==null?col:col.getParentColumn();
 					map.put("parentCol", parentCol);
 					map.put("column", col);
 					if(1==col.getType() || 2==col.getType()){
@@ -215,7 +215,7 @@ public class GennerateController {
 			if(cate!=null){
 				gennerateCommon(map);
 				map.put("category", cate);
-				map.put("column", cate.getColumn());
+				//map.put("column", cate.getColumn());
 				publishAllProducts(request,cate,map);
 				if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 						path+Constant.CATEGORYPRODUCTPATH, 
@@ -341,13 +341,13 @@ public class GennerateController {
 				long catProductsSize = productService.countByCateId(cate.getId());
 				cate.setProductsSize(catProductsSize);
 				if(catProductsSize!=0){
-					if(!CollectionUtils.isEmpty(cate.getChildren())){
+					/*if(!CollectionUtils.isEmpty(cate.getChildren())){
 						for(Category childCate : cate.getChildren()){
 							catProductsSize = productService.countByCateId(childCate.getId());
 							logger.info("childCate products size |{}",catProductsSize);
 							childCate.setProductsSize(catProductsSize);
 						}
-					}
+					}*/
 				}
 			}
 		}
@@ -360,7 +360,7 @@ public class GennerateController {
 						"<a href='"+company.getWebsite()+"' class='button  product_type_simple' title='more infomation'>&nbsp;more"));
 		map.put("company", company);
 		//info信息
-		List<Info> infos = infoService.getList();
+		List<Info> infos = infoService.findList();
 		map.put("infos", infos);
 		//网站关键字
 		WebConfig webConfig = configService.loadSystemConfig();

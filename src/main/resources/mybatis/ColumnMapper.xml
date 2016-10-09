@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.brightengold.dao.ColumnDao">
+	<select id="findParentByAjax" resultType="Column">
+		select c.id,c.name from tb_column c where c.parentId is null order by c.priority desc,c.id desc
+	</select>
+	
+	<select id="loadColumnByCode" resultType="Column" parameterType="java.lang.String">
+		select c from tb_column c where c.code = #{code}
+	</select>
+	
+	<select id="findChildrenByParentId" parameterType="int" resultType="Column">
+		select c.id,c.name from tb_column c where c.parentId = #{pId} order by c.priority desc,c.id desc
+	</select>
+	
+	<select id="updateColumnPublishContent">
+		update tb_column c set c.type = #{type},c.hasNeedForm = #{hasNeedForm} where c.id = #{id} or c.parentId = #{id}
+	</select>
+	
+	<select id="findOne" resultType="Column" parameterType="int">
+		select * from tb_column c where id=#{id}
+	</select>
+	
+	<select id="save" parameterType="Column">
+		insert into tb_column(id,name,enName,url,parentId,priority,createDate,code,depth,type,hasNeedForm) 
+		values(null,#{name},#{enName},#{url},#{parentId},#{priority},#{createDate},#{code},#{depth},#{type},#{hasNeedForm})
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_column where id=#{id}
+	</delete>
+	
+	<select id="countColumnByCode" parameterType="java.lang.String" resultType="long">
+		select count(*) from tb_column where code=#{code}
+	</select>
+	
+	<select id="findAll" resultType="Column">
+		select * from tb_column order by c.priority desc,c.id desc
+	</select>
+	
+	<select id="findAllCount" resultType="long" parameterType="java.lang.String">
+		select count(*) from tb_column where name like CONCAT('%',#{keyword},'%') or 
+		code like CONCAT('%',#{keyword},'%') or enName like CONCAT('%',#{keyword},'%')
+	</select>
+	
+	<select id="findList" resultType="Column">
+		select * from tb_column where name like CONCAT('%',#{keyword},'%') or code like CONCAT('%',#{keyword},'%') 
+		or enName like CONCAT('%',#{keyword},'%') order by priority desc,id desc limit #{start},#{pageSize}
+	</select>
+	
+</mapper>

@@ -2,16 +2,10 @@ package com.brightengold.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-@Entity
-@Table
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class Advertisement implements Serializable {
 	private static final long serialVersionUID = -5638792445671644739L;
 	private Integer id;
@@ -50,15 +44,12 @@ public class Advertisement implements Serializable {
 	 * 默认为1 正常
 	 */
 	private int status = 1;
-	@Id
-	@GeneratedValue
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=50)
 	public String getName() {
 		return name;
 	}
@@ -77,7 +68,6 @@ public class Advertisement implements Serializable {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	@Column(length=100)
 	public String getUrl() {
 		return url;
 	}
@@ -91,7 +81,6 @@ public class Advertisement implements Serializable {
 		this.priority = priority;
 	}
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -109,5 +98,10 @@ public class Advertisement implements Serializable {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

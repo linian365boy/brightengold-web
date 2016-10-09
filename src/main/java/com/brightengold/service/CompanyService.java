@@ -2,14 +2,14 @@ package com.brightengold.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.brightengold.model.Company;
 import com.brightengold.util.ConstantVariable;
 import com.brightengold.util.Tools;
 import com.google.gson.GsonBuilder;
 
-@Component("companyService")
+@Service("companyService")
 public class CompanyService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
