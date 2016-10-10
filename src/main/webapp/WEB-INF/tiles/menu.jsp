@@ -103,14 +103,6 @@
     <body>
 	<aside id="sidebar" class="column">
 	</aside><!-- end of sidebar -->
-	<%
-		if(request.getParameter("menuId")!=null){
-			WebApplicationContext app = ContextLoader.getCurrentWebApplicationContext();
-			MenuServiceImpl menuService = (MenuServiceImpl)app.getBean("menuService");
-			Menu menu = menuService.loadMenuById(Long.parseLong(request.getParameter("menuId")));
-			session.setAttribute("menu", menu);
-		}
-	%>
 	<script type="text/javascript">
   	if(typeof(str)!='undefined'){
   		$("#sidebar").html(str);

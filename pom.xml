@@ -6,14 +6,13 @@
 	<artifactId>web</artifactId>
 	<name>brightengold-web</name>
 	<packaging>war</packaging>
-	<version>1.0.0${app.version.type}</version>
+	<version>1.1.0${app.version.type}</version>
 	
 	<properties>
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <org.springframework-version>3.2.4.RELEASE</org.springframework-version>
 	    <org.springSecurityframework-version>3.2.3.RELEASE</org.springSecurityframework-version>
 	    <org.aspectj-version>1.7.1</org.aspectj-version>
-	    <org.slf4j-version>1.6.6</org.slf4j-version>
 	    <timestamp>${maven.build.timestamp}</timestamp>
 	    <dev.version.type>-SNAPSHOT</dev.version.type>
 	    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -201,6 +200,16 @@
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-extras</artifactId>
 			<version>3.0.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jcl-over-slf4j</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- return json -->
@@ -208,12 +217,6 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 			<version>2.3.3</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.brightengold</groupId>
-			<artifactId>brightengold-util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.rainier.permission</groupId>

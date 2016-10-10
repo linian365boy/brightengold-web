@@ -90,8 +90,8 @@
 
 	<!-- 引入auth_core.jar start -->
 
-	<beans:bean id="resourceDetailsBuilder" class="cn.rainier.nian.model.ResourceDetailsBuilder">
-		<beans:constructor-arg name="dataSource" ref="dataSource"/>
+	<beans:bean id="resourceDetailsBuilder" class="cn.rainier.nian.helper.ResourceDetailsBuilder">
+		<beans:property name="resourceDao" ref="resourceDao"/>
 	</beans:bean>
 
     <!-- 引入auth_core.jar start -->
