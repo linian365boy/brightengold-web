@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rainier.nian.dao.ResourceDao">
+	<select id="getAllResource">
+		select * from tb_resource order by priority desc
+	</select>
+	
+	<select id="findResourceByParentId">
+		select r.id,r.name,r.descn from tb_resource r where r.menuId = #{menuId} and r.display is true order by priority desc
+	</select>
+	
+	<select id="findAllResourceByParentId" resultType="Info">
+		select r.id,r.name,r.descn from tb_resource r where r.menuId = #{menuId} order by priority desc
+	</select>
+	
+	<select id="findResourceByRole" resultType="Info">
+		select rr.resourceId from tb_role_resource rr where rr.roleId = #{name}
+	</select>
+	
+	<select id="loadResourceByResourceId" resultType="long">
+		select r.* from tb_resource r where r.id = #{id}
+	</select>
+	
+</mapper>

@@ -56,7 +56,7 @@ public class UserController {
 		}
 		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		//排除当前用户
-		users = userService.findAllUser(pageNo, pageSize, u.getId(),true);
+		users = userService.findAllUser(pageNo, pageSize, u.getId());
 		//排除自己
 		model.addAttribute("page",users);//map
 		return "admin/sys/user/list";

@@ -50,7 +50,7 @@ public class MenuController {
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String addUI(ModelMap map){
-		List<Object[]> parentMenu = menuService.findParentByAjax();
+		List<Menu> parentMenu = menuService.findParentByAjax();
 		map.put("parentMenu", parentMenu);
 		return "admin_unless/sys/menu/add";
 	}
@@ -58,8 +58,7 @@ public class MenuController {
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public String add(Menu menu){
 		try{
-			Menu temp = menuService.saveMenu(menu);
-			if(temp!=null){
+			if(menuService.saveMenu(menu)){
 				MsgUtil.setMsgAdd("success");
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
 				logger.info("添加菜单{}成功！",

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-  <typeAliases>
+  <!-- <typeAliases>
   	<typeAlias type="com.brightengold.model.Advertisement" alias="Advertisement"/>
   	<typeAlias type="com.brightengold.model.Category" alias="Category"/>
   	<typeAlias type="com.brightengold.model.Column" alias="Column"/>
@@ -12,9 +12,9 @@
   	<typeAlias type="com.brightengold.model.Log" alias="Log"/>
   	<typeAlias type="com.brightengold.model.News" alias="News"/>
   	<typeAlias type="com.brightengold.model.Product" alias="Product"/>
-  	<!-- <typeAlias type="com.brightengold.model." alias=""/>
   	<typeAlias type="com.brightengold.model." alias=""/>
   	<typeAlias type="com.brightengold.model." alias=""/>
-  	<typeAlias type="com.brightengold.model." alias=""/> -->
-  </typeAliases>
+  	<typeAlias type="com.brightengold.model." alias=""/>
+  	<typeAlias type="com.brightengold.model." alias=""/>
+  </typeAliases> -->
 </configuration>

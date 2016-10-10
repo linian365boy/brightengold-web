@@ -48,30 +48,25 @@
 		<property name="properties" ref="configProperties" />
 	</bean>
 
+	<!-- 添加数据源参数 -->
+	<import resource="classpath:/dataSource.xml" />
+	
 	<!-- spring和MyBatis整合 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:/mybatis/mybatis-config.xml" />
 		<property name="dataSource" ref="dataSource" />
-		<!-- 自动扫描domain目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.brightengold.model" />
+		<!-- 自动扫描domain目录, 省掉mybatis-config.xml的configuration里的手工配置 -->
+		<property name="typeAliasesPackage" value="com.brightengold.model,cn.rainier.nian.model" />
 		<!-- 自动扫描mapping.xml文件 -->
 		<property name="mapperLocations" value="classpath:/mybatis/*Mapper.xml"></property>
 	</bean>
-
-	<!-- 添加数据源参数 -->
-	<import resource="classpath:/dataSource.xml" />
-
-	<!-- 配置了两个Spring Data Jpa配置 -->
-	<!-- 引入auth_core.jar start -->
-	<!-- 配置了auth_core.jar的jpa repositories -->
-	<jpa:repositories base-package="cn.rainier.nian.dao"
-		transaction-manager-ref="transactionManager"
-		entity-manager-factory-ref="entityManagerFactory" />
-
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<property name="basePackage" value="com.brightengold.dao,cn.rainier.nian.dao" />
+	</bean>
+	
 	<!-- 引入auth_core自带的userService -->
-
-	<bean class="cn.rainier.nian.service.OutCSVForUser" id="outUser" />
-
 	<bean class="cn.rainier.nian.service.impl.UserServiceImpl" id="userService">
 		<property name="userDao" ref="userDao" />
 		<property name="outCSV" ref="outUser" />

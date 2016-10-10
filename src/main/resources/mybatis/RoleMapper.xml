@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rainier.nian.dao.RoleDao">
+	<insert id="save">
+		insert into tb_role(name,desc,remarks,defaultOrNo,createDate) 
+		values(#{name},#{desc},#{remarks},#{defaultOrNo},#{createDate})
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		delete from tb_role where name=#{roleId}
+	</delete>
+	
+	<select id="findOne" parameterType="java.lang.String" resultType="Role">
+		select * from tb_role where name=#{roleName}
+	</select>
+	
+	<select id="finAllByAjax">
+		select r.name,r.desc from tb_role r where r.defaultOrNo is false
+	</select>
+	
+	<select id="findRoleByUser">
+		select r from tb_role r inner join tb_user_role ur on r.name=ur.roleId 
+		where u.id =#{userId}
+	</select>
+	
+	<select id="findDefaultRole">
+		select * from tb_role r where r.defaultOrNo is true
+	</select>
+</mapper>

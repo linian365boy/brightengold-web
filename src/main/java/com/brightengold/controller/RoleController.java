@@ -22,21 +22,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.brightengold.service.LogUtil;
+import com.brightengold.service.MsgUtil;
+import com.brightengold.util.LogType;
+import com.google.gson.Gson;
+
+import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
-import cn.rainier.nian.model.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Role;
-import cn.rainier.nian.model.User;
 import cn.rainier.nian.service.impl.MenuServiceImpl;
 import cn.rainier.nian.service.impl.ResourceServiceImpl;
 import cn.rainier.nian.service.impl.RoleServiceImpl;
 import cn.rainier.nian.utils.PageRainier;
 import cn.rainier.nian.utils.UUIDGenerator;
-
-import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
-import com.brightengold.util.LogType;
-import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/admin/sys/role")
@@ -64,7 +63,7 @@ public class RoleController {
 	@ResponseBody
 	public String getRolesByAjax(){
 		Gson gson = new Gson();
-		List<Object[]> rolesByAjax = roleService.findAllByAjax();
+		List<Role> rolesByAjax = roleService.findAllByAjax();
 		return gson.toJson(rolesByAjax);
 	}
 	
@@ -129,7 +128,7 @@ public class RoleController {
 			/*for(User u : role.getUsers()){
 				u.getRoles().remove(role);
 			}*/
-			roleService.delRole(role);
+			roleService.delRole(roleName);
 			MsgUtil.setMsgDelete("success");
 			LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDesc());
 			logger.warn("删除角色为{}",role.getDesc());
@@ -159,10 +158,10 @@ public class RoleController {
 					Menu menu = null;
 					for(String str : strIdArr){
 						if(str.startsWith("r_")){
-							res = resourceService.loadResourceByResource(Long.parseLong(str.substring(2)));
+							res = resourceService.loadResourceByResource(Integer.parseInt(str.substring(2)));
 							ress.add(res);
 						}else{
-							menu = menuService.loadMenuById(Long.parseLong(str));
+							menu = menuService.loadMenuById(Integer.parseInt(str));
 							//resources = resourceService.findResourceByParentId(menu.getId());
 							//if(menu.getParentMenu()!=null&&resources!=null&&resources.size()==0){
 							//	ress.addAll(resourceService.findAllResourceByParentId(menu.getId()));

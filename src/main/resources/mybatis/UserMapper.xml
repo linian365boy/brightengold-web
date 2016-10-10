@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rainier.nian.dao.UserDao">
+	<insert id="save">
+		insert into tb_user(id,realName,username,email,password,enabled,accountNonLocked,lastCloseDate) 
+		values(null,#{realName},#{username},#{email},#{password},#{enabled},#{accountNonLocked},#{lastCloseDate})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_user where id=#{id}
+	</delete>
+	
+	<select id="findUserByRole" resultType="User">
+		select distinct * from tb_user u inner join tb_user_role ur on u.id=ur.userId 
+		where r.id = #{roleId} order by u.id desc
+	</select>
+	
+	<select id="findByName" resultType="User">
+		select * from tb_user u where u.username = #{username}
+	</select>
+	
+	<select id="findUserByLike" resultType="User">
+		select * from tb_user u where u.username like concat('%',#{un},'%')
+	</select>
+	
+	<select id="findOne"  parameterType="int" resultType="User">
+		select * from tb_user where id=#{id}
+	</select>
+	
+	<select id="getPasswordById" resultType="java.lang.String" parameterType="int">
+		select u.password from tb_user u where u.id = #{id}
+	</select>
+	
+	<update id="changePassword">
+		update tb_user set password = #{password} where username = #{username}
+	</update>
+	
+	<update id="unsubscribe" parameterType="java.lang.String">
+		update tb_user set accountNonLocked = false,lastCloseDate=NOW() where username = #{username}
+	</update>
+	
+	<update id="unsubscribe" parameterType="int">
+		update tb_user set accountNonLocked = false,lastCloseDate=NOW() where id = #{id}
+	</update>
+	
+	<select id="findList" resultType="User">
+		select * from tb_user where id!=#{loginId} order by priority desc limit #{start},#{pageSize}
+	</select>
+	
+	<select id="findAllCount" resultType="long" parameterType="int">
+		select count(*) from tb_user where id!=#{userId}
+	</select>
+	
+</mapper>
