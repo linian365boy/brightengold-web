@@ -28,7 +28,6 @@
 		<property name="useCodeAsDefaultMessage" value="true" />
 	</bean>
 	<context:component-scan base-package="com.brightengold" />
-	<task:annotation-driven />
 	<!-- 定义受环境影响易变的变量 -->
 	<bean id="configProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -69,75 +68,22 @@
 	<!-- 引入auth_core自带的userService -->
 	<bean class="cn.rainier.nian.service.impl.UserServiceImpl" id="userService">
 		<property name="userDao" ref="userDao" />
-		<property name="outCSV" ref="outUser" />
+		<property name="userCache" ref="nullUserCache"/>
 	</bean>
-
-	<bean class="cn.rainier.nian.service.OutCSVForRole" id="outRole">
-		<property name="resourceDao" ref="resourceDao" />
-	</bean>
+	
+	<bean class="org.springframework.security.core.userdetails.cache.NullUserCache" id="nullUserCache"/>
 
 	<bean id="roleService" class="cn.rainier.nian.service.impl.RoleServiceImpl">
 		<property name="roleDao" ref="roleDao" />
-		<property name="outCSV" ref="outRole" />
 	</bean>
 
 	<bean id="menuService" class="cn.rainier.nian.service.impl.MenuServiceImpl">
 		<property name="menuDao" ref="menuDao" />
 	</bean>
 
-	<bean id="resourceDao" class="cn.rainier.nian.dao.impl.ResourceDaoImpl">
-		<property name="ds" ref="dataSource" />
-	</bean>
-
 	<bean id="resourceService" class="cn.rainier.nian.service.impl.ResourceServiceImpl">
 		<property name="resourceDao" ref="resourceDao" />
-		<property name="menuDao" ref="menuDao" />
 	</bean>
-
-	<!-- 引入auth_core.jar end -->
-
-	<jpa:repositories base-package="com.brightengold.dao"
-		transaction-manager-ref="transactionManager"
-		entity-manager-factory-ref="entityManagerFactory" />
-
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
-
-	<tx:annotation-driven transaction-manager="transactionManager" />
-	<!-- Jpa Entity Manager 配置 -->
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="persistenceXmlLocation" value="classpath:jpa/persistence.xml" />
-		<property name="persistenceUnitName" value="rockechogroup" />
-	</bean>
-
-	<aop:aspectj-autoproxy proxy-target-class="true" />
-
-	<aop:config proxy-target-class="true">
-		<aop:pointcut
-			expression="(execution(* com.brightengold.service.*.*(..))) or (execution(* cn.rainier.nian.service.impl.*.*(..))) "
-			id="business" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="business" />
-	</aop:config>
-
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="save*" propagation="REQUIRED" />
-			<tx:method name="update*" propagation="REQUIRED" />
-			<tx:method name="edit*" propagation="REQUIRED" />
-			<tx:method name="del*" propagation="REQUIRED" />
-			<tx:method name="load*" read-only="true" />
-			<tx:method name="find*" read-only="true" />
-			<tx:method name="batch*" propagation="REQUIRED" />
-			<tx:method name="get*" propagation="REQUIRED" />
-			<tx:method name="log*" propagation="REQUIRED" />
-			<tx:method name="changePassword" propagation="REQUIRED" />
-			<tx:method name="resetPassword" propagation="REQUIRED" />
-			<tx:method name="unsubscribe" propagation="REQUIRED" />
-		</tx:attributes>
-	</tx:advice>
 
 	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
 		<property name="config">
@@ -174,13 +120,11 @@
 			</props>
 		</property>
 	</bean>
-
-	<!-- 支持异步方法执行 -->
-	<bean id="taskExecutor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	
+	<!-- 发送邮件支持异步方法执行 -->
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 		<property name="corePoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
-
 </beans>

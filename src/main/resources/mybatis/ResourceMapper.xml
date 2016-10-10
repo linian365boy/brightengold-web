@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.rainier.nian.dao.ResourceDao">
-	<select id="getAllResource">
+	<resultMap type="Resource" id="typeResourceMap">
+		<result column="res_string" jdbcType="VARCHAR" property="resString"/>
+		<result column="name" jdbcType="VARCHAR" property="roleName"/>
+	</resultMap>
+	
+	<select id="getAllResource" resultType="Resource">
 		select * from tb_resource order by priority desc
 	</select>
 	
-	<select id="findResourceByParentId">
+	<select id="findResourceByParentId" resultType="Resource">
 		select r.id,r.name,r.descn from tb_resource r where r.menuId = #{menuId} and r.display is true order by priority desc
 	</select>
 	
-	<select id="findAllResourceByParentId" resultType="Info">
+	<select id="findAllResourceByParentId" resultType="Resource">
 		select r.id,r.name,r.descn from tb_resource r where r.menuId = #{menuId} order by priority desc
 	</select>
 	
-	<select id="findResourceByRole" resultType="Info">
+	<select id="findResourceByRole" resultType="int" parameterType="java.lang.String">
 		select rr.resourceId from tb_role_resource rr where rr.roleId = #{name}
 	</select>
 	
-	<select id="loadResourceByResourceId" resultType="long">
+	<select id="loadResourceByResourceId" parameterType="long" resultType="Resource">
 		select r.* from tb_resource r where r.id = #{id}
 	</select>
 	
+	<select id="getAllTypeResource" resultMap="typeResourceMap" parameterType="java.lang.String">
+		select re.resString,r.name from tb_role r join tb_role_resource rr on r.name=rr.roleId join tb_resource re 
+		on re.id=rr.resourceId where re.resType=#{type} order by re.priority
+	</select>
 </mapper>

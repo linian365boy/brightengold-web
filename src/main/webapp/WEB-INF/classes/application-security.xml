@@ -15,9 +15,7 @@
 	<http pattern="/resources/**" security="none"/>
     <http pattern="/admin/login*" security="none"/>
     <http pattern="/admin/accessDenied.html" security="none"/>
-    <http pattern="/admin/login.html" security="none" />
-    <http pattern="/admin/loginCheck.html" security="none"/>
-	
+    
     <http auto-config="false" request-matcher="regex" use-expressions="true" entry-point-ref="myAuthenticationEntryPoint">
     	<access-denied-handler error-page="/admin/accessDenied.html"/>
     	<remember-me key="act_spring"/>
@@ -39,7 +37,7 @@
     
     <!-- 未登录的切入点 -->
     <beans:bean id="myAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-        <beans:property name="loginFormUrl" value="/admin/login.html"></beans:property>
+        <beans:property name="loginFormUrl" value="/admin/login.html"/>
     </beans:bean>
     
   <beans:bean id="accessDecisionManager" class="cn.rainier.nian.security.MyAccessDecisionManager"/>
@@ -90,8 +88,8 @@
 
 	<!-- 引入auth_core.jar start -->
 
-	<beans:bean id="resourceDetailsBuilder" class="cn.rainier.nian.model.ResourceDetailsBuilder">
-		<beans:constructor-arg name="dataSource" ref="dataSource"/>
+	<beans:bean id="resourceDetailsBuilder" class="cn.rainier.nian.helper.ResourceDetailsBuilder">
+		<beans:property name="resourceDao" ref="resourceDao"/>
 	</beans:bean>
 
     <!-- 引入auth_core.jar start -->

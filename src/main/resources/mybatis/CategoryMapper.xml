@@ -35,8 +35,8 @@
 		select * from tb_category c order by c.createDate desc limit #{start},#{pageSize}
 	</select>
 	
-	<select id="findOne" parameterType="int" resultType="Category">
-		select * from tb_category where id=#{id}
+	<select id="findOneById" parameterType="int" resultType="Category">
+		select * from tb_category where id=#{categoryId}
 	</select>
 	
 	<insert id="save">
@@ -52,7 +52,7 @@
 		select count(*) from tb_category where enName=#{enName}
 	</select>
 	
-	<select id="findOne" resultType="Category">
+	<select id="findOneByEnName" parameterType="java.lang.String" resultType="Category">
 		select * from tb_category where enName=#{enName}
 	</select>
 	

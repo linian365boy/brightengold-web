@@ -32,7 +32,7 @@ public class CategoryService {
 	}
 
 	public Category loadCategoryById(Integer categoryId) {
-		return categoryDao.findOne(categoryId);
+		return categoryDao.findOneById(categoryId);
 	}
 
 	public void saveCategory(Category temp) {
@@ -70,7 +70,7 @@ public class CategoryService {
 	}*/
 
 	public Category loadCategoryByEname(String enName) {
-		return categoryDao.findOne(enName);
+		return categoryDao.findOneByEnName(enName);
 	}
 
 	public List<Category> findCateByColId(Integer id) {

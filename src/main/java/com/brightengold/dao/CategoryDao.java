@@ -23,7 +23,7 @@ public interface CategoryDao {
 	
 	List<Category> findList(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
 	
-	Category findOne(Integer categoryId);
+	Category findOneById(Integer categoryId);
 	
 	void save(Category temp);
 	
@@ -31,7 +31,7 @@ public interface CategoryDao {
 	
 	long countByEname(String enName);
 	
-	Category findOne(String enName);
+	Category findOneByEnName(String enName);
 	
 	List<Category> findAll();
 }

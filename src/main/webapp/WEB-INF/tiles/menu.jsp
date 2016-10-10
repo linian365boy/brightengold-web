@@ -67,8 +67,10 @@
 			<script type="text/javascript">
 				$(document).ready(function(){
 					var t = new Date().getTime();
-					$.get("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(xml){
-						var da = $(xml);
+					$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
+						console.info(json);
+						var da = $(json);
+						console.info(da);
 						var pMenu = da.find("item[url='javascript:void(0);']");
 						var str = "";
 						if((pMenu!=null)&&(pMenu.length!=0)){
@@ -103,14 +105,6 @@
     <body>
 	<aside id="sidebar" class="column">
 	</aside><!-- end of sidebar -->
-	<%
-		if(request.getParameter("menuId")!=null){
-			WebApplicationContext app = ContextLoader.getCurrentWebApplicationContext();
-			MenuServiceImpl menuService = (MenuServiceImpl)app.getBean("menuService");
-			Menu menu = menuService.loadMenuById(Long.parseLong(request.getParameter("menuId")));
-			session.setAttribute("menu", menu);
-		}
-	%>
 	<script type="text/javascript">
   	if(typeof(str)!='undefined'){
   		$("#sidebar").html(str);

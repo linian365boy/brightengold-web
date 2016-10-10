@@ -27,24 +27,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import cn.rainier.nian.model.Role;
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.service.impl.RoleServiceImpl;
-import cn.rainier.nian.service.impl.UserServiceImpl;
-import cn.rainier.nian.utils.PageRainier;
-
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+
+import cn.rainier.nian.model.Role;
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.service.RoleService;
+import cn.rainier.nian.service.UserService;
+import cn.rainier.nian.service.impl.RoleServiceImpl;
+import cn.rainier.nian.service.impl.UserServiceImpl;
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/sys/user")
 @Scope("prototype")
 public class UserController {
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 	@Autowired
-	private RoleServiceImpl roleService;
+	private RoleService roleService;
 	private PageRainier<User> users;
 	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -211,14 +213,14 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/{username}/unsubscribe",method=RequestMethod.GET)
-	public String unsubscribe(@PathVariable String username,User user){
-		if (user.getUsername() != null) {
-			user = userService.loadUserByName(user.getUsername());
-			userService.unsubscribe(user);
+	public String unsubscribe(@PathVariable String username){
+		if(userService.unsubscribe(username)){
 			MsgUtil.setMsg("success", "注销用户成功！");
 			//日志记录
-			LogUtil.getInstance().log(LogType.NSUBSCTIBE, user.getUsername()+"被注销了");
-			logger.warn("用户：{}，注销成功",user.getUsername());
+			LogUtil.getInstance().log(LogType.NSUBSCTIBE, username+"被注销了");
+			logger.warn("用户：{}，注销成功",username);
+		}else{
+			MsgUtil.setMsg("error", "注销用户失败！");
 		}
 		return "redirect:/admin/sys/user/users/1.html";
 	}
@@ -277,16 +279,8 @@ public class UserController {
 		this.pageSize = pageSize;
 	}
 
-	public UserServiceImpl getUserService() {
-		return userService;
-	}
-
 	public void setUserService(UserServiceImpl userService) {
 		this.userService = userService;
-	}
-
-	public RoleServiceImpl getRoleService() {
-		return roleService;
 	}
 
 	public void setRoleService(RoleServiceImpl roleService) {

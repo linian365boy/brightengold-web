@@ -1,11 +1,9 @@
 package com.brightengold.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,12 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -27,7 +27,10 @@ import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
 
 import cn.rainier.nian.model.Menu;
-import cn.rainier.nian.service.impl.MenuServiceImpl;
+import cn.rainier.nian.model.Resource;
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.service.MenuService;
+import cn.rainier.nian.service.ResourceService;
 import cn.rainier.nian.utils.PageRainier;
 
 @Controller
@@ -36,7 +39,9 @@ import cn.rainier.nian.utils.PageRainier;
 @Scope("prototype")
 public class MenuController {
 	@Autowired
-	private MenuServiceImpl menuService;
+	private MenuService menuService;
+	@Autowired
+	private ResourceService resourceService;
 	private PageRainier<Menu> menus;
 	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(MenuController.class);
@@ -74,7 +79,7 @@ public class MenuController {
 		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/menu/menus/1.html";
 	}
 	
-	public String generateXmlString(HttpServletRequest request,ModelMap model) {
+	private String generateJsonString(HttpServletRequest request,ModelMap model) {
 		String output = "";
 		String roleName = request.getParameter("name");
 		String id = request.getParameter("id");
@@ -96,27 +101,11 @@ public class MenuController {
 		return null;
 	}
 
-	private String generateInitTreeString(ModelMap model, String roleName, boolean parseBoolean) {
-		return null;
-	}
-
+	@ResponseBody
 	@RequestMapping(value="/findMenuByRole",method=RequestMethod.GET)
-	public void findMenuByRole(HttpServletRequest request,HttpServletResponse response,ModelMap model){
-		PrintWriter out = null;
-		String str = generateXmlString(request,model);
-		try{
-			response.setCharacterEncoding("utf8");
-			response.setContentType("text/xml;charset=UTF-8");
-			out = response.getWriter();
-			out.print(str);
-			out.flush();
-		}catch(IOException e){
-			logger.error("服务器发送错误:{}",e);
-		}finally{
-			if(out!=null){
-				out.close();
-			}
-		}
+	public String findMenuByRole(HttpServletRequest request,ModelMap model){
+		String responseStr = this.generateJsonString(request,model);
+		return responseStr;
 	}
 	
 	/**
@@ -127,12 +116,11 @@ public class MenuController {
 	 * @Author: 李年
 	 * @CreateDate: 2013-5-9
 	 */
-	/*public String generateInitTreeString(ModelMap model,String name,boolean flag){
+	private String generateInitTreeString(ModelMap model,String name,boolean flag){
 		Iterator<Menu> it = null;
 		List<Menu> children = null;
-		String menuXml = null;
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		StringBuilder xmlStr = new StringBuilder();
+		StringBuilder jsonStr = new StringBuilder();
 		List<Menu> menus = menuService.findParentMenuByRole(user.getRoles(),flag);
 		List<Resource> resourceNames = null;	//角色能访问的资源
 		List<Resource> resources = null;		//二级菜单下能访问的可显示的资源
@@ -141,19 +129,24 @@ public class MenuController {
 		}
 		String displayName;
 		boolean flags = false;
-		xmlStr.append("<?xml version='1.0' encoding='UTF-8'?>");
-		xmlStr.append("<tree id='0'>");
+		jsonStr.append("{\"tree\":{\"id\": \"0\",\"item\":[");
+		int menusIndex = 0;
 		for(Menu menu : menus){
 			if(flag){
 				displayName = menu.getMark();
 			}else{
 				displayName = menu.getName();
 			}
-			xmlStr.append("<item child='1' text='"+displayName+"' id='"+menu.getId()+"' url='"+menu.getUrl()+"'>");
+			if(menusIndex>0){
+				jsonStr.append(",");
+			}
+			jsonStr.append("{\"child\":\"1\",\"text\": \""+displayName+"\",\"id\": \""+menu.getId()+"\",\"url\": \""+menu.getUrl()+"\",\"item\":[");
+			menusIndex++;
 			if(menu.getChildren().size()>0&&menu.getChildren()!=null){
 				children = menu.getChildren();
 				it = children.iterator();
 				Menu subMenu = null;
+				int itIndex = 0;
 				while(it.hasNext()){
 					subMenu = it.next();
 					if(flag){
@@ -163,31 +156,37 @@ public class MenuController {
 					}
 					resources = resourceService.findResourceByParentId(subMenu.getId());
 					if(resources.size()==0&&flag){
+						if(itIndex>0){
+							jsonStr.append(",");
+						}
 						for(Iterator<Resource> itRes = resourceNames.iterator();itRes.hasNext();){
-							if(itRes.next().getMenu().getId() == subMenu.getId()){
+							if(itRes.next().getMenuId() == subMenu.getId()){
 								flags = true;
-								xmlStr.append("<item checked='1' child='0' text='"+displayName+"' id='"+subMenu.getId()+"' url='"+subMenu.getUrl()+"'/>");
+								jsonStr.append("{\"checked\":\"1\",\"child\":\"0\",\"text\":\""+displayName+"\",\"id\":\""+subMenu.getId()+"\",\"url\":\""+subMenu.getUrl()+"\"}");
+								itIndex++;
 								break;
 							}
 							flags = false;
 						}
 						if(!flags){
-							xmlStr.append("<item child='0' text='"+displayName+"' id='"+subMenu.getId()+"' url='"+subMenu.getUrl()+"'/>");
+							jsonStr.append("{\"child\":\"0\",\"text\":\""+displayName+"\",\"id\":'"+subMenu.getId()+"',\"url\":\""+subMenu.getUrl()+"\"}");
+							itIndex++;
 						}
 					}else{
-						xmlStr.append("<item child='1' text='"+displayName+"' id='"+subMenu.getId()+"' url='"+subMenu.getUrl()+"'/>");
+						if(itIndex>0){
+							jsonStr.append(",");
+						}
+						jsonStr.append("{\"child\":\"1\",\"text\":\""+displayName+"\",\"id\":\""+subMenu.getId()+"\",\"url\":\""+subMenu.getUrl()+"\"}");
+						itIndex++;
 					}
 				}
 			}
-			xmlStr.append("</item>");
+			jsonStr.append("]}");
 		}
-		xmlStr.append("</tree>");
-		menuXml = xmlStr.toString();
-		if(!flag){
-			model.addAttribute("menuXml", menuXml);
-		}
-		return menuXml;
-	}*/
+		jsonStr.append("]}}");
+		logger.info("能够访问的菜单json字符串menuJson=>{}",jsonStr.toString());
+		return jsonStr.toString();
+	}
 	
 	/**
 	 * @FunName: generateTreeNodeXmlString
@@ -241,3 +240,44 @@ public class MenuController {
 		this.pageSize = pageSize;
 	}
 }
+	/*
+		{
+		  "tree": {
+		    "id": "0",
+		    "item": [
+		      {
+		        "child": "1",
+		        "text": "系统管理",
+		        "id": "16",
+		        "url": "javascript:void(0);",
+		        "item": [
+		          {
+		            "child": "1",
+		            "text": "用户管理",
+		            "id": "17",
+		            "url": "admin/sys/user/users/1.html"
+		          },
+		          {
+		            "child": "1",
+		            "text": "角色管理",
+		            "id": "18",
+		            "url": "admin/sys/role/roles/1.html"
+		          }
+		        ]
+		      },
+		      {
+		        "child": "1",
+		        "text": "滚动图片管理",
+		        "id": "23",
+		        "url": "javascript:void(0);",
+		        "item": {
+		          "child": "1",
+		          "text": "首页滚动图片",
+		          "id": "24",
+		          "url": "admin/ad/ads/1.html"
+		        }
+		      }
+		    ]
+		  }
+		}
+		*/

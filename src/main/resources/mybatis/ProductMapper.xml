@@ -7,11 +7,11 @@
 		where (co.id = #{id} or co.parentId = #{id}) and pr.status is true and pr.publish is true
 	</select>
 	
-	<select id="findListByColId" parameterType="int" resultType="Product">
+	<!-- <select id="findListByColId" parameterType="int" resultType="Product">
 		select * from tb_product pr join tb_category ca on (pr.categoryId=ca.id) join tb_column 
 		co on (ca.columnId = co.id) where 
 		co.id = #{id} or co.parentId = #{id} order by pr.priority desc,pr.hot desc,pr.id desc
-	</select>
+	</select> -->
 	
 	<select id="countByCateId" parameterType="int" resultType="long">
 		select count(pr.id) from tb_product pr inner join tb_category ca on (pr.categoryId=ca.id)  

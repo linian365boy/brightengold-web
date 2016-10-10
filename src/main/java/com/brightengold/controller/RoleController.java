@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -31,6 +30,7 @@ import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
 import cn.rainier.nian.model.Role;
+import cn.rainier.nian.service.RoleService;
 import cn.rainier.nian.service.impl.MenuServiceImpl;
 import cn.rainier.nian.service.impl.ResourceServiceImpl;
 import cn.rainier.nian.service.impl.RoleServiceImpl;
@@ -42,7 +42,7 @@ import cn.rainier.nian.utils.UUIDGenerator;
 @Scope("prototype")
 public class RoleController {
 	@Autowired
-	private RoleServiceImpl roleService;
+	private RoleService roleService;
 	private PageRainier<Role> roles;
 	private Integer pageSize = 10;
 	@Autowired
@@ -90,7 +90,7 @@ public class RoleController {
 			role.setCreateDate(new Date());
 			roleService.saveRole(role);
 			MsgUtil.setMsgAdd("success");
-			LogUtil.getInstance().log(LogType.ADD,"角色："+role.getDesc());
+			LogUtil.getInstance().log(LogType.ADD,"角色："+role.getDescribes());
 			logger.info("添加角色{}成功！",ToStringBuilder.reflectionToString(role,ToStringStyle.SHORT_PREFIX_STYLE, true));
 		} catch (Exception e) {
 			MsgUtil.setMsgAdd("error");
@@ -111,12 +111,12 @@ public class RoleController {
 	public String update(@PathVariable String roleName,Role role) {
 		if(roleName!=null){
 			Role temp = roleService.loadRoleByName(role.getName());
-			String ryName = temp.getDesc();
-			temp.setDesc(role.getDesc());
+			String ryName = temp.getDescribes();
+			temp.setDescribes(role.getDescribes());
 			roleService.saveRole(temp);
 			logger.info("修改角色信息|{}",temp);
 			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT,"角色由\""+ryName+"\"修改为：\""+temp.getDesc()+"\"");
+			LogUtil.getInstance().log(LogType.EDIT,"角色由\""+ryName+"\"修改为：\""+temp.getDescribes()+"\"");
 		}
 		return "redirect:/admin/sys/role/roles/1.html";
 	}
@@ -130,8 +130,8 @@ public class RoleController {
 			}*/
 			roleService.delRole(roleName);
 			MsgUtil.setMsgDelete("success");
-			LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDesc());
-			logger.warn("删除角色为{}",role.getDesc());
+			LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDescribes());
+			logger.warn("删除角色为{}",role.getDescribes());
 		}
 		return "redirect:/admin/sys/role/roles/1.html";
 	}
@@ -178,8 +178,8 @@ public class RoleController {
 					}
 				}
 				roleService.saveRole(model);
-				MsgUtil.setMsg("success", "成功分配【"+model.getDesc()+"】权限！");
-				LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDesc()+"的权限");
+				MsgUtil.setMsg("success", "成功分配【"+model.getDescribes()+"】权限！");
+				LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
 				//logger.warn("角色{}重新分配了权限{}",model.getDesc(),
 				//		ToStringBuilder.reflectionToString(model.getResources(), 
 				//				ToStringStyle.SHORT_PREFIX_STYLE));
@@ -198,27 +198,6 @@ public class RoleController {
 			logger.error("角色{}分配权限失败，发生错误：{}！",roleName,e);
 		}
 		return "redirect:/admin/sys/role/roles/1.html";
-	}
-	@RequestMapping(value="/export",method=RequestMethod.GET)
-	public void exportToCSV(HttpServletResponse response){
-		try {
-			List<Role> roles = roleService.findAll(null, null,false).getResult();
-			roles.remove(roleService.findDefault());
-			String fileName = "角色信息"+new Date().getTime()+".csv";
-			fileName = new String(fileName.getBytes("gbk"),"iso8859-1");
-			response.setContentType("application/csv;charset=gbk");
-			response.setHeader("Content-Disposition","attachment; filename="+fileName);
-			//注意：先权限jar包里的（按属性顺序下来的），再扩展的属性
-			String[] headers = {"角色","权限"};
-			//roleService.exportToCSVExNoDisplay(roles,fileName,headers,response);
-			LogUtil.getInstance().log(LogType.EXPORT,"导出角色表："+fileName);
-		} catch (Exception e) {
-			logger.error("导出角色信息报错",e);
-		}
-	}
-
-	public RoleServiceImpl getRoleService() {
-		return roleService;
 	}
 
 	public void setRoleService(RoleServiceImpl roleService) {

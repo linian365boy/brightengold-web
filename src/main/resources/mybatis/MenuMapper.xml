@@ -11,10 +11,10 @@
 	</delete>
 	
 	<select id="findParentMenuByRole" resultType="Menu">
-		select distinct * from tb_menu m inner join tb_role_menu rm on rm.roleId=r.id 
-		where m.parentId is null and rm.id in 
+		select distinct * from tb_menu m inner join tb_role_menu rm on rm.menuId=m.id 
+		where m.parentId is null and rm.roleId in 
 		<foreach collection="roles" item="role" open="(" close=")" separator=",">
-			#{role.id}
+			#{role.name}
 		</foreach>
 		order by priority desc
 	</select>
@@ -24,15 +24,15 @@
 	</select>
 	
 	<select id="getChildldByParentAndRoles" resultType="Menu">
-		select distinct m from tb_menu m inner join tb_role_menu rm on rm.roleId=r.id 
-		where m.parentId = #{pid} and rm.id in 
+		select distinct * from tb_menu m inner join tb_role_menu rm on rm.menuId=m.id 
+		where m.parentId = #{pid} and rm.roleId in 
 		<foreach collection="roles" item="role" open="(" close=")" separator=",">
-			#{role.id}
+			#{role.name}
 		</foreach>
 		order by priority desc
 	</select>
 	
-	<select id="findParentMenuByRole" resultType="Menu">
+	<select id="findParentMenu" resultType="Menu">
 		select distinct * from tb_menu m where m.parentId is null
 	</select>
 	
