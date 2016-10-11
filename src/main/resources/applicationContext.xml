@@ -120,7 +120,6 @@
 			</props>
 		</property>
 	</bean>
-	
 	<!-- 发送邮件支持异步方法执行 -->
 	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 		<property name="corePoolSize" value="5" />
