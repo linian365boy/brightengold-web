@@ -19,7 +19,7 @@
 	</select>
 	
 	<select id="findResourceByRole" resultType="int" parameterType="java.lang.String">
-		select rr.resourceId from tb_role_resource rr where rr.roleId = #{name}
+		select rr.resourceId,rr.menuId from tb_role_resource rr where rr.roleId = #{name} order by priority desc
 	</select>
 	
 	<select id="loadResourceByResourceId" parameterType="long" resultType="Resource">

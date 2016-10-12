@@ -6,9 +6,8 @@
 <%@page import="org.springframework.web.context.ContextLoader"%>
 <%@page import="org.springframework.web.context.WebApplicationContext"%>
 <%@include file="/views/commons/include.jsp" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-     <html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+    <html>
     <head>
     <meta charset="utf-8"/>
 	<title>menu</title>
@@ -16,91 +15,30 @@
 	    $(function(){
 	       $('.column').equalHeight();
 	    });
-	</script>
-	<c:choose>
-		<c:when test="${!empty sessionScope.menuXml }">
-			<script type="text/javascript">
-			var da = loadXML("${sessionScope.menuXml}");
-			var pMenu = $(da).find("item[url='javascript:void(0);']");
-			var str = "";
-			if((pMenu!=null)&&(pMenu.length!=0)){
-				for(var i=0;i<pMenu.length;i++){
-					var pmenu = $(pMenu[i]);
-					var name = pmenu.attr("text");
-					var url = pmenu.attr("url");
-					str+= "<h3><a href='"+url+"' id='nav_"+(i+1)+"' title="+name+">"+name+"</a></h3>";
-					var sMenu = pmenu.find("item");
-					var length = sMenu.length;
-					if((sMenu!=null)&&(length!=0)){
-						str+="<ul class='toggle'>";
-						for(var j=0;j<length;j++){
-							var smenu = $(sMenu[j]);
-							var smenuName = smenu.attr("text");
-							var smenuUrl = smenu.attr("url");
-							var id = smenu.attr("id");
-							str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}"+smenuUrl+"'>"+smenuName+"</a></li>";
-						}
-						str+="</ul>";
+		$(document).ready(function(){
+			var t = new Date().getTime();
+			$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
+				var pMenu = json.tree.item;
+				var str = "";
+				if((pMenu!=null)&&(pMenu.length!=0)){
+					for(var i=0;i<pMenu.length;i++){
+						str+= "<h3><a href='"+pMenu[i].url+"' id='nav_"+(i+1)+"' title="+pMenu[i].text+">"+pMenu[i].text+"</a></h3>";
+						var sMenu = pMenu[i].item;
+						console.info("sMenu.length==>"+sMenu.length);
+						if((sMenu!=null)&&(sMenu.length!=0)){
+							str+= "<ul class='toggle'>";
+							for(var j=0;j<sMenu.length;j++){
+								str+="<li class='icn_categories'><a title="+sMenu[j].text+" href='${ctx}"+sMenu[j].url+"'>"+sMenu[j].text+"</a></li>";
+							}
+							str+="</ul>";
+						};
 					};
 				};
-			};
-
-			function loadXML(xmlString){
-			    var xmlDoc;
-			    if (window.ActiveXObject)
-			    {
-			        xmlDoc = new ActiveXObject('Microsoft.XMLDOM');
-			        if(!xmlDoc) xmldoc = new ActiveXObject("MSXML2.DOMDocument.3.0");
-			        xmlDoc.async = false;
-			        xmlDoc.loadXML(xmlString);
-			    }else if (document.implementation && document.implementation.createDocument){
-			        var domParser = new DOMParser();
-			        xmlDoc = domParser.parseFromString(xmlString, 'text/xml');
-			    }else{
-			        return null;
-			    }
-			    return xmlDoc;
-			}
-		</script>
-		</c:when>		
-		<c:otherwise>
-			<script type="text/javascript">
-				$(document).ready(function(){
-					var t = new Date().getTime();
-					$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
-						console.info(json);
-						var da = $(json);
-						console.info(da);
-						var pMenu = da.find("item[url='javascript:void(0);']");
-						var str = "";
-						if((pMenu!=null)&&(pMenu.length!=0)){
-							for(var i=0;i<pMenu.length;i++){
-								var pmenu = $(pMenu[i]);
-								var name = pmenu.attr("text");
-								var url = pmenu.attr("url");
-								str+= "<h3><a href='"+url+"' id='nav_"+(i+1)+"' title="+name+">"+name+"</a></h3>";
-								var sMenu = pmenu.find("item");
-								var length = sMenu.length;
-								if((sMenu!=null)&&(length!=0)){
-								str+= "<ul class='toggle'>";
-									for(var j=0;j<length;j++){
-										var smenu = $(sMenu[j]);
-										var smenuName = smenu.attr("text");
-										var smenuUrl = smenu.attr("url");
-										var id = smenu.attr("id");
-										str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}"+smenuUrl+"'>"+smenuName+"</a></li>";
-									}
-									str+="</ul>";
-								};
-							};
-						};
-						$("#sidebar").html(str);
-						showHide();
-					});
-				});
-				</script>
-		</c:otherwise>
-	</c:choose>
+				$("#sidebar").html(str);
+				showHide();
+			});
+		});
+	</script>
     </head>
     <body>
 	<aside id="sidebar" class="column">

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -35,7 +36,7 @@ import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/sys/menu")
-@SessionAttributes("menuXml")
+@SessionAttributes("menuJson")
 @Scope("prototype")
 public class MenuController {
 	@Autowired
@@ -79,7 +80,7 @@ public class MenuController {
 		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/menu/menus/1.html";
 	}
 	
-	private String generateJsonString(HttpServletRequest request,ModelMap model) {
+	private String generateJsonString(HttpServletRequest request,HttpSession session) {
 		String output = "";
 		String roleName = request.getParameter("name");
 		String id = request.getParameter("id");
@@ -92,7 +93,7 @@ public class MenuController {
 			}else{
 				flag = "false";
 			}
-			output = generateInitTreeString(model,roleName,Boolean.parseBoolean(flag));
+			output = generateInitTreeString(session,roleName,Boolean.parseBoolean(flag));
 		}
 		return output;
 	}
@@ -103,8 +104,14 @@ public class MenuController {
 
 	@ResponseBody
 	@RequestMapping(value="/findMenuByRole",method=RequestMethod.GET)
-	public String findMenuByRole(HttpServletRequest request,ModelMap model){
-		String responseStr = this.generateJsonString(request,model);
+	public String findMenuByRole(HttpServletRequest request, HttpSession session){
+		Object menuJsonObj = session.getAttribute("menuJson");
+		String responseStr = null;
+		if(menuJsonObj!=null){
+			responseStr = (String)menuJsonObj;
+		}else{
+			responseStr = this.generateJsonString(request,session);
+		}
 		return responseStr;
 	}
 	
@@ -116,16 +123,16 @@ public class MenuController {
 	 * @Author: 李年
 	 * @CreateDate: 2013-5-9
 	 */
-	private String generateInitTreeString(ModelMap model,String name,boolean flag){
+	private String generateInitTreeString(HttpSession session,String name,boolean flag){
 		Iterator<Menu> it = null;
 		List<Menu> children = null;
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		StringBuilder jsonStr = new StringBuilder();
 		List<Menu> menus = menuService.findParentMenuByRole(user.getRoles(),flag);
-		List<Resource> resourceNames = null;	//角色能访问的资源
+		List<Resource> roleResources = null;	//角色能访问的资源
 		List<Resource> resources = null;		//二级菜单下能访问的可显示的资源
 		if(name!=null){
-			resourceNames = resourceService.findResourceByRole(name);
+			roleResources = resourceService.findResourceByRole(name);
 		}
 		String displayName;
 		boolean flags = false;
@@ -159,7 +166,7 @@ public class MenuController {
 						if(itIndex>0){
 							jsonStr.append(",");
 						}
-						for(Iterator<Resource> itRes = resourceNames.iterator();itRes.hasNext();){
+						for(Iterator<Resource> itRes = roleResources.iterator();itRes.hasNext();){
 							if(itRes.next().getMenuId() == subMenu.getId()){
 								flags = true;
 								jsonStr.append("{\"checked\":\"1\",\"child\":\"0\",\"text\":\""+displayName+"\",\"id\":\""+subMenu.getId()+"\",\"url\":\""+subMenu.getUrl()+"\"}");
@@ -185,6 +192,7 @@ public class MenuController {
 		}
 		jsonStr.append("]}}");
 		logger.info("能够访问的菜单json字符串menuJson=>{}",jsonStr.toString());
+		session.setAttribute("menuJson", jsonStr.toString());
 		return jsonStr.toString();
 	}
 	
@@ -240,44 +248,3 @@ public class MenuController {
 		this.pageSize = pageSize;
 	}
 }
-	/*
-		{
-		  "tree": {
-		    "id": "0",
-		    "item": [
-		      {
-		        "child": "1",
-		        "text": "系统管理",
-		        "id": "16",
-		        "url": "javascript:void(0);",
-		        "item": [
-		          {
-		            "child": "1",
-		            "text": "用户管理",
-		            "id": "17",
-		            "url": "admin/sys/user/users/1.html"
-		          },
-		          {
-		            "child": "1",
-		            "text": "角色管理",
-		            "id": "18",
-		            "url": "admin/sys/role/roles/1.html"
-		          }
-		        ]
-		      },
-		      {
-		        "child": "1",
-		        "text": "滚动图片管理",
-		        "id": "23",
-		        "url": "javascript:void(0);",
-		        "item": {
-		          "child": "1",
-		          "text": "首页滚动图片",
-		          "id": "24",
-		          "url": "admin/ad/ads/1.html"
-		        }
-		      }
-		    ]
-		  }
-		}
-		*/

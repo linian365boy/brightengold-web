@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.rainier.nian.dao.MenuDao">
+	
+	<resultMap type="Menu" id="MenuMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result property="mark" column="mark" jdbcType="VARCHAR"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+		<result property="parentId" column="parentId" jdbcType="INTEGER"/>
+		<result property="priority" column="priority" jdbcType="INTEGER"/>
+		<result property="url" column="url" jdbcType="VARCHAR"/>
+		<!-- 非表中字段 -->
+		<result property="parentMenuName" column="parentName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
 	<insert id="save">
 		insert into tb_menu(id,name,mark,url,priority,parentId) 
 		values(null,#{name},#{mark},#{url},#{priority},#{parentId})
@@ -33,7 +45,7 @@
 	</select>
 	
 	<select id="findParentMenu" resultType="Menu">
-		select distinct * from tb_menu m where m.parentId is null
+		select distinct * from tb_menu m where m.parentId is null order by priority desc
 	</select>
 	
 	<select id="loadMenuByUrl" resultType="Menu">
@@ -41,11 +53,12 @@
 	</select>
 	
 	<select id="findParentByAjax" resultType="Menu">
-		select id,name from tb_menu m where m.parentId is null
+		select id,name from tb_menu m where m.parentId is null order by priority desc
 	</select>
 	
-	<select id="findList" resultType="Menu">
-		select * from tb_menu order by priority desc limit #{start},#{pageSize}
+	<select id="findList" resultMap="MenuMap">
+		select t1.*,t2.name as parentName from tb_menu t1 inner join tb_menu t2 on (t1.parentId=t2.id) 
+		order by priority desc limit #{start},#{pageSize}
 	</select>
 	
 	<select id="findAllCount" resultType="long">
@@ -53,6 +66,6 @@
 	</select>
 	
 	<select id="loadMenuByResourceId" resultType="Menu">
-		select m.* from tb_menu m inner join tb_resource r on r.menuId=m.id where r.id = #{resourceId}
+		select m.* from tb_menu m inner join tb_resource r on r.menuId=m.id where r.id = #{resourceId} order by priority desc
 	</select>
 </mapper>
