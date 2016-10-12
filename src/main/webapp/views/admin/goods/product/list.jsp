@@ -115,7 +115,7 @@
 						name="picUrl" width="50" height="50"/>
 					</td>
 					<td>${product.enName }</td>
-					<td>${product.category.enName }</td>
+					<td>${product.categoryEnName }</td>
 					<td>${product.hot?"<span class='label label-danger' title='热门'>热门</span>":"<span class='label label-primary' title='非热门'>非热门</span>" }</td>
 					<td>${product.publish?"<span class='label label-info' title='发布'>发布</span>":"<span class='label label-default' title='未发布'>未发布</span>" }</td>
 					<td onclick="changeStatus(${product.id},${product.status });" id="status_${product.id }" 

@@ -39,7 +39,13 @@ public class Category implements Serializable{
 	//备注
 	private String remark;
 	
+	//临时变量
 	private transient long productsSize;
+	//父类分类名称
+	private String parentName;
+	//分类所在的栏目名称
+	private String columnName;
+	
 	
 	public Category(int id, String name, String enName) {
 		this.id = id;
@@ -102,6 +108,19 @@ public class Category implements Serializable{
 	public void setColumnId(Integer columnId) {
 		this.columnId = columnId;
 	}
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+	public String getColumnName() {
+		return columnName;
+	}
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

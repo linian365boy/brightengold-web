@@ -69,7 +69,7 @@
 						<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 						<td>${menu.name }</td>
 						<td>${menu.mark }</td>
-						<td>${menu.parentMenu.name }</td>
+						<td>${menu.parentMenuName }</td>
 						<td>${menu.url }</td>
 						<td>${menu.priority }</td>
 						<td>

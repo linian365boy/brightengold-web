@@ -67,6 +67,9 @@ public class Product implements Serializable{
 	 */
 	private Integer priority;
 	
+	//临时变量
+	private String categoryEnName;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -151,6 +154,12 @@ public class Product implements Serializable{
 	}
 	public void setCreateUserId(Integer createUserId) {
 		this.createUserId = createUserId;
+	}
+	public String getCategoryEnName() {
+		return categoryEnName;
+	}
+	public void setCategoryEnName(String categoryEnName) {
+		this.categoryEnName = categoryEnName;
 	}
 	@Override
 	public String toString() {

@@ -54,9 +54,6 @@ public class CategoryController {
 	
 	@RequestMapping(value={"/categorys/{pageNo}"})
 	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		if(pageNo==null){
-			pageNo = 1;
-		}
 		categorys = categoryService.findAll(pageNo, pageSize);
 		model.addAttribute("page",categorys);//map
 		return "admin/goods/category/list";

@@ -100,7 +100,7 @@
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td title="${column.name }（${column.enName }）">${column.name }（${column.enName }）</td>
 					<td>${column.code }</td>
-					<td>${empty column.parentColumn?"————":column.parentColumn.name }</td>
+					<td>${empty column.parentName?"————":column.parentName }</td>
 					<td>${column.priority }</td>
 					<td>
 						<input type="image" name="${column.id }" data-toggle="tooltip" data-placement="top" onclick="update(this);"

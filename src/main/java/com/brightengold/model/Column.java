@@ -66,6 +66,10 @@ public class Column implements Serializable{
 	 */
 	private boolean hasNeedForm = false;
 	
+	
+	//临时变量
+	private String parentName;
+	
 	public Column(int id, String name, String enName) {
 		this.id = id;
 		this.name = name;
@@ -136,6 +140,12 @@ public class Column implements Serializable{
 	}
 	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
+	}
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 	@Override
 	public String toString() {

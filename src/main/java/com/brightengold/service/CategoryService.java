@@ -17,7 +17,6 @@ public class CategoryService {
 
 	public PageRainier<Category> findAll(Integer pageNo, Integer pageSize) {
 		long count = categoryDao.findAllCount();
-		//Page<Category> tempPage = categoryDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
 		PageRainier<Category> page = new PageRainier<Category>(count);
 		page.setResult(categoryDao.findList((pageNo-1)*pageSize,pageSize));
 		return page;

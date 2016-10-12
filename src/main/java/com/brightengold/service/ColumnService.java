@@ -34,35 +34,11 @@ public class ColumnService {
 	}
 	
 	public PageRainier<Column> findAll(Integer pageNo, Integer pageSize, String keyword){
-		//Page<Column> tempPage = columnDao.findAll(columnSpec(keyword),
-		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
-		//如果查询的页面大于最大页数，查询第一页数据
-		//if(tempPage.getTotalPages()<pageNo){
-		//	pageNo = 1;
-		//	tempPage = columnDao.findAll(columnSpec(keyword),
-		//			new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","id")));
-		//}
 		long count = columnDao.findAllCount(keyword);
 		PageRainier<Column> page = new PageRainier<Column>(count);
 		page.setResult(columnDao.findList(keyword,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
-
-	/*private Specification<Column> columnSpec(final String keyword) {
-		if(StringUtils.isNotBlank(keyword)){
-			return new Specification<Column>(){
-				@Override
-				public Predicate toPredicate(Root<Column> root,
-						CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.or(cb.like(root.<String>get("name"), '%'+keyword+'%'),
-							cb.like(root.<String>get("code"), '%'+keyword+'%'),
-							cb.like(root.<String>get("enName"), '%'+keyword+'%'));
-				}
-			};
-		}else{
-			return null;
-		}
-	}*/
 
 	public void delete(Integer id) {
 		columnDao.delete(id);
@@ -80,16 +56,6 @@ public class ColumnService {
 	public Long countColumnByCode(String code) {
 		return columnDao.countColumnByCode(code);
 	}
-
-	/*private Specification<Column> countSpec(final String code) {
-		return new Specification<Column>(){
-			@Override
-			public Predicate toPredicate(Root<Column> root,
-					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.equal(root.<String>get("code"), code);
-			}
-		};
-	}*/
 
 	public Column loadColumnByCode(String code) {
 		return columnDao.loadColumnByCode(code);

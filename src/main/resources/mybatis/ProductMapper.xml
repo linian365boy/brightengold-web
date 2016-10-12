@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.brightengold.dao.ProductDao">
+	<resultMap type="Product" id="ProductMap">
+		<id column="id" jdbcType="INTEGER" property="id"/>	
+		<result column="enName" jdbcType="VARCHAR" property="enName"/>		
+		<result column="picUrl" jdbcType="VARCHAR" property="picUrl"/>	
+		<result column="hot" jdbcType="BOOLEAN" property="hot"/>	
+		<result column="publish" jdbcType="BOOLEAN" property="publish"/>	
+		<result column="status" jdbcType="BOOLEAN" property="status"/>	
+		<result column="priority" jdbcType="INTEGER" property="priority"/>	
+		<result column="categoryEnName" jdbcType="VARCHAR" property="categoryEnName"/>		
+	</resultMap>
+	
 	<select id="countByColId" parameterType="int" resultType="long">
 		select count(*) from tb_product pr inner join tb_category ca on (pr.categoryId=ca.id) 
 		inner join tb_column co on (ca.columnId = co.id) 
 		where (co.id = #{id} or co.parentId = #{id}) and pr.status is true and pr.publish is true
 	</select>
-	
-	<!-- <select id="findListByColId" parameterType="int" resultType="Product">
-		select * from tb_product pr join tb_category ca on (pr.categoryId=ca.id) join tb_column 
-		co on (ca.columnId = co.id) where 
-		co.id = #{id} or co.parentId = #{id} order by pr.priority desc,pr.hot desc,pr.id desc
-	</select> -->
 	
 	<select id="countByCateId" parameterType="int" resultType="long">
 		select count(pr.id) from tb_product pr inner join tb_category ca on (pr.categoryId=ca.id)  
@@ -47,7 +52,14 @@
 	</select>
 	
 	<select id="findList" resultType="Product">
-		select * from tb_product where enName like concat('%',#{keyword},'%') order by priority desc,hot desc,id desc limit #{start},#{pageSize}
+		select tp.id,tp.enName,tp.picUrl,tp.hot,tp.publish,tp.status,tp.priority,tc.enName 
+		from tb_product tp inner join tb_category tc on tp.categoryId = tc.id 
+		<where>
+			<if test="keyword!=null || keyword!=''">
+				tp.enName like concat('%',#{keyword},'%') 
+			</if>
+		</where>
+		order by tp.priority desc,tp.hot desc,tp.id desc limit #{start},#{pageSize}
 	</select>
 	
 	<select id="findAllReleaseProductByLikeKeyWordList" resultType="Product">
@@ -63,7 +75,13 @@
 		where pr.publish is true and pr.status is true and (ca.columnId=#{colId} or co.parentId=#{colId}) order by priority desc,hot desc,id desc
 	</select>
 	
-	<select id="findAllCount" resultType="long">
-		select * from tb_product where enName like concat('%',#{keyword},'%') order by priority desc,hot desc,id desc
+	<select id="findAllCount" resultType="long" parameterType="java.lang.String">
+		select * from tb_product 
+		<where>
+			<if test="keyword!=null || keyword!=''">
+				enName like concat('%',#{keyword},'%') 
+			</if>
+		</where>
+		order by priority desc,hot desc,id desc
 	</select>
 </mapper>

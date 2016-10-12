@@ -19,35 +19,11 @@ public class ProductService {
 	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
 	public PageRainier<Product> findAll(Integer pageNo, Integer pageSize, String keyword) {
-		//Page<Product> tempPage = productDao.findAll(findAllSpec(keyword),
-		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
-		//如果查询的页面大于最大页数，查询第一页数据
-		//if(tempPage.getTotalPages()<pageNo){
-		//	pageNo = 1;
-		//	tempPage = productDao.findAll(findAllSpec(keyword),
-		//			new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
-		//}
 		long count = productDao.findAllCount(keyword);
 		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
 		page.setResult(productDao.findList(keyword,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
-
-	/*private Specification<Product> findAllSpec(final String keyword) {
-		if(StringUtils.isNotBlank(keyword)){
-			return new Specification<Product>(){
-				@Override
-				public Predicate toPredicate(Root<Product> root,
-						CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.or(
-							cb.like(root.<String>get("enName"), '%'+keyword+'%')
-							);
-				}
-			};
-		}else{
-			return null;
-		}
-	}*/
 
 	public Product loadProductById(Integer productId) {
 		return productDao.findOne(productId);
@@ -69,30 +45,8 @@ public class ProductService {
 	 * @since JDK 1.7
 	 */
 	public List<Product> findIndexPic(int pageSize){
-		//Page<Product> tempPage = productDao.findAll(findIndexPicSpec(), 
-		//		new PageRequest(0,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
-		//return tempPage.getContent();
 		return productDao.findIndexPic(pageSize);
 	}
-	
-	/**
-	 * findIndexPicSpec:首页展示热门产品Spec
-	 * @author tanfan 
-	 * @return 
-	 * @since JDK 1.7
-	 */
-	/*private Specification<Product> findIndexPicSpec() {
-		return new Specification<Product>(){
-			@Override
-			public Predicate toPredicate(Root<Product> root,
-					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(
-						cb.equal(root.<Boolean>get("publish"),true),
-						cb.equal(root.<Boolean>get("status"), true),
-						cb.equal(root.<Boolean>get("hot"), true));
-			}
-		};
-	}*/
 	
 	/**
 	 * 查询栏目下的已发布的，状态正常的产品
@@ -112,8 +66,6 @@ public class ProductService {
 	 */
 	public PageRainier<Product> findPageByColId(int pageNo, Integer pageSize,
 			Integer colId) {
-		//Page<Product> tempPage = productDao.findAll(findPageByColIdSpec(id), 
-		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC, "priority","hot","id")));
 		long count = productDao.countByColId(colId);
 		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
 		page.setResult(productDao.findListByColId(colId,(pageNo-1)*pageSize,pageSize));
@@ -123,23 +75,6 @@ public class ProductService {
 	public long countIndexByColId(Integer id) {
 		return productDao.countByColId(id);
 	}
-
-	/*private Specification<Product> findPageByColIdSpec(final Integer columnId) {
-		return new Specification<Product>(){
-			@Override
-			public Predicate toPredicate(Root<Product> root,
-					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(
-						cb.or(
-								cb.equal(root.get("category").get("column").<Integer>get("id"), columnId),
-								cb.equal(root.get("category").get("column").get("parentColumn").<Integer>get("id"), columnId)
-							),
-						cb.isTrue(root.<Boolean>get("publish")),
-						cb.isTrue(root.<Boolean>get("status"))
-						);
-			}
-		};
-	}*/
 
 	public void insertOfBatch(List<Product> productList) {
 		productDao.save(productList);
@@ -158,30 +93,11 @@ public class ProductService {
 	 */
 	public PageRainier<Product> findAllByCateId(int pageNo, Integer pageSize,
 			Integer cateId) {
-		//Page<Product> tempPage = productDao.findAll(findAllByCateIdSpec(cateId), 
-		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority","hot","id")));
 		long count = productDao.countByCateId(cateId);
 		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
 		page.setResult(productDao.findAllListByCateId(cateId,(pageNo-1)*pageSize,pageSize));
 		return page;
 	}
-
-	/*private Specification<Product> findAllByCateIdSpec(final Integer cateId) {
-		return new Specification<Product>(){
-			@Override
-			public Predicate toPredicate(Root<Product> root,
-					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(
-							cb.or(
-								cb.equal(root.get("category").<Integer>get("id"), cateId),
-								cb.equal(root.get("category").get("parent").<Integer>get("id"), cateId)
-							),
-							cb.isTrue(root.<Boolean>get("status")),
-							cb.isTrue(root.<Boolean>get("publish"))
-						);
-			}
-		};
-	}*/
 
 	public boolean updateStatus(Integer id, boolean status) {
 		if(status){

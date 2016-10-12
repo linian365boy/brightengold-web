@@ -71,7 +71,7 @@
 					<td>
 						<c:choose>
 							<c:when test="${!(empty category.parent) }">
-								${category.parent.name }（${category.parent.enName }）
+								${category.parentName }
 							</c:when>
 							<c:otherwise>
 								————
@@ -79,7 +79,7 @@
 						</c:choose>
 					</td>
 					<td>${category.name }（${category.enName }）</td>
-					<td>${category.column.name }（${category.column.enName }）</td>
+					<td>${category.columnName }</td>
 					<td>
 						<input type="image" name="${category.id }" onclick="update(this);"
 						src="${ctx }resources/images/icn_edit.png" title="修改"/>
