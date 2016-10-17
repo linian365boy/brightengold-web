@@ -57,7 +57,7 @@
 	<select id="findAllCount" resultType="long" parameterType="java.lang.String">
 		select count(*) from tb_column 
 		<where>
-			<if test="keyword!=null || keyword!=''">
+			<if test="keyword!=null and keyword!=''">
 				name like CONCAT('%',#{keyword},'%') or 
 				code like CONCAT('%',#{keyword},'%') or 
 				enName like CONCAT('%',#{keyword},'%')
@@ -66,9 +66,9 @@
 	</select>
 	
 	<select id="findList" resultMap="ColumnMap">
-		select t1.*,t2.name from tb_column t1 inner join tb_column t2 on t1.parentId = t2.id 
+		select t1.*,t2.name as parentName from tb_column t1 left join tb_column t2 on t1.parentId = t2.id 
 		<where>
-			<if test="keyword!=null || keyword!=''">
+			<if test="keyword!=null and keyword!=''">
 				t1.name like CONCAT('%',#{keyword},'%') or 
 				t1.code like CONCAT('%',#{keyword},'%') or 
 				t1.enName like CONCAT('%',#{keyword},'%')

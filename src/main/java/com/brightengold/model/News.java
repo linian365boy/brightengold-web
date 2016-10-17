@@ -65,6 +65,12 @@ public class News implements Serializable {
 	 */
 	private String depth;
 	
+	
+	//临时变量
+	private String columnName;
+	
+	public News(){}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -142,6 +148,12 @@ public class News implements Serializable {
 	}
 	public void setColumnId(Integer columnId) {
 		this.columnId = columnId;
+	}
+	public String getColumnName() {
+		return columnName;
+	}
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
 	}
 	@Override
 	public String toString() {

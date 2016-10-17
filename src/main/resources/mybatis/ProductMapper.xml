@@ -55,7 +55,7 @@
 		select tp.id,tp.enName,tp.picUrl,tp.hot,tp.publish,tp.status,tp.priority,tc.enName 
 		from tb_product tp inner join tb_category tc on tp.categoryId = tc.id 
 		<where>
-			<if test="keyword!=null || keyword!=''">
+			<if test="keyword!=null and keyword!=''">
 				tp.enName like concat('%',#{keyword},'%') 
 			</if>
 		</where>
@@ -76,9 +76,9 @@
 	</select>
 	
 	<select id="findAllCount" resultType="long" parameterType="java.lang.String">
-		select * from tb_product 
+		select count(*) from tb_product 
 		<where>
-			<if test="keyword!=null || keyword!=''">
+			<if test="keyword!=null and keyword!=''">
 				enName like concat('%',#{keyword},'%') 
 			</if>
 		</where>

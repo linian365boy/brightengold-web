@@ -70,7 +70,7 @@
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td>
 						<c:choose>
-							<c:when test="${!(empty category.parent) }">
+							<c:when test="${!(empty category.parentName) }">
 								${category.parentName }
 							</c:when>
 							<c:otherwise>

@@ -70,6 +70,8 @@ public class Product implements Serializable{
 	//临时变量
 	private String categoryEnName;
 	
+	public Product(){}
+	
 	public Integer getId() {
 		return id;
 	}

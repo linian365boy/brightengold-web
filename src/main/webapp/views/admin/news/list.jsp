@@ -97,7 +97,7 @@
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td><a href="${ctx }admin/news/${news.id}.html" title="${news.title }" target="_blank">${news.title }</a></td>
-					<td>${news.column.name }（${news.column.enName }）</td>
+					<td>${news.columnName }</td>
 					<td>${news.createDate }</td>
 					<td id="${news.id }">
 						<c:choose>

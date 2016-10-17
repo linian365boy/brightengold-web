@@ -70,6 +70,9 @@ public class Column implements Serializable{
 	//临时变量
 	private String parentName;
 	
+	//使用mybatis resuleMap的setter getter方式注入属性，必须要有一个空参数的构造方法
+	public Column(){}
+	
 	public Column(int id, String name, String enName) {
 		this.id = id;
 		this.name = name;

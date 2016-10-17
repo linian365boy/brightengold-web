@@ -46,6 +46,8 @@ public class Category implements Serializable{
 	//分类所在的栏目名称
 	private String columnName;
 	
+	//使用mybatis resuleMap的setter getter方式注入属性，必须要有一个空参数的构造方法
+	public Category(){}
 	
 	public Category(int id, String name, String enName) {
 		this.id = id;

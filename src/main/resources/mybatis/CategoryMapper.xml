@@ -6,7 +6,7 @@
 		<result column="name" property="name" jdbcType="VARCHAR"/>
 		<result column="enName" property="enName" jdbcType="VARCHAR"/>
 		<result column="parentId" property="parentId" jdbcType="INTEGER"/>
-		<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="createDate" property="createDate" jdbcType="DATE" javaType="java.util.Date"/>
 		<result column="createUserId" property="createUserId" jdbcType="INTEGER"/>
 		<result column="columnId" property="columnId" jdbcType="INTEGER"/>
 		<result column="remark" property="remark" jdbcType="VARCHAR"/>
@@ -44,7 +44,7 @@
 	</select>
 	
 	<select id="findList" resultMap="CategoryMap">
-		select c1.*,t2.name as parentName,tc.name as columnName from tb_category c1 inner join tb_category c2 
+		select c1.*,c2.name as parentName,tc.name as columnName from tb_category c1 left join tb_category c2 
 		on c1.parentId=c2.id inner join tb_column tc on c1.columnId=tc.id 
 		order by c1.createDate desc limit #{start},#{pageSize}
 	</select>

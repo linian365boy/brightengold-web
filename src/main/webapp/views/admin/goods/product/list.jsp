@@ -109,7 +109,7 @@
 			<tbody id="dataContent"> 
 				<c:forEach items="${page.result }" var="product" varStatus="status">
 				<tr>
-					<td>${(pageNo*pageSize)+status.index+1 }</td>
+					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td>
 						<img src="${ctx }resources/${product.picUrl }" title="${product.enName }" alt="${product.enName }" 
 						name="picUrl" width="50" height="50"/>

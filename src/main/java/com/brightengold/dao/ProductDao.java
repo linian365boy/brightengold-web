@@ -35,7 +35,7 @@ public interface ProductDao {
 	
 	List<Product> findListByColId(@Param("colId") Integer colId,@Param("start") int start,@Param("pageSize") Integer pageSize);
 	
-	long findAllCount(String keyword);
+	long findAllCount(@Param("keyword") String keyword);
 	
 	List<Product> findAllListByCateId(@Param("cateId") Integer cateId,@Param("start") int start,@Param("pageSize") Integer pageSize);
 	

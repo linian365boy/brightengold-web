@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.brightengold.dao.NewsDao">
+	<resultMap type="News" id="NewsMap">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+		<result property="title" column="title" jdbcType="VARCHAR"/>	
+		<result property="priority" column="priority" jdbcType="INTEGER"/>	
+		<result property="url" column="url" jdbcType="VARCHAR"/>	
+		<result property="createDate" column="createDate" jdbcType="DATE"/>	
+		<result property="publishDate" column="publishDate" jdbcType="DATE"/>	
+		<result property="columnName" column="columnName" jdbcType="VARCHAR"/>	
+	</resultMap>
+	
 	<update id="updateClicks">
 		update News set clicks = #{clicks} where id = #{newsId}
 	</update>
@@ -15,15 +25,17 @@
 		select * from tb_news where id=#{id}
 	</select>
 	
-	<select id="findAllCount">
+	<select id="findAllCount" resultType="long">
 		select count(*) from tb_news 
 	</select>
 	
-	<select id="findList">
-		select * from tb_news where order by priority desc,id desc limit #{start},#{pageSize}
+	<select id="findList" resultMap="NewsMap">
+		select tn.id,tn.title,tn.priority,tn.url,tn.createDate,tn.publishDate,tc.name as columnName 
+		from tb_news tn inner join tb_column tc on tn.columnId=tc.id 
+		order by tn.priority desc,tn.id desc limit #{start},#{pageSize}
 	</select>
 	
-	<select id="findIndexNews">
+	<select id="findIndexNews" resultType="News">
 		select * from tb_news where publishDate is not null order by priority desc,createDate desc limit #{indexNewsSize}
 	</select>
 	
