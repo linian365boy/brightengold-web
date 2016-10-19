@@ -1,52 +1,65 @@
-<%@page import="java.util.Locale"%>
-<%@page import="java.util.TimeZone"%>
-<%@page import="java.util.Calendar"%>
-<%@page import="cn.rainier.nian.service.impl.MenuServiceImpl"%>
-<%@page import="cn.rainier.nian.model.Menu"%>
-<%@page import="org.springframework.web.context.ContextLoader"%>
-<%@page import="org.springframework.web.context.WebApplicationContext"%>
-<%@include file="/views/commons/include.jsp" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-    <html>
-    <head>
-    <meta charset="utf-8"/>
-	<title>menu</title>
-	<script type="text/javascript">
-	    $(function(){
-	       $('.column').equalHeight();
-	    });
-		$(document).ready(function(){
-			var t = new Date().getTime();
-			$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
-				var pMenu = json.tree.item;
-				var str = "";
-				if((pMenu!=null)&&(pMenu.length!=0)){
-					for(var i=0;i<pMenu.length;i++){
-						str+= "<h3><a href='"+pMenu[i].url+"' id='nav_"+(i+1)+"' title="+pMenu[i].text+">"+pMenu[i].text+"</a></h3>";
-						var sMenu = pMenu[i].item;
-						console.info("sMenu.length==>"+sMenu.length);
-						if((sMenu!=null)&&(sMenu.length!=0)){
-							str+= "<ul class='toggle'>";
-							for(var j=0;j<sMenu.length;j++){
-								str+="<li class='icn_categories'><a title="+sMenu[j].text+" href='${ctx}"+sMenu[j].url+"'>"+sMenu[j].text+"</a></li>";
-							}
-							str+="</ul>";
-						};
-					};
-				};
-				$("#sidebar").html(str);
-				showHide();
-			});
-		});
-	</script>
-    </head>
-    <body>
-	<aside id="sidebar" class="column">
-	</aside><!-- end of sidebar -->
-	<script type="text/javascript">
-  	if(typeof(str)!='undefined'){
-  		$("#sidebar").html(str);
-  	}
-  </script>
-	</body>
-	</html>
+<!-- Left side column. contains the logo and sidebar -->
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="/resources/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>Alexander Pierce</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header" id="mainNavigation">MAIN NAVIGATION</li>
+        
+        <!-- <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
+            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+          </ul>
+        </li> -->
+        <!-- <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>Charts</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
+            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
+            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
+            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+          </ul>
+        </li> -->
+        
+        
+        <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+        <li class="header">LABELS</li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
