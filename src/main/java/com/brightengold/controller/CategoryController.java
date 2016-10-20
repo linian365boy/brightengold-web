@@ -53,9 +53,11 @@ public class CategoryController {
 	private static Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
 	@RequestMapping(value={"/categorys/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
+	public String list(@PathVariable Integer pageNo,ModelMap map,HttpServletRequest request){
 		categorys = categoryService.findAll(pageNo, pageSize);
-		model.addAttribute("page",categorys);//map
+		map.put("page",categorys);//map
+		map.put("pmenuText", request.getParameter("ptext"));
+		map.put("menuText", request.getParameter("text"));
 		return "admin/goods/category/list";
 	}
 	

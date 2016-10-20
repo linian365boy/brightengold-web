@@ -61,5 +61,9 @@
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
       </ul>
+      <form id="menuForm" action="#" style="display: none;" method="post">
+      	<input type="hidden" name="text" id="menuText"/>
+      	<input type="hidden" name="ptext" id="pmenuText"/>
+      </form>
     </section>
     <!-- /.sidebar -->

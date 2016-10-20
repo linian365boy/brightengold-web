@@ -8,8 +8,10 @@
     <head>
     <meta charset="utf-8"/>
 	<title>header</title>
-	<link rel="icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon">
-	<link rel="shortcut icon" href="${ctx }/resources/images/favicon.ico" type="image/x-icon" />
+	<link rel="icon" href="${ctx }/resources/dist/img/favicon_48X66.ico"
+	type="image/x-icon">
+	<link rel="shortcut icon" href="${ctx }/resources/dist/img/favicon_16X22.ico"
+	type="image/x-icon" />
     </head>
     <body>
 	<header id="header">

@@ -16,23 +16,25 @@
 <!-- page script -->
 <script>
   $(function () {
-    $("#example1").DataTable();
-    $('#example2').DataTable({
+    $("#table").DataTable();
+    /*$('#table').DataTable({
       "paging": true,
       "lengthChange": false,
       "searching": false,
       "ordering": true,
       "info": true,
       "autoWidth": false
-    });
+    });*/
     
     var t = new Date().getTime();
 	$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
 		var pMenu = json.tree.item;
 		var str = "";
+		var pmenuText = "${pmenuText}";
+		var menuText = "${menuText}";
 		if((pMenu!=null)&&(pMenu.length!=0)){
 			for(var i=0;i<pMenu.length;i++){
-				if(i==0){
+				if(pmenuText==null || (pmenuText!=null && pmenuText!='' && pmenuText==pMenu[i].text)){
 					str+= "<li class='active treeview'>";
 				}else{
 					str+= "<li class='treeview'>";
@@ -42,12 +44,12 @@
 				if((sMenu!=null)&&(sMenu.length!=0)){
 					str+= "<ul class='treeview-menu'>";
 					for(var j=0;j<sMenu.length;j++){
-						if(j==0){
+						if(menuText!=null && menuText!='' && menuText==sMenu[j].text){
 							str+="<li class='active'>";
 						}else{
 							str+="<li>";
 						}
-						str+="<a title="+sMenu[j].text+" href='${ctx}"+sMenu[j].url+"'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
+						str+="<a title="+sMenu[j].text+" href='javascript:void(0);' onclick='gotoMenu(&apos;${ctx}"+sMenu[j].url+"&apos;,&apos;"+pMenu[i].text+"&apos;,&apos;"+sMenu[j].text+"&apos;)'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
 					}
 					str+="</ul></li>";
 				};
@@ -56,4 +58,11 @@
 		$("#mainNavigation").after(str);
 	});
   });
+  
+  function gotoMenu(url,ptext,text){
+	  $("#menuForm").prop("action",url);
+	  $("#pmenuText").val(ptext);
+	  $("#menuText").val(text);
+	  $("#menuForm").submit();
+  }
 </script>
