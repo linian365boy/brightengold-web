@@ -36,10 +36,9 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/resources/dist/js/demo.js"></script>
 <script type="text/javascript">
-/*var t = new Date().getTime();
+		var t = new Date().getTime();
 		$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
-			console.info(t);
-			 var pMenu = json.tree.item;
+			var pMenu = json.tree.item;
 			var str = "";
 			if((pMenu!=null)&&(pMenu.length!=0)){
 				for(var i=0;i<pMenu.length;i++){
@@ -64,47 +63,6 @@
 					};
 				};
 			};
-			console.info(str); 
-			//$("li.header").after(str);
-		});*/
-		$(document).ready(function(){
-			var t = new Date().getTime();
-			$.get("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(xml){
-				var da = $(xml);
-				var pMenu = da.find("item[url='javascript:void(0);']");
-				var str = "";
-				if((pMenu!=null)&&(pMenu.length!=0)){
-					for(var i=0;i<pMenu.length;i++){
-						if(i==0){
-							str+= "<li class='active treeview'>";
-						}else{
-							str+= "<li class='treeview'>";
-						}
-						var pmenu = $(pMenu[i]);
-						var name = pmenu.attr("text");
-						var url = pmenu.attr("url");
-						str+= "<a href='"+url+"' id='nav_"+(i+1)+"' title="+name+"><i class='fa fa-pie-chart'></i><span>"+name+"</span><span class='pull-right-container'><i class='fa fa-angle-left pull-right'></i></span></a>";
-						var sMenu = pmenu.find("item");
-						var length = sMenu.length;
-						if((sMenu!=null)&&(length!=0)){
-						str+= "<ul class='treeview-menu'>";
-							for(var j=0;j<length;j++){
-								if(j==0){
-									str+="<li class='active'>";
-								}else{
-									str+="<li>";
-								}
-								var smenu = $(sMenu[j]);
-								var smenuName = smenu.attr("text");
-								var smenuUrl = smenu.attr("url");
-								var id = smenu.attr("id");
-								str+="<a title="+smenuName+" href='${ctx}"+url+"'><i class='fa fa-circle-o'></i>"+smenuName+"</a></li>";
-							}
-							str+="</ul></li>";
-						};
-					};
-				};
-				$("#mainNavigation").after(str);
-			});
+			$("#mainNavigation").after(str);
 		});
 </script>

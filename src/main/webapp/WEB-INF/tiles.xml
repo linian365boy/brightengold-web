@@ -6,10 +6,13 @@
 	<!-- 主框架 -->
 	<definition name="baselayout" template="/WEB-INF/tiles/baselayout.jsp">
 		<put-attribute name="title" value="年年有鱼管理后台" />
+		<put-attribute name="headJsCss" value="/WEB-INF/tiles/headJsCss.jsp"/>
         <put-attribute name="head" value="/WEB-INF/tiles/head.jsp"/>
         <put-attribute name="left" value="/WEB-INF/tiles/menu.jsp"/>
         <put-attribute name="main" value="/WEB-INF/tiles/index.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>
+        <put-attribute name="sidebar" value="/WEB-INF/tiles/sidebar.jsp"/>
+        <put-attribute name="footerJsCss" value="/WEB-INF/tiles/footerJsCss.jsp"/>
         <!-- <put-list-attribute name="stylesheets">  
             <add-attribute value="static/style/main" />  
         </put-list-attribute>
@@ -34,7 +37,9 @@
 		<put-attribute name="main" value="/views/admin/ad/{1}.jsp" />
 	</definition>
 	<definition name="admin/goods/*/*" extends="baselayout">
+		<put-attribute name="headJsCss" value="/views/admin/commons/headJsCss.jsp"/>
 		<put-attribute name="main" value="/views/admin/goods/{1}/{2}.jsp" />
+		<put-attribute name="footerJsCss" value="/views/admin/commons/footerJsCss.jsp"/>
 	</definition>
 	<definition name="admin/feedback/*" extends="baselayout">
 		<put-attribute name="main" value="/views/admin/feedback/{1}.jsp" />
