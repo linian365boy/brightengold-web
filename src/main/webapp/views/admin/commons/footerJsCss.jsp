@@ -1,10 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!-- jQuery 2.2.3 -->
 <script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
-<!-- DataTables -->
-<script src="/resources/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- Bootstrap table -->
+<script src="/resources/plugins/bootstrap-table/bootstrap-table.js"></script>
+<!-- put your locale files after bootstrap-table.js -->
+<script src="/resources/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
 <!-- SlimScroll -->
 <script src="/resources/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
@@ -16,18 +19,9 @@
 <!-- page script -->
 <script>
   $(function () {
-    $("#table").DataTable();
-    /*$('#table').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
-    });*/
-    
-    var t = new Date().getTime();
-	$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
+	  var length = $("#mainNavigation li.treeview").size();
+		console.info(length+"-=--=-=-==-=-");
+		$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+new Date().getTime(),function(json){
 		var pMenu = json.tree.item;
 		var str = "";
 		var pmenuText = "${pmenuText}";
@@ -65,4 +59,22 @@
 	  $("#menuText").val(text);
 	  $("#menuForm").submit();
   }
+  
+  function runningFormatter(value, row, index){
+	  return (index+1)+parseInt($(".page-size").text())*(parseInt($(".page-number.active").text())-1);
+  }
+  function actionFormatter(value, row, index) {
+	    return [
+	        '<a class="label label-info edit" href="javascript:void(0)" title="修改">修改</a>',
+			'<a class="label label-danger ml10 remove" href="javascript:void(0)" title="删除">删除</a>'
+	    ].join('');
+	}
+  window.actionEvents = {
+		    'click .edit': function (e, value, row, index) {
+		    	update(row.id);
+		    },
+		    'click .remove': function (e, value, row, index) {
+		    	del(row.id);
+		    }
+		};
 </script>

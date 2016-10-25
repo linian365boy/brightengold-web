@@ -122,7 +122,6 @@ public class Category implements Serializable{
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
-
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

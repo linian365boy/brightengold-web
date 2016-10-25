@@ -43,6 +43,10 @@ import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+import com.brightengold.vo.RequestParam;
+import com.brightengold.vo.ReturnData;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
@@ -65,16 +69,22 @@ public class ProductController {
 	private SystemConfig systemConfig;
 	@Autowired
 	private ColumnService columnService;
-	
 	private PageRainier<Product> products;
-	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
-	@RequestMapping(value={"/products/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,String keyword){
-		products = productService.findAll(pageNo, pageSize, keyword);
-		model.addAttribute("page",products);//map
+	@RequestMapping(value={"/products/list"})
+	public String list(HttpServletRequest request,ModelMap map){
+		map.put("ajaxListUrl", "admin/goods/product/products/getJsonList.html");
 		return "admin/goods/product/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/products/getJsonList")
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		products = productService.findAll(param);
+		ReturnData<Product> datas = new ReturnData<Product>(products.getTotalRowNum(), products.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.GET)
@@ -311,11 +321,4 @@ public class ProductController {
 		this.products = products;
 	}
 
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
 }

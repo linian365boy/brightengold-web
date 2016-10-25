@@ -52,7 +52,7 @@
 	</select>
 	
 	<select id="findList" resultType="Product">
-		select tp.id,tp.enName,tp.picUrl,tp.hot,tp.publish,tp.status,tp.priority,tc.enName 
+		select tp.id,tp.enName,tp.picUrl,tp.hot,tp.publish,tp.status,tp.priority,tc.enName as categoryEnName 
 		from tb_product tp inner join tb_category tc on tp.categoryId = tc.id 
 		<where>
 			<if test="keyword!=null and keyword!=''">

@@ -49,7 +49,7 @@
 
 	<!-- Application Loggers -->
 	<Loggers>
-		<Root level="ALL">
+		<Root level="DEBUG">
             ${logback.log.console}
             <AppenderRef ref="infoLog"/>
             <AppenderRef ref="warnLog"/>

@@ -54,42 +54,30 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">产品列表</h3>
+              <h3 class="box-title">产品分类列表</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" class="table table-hover table-striped">
+              <table data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+              data-show-columns="true" 
+              data-show-export="true" 
+              data-show-pagination-switch="true" 
+              data-pagination="true" 
+              data-id-field="id" 
+              data-page-list="[10, 25, 50]" 
+              data-show-footer="false" 
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
                 <thead>
                 <tr> 
-    				<th >序号</th>
-					<th >一级分类</th>
-					<th >二级分类</th>
-					<th >所在栏目</th>
-					<th >操作</th>
+                	<th data-formatter="runningFormatter">序号</th>
+					<th data-field="parentName">父级分类</th>
+					<th data-field="name">名称（中）</th>
+					<th data-field="enName">名称（英）</th>
+					<th data-field="columnName">所在栏目</th>
+					<th data-field="createDate">创建日期</th>
+					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr> 
                 </thead>
-                <tbody>
-                <c:forEach items="${page.result }" var="category" varStatus="status">
-	                <tr>
-	                  <td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-	                  <td><c:choose>
-							<c:when test="${!(empty category.parentName) }">
-								${category.parentName }
-							</c:when>
-							<c:otherwise>
-								————
-							</c:otherwise>
-						</c:choose>
-	                  </td>
-	                  <td>${category.name }（${category.enName }）</td>
-	                  <td>${category.columnName }</td>
-	                  <td>
-						<span class="label label-info" name="${category.id }" onclick="update(this);">修改</span>
-						<span class="label label-danger" name="${category.id }" onclick="del(this);">删除</span>
-					</td>
-	                </tr>
-                </c:forEach>
-                </tbody>
               </table>
             </div>
             <!-- /.box-body -->

@@ -3,7 +3,9 @@ package com.brightengold.controller;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.brightengold.model.Column;
 import com.brightengold.model.News;
 import com.brightengold.service.ColumnService;
@@ -31,7 +34,11 @@ import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.MessageVo;
+import com.brightengold.vo.RequestParam;
+import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
 
@@ -40,20 +47,25 @@ import cn.rainier.nian.utils.PageRainier;
 @Scope("prototype")
 public class NewsController {
 	private static Logger logger = LoggerFactory.getLogger(NewsController.class);
-	
 	@Autowired
 	private NewsService newsService;
 	@Autowired
 	private ColumnService columnService;
-	
 	private PageRainier<News> news;
-	private Integer pageSize = 10;
 	
-	@RequestMapping({"/news/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model){
-		news = newsService.findAll(pageNo, pageSize);
-		model.addAttribute("page",news);//map
+	@RequestMapping({"/news/list"})
+	public String list(HttpServletRequest request,ModelMap map){
+		map.put("ajaxListUrl", "admin/news/news/getJsonList.html");
 		return "admin/news/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping({"/news/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		news = newsService.findAll(param);
+		ReturnData<News> datas = new ReturnData<News>(news.getTotalRowNum(), news.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -238,11 +250,5 @@ public class NewsController {
 	}
 	public void setNews(PageRainier<News> news) {
 		this.news = news;
-	}
-	public Integer getPageSize() {
-		return pageSize;
-	}
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
 	}
 }

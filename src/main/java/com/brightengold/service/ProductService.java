@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.brightengold.dao.ProductDao;
 import com.brightengold.model.Product;
+import com.brightengold.vo.RequestParam;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -18,10 +19,10 @@ public class ProductService {
 	private ProductDao productDao;
 	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
-	public PageRainier<Product> findAll(Integer pageNo, Integer pageSize, String keyword) {
-		long count = productDao.findAllCount(keyword);
-		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
-		page.setResult(productDao.findList(keyword,(pageNo-1)*pageSize,pageSize));
+	public PageRainier<Product> findAll(RequestParam param) {
+		long count = productDao.findAllCount(param.getSearch());
+		PageRainier<Product> page = new PageRainier<Product>(count);
+		page.setResult(productDao.findList(param.getSearch(),param.getOffset(),param.getLimit()));
 		return page;
 	}
 

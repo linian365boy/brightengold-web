@@ -3,6 +3,8 @@ package com.brightengold.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -36,9 +38,9 @@ public class ColumnController {
 	private static Logger logger = LoggerFactory.getLogger(ColumnController.class);
 	
 	@RequestMapping(value={"/cols/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,String keyword){
+	public String list(HttpServletRequest request,@PathVariable Integer pageNo,ModelMap map,String keyword){
 		columns = columnService.findAll(pageNo, pageSize,keyword);
-		model.addAttribute("page",columns);//map
+		map.put("page",columns);//map
 		return "admin/sys/col/list";
 	}
 	

@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="/views/commons/include.jsp" %>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script type="text/javascript" src="${ctx }resources/js/system.js"></script>
-<title>栏目分类管理</title>
 <script type="text/javascript">
 	var update = function(obj){
 		var categoryId = $(obj).attr("name");
@@ -57,33 +52,33 @@
 			 $('[data-toggle="tooltip"]').tooltip();
 		});
 </script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<form class="form-inline" id="searchForm">
-		  <div class="form-group">
-		    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
-		    <div class="input-group">
-		      <div class="input-group-addon">关键字</div>
-		      <input type="text" class="form-control" name="keyword" value="${param.keyword }" id="exampleInputAmount" placeholder="请输入关键字搜索">
-		      <div class="input-group-addon"></div>
-		    </div>
-		  </div>
-		  <button type="submit" class="btn btn-primary">搜索</button>
-		</form>
-		<header>
-		<h3 class="tabs_involved">栏目分类列表</h3>
-		<ul class="tabs">
-   			<li><a href="javascript:void(0);" onclick="tianjia();">新增栏目</a></li>
-		</ul>
-		</header>
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter"> 
-			<thead> 
-				<tr> 
+
+	<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	反馈管理
+        <small>更轻松管理您的反馈信息</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">反馈管理</a></li>
+        <li class="active">反馈管理</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">反馈列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="table" class="table table-hover table-striped">
+                <thead>
+                <tr> 
     				<th >序号</th>
 					<th >栏目名称(英文)</th>
 					<th >栏目代码</th>
@@ -91,9 +86,9 @@
 					<th >排序号</th>
 					<th >操作</th>
 				</tr> 
-			</thead> 
-			<tbody id="dataContent">
-				<c:choose>
+                </thead>
+                <tbody>
+                <c:choose>
 				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
 				<c:forEach items="${page.result }" var="column" varStatus="status">
 				<tr>
@@ -134,21 +129,15 @@
 				<tr class="text-center"><td colspan="6">暂无数据</td></tr>
 			</c:otherwise>
 			</c:choose>
-				</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/sys/col/cols"/>
-                		</c:import>
-                	</div>
-              </tr>
-			</tfoot>
-			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

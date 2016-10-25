@@ -14,15 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import cn.rainier.nian.utils.PageRainier;
 
 import com.brightengold.model.Advertisement;
 import com.brightengold.service.AdvertisementService;
@@ -33,6 +30,8 @@ import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.ResultVo;
 import com.google.gson.Gson;
+
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/ad")
@@ -45,9 +44,9 @@ public class AdvertisementController {
 	private static Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
 	
 	@RequestMapping(value={"/ads/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model){
+	public String list(HttpServletRequest request,@PathVariable Integer pageNo,ModelMap map){
 		page = service.findAll(pageNo, pageSize);
-		model.addAttribute("page",page);//map
+		map.put("page",page);//map
 		return "admin/ad/list";
 	}
 	

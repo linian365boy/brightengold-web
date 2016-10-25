@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="../../../commons/include.jsp" %>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script type="text/javascript" src="${ctx }resources/js/system.js"></script>
-<title>角色管理</title>
 
 <script type="text/javascript">
 
@@ -45,34 +40,41 @@
 		}
 		
 </script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">角色列表</h3>
-		<ul class="tabs">
-			<c:url value="${ctx }admin/sys/role/export.html" var="exportUrl" scope="page"/>
-   			<li><a href="javascript:void(0);" onclick="tianjia();">新增角色</a></li>
-   			<li><a href="javascript:void(0);" onclick="exportToCSV('${exportUrl}');">导出</a></li>
-   			<li><a href="javascript:void(0);" onclick="qxfp();">权限分配</a></li>
-		</ul>
-		</header>
 
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter table table-striped" cellspacing="0"> 
-			<thead> 
-				<tr> 
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	反馈管理
+        <small>更轻松管理您的反馈信息</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">反馈管理</a></li>
+        <li class="active">反馈管理</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">反馈列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="table" class="table table-hover table-striped">
+                <thead>
+                <tr> 
     				<th >序号</th>
 					<th >角色</th>
-					<th width="600px">权限</th>
+					<th >权限</th>
 					<th >操作</th>
 				</tr> 
-			</thead> 
-			<tbody id="dataContent"> 
-			<c:choose>
+                </thead>
+                <tbody>
+                <c:choose>
 				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
 				<c:forEach items="${page.result }" var="role" varStatus="status">
 				<tr>
@@ -97,22 +99,15 @@
 				<tr class="text-center"><td colspan="4">暂无数据</td></tr>
 			</c:otherwise>
 			</c:choose>
-			</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/sys/role/roles"/>
-                		</c:import>
-                	</div>
-                  <!-- <div class="clear"></div></td> -->
-              </tr>
-			</tfoot>
-			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

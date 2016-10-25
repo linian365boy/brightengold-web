@@ -10,7 +10,7 @@
 <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
 <script src="/resources/plugins//raphael/raphael-min.js"></script>
-<script src="/resources/plugins/morris/morris.min.js"></script>
+<!-- <script src="/resources/plugins/morris/morris.min.js"></script> -->
 <!-- Sparkline -->
 <script src="/resources/plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- jvectormap -->
@@ -32,37 +32,48 @@
 <!-- AdminLTE App -->
 <script src="/resources/dist/js/app.min.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="/resources/dist/js/pages/dashboard.js"></script>
+<!-- <script src="/resources/dist/js/pages/dashboard.js"></script> -->
 <!-- AdminLTE for demo purposes -->
 <script src="/resources/dist/js/demo.js"></script>
+
+<!-- Bootstrap table -->
+<script src="/resources/plugins/bootstrap-table/bootstrap-table.js"></script>
+<!-- put your locale files after bootstrap-table.js -->
+<script src="/resources/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
 <script type="text/javascript">
-		var t = new Date().getTime();
-		$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
-			var pMenu = json.tree.item;
-			var str = "";
-			if((pMenu!=null)&&(pMenu.length!=0)){
-				for(var i=0;i<pMenu.length;i++){
-					if(i==0){
-						str+= "<li class='active treeview'>";
-					}else{
-						str+= "<li class='treeview'>";
-					}
-					str+= "<a href='"+pMenu[i].url+"' id='nav_"+(i+1)+"' title="+pMenu[i].text+"><i class='fa fa-pie-chart'></i><span>"+pMenu[i].text+"</span><span class='pull-right-container'><i class='fa fa-angle-left pull-right'></i></span></a>";
-					var sMenu = pMenu[i].item;
-					if((sMenu!=null)&&(sMenu.length!=0)){
-						str+= "<ul class='treeview-menu'>";
-						for(var j=0;j<sMenu.length;j++){
-							if(j==0){
-								str+="<li class='active'>";
-							}else{
-								str+="<li>";
-							}
-							str+="<a title="+sMenu[j].text+" href='${ctx}"+sMenu[j].url+"'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
+		$(function(){
+			var length = $("#mainNavigation li.treeview").size();
+			console.info(length+"-=-");
+			var pmenuText = "${pmenuText}";
+			var menuText = "${menuText}";
+			$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+new Date().getTime(),function(json){
+				var pMenu = json.tree.item;
+				var str = "";
+				if((pMenu!=null)&&(pMenu.length!=0)){
+					for(var i=0;i<pMenu.length;i++){
+						if(pmenuText==null || (pmenuText!=null && pmenuText!='' && pmenuText==pMenu[i].text)){
+							str+= "<li class='active treeview'>";
+						}else{
+							str+= "<li class='treeview'>";
 						}
-						str+="</ul></li>";
+						str+= "<a href='"+pMenu[i].url+"' id='nav_"+(i+1)+"' title="+pMenu[i].text+"><i class='fa fa-pie-chart'></i><span>"+pMenu[i].text+"</span><span class='pull-right-container'><i class='fa fa-angle-left pull-right'></i></span></a>";
+						var sMenu = pMenu[i].item;
+						if((sMenu!=null)&&(sMenu.length!=0)){
+							str+= "<ul class='treeview-menu'>";
+							for(var j=0;j<sMenu.length;j++){
+								if(menuText!=null && menuText!='' && menuText==sMenu[j].text){
+									str+="<li class='active'>";
+								}else{
+									str+="<li>";
+								}
+								str+="<a title="+sMenu[j].text+" href='${ctx}"+sMenu[j].url+"'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
+							}
+							str+="</ul></li>";
+						};
 					};
 				};
-			};
-			$("#mainNavigation").after(str);
-		});
+				$("#mainNavigation").after(str);
+			});
+		})
 </script>

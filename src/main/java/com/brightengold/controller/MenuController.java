@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,9 +47,9 @@ public class MenuController {
 	private static Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
 	@RequestMapping({"/menus/{pageNo}"})
-	public String list(@PathVariable Integer pageNo, Model model){
+	public String list(HttpServletRequest request,@PathVariable Integer pageNo, ModelMap map){
 		menus = menuService.findAll(pageNo, pageSize);
-		model.addAttribute("page",menus);//map
+		map.put("page",menus);//map
 		return "admin/sys/menu/list";
 	}
 	
@@ -104,12 +103,9 @@ public class MenuController {
 
 	@ResponseBody
 	@RequestMapping(value="/findMenuByRole",method=RequestMethod.GET)
-	public String findMenuByRole(HttpServletRequest request, HttpSession session){
-		Object menuJsonObj = session.getAttribute("menuJson");
-		String responseStr = null;
-		if(menuJsonObj!=null){
-			responseStr = (String)menuJsonObj;
-		}else{
+	public Object findMenuByRole(HttpServletRequest request, HttpSession session){
+		Object responseStr = session.getAttribute("menuJson");
+		if(responseStr==null){
 			responseStr = this.generateJsonString(request,session);
 		}
 		return responseStr;

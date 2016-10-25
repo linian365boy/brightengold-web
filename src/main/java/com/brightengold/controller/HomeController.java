@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -21,7 +22,7 @@ public class HomeController {
 	private Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value={"/index"}, method = RequestMethod.GET)
-	public String home(Model model) {
+	public String home(ModelMap map) {
 		logger.debug("enter Index page!!");
 		return "admin/index";
 	}

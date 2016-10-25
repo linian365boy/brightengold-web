@@ -9,13 +9,14 @@
   <link rel="stylesheet" href="/resources/plugins/font-awesome/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="/resources/plugins/ionicons/ionicons.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="/resources/plugins/datatables/dataTables.bootstrap.css">
+  <!-- Bootstrap table -->
+  <link rel="stylesheet" href="/resources/plugins/bootstrap-table/bootstrap-table.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="/resources/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="/resources/dist/css/customUse.css">
   <link rel="icon" href="${ctx }/resources/dist/img/favicon_48X66.ico"
 	type="image/x-icon">
 	<link rel="shortcut icon" href="${ctx }/resources/dist/img/favicon_16X22.ico"

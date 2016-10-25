@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,12 +69,9 @@ public class RoleController {
 	}
 	
 	@RequestMapping({"/roles/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		if(pageNo==null){
-			pageNo = 1;
-		}
+	public String list(@PathVariable Integer pageNo,ModelMap map,HttpServletRequest request){
 		roles = roleService.findAll(pageNo, pageSize, true);
-		model.addAttribute("page",roles);//map
+		map.put("page",roles);//map
 		return "admin/sys/role/list";
 	}
 	

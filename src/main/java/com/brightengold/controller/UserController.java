@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,15 +53,12 @@ public class UserController {
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@RequestMapping({"/users/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		if(pageNo==null){
-			pageNo = 1;
-		}
+	public String list(@PathVariable Integer pageNo,ModelMap map,HttpServletRequest request){
 		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		//排除当前用户
 		users = userService.findAllUser(pageNo, pageSize, u.getId());
 		//排除自己
-		model.addAttribute("page",users);//map
+		map.put("page",users);//map
 		return "admin/sys/user/list";
 	}
 	

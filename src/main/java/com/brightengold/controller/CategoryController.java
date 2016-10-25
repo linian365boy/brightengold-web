@@ -33,7 +33,10 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.RequestParam;
+import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
@@ -52,13 +55,28 @@ public class CategoryController {
 	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
-	@RequestMapping(value={"/categorys/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,ModelMap map,HttpServletRequest request){
-		categorys = categoryService.findAll(pageNo, pageSize);
-		map.put("page",categorys);//map
-		map.put("pmenuText", request.getParameter("ptext"));
-		map.put("menuText", request.getParameter("text"));
+	/**
+	 * list:如果需要定位用户进入到哪个栏目菜单，需要传入HttpServletRequest、ModelMap两个参数，顺序不定
+	 * @author tanfan 
+	 * @param request
+	 * @param map
+	 * @param pageNo
+	 * @return 
+	 * @since JDK 1.7
+	 */
+	@RequestMapping("/categorys/list")
+	public String list(HttpServletRequest request, ModelMap map){
+		map.put("ajaxListUrl", "admin/goods/category/categorys/getJsonList.html");
 		return "admin/goods/category/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/categorys/getJsonList")
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		categorys = categoryService.findAll(param);
+		ReturnData<Category> datas = new ReturnData<Category>(categorys.getTotalRowNum(), categorys.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)

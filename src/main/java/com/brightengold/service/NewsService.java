@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.brightengold.dao.NewsDao;
 import com.brightengold.model.News;
+import com.brightengold.vo.RequestParam;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -18,11 +19,10 @@ public class NewsService {
 	private NewsDao newsDao;
 	private static Logger logger = LoggerFactory.getLogger(NewsService.class);
 	
-	public PageRainier<News> findAll(Integer pageNo, Integer pageSize) {
-		//Page<News> tempPage = newsDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id","priority")));
+	public PageRainier<News> findAll(RequestParam param) {
 		long count = newsDao.findAllCount();
-		PageRainier<News> page = new PageRainier<News>(count,pageNo,pageSize);
-		page.setResult(newsDao.findList((pageNo-1)*pageSize,pageSize));
+		PageRainier<News> page = new PageRainier<News>(count);
+		page.setResult(newsDao.findList(param.getOffset(),param.getLimit()));
 		return page;
 	}
 	

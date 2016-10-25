@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="../../commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>新闻管理</title>
 <script type="text/javascript">
 	var update = function(obj){
 		var newsId = $(obj).attr("name");
@@ -66,34 +61,52 @@
 		};
 		
 </script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">新闻列表</h3>
-		<ul class="tabs">
-   			<li><a href="${ctx}admin/news/add.html" >新增新闻</a></li>
-		</ul>
-		</header>
 
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
-			<thead> 
-				<tr> 
-    				<th >序号</th>
-					<th >新闻标题</th>
-					<th >所在栏目</th>
-					<th >创建日期</th>
-					<th >发布日期</th>
-					<th >优先值</th>
-					<th >操作</th>
-				</tr>
-			</thead> 
-			<tbody id="dataContent"> 
-				<c:forEach items="${page.result }" var="news" varStatus="status">
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	产品分类管理
+        <small>更轻松管理您的分类</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">产品管理</a></li>
+        <li class="active">产品分类管理</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">产品分类列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+              data-show-columns="true" 
+              data-show-export="true" 
+              data-show-pagination-switch="true" 
+              data-pagination="true" 
+              data-id-field="id" 
+              data-page-list="[10, 25, 50]" 
+              data-show-footer="false" 
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+                <thead>
+                <tr> 
+    				<th data-formatter="runningFormatter">序号</th>
+					<th data-field="title">新闻标题</th>
+					<th data-field="columnName">所在栏目</th>
+					<th data-field="createDate">创建日期</th>
+					<th data-field="publishDate">发布日期</th>
+					<th data-field="priority">优先值</th>
+					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+				</tr> 
+                </thead>
+                <%-- <tbody>
+                <c:forEach items="${page.result }" var="news" varStatus="status">
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td><a href="${ctx }admin/news/${news.id}.html" title="${news.title }" target="_blank">${news.title }</a></td>
@@ -111,32 +124,21 @@
 					</td>
 					<td>${ news.priority}</td>
 					<td>
-						<input type="image" name="${news.id }" onclick="update(this);"
-						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
-						<input type="image" name="${news.id }" onclick="purview(this);" 
-						src="${ctx }resources/images/icn_preview.png" title="预览"/>&nbsp;
-						<input type="image" name="${news.id }" onclick="publish(this);" 
-						src="${ctx }resources/images/icn_publish.png" title="发布"/>&nbsp;
-						<input type="image" name="${news.id }" onclick="del(this);" 
-						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;
+						<span class="label label-info" name="${news.id }" onclick="update(this);">修改</span>
+						<span class="label label-primary" name="${news.id }" onclick="publish(this);">发布</span>
+						<span class="label label-danger" name="${news.id }" onclick="del(this);">删除</span>
 					</td>
 				</tr>
 				</c:forEach>
-				</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/news/news"/>
-                		</c:import>
-                	</div>
-              </tr>
-			</tfoot>
-			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+                </tbody> --%>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
