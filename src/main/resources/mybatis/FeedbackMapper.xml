@@ -14,7 +14,7 @@
 	</select>
 	
 	<select id="findList" resultType="Feedback">
-		select * from tb_feedback order by id desc limit #{start},#{pageSize}
+		select * from tb_feedback order by id desc limit #{offset},#{limit}
 	</select>
 	
 	<insert id="save" parameterType="Feedback">

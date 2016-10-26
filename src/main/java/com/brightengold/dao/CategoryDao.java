@@ -2,6 +2,8 @@ package com.brightengold.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Category;
 
 public interface CategoryDao {
@@ -21,7 +23,7 @@ public interface CategoryDao {
 	
 	long findAllCount();
 	
-	List<Category> findList(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
+	List<Category> findList(RequestParam param);
 	
 	Category findOneById(Integer categoryId);
 	

@@ -15,16 +15,19 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.ReturnData;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
@@ -46,11 +49,19 @@ public class MenuController {
 	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
-	@RequestMapping({"/menus/{pageNo}"})
-	public String list(HttpServletRequest request,@PathVariable Integer pageNo, ModelMap map){
-		menus = menuService.findAll(pageNo, pageSize);
-		map.put("page",menus);//map
+	@RequestMapping({"/menus/list"})
+	public String list(HttpServletRequest request,ModelMap map){
+		map.put("ajaxListUrl","admin/sys/menu/menus/getJsonList.html");
 		return "admin/sys/menu/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping({"/menus/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().create();
+		menus = menuService.findAll(param);
+		ReturnData<Menu> datas = new ReturnData<Menu>(menus.getTotalRowNum(),menus.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)

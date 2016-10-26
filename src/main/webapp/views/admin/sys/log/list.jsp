@@ -1,17 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="../../../commons/include.jsp" %>
-    
+    <script type="text/javascript">
+	<!--
+	$("#table").bootstrapTable();
+	//-->
+	</script>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        	反馈管理
-        <small>更轻松管理您的反馈信息</small>
+        	日志管理
+        <small>更轻松管理您的操作日志</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">反馈管理</a></li>
-        <li class="active">反馈管理</li>
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">日志管理</li>
       </ol>
     </section>
 
@@ -21,22 +25,30 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">反馈列表</h3>
+              <h3 class="box-title">日志列表</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" class="table table-hover table-striped">
+              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+              data-show-columns="true" 
+              data-show-export="true" 
+              data-show-pagination-switch="true" 
+              data-pagination="true" 
+              data-id-field="id" 
+              data-page-list="[10, 25, 50]" 
+              data-show-footer="false" 
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
                 <thead>
                 <tr> 
-    				<th >序号</th>
-	                <th >操作</th>
-	                <th >操作员</th>
+    				<th data-formatter="runningFormatter">序号</th>
+	                <th data-field="type">操作</th>
+	                <th data-field="operatorRealName">操作员</th>
 	                <!-- <th width="16%">模块</th> -->
-	                <th >操作日期</th>
-	                <th>内容</th>
+	                <th data-field="createTime">操作日期</th>
+	                <th data-formatter="actionFormatter" data-events="actionEvents">内容</th>
 				</tr> 
                 </thead>
-                <tbody>
+                <%-- <tbody>
                 <c:choose>
 					<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
 						<c:forEach items="${page.result }" var="log" varStatus="status">
@@ -46,7 +58,7 @@
 								<td title="员工号：${log.operator }&nbsp;&nbsp;姓名：${log.operatorRealName}">
 									${log.operatorRealName }
 								</td>
-								<%-- <td>${log.menu.name }</td> --%>
+								<td>${log.menu.name }</td>
 								<td>
 									<fmt:formatDate value="${log.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/>
 								</td>
@@ -58,7 +70,7 @@
 						<tr class="text-center"><td colspan="6">暂无数据</td></tr>
 					</c:otherwise>
 				</c:choose>
-                </tbody>
+                </tbody> --%>
               </table>
             </div>
             <!-- /.box-body -->

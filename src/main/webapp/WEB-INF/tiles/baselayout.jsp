@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title><tiles:insertAttribute name="title"/></title>
 	<tiles:insertAttribute name="headJsCss"/>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">

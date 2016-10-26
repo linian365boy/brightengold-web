@@ -58,7 +58,7 @@
 	
 	<select id="findList" resultMap="MenuMap">
 		select t1.*,t2.name as parentName from tb_menu t1 inner join tb_menu t2 on (t1.parentId=t2.id) 
-		order by priority desc limit #{start},#{pageSize}
+		order by priority desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findAllCount" resultType="long">

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Column;
 import com.brightengold.model.News;
 import com.brightengold.service.ColumnService;
@@ -34,7 +35,6 @@ import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.MessageVo;
-import com.brightengold.vo.RequestParam;
 import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

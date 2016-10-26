@@ -1,11 +1,9 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>AdminLTE 2 | Dashboard</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
-<title>header</title>
 <link rel="icon" href="${ctx }/resources/dist/img/favicon_48X66.ico"
 	type="image/x-icon">
 <link rel="shortcut icon" href="${ctx }/resources/dist/img/favicon_16X22.ico"
@@ -18,12 +16,16 @@
 <!-- Ionicons -->
 <link rel="stylesheet"
 	href="/resources/plugins/ionicons/ionicons.min.css">
+<!-- Bootstrap table -->
+<link rel="stylesheet" href="/resources/plugins/bootstrap-table/bootstrap-table.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins
 	       folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet"
 	href="/resources/dist/css/skins/_all-skins.min.css">
+<!-- custom use -->
+<link rel="stylesheet" href="/resources/dist/css/customUse.css">
 <!-- iCheck -->
 <link rel="stylesheet" href="/resources/plugins/iCheck/flat/blue.css">
 <!-- Morris chart -->

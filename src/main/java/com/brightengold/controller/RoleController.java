@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
@@ -45,7 +48,6 @@ public class RoleController {
 	@Autowired
 	private RoleService roleService;
 	private PageRainier<Role> roles;
-	private Integer pageSize = 10;
 	@Autowired
 	private ResourceServiceImpl resourceService;
 	@Autowired
@@ -68,11 +70,19 @@ public class RoleController {
 		return gson.toJson(rolesByAjax);
 	}
 	
-	@RequestMapping({"/roles/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,ModelMap map,HttpServletRequest request){
-		roles = roleService.findAll(pageNo, pageSize, true);
-		map.put("page",roles);//map
+	@RequestMapping({"/roles/list"})
+	public String list(ModelMap map,HttpServletRequest request){
+		map.put("ajaxListUrl","admin/sys/role/roles/getJsonList.html");
 		return "admin/sys/role/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping({"/roles/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().create();
+		roles = roleService.findAll(param);
+		ReturnData<Role> datas = new ReturnData<Role>(roles.getTotalRowNum(), roles.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -209,13 +219,4 @@ public class RoleController {
 	public void setRoles(PageRainier<Role> roles) {
 		this.roles = roles;
 	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
-	
 }

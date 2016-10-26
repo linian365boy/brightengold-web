@@ -10,7 +10,6 @@
 <link rel="icon" href="${ctx }resources/dist/img/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="${ctx }resources/dist/img/favicon.ico" type="image/x-icon" />
 <link href="${ctx }resources/dist/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
-<script language="javascript">if(top.location != self.location){top.location=self.location;}</script>
 </head>
 <body>
   <form action="j_spring_security_check" id="login" method="post">

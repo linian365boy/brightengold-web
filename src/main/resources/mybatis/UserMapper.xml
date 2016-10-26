@@ -62,7 +62,7 @@
 	</update>
 	
 	<select id="findList" resultType="User">
-		select * from tb_user where id!=#{loginId} order by createDate desc limit #{start},#{pageSize}
+		select * from tb_user where id!=#{loginId} order by createDate desc limit #{param.offset},#{param.limit}
 	</select>
 	
 	<select id="findAllCount" resultType="long" parameterType="int">

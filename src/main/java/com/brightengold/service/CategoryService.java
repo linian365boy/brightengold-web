@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.CategoryDao;
 import com.brightengold.model.Category;
-import com.brightengold.vo.RequestParam;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -19,7 +19,7 @@ public class CategoryService {
 	public PageRainier<Category> findAll(RequestParam param) {
 		long count = categoryDao.findAllCount();
 		PageRainier<Category> page = new PageRainier<Category>(count);
-		page.setResult(categoryDao.findList(param.getOffset(),param.getLimit()));
+		page.setResult(categoryDao.findList(param));
 		return page;
 	}
 

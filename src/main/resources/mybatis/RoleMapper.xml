@@ -26,4 +26,12 @@
 	<select id="findDefaultRole">
 		select * from tb_role r where r.defaultOrNo is true
 	</select>
+	
+	<select id="findAllCount" resultType="long">
+		select count(*) from tb_role r where r.defaultOrNo is not true
+	</select>
+	
+	<select id="findAll" resultType="Role" parameterType="com.brightengold.common.vo.RequestParam">
+		select * from tb_role r where r.defaultOrNo is not true limit #{offset},#{limit}
+	</select>
 </mapper>

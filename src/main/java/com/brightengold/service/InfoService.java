@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.InfoDao;
 import com.brightengold.model.Info;
 
@@ -15,11 +16,11 @@ public class InfoService {
 	@Autowired
 	private InfoDao infoDao;
 	
-	public PageRainier<Info> findAll(Integer pageNo, Integer pageSize) {
+	public PageRainier<Info> findAll(RequestParam param) {
 		long count = infoDao.findAllCount();
 		//Page<Info> tempPage = infoDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority")));
-		PageRainier<Info> page = new PageRainier<Info>(count,pageNo,pageSize);
-		page.setResult(infoDao.findList((pageNo-1)*pageSize,pageSize));
+		PageRainier<Info> page = new PageRainier<Info>(count);
+		page.setResult(infoDao.findList(param));
 		return page;
 	}
 	

@@ -41,7 +41,7 @@ public class CompanyController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
 	}
 	
-	@RequestMapping(value={"/detail","/",""},method=RequestMethod.GET)
+	@RequestMapping(value={"/detail","/",""},method=RequestMethod.POST)
 	public String detail(Model model) {
 		model.addAttribute("model",companyService.loadCompany());
 		return "admin/sys/company/detail";

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.ColumnDao;
 import com.brightengold.model.Column;
 
@@ -33,10 +34,10 @@ public class ColumnService {
 		return flag;
 	}
 	
-	public PageRainier<Column> findAll(Integer pageNo, Integer pageSize, String keyword){
-		long count = columnDao.findAllCount(keyword);
+	public PageRainier<Column> findAll(RequestParam param){
+		long count = columnDao.findAllCount(param);
 		PageRainier<Column> page = new PageRainier<Column>(count);
-		page.setResult(columnDao.findList(keyword,(pageNo-1)*pageSize,pageSize));
+		page.setResult(columnDao.findList(param));
 		return page;
 	}
 

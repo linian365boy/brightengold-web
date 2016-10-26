@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.NewsDao;
 import com.brightengold.model.News;
-import com.brightengold.vo.RequestParam;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -22,7 +22,7 @@ public class NewsService {
 	public PageRainier<News> findAll(RequestParam param) {
 		long count = newsDao.findAllCount();
 		PageRainier<News> page = new PageRainier<News>(count);
-		page.setResult(newsDao.findList(param.getOffset(),param.getLimit()));
+		page.setResult(newsDao.findList(param));
 		return page;
 	}
 	
@@ -94,13 +94,13 @@ public class NewsService {
 		return newsDao.countByColId(colId,depth);
 	}
 
-	public PageRainier<News> findAllByColId(int pageNo, Integer pageSize,
+	public PageRainier<News> findAllByColId(RequestParam param,
 			Integer colId, int depth) {
 		//Page<News> tempPage = newsDao.findAll(countByColIdSpec(colId,depth), 
 		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id","priority")));
 		long count = newsDao.findAllCountByColId(colId,depth);
-		PageRainier<News> page = new PageRainier<News>(count,pageNo,pageSize);
-		page.setResult(newsDao.findList((pageNo-1)*pageSize, pageSize));
+		PageRainier<News> page = new PageRainier<News>(count);
+		page.setResult(newsDao.findList(param));
 		return page;
 	}
 

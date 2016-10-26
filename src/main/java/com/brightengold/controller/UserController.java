@@ -28,9 +28,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.ReturnData;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.Role;
 import cn.rainier.nian.model.User;
@@ -52,14 +56,21 @@ public class UserController {
 	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
-	@RequestMapping({"/users/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,ModelMap map,HttpServletRequest request){
+	@RequestMapping({"/users/list"})
+	public String list(ModelMap map,HttpServletRequest request){
+		map.put("ajaxListUrl","admin/sys/user/users/getJsonList.html");
+		return "admin/sys/user/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping({"/users/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().create();
 		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		//排除当前用户
-		users = userService.findAllUser(pageNo, pageSize, u.getId());
-		//排除自己
-		map.put("page",users);//map
-		return "admin/sys/user/list";
+		users = userService.findAllUser(param, u.getId());
+		ReturnData<User> datas = new ReturnData<User>(users.getTotalRowNum(), users.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)

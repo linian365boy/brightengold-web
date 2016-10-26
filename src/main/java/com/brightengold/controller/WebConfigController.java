@@ -32,7 +32,7 @@ public class WebConfigController {
 	private WebConfigService webConfigService;
 	private static final Logger logger = LoggerFactory.getLogger(WebConfigController.class);
 	
-	@RequestMapping(value={"/detail","/",""},method=RequestMethod.GET)
+	@RequestMapping(value={"/detail","/",""},method=RequestMethod.POST)
 	public String detail(Model model) {
 		model.addAttribute("model",webConfigService.loadSystemConfig());
 		return "admin/sys/webconfig/detail";

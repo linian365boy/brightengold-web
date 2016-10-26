@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <!-- jQuery 2.2.3 -->
 <script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- jQuery form plugin -->
+<script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
 <!-- Bootstrap table -->
@@ -18,9 +20,7 @@
 <script src="/resources/dist/js/demo.js"></script>
 <!-- page script -->
 <script>
-  $(function () {
-	  var length = $("#mainNavigation li.treeview").size();
-		console.info(length+"-=--=-=-==-=-");
+  /* $(function () {
 		$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+new Date().getTime(),function(json){
 		var pMenu = json.tree.item;
 		var str = "";
@@ -51,14 +51,21 @@
 		};
 		$("#mainNavigation").after(str);
 	});
-  });
+  }); 
   
   function gotoMenu(url,ptext,text){
 	  $("#menuForm").prop("action",url);
 	  $("#pmenuText").val(ptext);
 	  $("#menuText").val(text);
-	  $("#menuForm").submit();
-  }
+	  //$("#menuForm").submit();
+	  $('#menuForm').ajaxForm(function(data) { 
+          alert("Thank you for your comment!");
+          console.info(data);
+          $("#menuForm").prop("action","#");
+          $("#pmenuText").val("");
+    	  $("#menuText").val("");
+      });
+  }*/
   
   function runningFormatter(value, row, index){
 	  return (index+1)+parseInt($(".page-size").text())*(parseInt($(".page-number.active").text())-1);

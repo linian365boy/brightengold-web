@@ -2,6 +2,8 @@ package com.brightengold.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Product;
 
 public interface ProductDao {
@@ -27,15 +29,15 @@ public interface ProductDao {
 	
 	void save(List<Product> productList);
 	
-	List<Product> findList(@Param("keyword") String keyword, @Param("start") int start,@Param("pageSize") Integer pageSize);
+	List<Product> findList(RequestParam param);
 	
-	List<Product> findAllReleaseProductByLikeKeyWordList(@Param("keyword") String keyword, @Param("start") int start,@Param("pageSize") int pageSize);
+	List<Product> findAllReleaseProductByLikeKeyWordList(RequestParam param);
 	
-	long countAllReleaseProductByLikeKeyword(String keyword);
+	long countAllReleaseProductByLikeKeyword(RequestParam param);
 	
 	List<Product> findListByColId(@Param("colId") Integer colId,@Param("start") int start,@Param("pageSize") Integer pageSize);
 	
-	long findAllCount(@Param("keyword") String keyword);
+	long findAllCount(RequestParam param);
 	
 	List<Product> findAllListByCateId(@Param("cateId") Integer cateId,@Param("start") int start,@Param("pageSize") Integer pageSize);
 	

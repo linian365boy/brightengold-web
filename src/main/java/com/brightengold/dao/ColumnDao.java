@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Column;
 
 public interface ColumnDao {
@@ -28,7 +29,7 @@ public interface ColumnDao {
 	
 	List<Column> findAll();
 	
-	long findAllCount(String keyword);
+	long findAllCount(RequestParam param);
 	
-	List<Column> findList(@Param("keyword") String keyword, @Param("start") Integer start,@Param("pageSize") Integer pageSize);
+	List<Column> findList(RequestParam param);
 }

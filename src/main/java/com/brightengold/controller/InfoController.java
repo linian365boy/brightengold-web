@@ -14,12 +14,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Info;
 import com.brightengold.service.InfoService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.ReturnData;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
@@ -31,14 +36,21 @@ public class InfoController {
 	@Autowired
 	private InfoService infoService;
 	private PageRainier<Info> page;
-	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(InfoController.class);
 	
-	@RequestMapping({"/{pageNo}"})
-	public String list(HttpServletRequest request,@PathVariable Integer pageNo,ModelMap map){
-		page = infoService.findAll(pageNo, pageSize);
-		map.put("page",page);//map
+	@RequestMapping({"/list"})
+	public String list(HttpServletRequest request,ModelMap map){
+		map.put("ajaxListUrl","admin/sys/info/getJsonList.html");
 		return "admin/sys/info/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping({"/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().create();
+		page = infoService.findAll(param);
+		ReturnData<Info> datas = new ReturnData<Info>(page.getTotalRowNum(), page.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -108,13 +120,6 @@ public class InfoController {
 			LogUtil.getInstance().log(LogType.DEL, sb.toString());
 		}
 		return "redirect:/admin/sys/info/1.html";
-	}
-	
-	public Integer getPageSize() {
-		return pageSize;
-	}
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
 	}
 	public PageRainier<Info> getPage() {
 		return page;

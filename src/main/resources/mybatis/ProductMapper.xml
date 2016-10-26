@@ -51,35 +51,37 @@
 		select * from tb_product where publish is true and status is true and hot is true order by priority desc,hot desc,id desc limit #{pageSize}
 	</select>
 	
-	<select id="findList" resultType="Product">
+	<select id="findList" resultType="Product" parameterType="com.brightengold.common.vo.RequestParam">
 		select tp.id,tp.enName,tp.picUrl,tp.hot,tp.publish,tp.status,tp.priority,tc.enName as categoryEnName 
 		from tb_product tp inner join tb_category tc on tp.categoryId = tc.id 
 		<where>
-			<if test="keyword!=null and keyword!=''">
-				tp.enName like concat('%',#{keyword},'%') 
+			<if test="search!=null and search!=''">
+				tp.enName like concat('%',#{search},'%') 
 			</if>
 		</where>
-		order by tp.priority desc,tp.hot desc,tp.id desc limit #{start},#{pageSize}
+		order by tp.priority desc,tp.hot desc,tp.id desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findAllReleaseProductByLikeKeyWordList" resultType="Product">
-		select * from tb_product where enName like concat('%',#{keyword},'%') and publish is true and status is true order by priority desc,hot desc,id desc limit #{start},#{pageSize}
+		select * from tb_product where enName like concat('%',#{search},'%') and publish is true and status is true 
+		order by priority desc,hot desc,id desc limit #{offset},#{limit}
 	</select>
 	
-	<select id="countAllReleaseProductByLikeKeyword" resultType="long">
-		select count(*) from tb_product where enName like concat('%',#{keyword},'%') and publish is true and status is true
+	<select id="countAllReleaseProductByLikeKeyword" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+		select count(*) from tb_product where enName like concat('%',#{search},'%') and publish is true and status is true
 	</select>
 	
 	<select id="findListByColId" resultType="Product">
 		select * from tb_product pr inner join tb_category ca on (pr.categoryId=ca.id) inner join tb_column co on(ca.columnId=co.id)
-		where pr.publish is true and pr.status is true and (ca.columnId=#{colId} or co.parentId=#{colId}) order by priority desc,hot desc,id desc
+		where pr.publish is true and pr.status is true and (ca.columnId=#{colId} or co.parentId=#{colId}) 
+		order by priority desc,hot desc,id desc limit #{start},#{pageSize}
 	</select>
 	
-	<select id="findAllCount" resultType="long" parameterType="java.lang.String">
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
 		select count(*) from tb_product 
 		<where>
-			<if test="keyword!=null and keyword!=''">
-				enName like concat('%',#{keyword},'%') 
+			<if test="search!=null and search!=''">
+				enName like concat('%',#{search},'%') 
 			</if>
 		</where>
 		order by priority desc,hot desc,id desc

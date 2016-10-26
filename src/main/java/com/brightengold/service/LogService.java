@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.LogDao;
 import com.brightengold.model.Log;
 import com.brightengold.util.LogType;
@@ -74,11 +75,11 @@ public class LogService {
 		return page;
 	}*/
 
-	public PageRainier<Log> findAll(Integer pageNo, Integer pageSize) {
+	public PageRainier<Log> findAll(RequestParam param) {
 		//Page<Log> tempPage = logDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
 		long count = logDao.findAllCount();
-		PageRainier<Log> page = new PageRainier<Log>(count,pageNo,pageSize);
-		page.setResult(logDao.findList((pageNo-1)*pageSize,pageSize));
+		PageRainier<Log> page = new PageRainier<Log>(count);
+		page.setResult(logDao.findList(param));
 		return page;
 	}
 

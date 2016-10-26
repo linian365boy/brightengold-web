@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 import com.brightengold.service.AdvertisementService;
 import com.brightengold.service.LogUtil;
@@ -29,7 +30,9 @@ import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.ResultVo;
+import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -40,14 +43,21 @@ public class AdvertisementController {
 	@Autowired
 	private AdvertisementService service;
 	private PageRainier<Advertisement> page;
-	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
 	
-	@RequestMapping(value={"/ads/{pageNo}"})
-	public String list(HttpServletRequest request,@PathVariable Integer pageNo,ModelMap map){
-		page = service.findAll(pageNo, pageSize);
-		map.put("page",page);//map
+	@RequestMapping(value={"/ads/list"})
+	public String list(HttpServletRequest request,ModelMap map){
+		map.put("ajaxListUrl", "admin/ad/ads/getJsonList.html");
 		return "admin/ad/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value={"/ads/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().create();
+		page = service.findAll(param);
+		ReturnData<Advertisement> datas = new ReturnData<Advertisement>(page.getTotalRowNum(), page.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value={"/save"},method=RequestMethod.POST)

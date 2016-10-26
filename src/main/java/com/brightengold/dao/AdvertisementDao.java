@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 
 public interface AdvertisementDao {
@@ -21,5 +22,5 @@ public interface AdvertisementDao {
 	
 	long findAllCount();
 	
-	List<Advertisement> findList(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
+	List<Advertisement> findList(RequestParam param);
 }

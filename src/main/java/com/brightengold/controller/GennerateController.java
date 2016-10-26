@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 import com.brightengold.model.Category;
 import com.brightengold.model.Column;
@@ -72,7 +73,7 @@ public class GennerateController {
 	private Integer pageSize = 16;
 	private Integer pageNo = 1;
 	
-	@RequestMapping(value={"/generate"},method=RequestMethod.GET)
+	@RequestMapping(value={"/generate"},method=RequestMethod.POST)
 	public String toGennerateHtml(ModelMap map){
 		return "admin/sys/html/generate";
 	}
@@ -298,7 +299,7 @@ public class GennerateController {
 			 String parentPath = "";
 			 for(int i=0;i<totalPageNum;i++){
 				 map.putAll(modelMap);
-				 page = newsService.findAllByColId((i+1), pageSize, col.getId(),col.getDepth()); //得到所有的新闻
+				 page = newsService.findAllByColId(new RequestParam(i*pageSize,pageSize), col.getId(),col.getDepth()); //得到所有的新闻
 				 map.put("newsPage", page);
 				 parentPath = path + Constant.NEWSPRE + File.separator +col.getCode();
 				 //列表的页面生成

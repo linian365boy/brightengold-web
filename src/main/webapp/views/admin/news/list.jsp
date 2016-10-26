@@ -59,19 +59,19 @@
 				}
 			},"html");
 		};
-		
+		$("#table").bootstrapTable();
 </script>
 
 <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        	产品分类管理
-        <small>更轻松管理您的分类</small>
+        	新闻管理
+        <small>更轻松管理您的新闻</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">产品管理</a></li>
-        <li class="active">产品分类管理</li>
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="javascript:void(0);">新闻管理</a></li>
+        <li class="active">新闻管理</li>
       </ol>
     </section>
 
@@ -81,11 +81,11 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">产品分类列表</h3>
+              <h3 class="box-title">新闻列表</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 

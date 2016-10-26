@@ -27,7 +27,7 @@
 	
 	<!-- 后台系统展示 -->
 	<select id="findList" resultType="Advertisement">
-		select * from tb_advertisement order by priority desc,id desc limit #{start},#{pageSize}
+		select * from tb_advertisement order by priority desc,id desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findIndexAds" parameterType="int" resultType="Advertisement">

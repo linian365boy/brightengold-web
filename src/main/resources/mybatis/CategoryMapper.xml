@@ -46,7 +46,7 @@
 	<select id="findList" resultMap="CategoryMap">
 		select c1.*,c2.name as parentName,tc.name as columnName from tb_category c1 left join tb_category c2 
 		on c1.parentId=c2.id inner join tb_column tc on c1.columnId=tc.id 
-		order by c1.createDate desc limit #{start},#{pageSize}
+		order by c1.createDate desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findOneById" parameterType="int" resultType="Category">

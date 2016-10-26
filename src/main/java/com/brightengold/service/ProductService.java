@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.ProductDao;
 import com.brightengold.model.Product;
-import com.brightengold.vo.RequestParam;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -20,9 +20,9 @@ public class ProductService {
 	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
 	public PageRainier<Product> findAll(RequestParam param) {
-		long count = productDao.findAllCount(param.getSearch());
+		long count = productDao.findAllCount(param);
 		PageRainier<Product> page = new PageRainier<Product>(count);
-		page.setResult(productDao.findList(param.getSearch(),param.getOffset(),param.getLimit()));
+		page.setResult(productDao.findList(param));
 		return page;
 	}
 
@@ -159,13 +159,12 @@ public class ProductService {
 		};
 	}*/
 
-	public PageRainier<Product> findAllReleaseProductByLikeKeyword(String keyword, int pageNo, int pageSize) {
+	public PageRainier<Product> findAllReleaseProductByLikeKeyword(RequestParam param) {
 		//Page<Product> tempPage = productDao.findAll(findAllReleaseProductByLikeKeywordSpec(keyword), 
 		//		new PageRequest(pageNo-1, pageSize, new Sort(Direction.DESC,"priority","hot","id")));
-		
-		long count = productDao.countAllReleaseProductByLikeKeyword(keyword);
-		PageRainier<Product> page = new PageRainier<Product>(count,pageNo,pageSize);
-		page.setResult(productDao.findAllReleaseProductByLikeKeyWordList(keyword,(pageNo-1)*pageSize,pageSize));
+		long count = productDao.countAllReleaseProductByLikeKeyword(param);
+		PageRainier<Product> page = new PageRainier<Product>(count);
+		page.setResult(productDao.findAllReleaseProductByLikeKeyWordList(param));
 		return page;
 	}
 

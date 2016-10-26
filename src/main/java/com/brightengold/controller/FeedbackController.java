@@ -12,12 +12,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Feedback;
 import com.brightengold.service.FeedbackService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.ReturnData;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -31,11 +36,19 @@ public class FeedbackController {
 	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(FeedbackController.class);
 	
-	@RequestMapping({"/feedbacks/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,ModelMap map,HttpServletRequest request){
-		feedbacks = feedbackService.findAll(pageNo, pageSize);
-		map.put("page",feedbacks);//map
+	@RequestMapping({"/feedbacks/list"})
+	public String list(ModelMap map,HttpServletRequest request){
+		map.put("ajaxListUrl", "admin/feedback/feedbacks/getJsonList.html");
 		return "admin/feedback/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping({"/feedbacks/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		feedbacks = feedbackService.findAll(param);
+		ReturnData<Feedback> datas = new ReturnData<Feedback>(feedbacks.getTotalRowNum(), feedbacks.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)

@@ -23,8 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.rainier.nian.utils.PageRainier;
-
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 import com.brightengold.model.Category;
 import com.brightengold.model.Column;
@@ -51,6 +50,8 @@ import com.brightengold.vo.MessageVo;
 import com.google.code.kaptcha.Producer;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+
+import cn.rainier.nian.utils.PageRainier;
 
 /**
  * @ClassName: ViewController  
@@ -91,19 +92,14 @@ public class ViewController {
 	private MailService mailService;
 	
 	@RequestMapping(value="/products/search")
-	public String searchProducts(HttpServletRequest request, ModelMap map){
-		String keyword = request.getParameter("keyword");
-		String pageNoStr = request.getParameter("pageNo");
-		int pageNo = 1;
-		if(StringUtils.isNoneBlank(pageNoStr)){
-			pageNo = Integer.parseInt(pageNoStr);
-		}
+	public String searchProducts(ModelMap map, RequestParam param){
 		//生成公共部分内容
 		gennerateCommon(map);
-		PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(keyword,pageNo,Constant.PAGE_INDEX_SIZE);
+		PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(param);
 		map.put("page", page);
-		map.put("keyword", keyword);
-		map.put("pageNo", pageNo);
+		map.put("keyword", param.getSearch());
+		map.put("pageNo", (param.getOffset()%param.getLimit()==0)?param.getOffset()/param.getLimit():
+			1+(param.getOffset()/param.getLimit()));
 		return "html/search/list";
 	}
 	

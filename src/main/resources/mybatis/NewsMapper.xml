@@ -32,7 +32,7 @@
 	<select id="findList" resultMap="NewsMap">
 		select tn.id,tn.title,tn.priority,tn.url,tn.createDate,tn.publishDate,tc.name as columnName 
 		from tb_news tn inner join tb_column tc on tn.columnId=tc.id 
-		order by tn.priority desc,tn.id desc limit #{start},#{pageSize}
+		order by tn.priority desc,tn.id desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findIndexNews" resultType="News">

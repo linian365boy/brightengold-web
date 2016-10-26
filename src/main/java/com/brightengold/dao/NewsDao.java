@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.News;
 
 public interface NewsDao {
@@ -21,7 +22,7 @@ public interface NewsDao {
 
 	public long findAllCount();
 
-	public List<News> findList(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
+	public List<News> findList(RequestParam param);
 
 	public List<News> findIndexNews(int indexNewsSize);
 

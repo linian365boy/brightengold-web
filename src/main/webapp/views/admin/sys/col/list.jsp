@@ -51,18 +51,19 @@
 		$(function(){
 			 $('[data-toggle="tooltip"]').tooltip();
 		});
+		$("#table").bootstrapTable();
 </script>
 
 	<!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        	反馈管理
-        <small>更轻松管理您的反馈信息</small>
+        	栏目管理
+        <small>更轻松管理您的前台菜单栏目</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">反馈管理</a></li>
-        <li class="active">反馈管理</li>
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">栏目管理</li>
       </ol>
     </section>
 
@@ -72,22 +73,30 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">反馈列表</h3>
+              <h3 class="box-title">前台菜单栏目列表</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" class="table table-hover table-striped">
+              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+              data-show-columns="true" 
+              data-show-export="true" 
+              data-show-pagination-switch="true" 
+              data-pagination="true" 
+              data-id-field="id" 
+              data-page-list="[10, 25, 50]" 
+              data-show-footer="false" 
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
                 <thead>
                 <tr> 
-    				<th >序号</th>
-					<th >栏目名称(英文)</th>
-					<th >栏目代码</th>
-					<th >父级栏目</th>
-					<th >排序号</th>
-					<th >操作</th>
+    				<th data-formatter="runningFormatter">序号</th>
+					<th data-field="enName">栏目名称(英文)</th>
+					<th data-field="code">栏目代码</th>
+					<th data-field="parentName">父级栏目</th>
+					<th data-field="priority">排序号</th>
+					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr> 
                 </thead>
-                <tbody>
+                <%-- <tbody>
                 <c:choose>
 				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
 				<c:forEach items="${page.result }" var="column" varStatus="status">
@@ -129,7 +138,7 @@
 				<tr class="text-center"><td colspan="6">暂无数据</td></tr>
 			</c:otherwise>
 			</c:choose>
-                </tbody>
+                </tbody> --%>
               </table>
             </div>
             <!-- /.box-body -->

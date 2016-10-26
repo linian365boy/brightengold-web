@@ -1,28 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
      <%@include file="/views/commons/include.jsp" %>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/ckEditor/ckeditor.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/ckEditor/lang/zh-cn.js"></script>
-<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="${ctx }resources/css/style.css" rel="stylesheet"/>
-<title>网站信息</title>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">网站设置</h3>
-		</header>
-		<div class="tab_container">
-		<div id="tab1" class="tab_content">
+	<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	网站设置
+        <small>更轻松管理您的网站设置</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">网站设置</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">网站设置信息</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
 	<form id="form" action="${ctx }admin/sys/webconfig/update.html" method="post" class="form-horizontal">
 			<div class="form-group">
 			    <label for="keyword" class="col-sm-2 control-label">网站关键字</label>
@@ -49,8 +49,12 @@
 		  </div>
           </form>
           </div>
+            <!-- /.box-body -->
           </div>
-          </article>
-          </section>
-</body>
-</html>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

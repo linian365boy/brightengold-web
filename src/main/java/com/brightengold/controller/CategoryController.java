@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Category;
 import com.brightengold.model.Column;
 import com.brightengold.service.CategoryService;
@@ -33,7 +34,6 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
 import com.brightengold.util.LogType;
-import com.brightengold.vo.RequestParam;
 import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

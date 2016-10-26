@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Info;
 
 public interface InfoDao {
@@ -20,7 +21,7 @@ public interface InfoDao {
 
 	void delete(Info info);
 
-	List<Info> findList(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
+	List<Info> findList(RequestParam param);
 
 	long findAllCount();
 }

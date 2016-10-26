@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.AdvertisementDao;
 import com.brightengold.model.Advertisement;
 
@@ -27,12 +28,12 @@ public class AdvertisementService {
 		advertisementDao.delete(id);
 	}
 
-	public PageRainier<Advertisement> findAll(Integer pageNo, Integer pageSize) {
+	public PageRainier<Advertisement> findAll(RequestParam param) {
 		//Page<Advertisement> tempPage = advertisementDao.findAll(new PageRequest(pageNo-1,pageSize,
 		//		new Sort(Direction.DESC,"priority","id")));
 		long count = advertisementDao.findAllCount();
 		PageRainier<Advertisement> page = new PageRainier<Advertisement>(count);
-		page.setResult(advertisementDao.findList((pageNo-1)*pageSize,pageSize));
+		page.setResult(advertisementDao.findList(param));
 		return page;
 	}
 

@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Column;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.vo.ResultVo;
+import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -34,14 +37,21 @@ public class ColumnController {
 	@Autowired
 	private ColumnService columnService;
 	private PageRainier<Column> columns;
-	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(ColumnController.class);
 	
-	@RequestMapping(value={"/cols/{pageNo}"})
-	public String list(HttpServletRequest request,@PathVariable Integer pageNo,ModelMap map,String keyword){
-		columns = columnService.findAll(pageNo, pageSize,keyword);
-		map.put("page",columns);//map
+	@RequestMapping(value={"/cols/list"})
+	public String list(HttpServletRequest request,ModelMap map){
+		map.put("ajaxListUrl", "admin/sys/col/cols/getJsonList.html");
 		return "admin/sys/col/list";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value={"/cols/getJsonList"})
+	public String getJsonList(RequestParam param){
+		Gson gson = new GsonBuilder().create();
+		columns = columnService.findAll(param);
+		ReturnData<Column> datas = new ReturnData<Column>(columns.getTotalRowNum(), columns.getResult());
+		return gson.toJson(datas);
 	}
 	
 	@ResponseBody

@@ -78,7 +78,8 @@
 		return row.status?"<a class='label label-info editStatus' title='点击修改状态' href='javascript:void(0)'>正常</a>"
 				:"<a class='label label-default' title='点击修改状态' href='javascript:void(0)'>锁定</a>";
 	}
-		
+	
+	$("#table").bootstrapTable();
 </script>
 	
 	<!-- Content Header (Page header) -->
@@ -88,7 +89,7 @@
         <small>更轻松管理您的产品</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">产品管理</a></li>
         <li class="active">产品管理</li>
       </ol>
@@ -104,7 +105,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 

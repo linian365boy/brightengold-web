@@ -1,9 +1,7 @@
 package com.brightengold.dao;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Feedback;
 
 public interface FeedbackDao {
@@ -16,6 +14,6 @@ public interface FeedbackDao {
 
 	long findAllCount();
 
-	List<Feedback> findList(@Param("start") Integer start,@Param("pageSize") Integer pageSize);
+	List<Feedback> findList(RequestParam param);
 
 }

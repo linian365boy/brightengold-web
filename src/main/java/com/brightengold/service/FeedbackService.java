@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.FeedbackDao;
 import com.brightengold.model.Feedback;
 
@@ -15,11 +16,11 @@ public class FeedbackService {
 	@Autowired
 	private FeedbackDao feedbackDao;
 
-	public PageRainier<Feedback> findAll(Integer pageNo, Integer pageSize) {
+	public PageRainier<Feedback> findAll(RequestParam param) {
 		//Page<Feedback> tempPage = feedbackDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
 		long count = feedbackDao.findAllCount();
-		PageRainier<Feedback> page = new PageRainier<Feedback>(count,pageNo,pageSize);
-		page.setResult(feedbackDao.findList((pageNo-1)*pageSize,pageSize));
+		PageRainier<Feedback> page = new PageRainier<Feedback>(count);
+		page.setResult(feedbackDao.findList(param));
 		return page;
 	}
 

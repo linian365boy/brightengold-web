@@ -11,6 +11,6 @@
 	</insert>
 	
 	<select id="findList" resultType="Log">
-		select * from tb_log order by createTime desc limit #{start},#{pageSize} 
+		select * from tb_log order by createTime desc limit #{offset},#{limit} 
 	</select>
 </mapper>

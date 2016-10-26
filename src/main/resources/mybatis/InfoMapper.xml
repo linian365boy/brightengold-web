@@ -23,7 +23,7 @@
 	</select>
 	
 	<select id="findList" resultType="Info">
-		select * from tb_info order by priority desc limit #{start},#{pageSize}
+		select * from tb_info order by priority desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findAllCount" resultType="long">
