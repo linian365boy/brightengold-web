@@ -6,9 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <meta http-equiv="description" content="brigtengold login"> 
 <meta http-equiv="author" content="brigtengold"> 
-<title>rockechogroup login</title>
-<link rel="icon" href="${ctx }resources/dist/img/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="${ctx }resources/dist/img/favicon.ico" type="image/x-icon" />
+<title>login page</title>
+<link rel="icon" href="${ctx }/resources/dist/img/favicon_48X66.ico"
+	type="image/x-icon">
+<link rel="shortcut icon" href="${ctx }/resources/dist/img/favicon_16X22.ico"
+	type="image/x-icon" />
 <link href="${ctx }resources/dist/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
 </head>
 <body>

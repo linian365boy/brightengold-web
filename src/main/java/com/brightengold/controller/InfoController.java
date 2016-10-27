@@ -23,8 +23,6 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
@@ -46,11 +44,10 @@ public class InfoController {
 	
 	@ResponseBody
 	@RequestMapping({"/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().create();
+	public ReturnData<Info> getJsonList(RequestParam param){
 		page = infoService.findAll(param);
 		ReturnData<Info> datas = new ReturnData<Info>(page.getTotalRowNum(), page.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)

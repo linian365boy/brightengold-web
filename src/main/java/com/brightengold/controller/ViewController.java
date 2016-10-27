@@ -49,7 +49,6 @@ import com.brightengold.util.Tools;
 import com.brightengold.vo.MessageVo;
 import com.google.code.kaptcha.Producer;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -158,10 +157,9 @@ public class ViewController {
 	 */
 	@RequestMapping("/feedback/add")
 	@ResponseBody
-	public String addFeedback(Feedback feedback, String kaptcha, HttpServletRequest request){
+	public MessageVo addFeedback(Feedback feedback, String kaptcha, HttpServletRequest request){
 		String code = (String)request.getSession().getAttribute(Constant.VERIFY_CODE_KEY);
 		logger.info("addFeedback session verfiy code |{}, user input code |{}",code, kaptcha);
-		Gson gson = new Gson();
 		MessageVo vo = new MessageVo();
 		Map<String,String> messageMap = Maps.newHashMap();
 		try{
@@ -187,7 +185,7 @@ public class ViewController {
 					vo.setCode(202);
 					vo.setMessage("Please fill the required field or confirm the fields and submit it again.");
 					vo.setData(messageMap);
-					return gson.toJson(vo);
+					return vo;
 				}
 				feedbackService.addFeedback(feedback);
 				StringBuffer sb = new StringBuffer();
@@ -212,7 +210,7 @@ public class ViewController {
 			vo.setCode(500);
 			vo.setMessage("server error.");
 		}
-		return gson.toJson(vo);
+		return vo;
 	}
 	
 	@RequestMapping("/getVerifyCode")

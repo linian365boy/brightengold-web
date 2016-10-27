@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +29,6 @@ import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.ResultVo;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -53,11 +49,10 @@ public class AdvertisementController {
 	
 	@ResponseBody
 	@RequestMapping(value={"/ads/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().create();
+	public ReturnData<Advertisement> getJsonList(RequestParam param){
 		page = service.findAll(param);
 		ReturnData<Advertisement> datas = new ReturnData<Advertisement>(page.getTotalRowNum(), page.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value={"/save"},method=RequestMethod.POST)
@@ -83,8 +78,7 @@ public class AdvertisementController {
 			service.saveAdvertisement(ad);
 			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD, "新增滚动图片"+ad.getName()+"成功!");
-			logger.info("新增滚动图片成功，新增信息为：{}",
-					ToStringBuilder.reflectionToString(ad, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("新增滚动图片成功，新增信息为：{}",ad);
 		}catch(Exception e){
 			MsgUtil.setMsgAdd("error");
 			LogUtil.getInstance().log(LogType.ADD, "新增滚动图片"+ad.getName()+"失败!");
@@ -126,9 +120,7 @@ public class AdvertisementController {
 			service.saveAdvertisement(ad);
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT,content.toString());
-			logger.info("修改滚动图片信息成功，原图片信息：{}，修改后信息：{}",
-					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
-					ToStringBuilder.reflectionToString(ad, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("修改滚动图片信息成功，原图片信息：{}，修改后信息：{}",temp,ad);
 		}catch(Exception e){
 			MsgUtil.setMsgUpdate("error");
 			logger.error("修改滚动图片信息发生错误",e);
@@ -136,9 +128,9 @@ public class AdvertisementController {
 		return "redirect:/admin/ad/ads/1.html";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value={"/{id}/updateStatus"})
-	public String updateStatus(@PathVariable Integer id,Integer status){
-		Gson gson = new Gson();
+	public ResultVo<String> updateStatus(@PathVariable Integer id,Integer status){
 		ResultVo<String> vo = new ResultVo<String>();
 		try{
 			service.updateStatus(id,status);
@@ -150,13 +142,12 @@ public class AdvertisementController {
 			vo.setMessage("修改状态失败！");
 			logger.error("修改状态失败！",e);
 		}
-		return gson.toJson(vo);
+		return vo;
 	}
 	
 	@RequestMapping(value={"/{id}/delete"})
 	@ResponseBody
-	public String delete(@PathVariable Integer id){
-		Gson gson = new Gson();
+	public ResultVo<String> delete(@PathVariable Integer id){
 		ResultVo<String> vo = new ResultVo<String>();
 		Advertisement ad = service.loadAdvertisement(id);
 		try{
@@ -164,14 +155,13 @@ public class AdvertisementController {
 			vo.setCode(200);
 			vo.setMessage("删除信息成功！");
 			LogUtil.getInstance().log(LogType.DEL, "图片名称："+ad.getName());
-			logger.warn("删除图片信息成功，图片信息{}",
-					ToStringBuilder.reflectionToString(ad, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.warn("删除图片信息成功，图片信息{}",ad);
 		}catch(Exception e){
 			vo.setCode(500);
 			vo.setMessage("删除信息失败！");
 			logger.error("删除图片信息发生错误",e);
 		}
-		return gson.toJson(vo);
+		return vo;
 	}
 	
 }

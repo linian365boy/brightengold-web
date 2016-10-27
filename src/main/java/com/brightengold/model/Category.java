@@ -6,6 +6,8 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Category implements Serializable{
 	/**
 	 * 
@@ -27,6 +29,7 @@ public class Category implements Serializable{
 	/**
 	 * 产品创建日期
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date createDate;
 	/**
 	 * 产品创建人
@@ -67,7 +70,6 @@ public class Category implements Serializable{
 	public void setEnName(String enName) {
 		this.enName = enName;
 	}
-	
 	public Date getCreateDate() {
 		return createDate;
 	}

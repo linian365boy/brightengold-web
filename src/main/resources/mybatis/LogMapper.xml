@@ -3,14 +3,29 @@
 <mapper namespace="com.brightengold.dao.LogDao">
 	<select id="findAllCount" resultType="long">
 		select count(*) from tb_log 
+		<where>
+			<if test="search!=null and search!=''">
+				content like concat('%',#{search},'%') 
+				or operator like concat ('%',#{search},'%') 
+				or menuName like concat ('%',#{search},'%')
+			</if>
+		</where>
 	</select>
 	
 	<insert id="save">
-		insert into tb_log(id,content,type,operator,operatorRealName,menuId,createTime) 
-		values(null,#{content},#{type},#{operator},#{operatorRealName},#{menuId},#{createTime})
+		insert into tb_log(id,content,type,operator,operatorRealName,menuName,createTime) 
+		values(null,#{content},#{type},#{operator},#{operatorRealName},#{menuName},#{createTime})
 	</insert>
 	
 	<select id="findList" resultType="Log">
-		select * from tb_log order by createTime desc limit #{offset},#{limit} 
+		select * from tb_log 
+		<where>
+			<if test="search!=null and search!=''">
+				content like concat('%',#{search},'%') 
+				or operator like concat ('%',#{search},'%') 
+				or menuName like concat ('%',#{search},'%')
+			</if>
+		</where>
+		order by createTime desc limit #{offset},#{limit} 
 	</select>
 </mapper>

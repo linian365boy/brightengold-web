@@ -2,6 +2,7 @@ package com.brightengold.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -66,9 +67,10 @@ public class Column implements Serializable{
 	 */
 	private boolean hasNeedForm = false;
 	
-	
 	//临时变量
 	private String parentName;
+	//子栏目
+	private transient Set<Column> childColumn;
 	
 	//使用mybatis resuleMap的setter getter方式注入属性，必须要有一个空参数的构造方法
 	public Column(){}
@@ -150,6 +152,13 @@ public class Column implements Serializable{
 	public void setParentName(String parentName) {
 		this.parentName = parentName;
 	}
+	public Set<Column> getChildColumn() {
+		return childColumn;
+	}
+	public void setChildColumn(Set<Column> childColumn) {
+		this.childColumn = childColumn;
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

@@ -17,6 +17,26 @@
 		<result column="parentName" property="parentName" jdbcType="VARCHAR"/>
 	</resultMap>
 	
+	<resultMap type="Column" id="ColumnAndChildMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="enName" property="enName" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="parentId" property="parentId" jdbcType="INTEGER"/>
+		<result column="priority" property="priority" jdbcType="INTEGER"/>
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="code" property="code" jdbcType="VARCHAR"/>
+		<result column="depth" property="depth" jdbcType="INTEGER"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="hasNeedForm" property="hasNeedForm" jdbcType="BOOLEAN"/>
+		<!-- 非表字段 -->
+		<result column="parentName" property="parentName" jdbcType="VARCHAR"/>
+		<collection property="childColumn" ofType="Column">
+			<id column="id" property="id" jdbcType="INTEGER"/>
+			<result column="name" property="name" jdbcType="VARCHAR"/>
+		</collection>
+	</resultMap>
+	
 	<select id="findParentByAjax" resultType="Column">
 		select c.id,c.name from tb_column c where c.parentId is null order by c.priority desc,c.id desc
 	</select>
@@ -33,7 +53,7 @@
 		update tb_column c set c.type = #{type},c.hasNeedForm = #{hasNeedForm} where c.id = #{id} or c.parentId = #{id}
 	</select>
 	
-	<select id="findOne" resultType="Column" parameterType="int">
+	<select id="findOne" resultMap="ColumnAndChildMap" parameterType="int">
 		select * from tb_column c where id=#{id}
 	</select>
 	

@@ -62,7 +62,7 @@
 	}
 	
 	var productImgFormatter = function(value, row, index){
-		return "<img src='${ctx }resources/'"+row.picUrl+"' title='"+row.enName+"' alt='"+row.enName+"' width='50' height='50'></img>";
+		return "<img src='${ctx }resources/"+row.picUrl+"' title='"+row.enName+"' alt='"+row.enName+"' width='50' height='50'></img>";
 	}
 	
 	var isHotFormatter = function(value, row, index){

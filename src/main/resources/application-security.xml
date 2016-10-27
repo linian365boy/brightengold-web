@@ -77,20 +77,19 @@
 	</beans:bean>
 
 	<beans:bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
-	  <beans:property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
+	 <beans:property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
 	  <beans:property name="accessDeniedHandler" ref="accessDeniedHandler"/>
 	</beans:bean>
 
 	<beans:bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
 	  <beans:property name="errorPage" value="/admin/accessDenied.html"/>
 	</beans:bean>
-		<beans:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+	
+	<beans:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 	  <beans:property name="loginFormUrl" value="/admin/login.html"/>
 	</beans:bean>
 
-
 	<!-- 引入auth_core.jar start -->
-
 	<beans:bean id="resourceDetailsBuilder" class="cn.rainier.nian.helper.ResourceDetailsBuilder">
 		<beans:property name="resourceDao" ref="resourceDao"/>
 	</beans:bean>

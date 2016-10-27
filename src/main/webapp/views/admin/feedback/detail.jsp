@@ -5,10 +5,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>留言详情</title>
+<title>反馈留言详情</title>
 </head>
 <body>
-	<form id="form" action="..." method="post">
+	<%-- <form id="form" action="..." method="post">
 			<div id="label"><label for="name">姓名：</label>
             	<input type="text"  disabled="disabled" id="inputyc" value="${model.name }"/>
             </div>
@@ -21,6 +21,29 @@
 			<div id="label"> <label for="createTime">反馈时间：</label>
 				<input type="text" disabled="disabled" id="inputyc" value="<fmt:formatDate value="${model.createTime }" type="both"/>"/>
 			</div>
-		</form>
+		</form> --%>
+		<div class="col-xs-12">
+         <!--  <p class="lead">Amount Due 2/22/2014</p> -->
+          <div class="table-responsive">
+            <table class="table">
+              <tbody><tr>
+                <th style="width:20%">姓名</th>
+                <td>${model.name }</td>
+              </tr>
+              <tr>
+                <th>邮箱</th>
+                <td>${model.email }</td>
+              </tr>
+              <tr>
+                <th>内容</th>
+                <td><textarea class="form-control" disabled="disabled" rows="5">${model.content }</textarea></td>
+              </tr>
+              <tr>
+                <th>反馈时间</th>
+                <td><fmt:formatDate value="${model.createTime }" type="both"/></td>
+              </tr>
+            </tbody></table>
+          </div>
+        </div>
 </body>
 </html>

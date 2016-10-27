@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,6 @@ import com.brightengold.service.MsgUtil;
 import com.brightengold.vo.ResultVo;
 import com.brightengold.vo.ReturnData;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -47,30 +44,27 @@ public class ColumnController {
 	
 	@ResponseBody
 	@RequestMapping(value={"/cols/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().create();
+	public ReturnData<Column> getJsonList(RequestParam param){
 		columns = columnService.findAll(param);
 		ReturnData<Column> datas = new ReturnData<Column>(columns.getTotalRowNum(), columns.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value={"/getChildren/{pId}"},method = RequestMethod.POST)
-	public String getChildrenbyParentId(@PathVariable Integer pId){
-		Gson gson = new Gson();
+	public List<Column> getChildrenbyParentId(@PathVariable Integer pId){
 		List<Column> childByAjax = columnService.findChildrenByParentId(pId);
-		return gson.toJson(childByAjax);
+		return childByAjax;
 	}
 	
 	@RequestMapping(value="/getParentByAjax/{flag}",method=RequestMethod.GET)
 	@ResponseBody
-	public String getParentByAjax(@PathVariable Integer flag){
-		Gson gson = new Gson();
+	public List<Column> getParentByAjax(@PathVariable Integer flag){
 		List<Column> parentsByAjax = columnService.findParentByAjax();
 		if(flag!=0){
 			parentsByAjax.add(0, new Column(0,"根节点",null));
 		}
-		return gson.toJson(parentsByAjax);
+		return parentsByAjax;
 	}
 	
 	//目前最大只到三级
@@ -95,12 +89,10 @@ public class ColumnController {
 		column.setUrl("views/html/col/"+column.getCode()+".htm");
 		if(columnService.save(column)){
 			MsgUtil.setMsgAdd("success");
-			logger.info("新增栏目:{}成功！",
-					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("新增栏目:{}成功！",column);
 		}else{
 			MsgUtil.setMsgAdd("error");
-			logger.error("新增栏目:{}失败！",
-					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.error("新增栏目:{}失败！",column);
 		}
 		return "redirect:/admin/sys/col/cols/1.html";
 	}
@@ -128,14 +120,10 @@ public class ColumnController {
 			}
 			columnService.save(column);
 			MsgUtil.setMsgUpdate("success");
-			logger.info("修改栏目成功，原栏目信息：{}，修改后栏目信息：{}！",
-					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
-					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("修改栏目成功，原栏目信息：{}，修改后栏目信息：{}！",temp, column);
 		} catch (Exception e) {
 			MsgUtil.setMsgUpdate("success");
-			logger.error("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！！",
-					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
-					ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.error("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！",temp,column);
 		}
 		return "redirect:/admin/sys/col/cols/1.html";
 	}
@@ -206,7 +194,7 @@ public class ColumnController {
 	public String doPublishContent(@PathVariable Integer id,Column column, ModelMap map){
 		try{
 			columnService.updateColumnPublishContent(id,column);
-			logger.info("修改栏目的发布方式|{}",ToStringBuilder.reflectionToString(column, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("修改栏目的发布方式|{}",column);
 			MsgUtil.setMsgUpdate("success");
 		}catch(Exception e){
 			logger.error("设置发布模式发生错误！",e);

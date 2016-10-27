@@ -7,8 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +34,6 @@ import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
@@ -61,11 +57,10 @@ public class NewsController {
 	
 	@ResponseBody
 	@RequestMapping({"/news/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	public ReturnData<News> getJsonList(RequestParam param){
 		news = newsService.findAll(param);
 		ReturnData<News> datas = new ReturnData<News>(news.getTotalRowNum(), news.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -97,7 +92,7 @@ public class NewsController {
 		newsService.saveNews(news);
 		MsgUtil.setMsgAdd("success");
 		LogUtil.getInstance().log(LogType.ADD,"标题："+news.getTitle());
-		logger.info("添加了新闻：{}",ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
+		logger.info("添加了新闻：{}",news);
 		return "redirect:/admin/news/news/1.html";
 	}
 	
@@ -135,9 +130,7 @@ public class NewsController {
 				news.setDepth(String.valueOf(firstColId));
 			}*/
 			newsService.saveNews(news);
-			logger.info("修改前新闻信息|{}，修改后新闻信息|{}",
-					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE),
-					ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("修改前新闻信息|{}，修改后新闻信息|{}",temp,news);
 			if(!temp.getTitle().equals(news.getTitle())){
 				content.append("标题由\""+temp.getTitle()+"\"修改为\""+news.getTitle()+"\"");
 			}
@@ -182,7 +175,7 @@ public class NewsController {
 					Tools.delFile(path);
 				}
 				MsgUtil.setMsgDelete("success");
-				logger.warn("删除了新闻|{}",ToStringBuilder.reflectionToString(news, ToStringStyle.SHORT_PREFIX_STYLE));
+				logger.warn("删除了新闻|{}",news);
 			}
 			LogUtil.getInstance().log(LogType.DEL, "标题："+news.getTitle());
 		}
@@ -210,8 +203,7 @@ public class NewsController {
 	
 	@RequestMapping(value="/{newsId}/release",method=RequestMethod.GET)
 	@ResponseBody
-	public String releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
-		Gson gson = new Gson();
+	public MessageVo releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
 		MessageVo vo = new MessageVo();
 		String fPath = null;
 		if(newsId!=null){
@@ -237,12 +229,12 @@ public class NewsController {
 				vo.setCode(Constant.SUCCESS_CODE);
 				vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
 				logger.info("发布成功新闻|{}",tempNews.getTitle());
-				return gson.toJson(vo);
+				return vo;
 			}
 		}
 		vo.setCode(Constant.ERROR_CODE);
 		vo.setMessage("新闻id不存在");
-		return gson.toJson(vo);
+		return vo;
 	}
 	
 	public PageRainier<News> getNews() {

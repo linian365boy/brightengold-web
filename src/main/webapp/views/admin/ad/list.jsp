@@ -46,7 +46,7 @@
 		});
 	};
 	var adImgFormatter = function(value, row, index){
-		return "<img title='"+row.name +"' alt='"+row.name +"' src='${ctx }resources/'"+row.picUrl+"' width='107px' height='50px'/>";
+		return "<img title='"+row.name +"' alt='"+row.name +"' src='${ctx }resources/"+row.picUrl+"' width='107px' height='50px'/>";
 	}
 	
 	var adHrefFormatter = function(value, row, index){

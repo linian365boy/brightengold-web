@@ -7,8 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,6 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
@@ -64,10 +60,9 @@ public class RoleController {
 	 */
 	@RequestMapping(value="/getRolesByAjax",method=RequestMethod.GET)
 	@ResponseBody
-	public String getRolesByAjax(){
-		Gson gson = new Gson();
+	public List<Role> getRolesByAjax(){
 		List<Role> rolesByAjax = roleService.findAllByAjax();
-		return gson.toJson(rolesByAjax);
+		return rolesByAjax;
 	}
 	
 	@RequestMapping({"/roles/list"})
@@ -78,11 +73,10 @@ public class RoleController {
 	
 	@ResponseBody
 	@RequestMapping({"/roles/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().create();
+	public ReturnData<Role> getJsonList(RequestParam param){
 		roles = roleService.findAll(param);
 		ReturnData<Role> datas = new ReturnData<Role>(roles.getTotalRowNum(), roles.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -99,7 +93,7 @@ public class RoleController {
 			roleService.saveRole(role);
 			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD,"角色："+role.getDescribes());
-			logger.info("添加角色{}成功！",ToStringBuilder.reflectionToString(role,ToStringStyle.SHORT_PREFIX_STYLE, true));
+			logger.info("添加角色{}成功！",role);
 		} catch (Exception e) {
 			MsgUtil.setMsgAdd("error");
 			logger.error("添加角色发生错误：{}",e);

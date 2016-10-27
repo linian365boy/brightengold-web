@@ -13,8 +13,6 @@ import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Log;
 import com.brightengold.service.LogService;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -33,11 +31,10 @@ public class LogController {
 	
 	@ResponseBody
 	@RequestMapping({"/logs/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	public ReturnData<Log> getJsonList(RequestParam param){
 		logs = logService.findAll(param);
 		ReturnData<Log> datas = new ReturnData<Log>(logs.getTotalRowNum(), logs.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	public PageRainier<Log> getLogs() {

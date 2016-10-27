@@ -2,6 +2,8 @@ package com.brightengold.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,10 @@ import cn.rainier.nian.utils.PageRainier;
 public class CategoryService {
 	@Autowired
 	private CategoryDao categoryDao;
+	private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
 	public PageRainier<Category> findAll(RequestParam param) {
-		long count = categoryDao.findAllCount();
+		long count = categoryDao.findAllCount(param);
 		PageRainier<Category> page = new PageRainier<Category>(count);
 		page.setResult(categoryDao.findList(param));
 		return page;
@@ -83,6 +86,18 @@ public class CategoryService {
 	
 	public List<Category> findAllParentCateList() {
 		return categoryDao.findAllParentCateList();
+	}
+
+	public boolean updateCategory(Category category) {
+		boolean flag = false;
+		try{
+			categoryDao.updateCategory(category);
+			flag = true;
+		}catch(Exception e){
+			logger.info("修改分类报错！",e);
+			flag = false;
+		}
+		return flag;
 	}
 
 }

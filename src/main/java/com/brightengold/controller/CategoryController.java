@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +32,8 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
@@ -72,11 +69,10 @@ public class CategoryController {
 	
 	@ResponseBody
 	@RequestMapping("/categorys/getJsonList")
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	public ReturnData<Category> getJsonList(RequestParam param){
 		categorys = categoryService.findAll(param);
 		ReturnData<Category> datas = new ReturnData<Category>(categorys.getTotalRowNum(), categorys.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -87,9 +83,11 @@ public class CategoryController {
 		return "admin_unless/goods/category/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(Category category, HttpServletRequest request) {
+	public MessageVo add(Category category, HttpServletRequest request) {
 		User u = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MessageVo vo = null;
 		try {
 			String secondColStr = request.getParameter("secondCol");
 			if(StringUtils.isNotBlank(secondColStr) 
@@ -110,24 +108,24 @@ public class CategoryController {
 			categoryService.saveCategory(category);
 			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD,"名称："+category.getEnName());
-			logger.info("添加产品分类{}成功！",
-					ToStringBuilder.reflectionToString(category, ToStringStyle.SHORT_PREFIX_STYLE));
+			logger.info("添加产品分类{}成功！",category);
+			vo = new MessageVo(200);
 		} catch (Exception e) {
 			MsgUtil.setMsgAdd("error");
 			logger.error("添加产品分类失败！",e);
+			vo = new MessageVo(500);
 		}
-		return "redirect:/admin/goods/category/categorys/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/getParentByAjax/{flag}",method=RequestMethod.GET)
 	@ResponseBody
-	public String getParentByAjax(@PathVariable Integer flag){
-		Gson gson = new Gson();
+	public List<Category> getParentByAjax(@PathVariable Integer flag){
 		List<Category> parentsByAjax = categoryService.findParentByAjax();
 		if(flag!=0){
-			parentsByAjax.add(0, new Category(0,"根节点",null));
+			parentsByAjax.add(0, new Category(0,"根节点","root note"));
 		}
-		return gson.toJson(parentsByAjax);
+		return parentsByAjax;
 	}
 	
 	@RequestMapping(value="/{categoryId}/update",method=RequestMethod.GET)
@@ -135,8 +133,13 @@ public class CategoryController {
 		if (categoryId != null) {
 			Category category = categoryService.loadCategoryById(categoryId);
 			model.addAttribute("model",category);
+			Column column = columnService.getById(category.getColumnId());
+			model.addAttribute("column", column);
+			if(column.getParentId()!=null){
+				model.addAttribute("parentColumn", columnService.getById(column.getParentId()));
+			}
 			List<Category> parentsByAjax = categoryService.findParentByAjax();
-			parentsByAjax.add(0, new Category(0,"根节点",null));
+			parentsByAjax.add(0, new Category(0,"根节点","root note"));
 			//获取一级栏目
 			List<Column> parentCol = columnService.findParentByAjax();
 			model.addAttribute("parentCol", parentCol);
@@ -145,9 +148,11 @@ public class CategoryController {
 		return "admin_unless/goods/category/update";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{categoryId}/update",method=RequestMethod.POST)
-	public String update(HttpServletRequest request,@PathVariable Integer categoryId,Category category) {
+	public MessageVo update(HttpServletRequest request,@PathVariable Integer categoryId,Category category) {
 		StringBuilder content = new StringBuilder();
+		MessageVo vo = null;
 		try {
 			if(categoryId!=null){
 				Category temp = categoryService.loadCategoryById(categoryId);
@@ -169,27 +174,27 @@ public class CategoryController {
 				}else{
 					content.append("名称："+temp.getEnName());
 				}
-				/*if(temp.getParentId()!=null&&!temp.getParentId().equals(category.getParentId())){
-					content.append("一级分类由\""+temp.getParentId().getEnName()+"\"修改为\""+category.getParentId().getEnName()+"\"");
-				}else if(temp.getParent()==null&&parentIds!=null){
-					//content.append("一级分类由\"无\"修改为\""+category.getParent().getEnName()+"\"");
+				if(temp.getParentId()!=null&&!temp.getParentId().equals(category.getParentId())){
+					content.append("一级分类由\""+temp.getParentName()+"\"修改为\""+category.getParentName()+"\"");
+				}else if(temp.getParentId()==null&&parentIds!=null){
+					content.append("一级分类由\"无\"修改为\""+category.getParentName()+"\"");
 				}else{
-					if(temp.getParent()!=null){
-						content.append("一级分类："+temp.getParent().getEnName());
+					if(temp.getParentId()!=null){
+						content.append("一级分类："+temp.getParentName());
 					}
-				}*/
-				category.setCreateDate(temp.getCreateDate());
+				}
 				category.setCreateUserId(temp.getCreateUserId());
-				categoryService.saveCategory(category);
+				categoryService.updateCategory(category);
 				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
-				logger.info("修改商品分类{}成功！",
-						ToStringBuilder.reflectionToString(category, ToStringStyle.SHORT_PREFIX_STYLE));
+				logger.info("修改商品分类{}成功！",category);
+				vo = new MessageVo(200);
 			}
 		}catch(Exception e){
 			logger.error("修改商品分类失败！",e);
+			vo = new MessageVo(500);
 		}
-		return "redirect:/admin/goods/category/categorys/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/existCategory",method=RequestMethod.POST)
@@ -224,8 +229,10 @@ public class CategoryController {
 		return null;
 	}
 	
-	@RequestMapping(value="/{categoryId}/del",method=RequestMethod.GET)
-	public String del(@PathVariable Integer categoryId){
+	@ResponseBody
+	@RequestMapping(value="/{categoryId}/del",method=RequestMethod.POST)
+	public MessageVo del(@PathVariable Integer categoryId){
+		MessageVo vo = null;
 		if(categoryId!=null){
 			Category temp = categoryService.loadCategoryById(categoryId);
 			if(categoryService.checkHasChildren(categoryId)){
@@ -236,26 +243,26 @@ public class CategoryController {
 				if(count>0){
 					MsgUtil.setMsg("error", "请先删除该分类下的"+count+"个产品！");
 				}else{
-					logger.info("删除分类|{}",ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE));
+					logger.info("删除分类|{}",temp);
 					categoryService.delCategory(categoryId);
 					MsgUtil.setMsg("success", "删除分类成功！");
 					//日志记录
 					LogUtil.getInstance().log(LogType.DEL, temp.getEnName()+"删除了");
+					vo = new MessageVo(200);
 				}
 			}
 		}
-		return "redirect:/admin/goods/category/categorys/1.html";
+		return vo;
 	}
 
 	@RequestMapping(value="/getChildrenCate/{parentCateId}",method=RequestMethod.POST)
 	@ResponseBody
-	public String getChildrenCate(@PathVariable Integer parentCateId){
-		Gson gson = new Gson();
+	public List<Object[]> getChildrenCate(@PathVariable Integer parentCateId){
 		List<Object[]> childrenCateArr = categoryService.findChildrenByParentCateId(parentCateId);
 		if(!CollectionUtils.isEmpty(childrenCateArr)){
-			return gson.toJson(childrenCateArr);
+			return childrenCateArr;
 		}
-		return gson.toJson(null);
+		return null;
 	}
 	
 	public PageRainier<Category> getCategorys() {

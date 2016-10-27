@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.brightengold.util.ImageUtil;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.ResultVo;
-import com.google.gson.Gson;
 
 /**
  * 专门处理图片上传
@@ -33,8 +32,7 @@ public class UploadController {
 	
 	@ResponseBody
 	@RequestMapping(value="/upload",method=RequestMethod.POST)
-	public String upload(MultipartHttpServletRequest request){
-		Gson gson = new Gson();
+	public ResultVo<String> upload(MultipartHttpServletRequest request){
 		ResultVo<String> vo = new ResultVo<String>();
 		String url = "";
 		MultipartFile file = request.getFile("file");
@@ -51,7 +49,7 @@ public class UploadController {
 					}else{
 						vo.setMessage("图片分辨率不符合50-500px * 10-1000px的规格");
 					}
-					return gson.toJson(vo);
+					return vo;
 				}
 				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/newsproducts");
 				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(file.getOriginalFilename());
@@ -70,7 +68,7 @@ public class UploadController {
 			vo.setCode(500);
 			vo.setMessage("上传图片失败！");
 		}
-		return gson.toJson(vo);
+		return vo;
 	}
 	
 }

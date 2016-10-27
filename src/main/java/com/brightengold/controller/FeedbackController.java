@@ -21,8 +21,6 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -44,11 +42,10 @@ public class FeedbackController {
 	
 	@ResponseBody
 	@RequestMapping({"/feedbacks/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	public ReturnData<Feedback> getJsonList(RequestParam param){
 		feedbacks = feedbackService.findAll(param);
 		ReturnData<Feedback> datas = new ReturnData<Feedback>(feedbacks.getTotalRowNum(), feedbacks.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)

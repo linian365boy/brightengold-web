@@ -3,13 +3,12 @@
     <%@include file="../../../commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var categoryId = $(obj).attr("name");
-		var url = '${ctx}admin/goods/category/'+categoryId+'/update.html';
+		var url = '${ctx}admin/goods/category/'+obj.id+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑分类信息',
 			id:'bianji',
-			width:550,
-			height:330,
+			width:768,
+			height:360,
 			resize: false
 			});
 		};
@@ -19,17 +18,26 @@
 			art.dialog.open(url,{
 				title:'添加商品分类',
 				id:'tianjia',
-				width: 550,
-				height: 330,
+				width: 768,
+				height: 360,
 				resize: false
 			});
 		};
 		
 		var del = function(obj){
-			var categoryId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此分类',function(){
-				var url = '${ctx}admin/goods/category/'+categoryId+'/del.html';
-				window.location.href=url;
+			art.dialog.confirm("确定删除此["+obj.enName+"]分类？",function(){
+				var url = '${ctx}admin/goods/category/'+obj.id+'/del.html';
+				$.post(url,function(json){
+					if(JSON.stringify(json).indexOf("login")!=-1){
+			    		 top.location.href="${ctx}admin/login.html";
+			    	}else{
+			    		if(json.code==200){
+			    			$("button[name='refresh']",window.document).click();
+			    		}else{
+			    			art.dialog.tips("<span>删除失败，系统发生错误！</span>", 1.5);
+			    		}
+			    	}
+				},"json");
 			});
 		};
 		
@@ -60,7 +68,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar" 
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 

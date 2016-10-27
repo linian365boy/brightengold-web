@@ -21,7 +21,7 @@ public interface CategoryDao {
 	//@Query("select c.id,c.enName from Category c where c.parent.id = :parentCateId")
 	List<Object[]> findChildrenByParentCateId(@Param("parentCateId") int parentCateId);
 	
-	long findAllCount();
+	long findAllCount(RequestParam param);
 	
 	List<Category> findList(RequestParam param);
 	
@@ -36,4 +36,6 @@ public interface CategoryDao {
 	Category findOneByEnName(String enName);
 	
 	List<Category> findAll();
+	
+	void updateCategory(Category category);
 }

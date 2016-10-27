@@ -1,3 +1,12 @@
 .ml10 {
     margin-left: 10px;
 }
+}
+.asterisk {
+    color: #d9534f;
+}
+label.error {
+    color: #b94a48;
+    margin-top: 2px;
+    display: inline;
+}

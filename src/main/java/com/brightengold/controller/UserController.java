@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +31,6 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.Role;
 import cn.rainier.nian.model.User;
@@ -64,13 +60,12 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping({"/users/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().create();
+	public ReturnData<User> getJsonList(RequestParam param){
 		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		//排除当前用户
 		users = userService.findAllUser(param, u.getId());
 		ReturnData<User> datas = new ReturnData<User>(users.getTotalRowNum(), users.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -91,7 +86,7 @@ public class UserController {
 			user.setRoles(roles);
 			userService.saveUser(user);
 			LogUtil.getInstance().log(LogType.ADD,"用户名："+user.getUsername()+" 姓名："+user.getRealName());
-			logger.info("添加了用户{}",ToStringBuilder.reflectionToString(user, ToStringStyle.SHORT_PREFIX_STYLE, true));
+			logger.info("添加了用户{}",user);
 		} catch (Exception e) {
 			MsgUtil.setMsgAdd("error");
 			e.printStackTrace();
@@ -151,10 +146,7 @@ public class UserController {
 			userService.saveUser(user);
 			MsgUtil.setMsgUpdate("success");
 			LogUtil.getInstance().log(LogType.EDIT,content.toString());
-			logger.info("用户从：{}，修改为：{}",
-					ToStringBuilder.reflectionToString(temp, ToStringStyle.SHORT_PREFIX_STYLE, true),
-					ToStringBuilder.reflectionToString(user, ToStringStyle.SHORT_PREFIX_STYLE, true)
-					);
+			logger.info("用户从：{}，修改为：{}",temp,user);
 		}
 		return "redirect:/admin/sys/user/users/1.html";
 	}

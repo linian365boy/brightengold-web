@@ -1,15 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
      <%@include file="/views/commons/include.jsp" %>
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>商品分类新增</title>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
-<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="${ctx }resources/css/style.css" rel="stylesheet"/>
+<!-- jQuery 2.2.3 -->
+<script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- jQuery form plugin -->
+<script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 <style type="text/css">
 	.selectpicker {
 		background-color: #fff;
@@ -29,11 +36,26 @@
 </style>
 	<script type="text/javascript">
 	$(document).ready(function(){
+		$('#form').ajaxForm({
+			dataType:'json',
+			success:function(json) { 
+	            if(JSON.stringify(json).indexOf("login")!=-1){
+		    		 top.location.href="${ctx}admin/login.html";
+		    	}else{
+		    		if(json.code==200){
+		    			$("button[name='refresh']",top.document).click();
+		    			top.art.dialog.list['tianjia'].close();
+		    		}else{
+		    			$(".has-error").removeClass("hide");
+		    		}
+		    	}
+	        }
+		}); 
 		$.getJSON("${ctx}admin/goods/category/getParentByAjax/1.html",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
-				str+="<option value="+json.get(i)[0]+">"+json.get(i)[1]+"</option>";
+				str+="<option value="+json.get(i).id+">"+json.get(i).enName+"</option>";
 			}
 			$("#parentCs").append(str);
 		});
@@ -58,11 +80,11 @@
 			},
 			messages:{
 				"name":{
-					required:"商品名称不能为空"
+					required:"商品分类不能为空"
 				},
 				"enName":{
-					required:"商品名称不能为空",
-					remote:"该商品名称已存在，请更换！"
+					required:"商品分类不能为空",
+					remote:"该商品分类已存在，请更换！"
 				}
 			},
 			highlight: function(element) {
@@ -85,7 +107,7 @@
 				html+='<select class="col-xs-5 selectpicker" name="secondCol" >';
 				html+="<option value='0'>==请选择==</option>";
 				$.each(json,function(i,n){
-					html+="<option value='"+n[0]+"'>"+n[1]+"</option>";
+					html+="<option value='"+n.id+"'>"+n.name+"</option>";
 				});
 				html+="</select>";
 			}
@@ -95,45 +117,49 @@
 	</script>
 </head>
 <body>
-	<form id="form" class="form-horizontal" action="${ctx }admin/goods/category/add.html" 
+	<form id="form" class="form-horizontal content" action="${ctx }admin/goods/category/add.html" 
 		method="post" target="_parent">
 			<div class="form-group">
-			    <label for="parentCs" class="col-sm-3 control-label">所属栏目</label>
-			    	<div class="row col-xs-8" style="overflow:hidden;">
+			    <label for="parentCs" class="col-sm-2 control-label">所属栏目</label>
+			    	<div class="col-xs-8" style="overflow:hidden;">
 			    		<c:if test="${fn:length(parentCol)>0 }">
 			    			<select class="col-xs-5 selectpicker" name="parentCol" onchange="changeCol(this);">
 				    			<c:forEach items="${parentCol }" var="col">
-				    				<option value="${col[0] }">${col[1] }</option>
+				    				<option value="${col.id }">${col.name }</option>
 				    			</c:forEach>
 				      		</select>
 			    		</c:if>
 			    	</div>
 			  </div>
              <div class="form-group">
-			    <label for="parentCs" class="col-sm-3 control-label">父级分类</label>
-				     <div class="row col-sm-8" style="overflow:hidden;">
+			    <label for="parentCs" class="col-sm-2 control-label">父级分类</label>
+				     <div class="col-sm-8" style="overflow:hidden;">
 				      <select class="col-xs-5 selectpicker" name="parentC" id="parentCs">
 				      </select>
 				    </div> 
 			  </div>
 			  <div class="form-group">
-			    <label for="name" class="col-sm-3 control-label">中文名称<span class="asterisk">*</span></label>
-			    <div class="row col-sm-8">
+			    <label for="name" class="col-sm-2 control-label">中文名称<code>*</code></label>
+			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="name" name="name" placeholder="名称">
 			    </div>
 			  </div>
 			  <div class="form-group">
-			    <label for="enName" class="col-sm-3 control-label">英文名称<span class="asterisk">*</span></label>
-			    <div class="row col-sm-8">
+			    <label for="enName" class="col-sm-2 control-label">英文名称<code>*</code></label>
+			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="enName" name="enName" placeholder="名称">
 			    </div>
 			  </div>
 			  <div class="form-group">
-			    <label for="remark" class="col-sm-3 control-label">备注</label>
-			    <div class="row col-sm-8">
+			    <label for="remark" class="col-sm-2 control-label">备注</label>
+			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="remark" name="remark" placeholder="备注">
 			    </div>
 			  </div>
+			  <div class="form-group has-error hide">
+			  	  <label class="col-sm-3 control-label">&nbsp;</label>
+                  <span class="help-block">新增失败，系统发生错误！</span>
+               </div>
 			  <div class="form-group">
 			  <div class="col-sm-offset-4 col-sm-8">
 			  	<button type="submit" class="btn btn-primary">保存</button>

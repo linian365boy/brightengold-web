@@ -45,8 +45,6 @@ import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.User;
 import cn.rainier.nian.utils.PageRainier;
@@ -80,11 +78,10 @@ public class ProductController {
 	
 	@ResponseBody
 	@RequestMapping("/products/getJsonList")
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	public ReturnData<Product> getJsonList(RequestParam param){
 		products = productService.findAll(param);
 		ReturnData<Product> datas = new ReturnData<Product>(products.getTotalRowNum(), products.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.GET)

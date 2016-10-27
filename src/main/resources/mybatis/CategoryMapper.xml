@@ -40,13 +40,23 @@
 	
 	<!-- 后台系统展示 -->
 	<select id="findAllCount" resultType="long">
-		select count(*) from tb_category c  
+		select count(*) from tb_category c 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or enName like concat ('%',#{search},'%')
+			</if>
+		</where> 
 	</select>
 	
 	<select id="findList" resultMap="CategoryMap">
 		select c1.*,c2.name as parentName,tc.name as columnName from tb_category c1 left join tb_category c2 
 		on c1.parentId=c2.id inner join tb_column tc on c1.columnId=tc.id 
-		order by c1.createDate desc limit #{offset},#{limit}
+		<where>
+			<if test="search!=null and search!=''">
+				c1.name like concat('%',#{search},'%') or c1.enName like concat ('%',#{search},'%')
+			</if>
+		</where>
+		order by c1.createDate desc,c1.id desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findOneById" parameterType="int" resultType="Category">
@@ -57,6 +67,11 @@
 		insert into tb_category(id,name,enName,parentId,createDate,createUserId,columnId,remark) 
 		values(null,#{name},#{enName},#{parentId},#{createDate},#{createUserId},#{columnId},#{remark})
 	</insert>
+	
+	<update id="updateCategory" parameterType="Category">
+		update tb_category set name=#{name},enName=#{enName},parentId=#{parentId},
+		columnId=#{columnId},remark=#{remark} where id=#{id}
+	</update>
 	
 	<delete id="delete" parameterType="int">
 		delete from tb_category where id=#{id}

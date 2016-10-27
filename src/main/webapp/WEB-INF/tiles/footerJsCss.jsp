@@ -43,6 +43,9 @@
 <!-- <script src="/resources/dist/js/pages/dashboard.js"></script> -->
 <!-- AdminLTE for demo purposes -->
 <script src="/resources/dist/js/demo.js"></script>
+<!-- artDialog -->
+<script type="text/javascript" src="/resources/plugins/artDialog/artDialog.js"></script>
+<script type="text/javascript" src="/resources/plugins/artDialog/iframeTools.js"></script>
 
 <script type="text/javascript">
 		$(function(){
@@ -79,7 +82,8 @@
 	         $("#menuForm").prop("action","#");
 	         $("#pmenuText").val("");
 	    	 $("#menuText").val("");
-	    	 if(data.indexOf("login")!=-1){
+	    	 if(data.indexOf("<title>login page</title>")!=-1){
+	    		 console.info(data);
 	    		 top.location.href="${ctx}admin/login.html";
 	    	 }else{
 		    	 $("div.content-wrapper").html(data);
@@ -98,10 +102,10 @@
 		}
 		window.actionEvents = {
 				    'click .edit': function (e, value, row, index) {
-				    	update(row.id);
+				    	update(row);
 				    },
 				    'click .remove': function (e, value, row, index) {
-				    	del(row.id);
+				    	del(row);
 				    }
 		};
 </script>

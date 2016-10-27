@@ -6,8 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,6 @@ import com.brightengold.service.LogUtil;
 import com.brightengold.service.MsgUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
@@ -57,11 +53,10 @@ public class MenuController {
 	
 	@ResponseBody
 	@RequestMapping({"/menus/getJsonList"})
-	public String getJsonList(RequestParam param){
-		Gson gson = new GsonBuilder().create();
+	public ReturnData<Menu> getJsonList(RequestParam param){
 		menus = menuService.findAll(param);
 		ReturnData<Menu> datas = new ReturnData<Menu>(menus.getTotalRowNum(),menus.getResult());
-		return gson.toJson(datas);
+		return datas;
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -77,8 +72,7 @@ public class MenuController {
 			if(menuService.saveMenu(menu)){
 				MsgUtil.setMsgAdd("success");
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
-				logger.info("添加菜单{}成功！",
-						ToStringBuilder.reflectionToString(menu, ToStringStyle.SHORT_PREFIX_STYLE));
+				logger.info("添加菜单{}成功！",menu);
 			}else{
 				MsgUtil.setMsgAdd("error");
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());

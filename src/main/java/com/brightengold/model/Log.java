@@ -32,6 +32,10 @@ public class Log implements Serializable {
 	 * 操作T时间
 	 */
 	private Date createTime;
+	/**
+	 * 后台菜单名称
+	 */
+	private String menuName;
 	
 	public Integer getId() {
 		return id;
@@ -68,6 +72,12 @@ public class Log implements Serializable {
 	}
 	public void setOperatorRealName(String operatorRealName) {
 		this.operatorRealName = operatorRealName;
+	}
+	public String getMenuName() {
+		return menuName;
+	}
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
 	}
 	@Override
 	public String toString() {
