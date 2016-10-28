@@ -41,4 +41,6 @@ public interface ProductDao {
 	
 	List<Product> findAllListByCateId(@Param("cateId") Integer cateId,@Param("start") int start,@Param("pageSize") Integer pageSize);
 	
+	void updateProduct(Product product);
+	
 }

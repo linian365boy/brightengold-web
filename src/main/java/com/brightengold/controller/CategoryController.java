@@ -1,12 +1,9 @@
 package com.brightengold.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -22,15 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Category;
 import com.brightengold.model.Column;
 import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
+import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
 import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
@@ -106,14 +102,12 @@ public class CategoryController {
 			category.setCreateDate(new Date());
 			category.setCreateUserId(u.getId());
 			categoryService.saveCategory(category);
-			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD,"名称："+category.getEnName());
 			logger.info("添加产品分类{}成功！",category);
-			vo = new MessageVo(200);
+			vo = new MessageVo(Constant.SUCCESS_CODE, "添加产品分类【"+category.getEnName()+"】成功！");
 		} catch (Exception e) {
-			MsgUtil.setMsgAdd("error");
 			logger.error("添加产品分类失败！",e);
-			vo = new MessageVo(500);
+			vo = new MessageVo(Constant.ERROR_CODE, "添加产品分类【"+category.getEnName()+"】失败！");
 		}
 		return vo;
 	}
@@ -185,48 +179,38 @@ public class CategoryController {
 				}
 				category.setCreateUserId(temp.getCreateUserId());
 				categoryService.updateCategory(category);
-				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 				logger.info("修改商品分类{}成功！",category);
-				vo = new MessageVo(200);
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改商品分类【"+category.getEnName()+"】成功！");
 			}
 		}catch(Exception e){
 			logger.error("修改商品分类失败！",e);
-			vo = new MessageVo(500);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改商品分类【"+category.getEnName()+"】失败！");
 		}
 		return vo;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/existCategory",method=RequestMethod.POST)
-	public String existUser(HttpServletRequest request,HttpServletResponse response){
-		PrintWriter out = null;
+	public boolean existCategory(String enName, String en){
+		//en为空表示添加，否则为编辑
+		boolean result = false;
 		try {
-			String enName = request.getParameter("enName");
-			String name = request.getParameter("en");		//name为空表示添加，否则为编辑
 			if(enName!=null){
-				response.setContentType("text/html;charset=UTF-8");
-				out = response.getWriter();
-				//如果没有修改username
-				if(enName.equals(name)){
-					out.print(true);	//true表示可用
+				//如果没有修改name
+				if(enName.equals(en)){
+					result = true;	//true表示可用
 				}else{
 					Category ca = categoryService.loadCategoryByName(enName);
-					if(ca!=null){
-						out.print(false);
-					}else{
-						out.print(true);	//true表示可用，用户名不存在
+					if(ca==null){
+						result = true;	//true表示可用，分类不存在
 					}
 				}
-				out.flush();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("查询是否存在相同分类发生错误",e);
-		}finally{
-			if(out!=null){
-				out.close();
-			}
 		}
-		return null;
+		return result;
 	}
 	
 	@ResponseBody
@@ -236,19 +220,18 @@ public class CategoryController {
 		if(categoryId!=null){
 			Category temp = categoryService.loadCategoryById(categoryId);
 			if(categoryService.checkHasChildren(categoryId)){
-				MsgUtil.setMsg("error", "请先删除该分类下的子分类");
+				vo = new MessageVo(Constant.ERROR_CODE,"请先删除该分类下的子分类");
 			}else{
 				//判断分类下是否有产品
 				long count = productService.countByCateId(categoryId);
 				if(count>0){
-					MsgUtil.setMsg("error", "请先删除该分类下的"+count+"个产品！");
+					vo = new MessageVo(Constant.ERROR_CODE,"请先删除该分类下的"+count+"个产品！");
 				}else{
 					logger.info("删除分类|{}",temp);
 					categoryService.delCategory(categoryId);
-					MsgUtil.setMsg("success", "删除分类成功！");
 					//日志记录
 					LogUtil.getInstance().log(LogType.DEL, temp.getEnName()+"删除了");
-					vo = new MessageVo(200);
+					vo = new MessageVo(Constant.SUCCESS_CODE,"删除分类【"+temp.getEnName()+"】成功！");
 				}
 			}
 		}

@@ -62,6 +62,10 @@
 		values(null,#{name},#{enName},#{url},#{parentId},#{priority},#{createDate},#{code},#{depth},#{type},#{hasNeedForm})
 	</select>
 	
+	<update id="updateColumn" parameterType="Column">
+		update tb_column set name=#{name},enName=#{enName},url=#{url},priority=#{priority} where id=#{id}
+	</update>
+	
 	<delete id="delete" parameterType="int">
 		delete from tb_column where id=#{id}
 	</delete>

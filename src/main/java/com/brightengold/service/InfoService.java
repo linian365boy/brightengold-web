@@ -2,6 +2,8 @@ package com.brightengold.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,7 @@ import cn.rainier.nian.utils.PageRainier;
 public class InfoService {
 	@Autowired
 	private InfoDao infoDao;
+	private static final Logger logger = LoggerFactory.getLogger(InfoService.class);
 	
 	public PageRainier<Info> findAll(RequestParam param) {
 		long count = infoDao.findAllCount();
@@ -31,19 +34,43 @@ public class InfoService {
 	public void delete(Integer id) {
 		infoDao.delete(id);
 	}
-	public void save(Info info){
-		infoDao.save(info);
+	public boolean save(Info info){
+		boolean flag = false;
+		try{
+			infoDao.save(info);
+			flag = true;
+		}catch(Exception e){
+			logger.info("新增信息失败，报错",e);
+		}
+		return flag;
 	}
 
 	public Info loadOneByCode(String code) {
 		return infoDao.loadByCode(code);
 	}
 
-	public void deleteInfo(Info info) {
-		infoDao.delete(info);
+	public boolean deleteInfo(Info info) {
+		boolean flag = false;
+		try{
+			infoDao.delete(info);
+		}catch(Exception e){
+			logger.error("删除信息失败",e);
+		}
+		return flag;
 	}
 
 	public List<Info> findList() {
 		return infoDao.findAll();
+	}
+
+	public boolean updateInfo(Info info) {
+		boolean flag = false;
+		try{
+			infoDao.updateInfo(info);
+			flag = true;
+		}catch(Exception e){
+			logger.info("新增信息失败，报错",e);
+		}
+		return flag;
 	}
 }

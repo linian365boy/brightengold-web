@@ -34,8 +34,15 @@ public class ProductService {
 		productDao.save(product);
 	}
 
-	public void delProduct(Integer productId) {
-		productDao.delete(productId);
+	public boolean delProduct(Integer productId) {
+		boolean flag = false;
+		try{
+			productDao.delete(productId);
+			flag = true;
+		}catch(Exception e){
+			logger.error("删除产品失败！",e);
+		}
+		return flag;
 	}
 	
 	/**
@@ -166,6 +173,10 @@ public class ProductService {
 		PageRainier<Product> page = new PageRainier<Product>(count);
 		page.setResult(productDao.findAllReleaseProductByLikeKeyWordList(param));
 		return page;
+	}
+
+	public void updateProduct(Product product) {
+		productDao.updateProduct(product);
 	}
 
 	/*private Specification<Product> findAllReleaseProductByLikeKeywordSpec(final String keyword) {

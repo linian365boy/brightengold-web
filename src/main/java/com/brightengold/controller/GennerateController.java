@@ -34,7 +34,6 @@ import com.brightengold.service.CategoryService;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.CompanyService;
 import com.brightengold.service.InfoService;
-import com.brightengold.service.MsgUtil;
 import com.brightengold.service.NewsService;
 import com.brightengold.service.ProductService;
 import com.brightengold.service.SystemConfig;
@@ -43,7 +42,6 @@ import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.HtmlStringUtil;
 import com.google.common.collect.Maps;
-
 import cn.rainier.nian.utils.PageRainier;
 
 @Controller
@@ -144,7 +142,7 @@ public class GennerateController {
 				logger.info("生成{}分类页面成功",cate.getEnName());
 			}
 		}
-		return "200";
+		return "Constant.SUCCESS_CODE";
 	}
 	
 	@ResponseBody
@@ -177,7 +175,7 @@ public class GennerateController {
 					map.put("hotProducts", products);
 					if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
 						logger.error("生成{}页面失败！",code);
-						return "500";
+						return "Constant.ERROR_CODE";
 					}else{
 						logger.info("生成{}页面成功！",code);
 					}
@@ -200,16 +198,16 @@ public class GennerateController {
 					if(!FreemarkerUtil.fprint(templateName, map, 
 							path+Constant.COLUMNPATHPRE, code+".htm")){
 						logger.error("生成{}页面失败！",code);
-						return "500";
+						return "Constant.ERROR_CODE";
 					}else{
 						logger.info("生成{}页面成功！",code);
 					}
 				}
 			}catch(Exception e){
 				logger.error("生成{}页面失败！",code,e);
-				return "500";
+				return "Constant.ERROR_CODE";
 			}
-			return "200";
+			return "Constant.SUCCESS_CODE";
 		}else{
 			//按分类英文名称查询是否有记录
 			Category cate = categoryService.loadCategoryByEname(code);
@@ -222,11 +220,11 @@ public class GennerateController {
 						path+Constant.CATEGORYPRODUCTPATH, 
 						cate.getEnName().replaceAll("\\s*", "")+".htm")){
 					logger.error("生成{}页面失败！",code);
-					return "500";
+					return "Constant.ERROR_CODE";
 				}else{
 					logger.info("生成{}页面成功",code);
 				}
-				return "200";
+				return "Constant.SUCCESS_CODE";
 			}
 			return "501";
 		}
@@ -377,10 +375,8 @@ public class GennerateController {
 			Map<String,Object> root = new HashMap<String,Object>();
 			root.put("ctx", basePath);
 			FreemarkerUtil.fprint("index.ftl", root, path+File.separator, "index.htm");
-			MsgUtil.setMsg("success", "恭喜您，生成首页成功！");
 			logger.info("生成首页成功！");
 		}catch(Exception e){
-			MsgUtil.setMsg("error", "对不起，生成首页失败！");
 			logger.error("生成页面发生错误",e);
 		}
 		return "redirect:/admin/sys/html/generate.html";

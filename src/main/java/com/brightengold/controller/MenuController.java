@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
+import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
 import cn.rainier.nian.model.Menu;
@@ -66,22 +66,23 @@ public class MenuController {
 		return "admin_unless/sys/menu/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(Menu menu){
+	public MessageVo add(Menu menu){
+		MessageVo vo = null;
 		try{
 			if(menuService.saveMenu(menu)){
-				MsgUtil.setMsgAdd("success");
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
 				logger.info("添加菜单{}成功！",menu);
+				vo = new MessageVo(Constant.SUCCESS_CODE);
 			}else{
-				MsgUtil.setMsgAdd("error");
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
+				vo = new MessageVo(Constant.ERROR_CODE,"新增菜单【"+menu.getName()+"】失败");
 			}
 		}catch(Exception e){
-			MsgUtil.setMsgAdd("error");
 			logger.error("新增菜单报错！",e);
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/menu/menus/1.html";
+		return vo;
 	}
 	
 	private String generateJsonString(HttpServletRequest request,HttpSession session) {

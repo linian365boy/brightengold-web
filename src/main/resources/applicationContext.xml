@@ -75,6 +75,7 @@
 
 	<bean id="roleService" class="cn.rainier.nian.service.impl.RoleServiceImpl">
 		<property name="roleDao" ref="roleDao" />
+		<property name="userDao" ref="userDao"/>
 	</bean>
 
 	<bean id="menuService" class="cn.rainier.nian.service.impl.MenuServiceImpl">

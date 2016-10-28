@@ -27,6 +27,10 @@
 		values(null,#{realName},#{username},#{email},#{password},#{enabled},#{accountNonLocked},#{lastCloseDate})
 	</insert>
 	
+	<update id="updateUser" parameterType="User">
+		update tb_user set realName=#{realName},email=#{email} where id=#{id}
+	</update>
+	
 	<delete id="delete" parameterType="int">
 		delete from tb_user where id=#{id}
 	</delete>
@@ -69,4 +73,7 @@
 		select count(*) from tb_user where id!=#{userId}
 	</select>
 	
+	<update id="updateUserRole">
+		update tb_user_role set roleId = #{newRoleId} where roleId = #{roleId}
+	</update>
 </mapper>

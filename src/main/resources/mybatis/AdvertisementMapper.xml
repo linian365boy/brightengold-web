@@ -34,4 +34,8 @@
 		select * from tb_advertisement where status=1 order by priority desc,id desc limit #{indexAdsSize}
 	</select>
 	
+	<update id="updateAdvertisement" parameterType="Advertisement">
+		update tb_advertisement set name=#{name},picUrl=#{picUrl},width=#{width},
+		height=#{height},url=#{url},priority=#{priority} where id=#{id}
+	</update>
 </mapper>

@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
+import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
 import cn.rainier.nian.helper.ResourceDetailsMonitor;
@@ -84,21 +84,23 @@ public class RoleController {
 		return "admin_unless/sys/role/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(Role role, HttpServletRequest request) {
+	public MessageVo add(Role role, HttpServletRequest request) {
+		MessageVo vo = null;
 		try {
 			String marking = UUIDGenerator.getUUID().toUpperCase();
 			role.setName("ROLE_"+marking);
 			role.setCreateDate(new Date());
 			roleService.saveRole(role);
-			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD,"角色："+role.getDescribes());
 			logger.info("添加角色{}成功！",role);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"添加角色"+role.getDescribes()+"成功！");
 		} catch (Exception e) {
-			MsgUtil.setMsgAdd("error");
-			logger.error("添加角色发生错误：{}",e);
+			logger.error("添加角色发生错误",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"添加角色"+role.getDescribes()+"失败！");
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/role/roles/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/{roleName}/update",method=RequestMethod.GET)
@@ -109,33 +111,40 @@ public class RoleController {
 		return "admin_unless/sys/role/update";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{roleName}/update",method=RequestMethod.POST)
-	public String update(@PathVariable String roleName,Role role) {
+	public MessageVo update(@PathVariable String roleName,Role role) {
+		MessageVo vo = null;
 		if(roleName!=null){
 			Role temp = roleService.loadRoleByName(role.getName());
 			String ryName = temp.getDescribes();
 			temp.setDescribes(role.getDescribes());
-			roleService.saveRole(temp);
-			logger.info("修改角色信息|{}",temp);
-			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT,"角色由\""+ryName+"\"修改为：\""+temp.getDescribes()+"\"");
+			if(roleService.updateRole(temp)){
+				logger.info("修改角色信息|{}",temp);
+				LogUtil.getInstance().log(LogType.EDIT,"角色由\""+ryName+"\"修改为：\""+temp.getDescribes()+"\"");
+				vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+temp.getDescribes()+"】修改成功！");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"角色【"+temp.getDescribes()+"】修改失败！");
+			}
 		}
-		return "redirect:/admin/sys/role/roles/1.html";
+		return vo;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{roleName}/del",method=RequestMethod.GET)
-	public String del(@PathVariable String roleName){
+	public MessageVo del(@PathVariable String roleName){
+		MessageVo vo = null;
 		if(roleName!=null){
 			Role role = roleService.loadRoleByName(roleName);
-			/*for(User u : role.getUsers()){
-				u.getRoles().remove(role);
-			}*/
-			roleService.delRole(roleName);
-			MsgUtil.setMsgDelete("success");
-			LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDescribes());
-			logger.warn("删除角色为{}",role.getDescribes());
+			if(roleService.delRole(roleName)){
+				LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDescribes());
+				logger.warn("删除角色为{}",role.getDescribes());
+				vo = new MessageVo(Constant.ERROR_CODE,"删除角色【"+role.getDescribes()+"】成功！");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"删除角色【"+role.getDescribes()+"】失败！");
+			}
 		}
-		return "redirect:/admin/sys/role/roles/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/qxfp",method=RequestMethod.GET)
@@ -180,7 +189,6 @@ public class RoleController {
 					}
 				}
 				roleService.saveRole(model);
-				MsgUtil.setMsg("success", "成功分配【"+model.getDescribes()+"】权限！");
 				LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
 				//logger.warn("角色{}重新分配了权限{}",model.getDesc(),
 				//		ToStringBuilder.reflectionToString(model.getResources(), 
@@ -192,11 +200,9 @@ public class RoleController {
 					e.printStackTrace();
 				}
 			}else{
-				MsgUtil.setMsg("error", "分配权限失败！");
 				logger.error("角色{}分配权限失败！",roleName);
 			}
 		} catch (NumberFormatException e) {
-			MsgUtil.setMsg("error", "分配权限失败！");
 			logger.error("角色{}分配权限失败，发生错误：{}！",roleName,e);
 		}
 		return "redirect:/admin/sys/role/roles/1.html";

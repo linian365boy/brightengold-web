@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.brightengold.util.Constant;
 import com.brightengold.util.ImageUtil;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.ResultVo;
@@ -55,7 +56,7 @@ public class UploadController {
 				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(file.getOriginalFilename());
 				FileUtils.copyInputStreamToFile(file.getInputStream(), new File(newFileName));
 				url = newFileName.substring(realPath.lastIndexOf("upload")).replace("\\", "/");
-				vo.setCode(200);
+				vo.setCode(Constant.SUCCESS_CODE);
 				vo.setMessage("上传图片成功！");
 				vo.setObj(url);
 			}else{
@@ -65,7 +66,7 @@ public class UploadController {
 			}
 		}catch(IOException e){
 			logger.error("上传图片发生错误！",e);
-			vo.setCode(500);
+			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("上传图片失败！");
 		}
 		return vo;

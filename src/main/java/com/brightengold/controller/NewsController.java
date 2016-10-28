@@ -25,7 +25,6 @@ import com.brightengold.model.Column;
 import com.brightengold.model.News;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
 import com.brightengold.service.NewsService;
 import com.brightengold.util.Constant;
 import com.brightengold.util.ConstantVariable;
@@ -71,8 +70,10 @@ public class NewsController {
 		return "admin/news/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(News news, Integer firstColId, Integer secondColId, Integer thirdColId){
+	public MessageVo add(News news, Integer firstColId, Integer secondColId, Integer thirdColId){
+		MessageVo vo = null;
 		if(news.getPriority()==null){
 			news.setPriority(0);
 		}
@@ -89,11 +90,14 @@ public class NewsController {
 			news.setColumnId(firstColId);
 			news.setDepth(String.valueOf(firstColId));
 		}
-		newsService.saveNews(news);
-		MsgUtil.setMsgAdd("success");
-		LogUtil.getInstance().log(LogType.ADD,"标题："+news.getTitle());
-		logger.info("添加了新闻：{}",news);
-		return "redirect:/admin/news/news/1.html";
+		if(newsService.saveNews(news)){
+			LogUtil.getInstance().log(LogType.ADD,"标题："+news.getTitle());
+			logger.info("添加了新闻：{}",news);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"添加新闻"+news.getTitle()+"成功");
+		}else{
+			vo = new MessageVo(Constant.ERROR_CODE,"添加新闻"+news.getTitle()+"失败");
+		}
+		return vo;
 	}
 	
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.GET)
@@ -113,9 +117,11 @@ public class NewsController {
 		return "admin/news/update";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.POST)
-	public String update(HttpServletRequest request,
+	public MessageVo update(HttpServletRequest request,
 			@PathVariable Integer newsId,News news, Integer firstColId, Integer secondColId){
+		MessageVo vo = null;
 		if(newsId!=null){
 			StringBuilder content = new StringBuilder();
 			News temp = newsService.loadNews(newsId);
@@ -129,25 +135,28 @@ public class NewsController {
 				news.setColumn(columnService.getById(firstColId));
 				news.setDepth(String.valueOf(firstColId));
 			}*/
-			newsService.saveNews(news);
-			logger.info("修改前新闻信息|{}，修改后新闻信息|{}",temp,news);
-			if(!temp.getTitle().equals(news.getTitle())){
-				content.append("标题由\""+temp.getTitle()+"\"修改为\""+news.getTitle()+"\"");
+			if(newsService.updateNews(news)){
+				logger.info("修改前新闻信息|{}，修改后新闻信息|{}",temp,news);
+				if(!temp.getTitle().equals(news.getTitle())){
+					content.append("标题由\""+temp.getTitle()+"\"修改为\""+news.getTitle()+"\"");
+				}
+				if(!temp.getPriority().equals(news.getPriority())){
+					content.append("优先值由\""+temp.getPriority()+"\"修改为\""+news.getPriority()+"\"");
+				}
+				if("".equals(content.toString().trim())){
+					content.append("修改了标题为"+news.getTitle()+"新闻");
+				}
+				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+				//删除页面
+				String path = request.getSession().getServletContext().getRealPath("/");
+				Tools.delFile(path + Constant.NEWSPATH + File.separator+news.getUrl());
+				Tools.delFile(path + Constant.NEWSPRE + File.separator+news.getId()+".htm");
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改新闻【"+news.getTitle()+"】成功");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"修改新闻【"+news.getTitle()+"】失败");
 			}
-			if(!temp.getPriority().equals(news.getPriority())){
-				content.append("优先值由\""+temp.getPriority()+"\"修改为\""+news.getPriority()+"\"");
-			}
-			if("".equals(content.toString().trim())){
-				content.append("修改了标题为"+news.getTitle()+"新闻");
-			}
-			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT, content.toString());
-			//删除页面
-			String path = request.getSession().getServletContext().getRealPath("/");
-			Tools.delFile(path + Constant.NEWSPATH + File.separator+news.getUrl());
-			Tools.delFile(path + Constant.NEWSPRE + File.separator+news.getId()+".htm");
 		}
-		return "redirect:/admin/news/news/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/{newsId}",method=RequestMethod.GET)
@@ -158,14 +167,15 @@ public class NewsController {
 			newsService.updateClicks(tempNews);
 			if(tempNews!=null){
 				model.addAttribute("news", tempNews);
-				return "admin_unless/news/details";
 			}
 		}
-		return "redirect:/admin/news/news/1.html";
+		return "admin_unless/news/details";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{newsId}/del",method=RequestMethod.GET)
-	public String del(@PathVariable Integer newsId,HttpServletRequest request,News news){
+	public MessageVo del(@PathVariable Integer newsId,HttpServletRequest request,News news){
+		MessageVo vo = null;
 		if(newsId!=null){
 			news = newsService.loadNews(newsId);
 			String htmlUrl = news.getUrl();
@@ -174,12 +184,14 @@ public class NewsController {
 					String path = request.getSession().getServletContext().getRealPath("/"+htmlUrl);
 					Tools.delFile(path);
 				}
-				MsgUtil.setMsgDelete("success");
 				logger.warn("删除了新闻|{}",news);
+				vo = new MessageVo(Constant.SUCCESS_CODE,"删除新闻【"+news.getTitle()+"】成功！");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"删除新闻【"+news.getTitle()+"】失败！");
 			}
 			LogUtil.getInstance().log(LogType.DEL, "标题："+news.getTitle());
 		}
-		return "redirect:/admin/news/news/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/{newsId}/checkPub",method=RequestMethod.GET)

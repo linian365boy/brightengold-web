@@ -34,6 +34,11 @@
 		#{publish},#{createDate},#{createUserId},#{status},#{keyWords},#{priority})
 	</insert>
 	
+	<update id="updateProduct">
+		update tb_product set enName=#{enName},categoryId=#{categoryId},picUrl=#{picUrl},introduce=#{introduce},
+		description=#{description},hot=#{hot},url=#{url},keyWords=#{keyWords},priority=#{priority} where id=#{id}
+	</update>
+	
 	<select id="findAllListByCateId" resultType="Product">
 		select * from tb_product pr where pr.categoryId = #{cateId} and pr.status is true and 
 		pr.publish is true order by pr.priority desc,pr.hot desc,pr.id desc limit #{start},#{pageSize}

@@ -1,7 +1,5 @@
 package com.brightengold.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,12 +22,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
+import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
 import cn.rainier.nian.model.Role;
@@ -49,7 +47,6 @@ public class UserController {
 	@Autowired
 	private RoleService roleService;
 	private PageRainier<User> users;
-	private Integer pageSize = 10;
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@RequestMapping({"/users/list"})
@@ -73,8 +70,10 @@ public class UserController {
 		return "admin_unless/sys/user/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(User user, HttpServletRequest request) {
+	public MessageVo add(User user, HttpServletRequest request) {
+		MessageVo vo = null;
 		try {
 			user.setAccountNonLocked(true);
 			//日志记录
@@ -87,11 +86,11 @@ public class UserController {
 			userService.saveUser(user);
 			LogUtil.getInstance().log(LogType.ADD,"用户名："+user.getUsername()+" 姓名："+user.getRealName());
 			logger.info("添加了用户{}",user);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"添加用户【"+user.getUsername()+"】成功！");
 		} catch (Exception e) {
-			MsgUtil.setMsgAdd("error");
-			e.printStackTrace();
+			vo = new MessageVo(Constant.ERROR_CODE,"添加用户【"+user.getUsername()+"】失败！");
 		}
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX+"/admin/sys/user/users/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/{username}",method=RequestMethod.GET)
@@ -111,10 +110,12 @@ public class UserController {
 		return "admin_unless/sys/user/update";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{username}/update",method=RequestMethod.POST)
-	public String update(HttpServletRequest request,@PathVariable String username,User user) {
+	public MessageVo update(HttpServletRequest request,@PathVariable String username,User user) {
 		Set<Role> roles = null;
 		StringBuilder content = new StringBuilder();
+		MessageVo vo = null;
 		if(user.getId()!=null){
 			User temp = userService.loadUserById(user.getId());
 			if(!temp.getUsername().equals(user.getUsername())){
@@ -143,87 +144,74 @@ public class UserController {
 			roles.add(roleService.findDefault());
 			roles.add(roleService.loadRoleByName(role));
 			user.setRoles(roles);
-			userService.saveUser(user);
-			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT,content.toString());
-			logger.info("用户从：{}，修改为：{}",temp,user);
+			if(userService.updateUser(user)){
+				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				logger.info("用户从：{}，修改为：{}",temp,user);
+				vo = new MessageVo(Constant.SUCCESS_CODE,"用户【"+user.getUsername()+"】修改成功！");
+			}else{
+				logger.warn("用户{}修改信息失败",temp);
+				vo = new MessageVo(Constant.ERROR_CODE,"用户【"+user.getUsername()+"】修改失败！");
+			}
 		}
-		return "redirect:/admin/sys/user/users/1.html";
+		return vo;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/existUser",method=RequestMethod.POST)
-	public String existUser(HttpServletRequest request,HttpServletResponse response){
-		PrintWriter out = null;
+	public boolean existUser(String username,String u){
+		//name为空表示添加，否则为编辑
+		boolean result = false;
 		try {
-			String username = request.getParameter("username");
-			String name = request.getParameter("u");		//name为空表示添加，否则为编辑
 			if(username!=null){
-				response.setContentType("text/html;charset=UTF-8");
-				out = response.getWriter();
 				//如果没有修改username
-				if(username.equals(name)){
-					out.print(true);	//true表示可用
+				if(username.equals(u)){
+					result = true;	//true表示可用
 				}else{
-					User u = userService.loadUserByName(username);
-					if(u!=null){
-						out.print(false);
-					}else{
-						out.print(true);	//true表示可用，用户名不存在
+					User user = userService.loadUserByName(username);
+					if(user==null){
+						result = true;	//true表示可用，用户名不存在
 					}
 				}
-				out.flush();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("existUser方法报错",e);
-		}finally{
-			if(out!=null){
-				out.close();
-			}
 		}
-		return null;
+		return result;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{username}/reset",method=RequestMethod.GET)
 	public String reset(@PathVariable String username,User user,HttpServletResponse response){
-		PrintWriter out = null;
 		String actionMsg = "";
 		try {
-			response.setContentType("text/html");
-			out = response.getWriter();
 			if(user.getUsername()!=null){
 				userService.resetPassword(user.getUsername());
 				actionMsg = "重置密码成功！";
 				LogUtil.getInstance().log(LogType.RESETPASSWORD, user.getUsername()+"的密码重置了");//日志记录
 				logger.warn("用户：{}，密码重置了",user.getUsername());
-				out.write(actionMsg);
-				out.flush();
 			}else{
 				actionMsg = "用户不存在！重置密码失败！";
 				logger.error("用户：{}，密码重置失败",user.getUsername());
-				out.write(actionMsg);
-				out.flush();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("用户名|{},密码重置方法报错",username,e);
-		}finally{
-			if(out!=null){
-				out.close();
-			}
 		}
-		return null;
+		return actionMsg;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{username}/unsubscribe",method=RequestMethod.GET)
-	public String unsubscribe(@PathVariable String username){
+	public MessageVo unsubscribe(@PathVariable String username){
+		MessageVo vo = null;
 		if(userService.unsubscribe(username)){
-			MsgUtil.setMsg("success", "注销用户成功！");
 			//日志记录
 			LogUtil.getInstance().log(LogType.NSUBSCTIBE, username+"被注销了");
 			logger.warn("用户：{}，注销成功",username);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"用户【"+username+"】注销成功");
 		}else{
-			MsgUtil.setMsg("error", "注销用户失败！");
+			vo = new MessageVo(Constant.ERROR_CODE,"用户【"+username+"】注销失败");
 		}
-		return "redirect:/admin/sys/user/users/1.html";
+		return vo;
 	}
 	
 	@ResponseBody
@@ -259,7 +247,7 @@ public class UserController {
 			}
 		} catch (Exception e) {
 			actionMsg = "密码修改失败！";
-			logger.error("修改密码出错："+e);
+			logger.error("修改密码出错：",e);
 		}
 		return actionMsg;
 	}
@@ -270,14 +258,6 @@ public class UserController {
 
 	public void setUsers(PageRainier<User> users) {
 		this.users = users;
-	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
 	}
 
 	public void setUserService(UserServiceImpl userService) {

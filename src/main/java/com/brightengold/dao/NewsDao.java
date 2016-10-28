@@ -30,4 +30,6 @@ public interface NewsDao {
 
 	public long countByColId(@Param("colId") Integer colId,@Param("depth") int depth);
 
+	public void updateNews(News news);
+
 }

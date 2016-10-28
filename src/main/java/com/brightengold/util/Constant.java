@@ -52,6 +52,14 @@ public class Constant {
 	 */
 	public static final int SUCCESS_CODE = 200;
 	/**
+	 * 验证码输入错误返回码
+	 */
+	public static final int CODE_201 = 201;
+	/**
+	 * 必填项未填错误返回码
+	 */
+	public static final int CODE_202 = 202;
+	/**
 	 * 失败返回码
 	 */
 	public static final int ERROR_CODE = 500;
@@ -59,6 +67,10 @@ public class Constant {
 	 * success
 	 */
 	public static final String SUCCESS_STR = "success";
+	/**
+	 * error
+	 */
+	public static final String ERROR_STR = "error";
 	/**
 	 * 验证码key
 	 */

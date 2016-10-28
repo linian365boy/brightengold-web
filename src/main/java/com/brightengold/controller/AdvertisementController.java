@@ -23,10 +23,10 @@ import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 import com.brightengold.service.AdvertisementService;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
 import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ResultVo;
 import com.brightengold.vo.ReturnData;
 
@@ -55,8 +55,10 @@ public class AdvertisementController {
 		return datas;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value={"/save"},method=RequestMethod.POST)
-	public String saveAd(MultipartFile photo,Advertisement ad,HttpServletRequest request){
+	public MessageVo saveAd(MultipartFile photo,Advertisement ad,HttpServletRequest request){
+		MessageVo vo = null;
 		try{
 			if(!photo.isEmpty()){
 				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/ads");
@@ -76,15 +78,15 @@ public class AdvertisementController {
 			ad.setStatus(Constant.C_ONE);
 			ad.setCreateDate(new Date());
 			service.saveAdvertisement(ad);
-			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD, "新增滚动图片"+ad.getName()+"成功!");
 			logger.info("新增滚动图片成功，新增信息为：{}",ad);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"新增滚动图片"+ad.getName()+"成功!");
 		}catch(Exception e){
-			MsgUtil.setMsgAdd("error");
 			LogUtil.getInstance().log(LogType.ADD, "新增滚动图片"+ad.getName()+"失败!");
 			logger.error("新增滚动图片发生错误",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"新增滚动图片"+ad.getName()+"失败!");
 		}
-		return "redirect:/admin/ad/ads/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value={"/save"},method=RequestMethod.GET)
@@ -99,11 +101,13 @@ public class AdvertisementController {
 		return "admin_unless/ad/update";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value={"/{id}/update"},method=RequestMethod.POST)
-	public String update(@PathVariable Integer id, HttpServletRequest request, ModelMap model,
+	public MessageVo update(@PathVariable Integer id, HttpServletRequest request, 
 			Advertisement ad,MultipartFile photo){
 		Advertisement temp = null;
 		StringBuilder content = new StringBuilder();
+		MessageVo vo = null;
 		try{
 			temp = service.loadAdvertisement(id);
 			ad.setCreateDate(temp.getCreateDate());
@@ -117,15 +121,18 @@ public class AdvertisementController {
 				ad.setPicUrl(temp.getPicUrl());
 			}
 			content.append("图片名称："+ad.getName());
-			service.saveAdvertisement(ad);
-			MsgUtil.setMsgUpdate("success");
-			LogUtil.getInstance().log(LogType.EDIT,content.toString());
-			logger.info("修改滚动图片信息成功，原图片信息：{}，修改后信息：{}",temp,ad);
+			if(service.updateAdvertisement(ad)){
+				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				logger.info("修改滚动图片信息成功，原图片信息：{}，修改后信息：{}",temp,ad);
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改滚动图片信息【"+ad.getName()+"】成功");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"修改滚动图片【"+ad+"】发生失败！");
+			}
 		}catch(Exception e){
-			MsgUtil.setMsgUpdate("error");
 			logger.error("修改滚动图片信息发生错误",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改滚动图片【"+ad+"】发生失败！");
 		}
-		return "redirect:/admin/ad/ads/1.html";
+		return vo;
 	}
 	
 	@ResponseBody
@@ -134,11 +141,11 @@ public class AdvertisementController {
 		ResultVo<String> vo = new ResultVo<String>();
 		try{
 			service.updateStatus(id,status);
-			vo.setCode(200);
+			vo.setCode(Constant.SUCCESS_CODE);
 			vo.setMessage("修改状态成功！");
 			logger.info("从{}修改为{}状态",(status==1)?"锁定":"正常",(status==1)?"正常":"锁定");
 		}catch(Exception e){
-			vo.setCode(500);
+			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("修改状态失败！");
 			logger.error("修改状态失败！",e);
 		}
@@ -152,12 +159,12 @@ public class AdvertisementController {
 		Advertisement ad = service.loadAdvertisement(id);
 		try{
 			service.delAdvertisement(id);
-			vo.setCode(200);
+			vo.setCode(Constant.SUCCESS_CODE);
 			vo.setMessage("删除信息成功！");
 			LogUtil.getInstance().log(LogType.DEL, "图片名称："+ad.getName());
 			logger.warn("删除图片信息成功，图片信息{}",ad);
 		}catch(Exception e){
-			vo.setCode(500);
+			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("删除信息失败！");
 			logger.error("删除图片信息发生错误",e);
 		}

@@ -3,7 +3,9 @@ package com.brightengold.controller;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +19,16 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.brightengold.model.Company;
 import com.brightengold.service.CompanyService;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
+import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+import com.brightengold.vo.MessageVo;
 
 @Controller
 @RequestMapping("/admin/sys/company")
@@ -44,9 +49,11 @@ public class CompanyController {
 		return "admin/sys/company/detail";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
-	public String update(@RequestParam  MultipartFile photos,Company company, HttpServletRequest request){
+	public MessageVo update(@RequestParam  MultipartFile photos,Company company, HttpServletRequest request){
 		Company temp = companyService.loadCompany();
+		MessageVo vo = null;
 		try{
 			if(!photos.isEmpty()){
 				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
@@ -73,16 +80,17 @@ public class CompanyController {
 				if(!temp.getTelPhone().equals(company.getTelPhone())){
 					content.append("公司联系方式由\""+temp.getTelPhone()+"\"修改为\""+company.getTelPhone()+"\"");
 				}
-				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改公司信息成功！");
 			}else{
-				MsgUtil.setMsgUpdate("error");
 				logger.error("修改公司信息报错");
+				vo = new MessageVo(Constant.ERROR_CODE,"修改公司信息失败！");
 			}
 		}catch(Exception e){
 			logger.error("修改公司信息报错",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改公司信息失败！");
 		}
-		return "redirect:/admin/sys/company/detail.html";
+		return vo;
 	}
 	
 }

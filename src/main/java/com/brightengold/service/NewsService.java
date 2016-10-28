@@ -45,7 +45,7 @@ public class NewsService {
 			newsDao.delete(newsId);
 			return true;
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error("删除新闻报错",e);
 		}
 		return false;
 	}
@@ -108,6 +108,16 @@ public class NewsService {
 		//Page<News> tempPage = newsDao.findAll(findIndexNewsSpec(), 
 		//		new PageRequest(0,indexNewsSize,new Sort(Direction.DESC,"priority","createDate")));
 		return newsDao.findIndexNews(indexNewsSize);
+	}
+
+	public boolean updateNews(News news) {
+		try{
+			newsDao.updateNews(news);
+			return true;
+		}catch(Exception e){
+			logger.error("删除新闻报错",e);
+		}
+		return false;
 	}
 
 	/*private Specification<News> findIndexNewsSpec() {

@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Column;
 import com.brightengold.service.ColumnService;
-import com.brightengold.service.MsgUtil;
+import com.brightengold.util.Constant;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ResultVo;
 import com.brightengold.vo.ReturnData;
-import com.google.gson.Gson;
 
 import cn.rainier.nian.utils.PageRainier;
 
@@ -68,9 +68,11 @@ public class ColumnController {
 	}
 	
 	//目前最大只到三级
+	@ResponseBody
 	@RequestMapping(value={"/add"},method=RequestMethod.POST)
-	public String add(Model model,Column column,
+	public MessageVo add(Model model,Column column,
 			Integer firstColumnId,Integer secondColumnId){
+		MessageVo vo = new MessageVo(Constant.SUCCESS_CODE);
 		if(null==column.getPriority()){
 			column.setPriority(0);
 		}
@@ -88,13 +90,14 @@ public class ColumnController {
 		}
 		column.setUrl("views/html/col/"+column.getCode()+".htm");
 		if(columnService.save(column)){
-			MsgUtil.setMsgAdd("success");
 			logger.info("新增栏目:{}成功！",column);
+			vo.setMessage("新增栏目【"+column.getEnName()+"】成功！");
 		}else{
-			MsgUtil.setMsgAdd("error");
 			logger.error("新增栏目:{}失败！",column);
+			vo.setCode(Constant.ERROR_CODE);
+			vo.setMessage("新增栏目【"+column.getEnName()+"】失败！");
 		}
-		return "redirect:/admin/sys/col/cols/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value={"/add"},method=RequestMethod.GET)
@@ -102,9 +105,11 @@ public class ColumnController {
 		return "admin_unless/sys/col/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value={"/{id}/update"},method=RequestMethod.POST)
-	public String update(@PathVariable Integer id,Model model,Column column){
+	public MessageVo update(@PathVariable Integer id,Model model,Column column){
 		Column temp = null;
+		MessageVo vo = null;
 		try {
 			temp = columnService.getById(id);
 			//if(column.getParentColumn().getId()!=0){
@@ -118,14 +123,14 @@ public class ColumnController {
 			}else{
 				column.setUrl(temp.getUrl());
 			}
-			columnService.save(column);
-			MsgUtil.setMsgUpdate("success");
+			columnService.updateColumn(column);
 			logger.info("修改栏目成功，原栏目信息：{}，修改后栏目信息：{}！",temp, column);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"修改栏目"+column.getEnName()+"成功");
 		} catch (Exception e) {
-			MsgUtil.setMsgUpdate("success");
 			logger.error("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！",temp,column);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改栏目"+column.getEnName()+"失败");
 		}
-		return "redirect:/admin/sys/col/cols/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value={"/{id}/update"},method=RequestMethod.GET)
@@ -137,50 +142,48 @@ public class ColumnController {
 	
 	@RequestMapping(value={"/{id}/delete"})
 	@ResponseBody
-	public String delete(@PathVariable Integer id,Model model){
+	public ResultVo<String> delete(@PathVariable Integer id,Model model){
 		Column temp = columnService.getById(id);
-		Gson gson = new Gson();
 		ResultVo<String> vo = new ResultVo<String>();
 		/*if(temp.getChildColumn()!=null && temp.getChildColumn().size()>0){
 			//还有子节点，不能删除
-			//MsgUtil.setMsg("error","删除失败，该节点包含有"+temp.getChildColumn().size()+"个子节点，请先删除该节点下的子节点！");
-			vo.setCode(500);
+			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("删除失败，该节点包含有"+temp.getChildColumn().size()+"个子节点，请先删除该节点下的子节点！");
 			logger.error("删除栏目信息：{}失败，该节点包含有{}个子节点",temp,temp.getChildColumn().size());
 		}else{
 			//判断是否有产品分类
 			List<Category> cates = categoryService.findCateByColId(temp.getId());
 			if(CollectionUtils.isNotEmpty(cates)){
-				vo.setCode(500);
+				vo.setCode(Constant.ERROR_CODE);
 				vo.setMessage("删除失败，该栏目包含有未删除的"+cates.size()+"个产品分类！");
 				logger.error("删除失败，该栏目包含有未删除的"+cates.size()+"个产品分类！");
 				return gson.toJson(vo);
 			}
 			columnService.delete(id);
-			vo.setCode(200);
+			vo.setCode(Constant.SUCCESS_CODE);
 			vo.setMessage("删除成功！");
 			logger.warn("删除栏目信息：{}成功",temp);
 		}*/
-		return gson.toJson(vo);
+		return vo;
 	}
 	
 	@RequestMapping(value="/existCol",method=RequestMethod.POST)
 	@ResponseBody
-	public String existCol(String code,String ycode){
+	public boolean existCol(String code,String ycode){
 		if(code!=null){
 			//如果没有修改code
 			if(code.equals(ycode)){
-				return Boolean.toString(true);	//true表示可用
+				return true;	//true表示可用
 			}else{
 				Long count = columnService.countColumnByCode(code);
 				if(count>0){
-					return Boolean.toString(false);
+					return false;
 				}else{
-					return Boolean.toString(true);	//true表示可用，用户名不存在
+					return true;	//true表示可用，用户名不存在
 				}
 			}
 		}
-		return Boolean.toString(false);
+		return false;
 	}
 	
 	@RequestMapping(value={"/{id}/setPublishContent"},method = RequestMethod.GET)
@@ -190,16 +193,18 @@ public class ColumnController {
 		return "admin_unless/sys/col/setContent";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value={"/{id}/setPublishContent"},method = RequestMethod.POST)
-	public String doPublishContent(@PathVariable Integer id,Column column, ModelMap map){
+	public MessageVo doPublishContent(@PathVariable Integer id,Column column, ModelMap map){
+		MessageVo vo = null;
 		try{
 			columnService.updateColumnPublishContent(id,column);
 			logger.info("修改栏目的发布方式|{}",column);
-			MsgUtil.setMsgUpdate("success");
+			vo = new MessageVo(Constant.SUCCESS_CODE,"设置发布模式成功！");
 		}catch(Exception e){
 			logger.error("设置发布模式发生错误！",e);
-			MsgUtil.setMsgUpdate("error");
+			vo = new MessageVo(Constant.ERROR_CODE,"设置发布模式失败！");
 		}
-		return "redirect:/admin/sys/col/cols/1.html";
+		return vo;
 	}
 }

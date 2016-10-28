@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Feedback;
 import com.brightengold.service.FeedbackService;
-import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
-import com.brightengold.util.LogType;
+import com.brightengold.util.Constant;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
 import cn.rainier.nian.utils.PageRainier;
@@ -56,19 +55,21 @@ public class FeedbackController {
 		return "admin_unless/feedback/detail";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{id}/del",method=RequestMethod.GET)
-	public String delete(@PathVariable Integer id,Feedback feedback){
+	public MessageVo delete(@PathVariable Integer id){
+		MessageVo vo = null;
 		if (id != null) {
 			try{
 				feedbackService.delete(id);
 				logger.warn("删除id|{}的评论",id);
-				MsgUtil.setMsgDelete("success");
-				LogUtil.getInstance().log(LogType.DEL, "联系方式为"+feedback.getTelePhone());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"删除评论成功！");
 			}catch(Exception e){
 				logger.error("删除评论报错!",e);
+				vo = new MessageVo(Constant.ERROR_CODE,"删除评论失败！");
 			}
 		}
-		return "redirect:/admin/feedback/feedbacks/1.html";
+		return vo;
 	}
 
 	public Integer getPageSize() {

@@ -24,4 +24,6 @@ public interface InfoDao {
 	List<Info> findList(RequestParam param);
 
 	long findAllCount();
+
+	void updateInfo(Info info);
 }

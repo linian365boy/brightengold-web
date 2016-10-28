@@ -79,4 +79,8 @@ public class ColumnService {
 		return columnDao.findAll();
 	}
 
+	public void updateColumn(Column column) {
+		columnDao.updateColumn(column);
+	}
+
 }

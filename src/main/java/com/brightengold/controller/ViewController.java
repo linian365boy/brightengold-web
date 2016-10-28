@@ -182,7 +182,7 @@ public class ViewController {
 					messageMap.put("content", "Please fill the Message.");
 				}
 				if(MapUtils.isNotEmpty(messageMap)){
-					vo.setCode(202);
+					vo.setCode(Constant.CODE_202);
 					vo.setMessage("Please fill the required field or confirm the fields and submit it again.");
 					vo.setData(messageMap);
 					return vo;
@@ -198,16 +198,16 @@ public class ViewController {
 						String.format("inquiry----%s",feedback.getName()), 
 								sb.toString());
 				logger.info("客户留言信息|{}",feedback);
-				vo.setCode(200);
+				vo.setCode(Constant.SUCCESS_CODE);
 				vo.setMessage("succeed send email.");
 			}else{
 				logger.error("验证码输入错误！");
-				vo.setCode(201);
+				vo.setCode(Constant.CODE_201);
 				vo.setMessage("kaptcha error.");
 			}
 		}catch(Exception e){
 			logger.error("客户留言出现错误！",e);
-			vo.setCode(500);
+			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("server error.");
 		}
 		return vo;

@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.brightengold.model.WebConfig;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
 import com.brightengold.service.WebConfigService;
+import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.MessageVo;
 
 /**
  * @ClassName: SystemController  
@@ -38,9 +40,11 @@ public class WebConfigController {
 		return "admin/sys/webconfig/detail";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
-	public String update(WebConfig config, HttpServletRequest request){
+	public MessageVo update(WebConfig config, HttpServletRequest request){
 		WebConfig webConfig = webConfigService.loadSystemConfig();
+		MessageVo vo = null;
 		try{
 			boolean flag = webConfigService.saveOrUpdateSystem(config);
 			if(flag){
@@ -48,15 +52,17 @@ public class WebConfigController {
 				if(!webConfig.getKeyword().equals(config.getKeyword())){
 					content.append("网站关键字由\""+webConfig.getKeyword()+"\"修改为\""+config.getKeyword()+"\"");
 				}
-				MsgUtil.setMsgUpdate("success");
 				logger.info("修改web配置信息成功|{}",config);
 				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改网站设置成功！");
 			}else{
 				logger.error("修改网站关键字出错");
+				vo = new MessageVo(Constant.ERROR_CODE,"修改网站设置失败！");
 			}
 		}catch(Exception e){
 			logger.error("修改网站关键字报错",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改网站设置失败！");
 		}
-		return "redirect:/admin/sys/webconfig/detail.html";
+		return vo;
 	}
 }

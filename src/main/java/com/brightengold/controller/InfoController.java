@@ -20,8 +20,9 @@ import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Info;
 import com.brightengold.service.InfoService;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
+import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
 import cn.rainier.nian.utils.FileUtil;
@@ -55,20 +56,23 @@ public class InfoController {
 		return "admin/sys/info/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(Info info) {
+	public MessageVo add(Info info) {
 		StringBuilder sb = new StringBuilder();
+		MessageVo vo = null;
 		try {
 			info.setUrl("views/html/info/"+info.getCode()+".htm");
 			infoService.save(info);
 			sb.append("信息名称："+info.getName());
-			MsgUtil.setMsgAdd("success");
 			LogUtil.getInstance().log(LogType.ADD, sb.toString());
 			logger.info("新增信息{}成功！",info);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"新增信息【"+info.getName()+"】成功！");
 		} catch (Exception e) {
 			logger.error("新增信息失败",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"新增信息【"+info.getName()+"】失败！");
 		}
-		return "redirect:/admin/sys/info/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/{infoId}/update",method=RequestMethod.GET)
@@ -79,10 +83,12 @@ public class InfoController {
 		return "admin/sys/info/update";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{infoId}/update",method=RequestMethod.POST)
-	public String update(HttpServletRequest request, 
+	public MessageVo update(HttpServletRequest request, 
 			@PathVariable Integer infoId,Info info) {
 		StringBuilder content = new StringBuilder();
+		MessageVo vo = null;
 		try {
 			if(infoId!=null){
 				Info tinfo = infoService.loadOne(infoId);
@@ -92,31 +98,40 @@ public class InfoController {
 				}else{
 					info.setUrl(tinfo.getUrl());
 				}
-				infoService.save(info);
-				logger.info("修改信息内容|{}",info);
-				MsgUtil.setMsgUpdate("success");
-				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				if(infoService.updateInfo(info)){
+					logger.info("修改信息内容|{}",info);
+					LogUtil.getInstance().log(LogType.EDIT,content.toString());
+					vo = new MessageVo(Constant.SUCCESS_CODE,"修改信息【"+info.getName()+"】成功！");
+				}else{
+					vo = new MessageVo(Constant.ERROR_CODE,"修改信息【"+info.getName()+"】失败！");
+				}
 			}
 		} catch (Exception e) {
 			logger.error("修改信息失败！",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"信息Id不存在");
 		}
-		return "redirect:/admin/sys/info/1.html";
+		return vo;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{infoId}/del",method=RequestMethod.GET)
-	public String del(@PathVariable Integer infoId,HttpServletRequest request){
+	public MessageVo del(@PathVariable Integer infoId,HttpServletRequest request){
+		MessageVo vo = null;
 		if(infoId!=null){
 			StringBuilder sb = new StringBuilder();
 			Info info = infoService.loadOne(infoId);
-			infoService.deleteInfo(info);
-			logger.warn("删除信息内容|{}",info);
-			String path = request.getSession().getServletContext().getRealPath("/");
-			FileUtil.delFile(path +File.separator+info.getUrl());
-			sb.append("名称："+info.getName());
-			MsgUtil.setMsgDelete("success");
-			LogUtil.getInstance().log(LogType.DEL, sb.toString());
+			if(infoService.deleteInfo(info)){
+				logger.warn("删除信息内容|{}",info);
+				String path = request.getSession().getServletContext().getRealPath("/");
+				FileUtil.delFile(path +File.separator+info.getUrl());
+				sb.append("名称："+info.getName());
+				LogUtil.getInstance().log(LogType.DEL, sb.toString());
+				vo = new MessageVo(Constant.SUCCESS_CODE);
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"删除信息【"+info.getName()+"】失败！");
+			}
 		}
-		return "redirect:/admin/sys/info/1.html";
+		return vo;
 	}
 	public PageRainier<Info> getPage() {
 		return page;

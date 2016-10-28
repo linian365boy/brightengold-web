@@ -32,4 +32,6 @@ public interface ColumnDao {
 	long findAllCount(RequestParam param);
 	
 	List<Column> findList(RequestParam param);
+	
+	void updateColumn(Column column);
 }

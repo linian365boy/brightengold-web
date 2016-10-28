@@ -37,13 +37,13 @@ import com.brightengold.service.ColumnService;
 import com.brightengold.service.CompanyService;
 import com.brightengold.service.InfoService;
 import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
 import com.brightengold.service.ProductService;
 import com.brightengold.service.SystemConfig;
 import com.brightengold.util.Constant;
 import com.brightengold.util.FreemarkerUtil;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
+import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
 import cn.rainier.nian.model.User;
@@ -121,15 +121,16 @@ public class ProductController {
 			model.put("crossCol", crossCol);
 			model.put("indexAds", ads);
 			model.put("model", product);
-			return "admin_unless/goods/product/detail";
 		}
-		return "redirect:/admin/goods/product/products/1.html";
+		return "admin_unless/goods/product/detail";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.POST)
-	public String update(HttpServletRequest request,MultipartFile photo, 
+	public MessageVo update(HttpServletRequest request,MultipartFile photo, 
 			@PathVariable Integer productId,Product product) {
 		StringBuilder content = new StringBuilder();
+		MessageVo vo = null;
 		try {
 			if(productId!=null){
 				Product tempProduct = productService.loadProductById(productId);
@@ -159,21 +160,23 @@ public class ProductController {
 					product.setUrl(Tools.getRndFilename()+".htm");
 				}
 				product.setStatus(tempProduct.isStatus());
-				productService.saveProduct(product);
+				productService.updateProduct(product);
 				logger.info("修改产品信息|{}",product);
-				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 				//删除页面
 				String path = request.getSession().getServletContext().getRealPath("/");
 				Tools.delFile(path + Constant.PRODUCTPRE + File.separator+productId+".htm");
 				Tools.delFile(path + Constant.PRODUCTPATH + File.separator+product.getUrl());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改产品【"+product.getEnName()+"】信息成功！");
 			}
 		} catch (NumberFormatException e) {
 			logger.error("修改产品信息报错",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改产品信息失败！");
 		} catch (IOException e) {
 			logger.error("修改产品信息报错",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改产品信息失败！");
 		}
-		return "redirect:/admin/goods/product/products/1.html";
+		return vo;
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
@@ -181,10 +184,12 @@ public class ProductController {
 		return "admin/goods/product/add";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public String add(MultipartFile photo,Product product,HttpServletRequest request) {
+	public MessageVo add(MultipartFile photo,Product product,HttpServletRequest request) {
 		User u = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		StringBuilder sb = new StringBuilder();
+		MessageVo vo = null;
 		try {
 			String categoryId = request.getParameter("parentC");
 			String childCateId = request.getParameter("childrenC");
@@ -206,28 +211,34 @@ public class ProductController {
 				product.setPriority(0);
 			}
 			productService.saveProduct(product);
-			MsgUtil.setMsgAdd("success");
 			sb.append("名称："+product.getEnName());
 			LogUtil.getInstance().log(LogType.ADD, sb.toString());
 			logger.info("新增产品{}成功！",product);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"新增产品【"+product.getEnName()+"】成功！");
 		} catch (Exception e) {
 			logger.error("新增产品发生错误。",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"新增产品【"+product.getEnName()+"】失败！");
 		}
-		return "redirect:/admin/goods/product/products/1.html";
+		return vo;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{productId}/del",method=RequestMethod.GET)
-	public String del(@PathVariable Integer productId,Product product){
+	public MessageVo del(@PathVariable Integer productId,Product product){
+		MessageVo vo = null;
 		if(productId!=null){
 			StringBuilder sb = new StringBuilder();
 			product = productService.loadProductById(productId);
-			productService.delProduct(productId);
-			logger.warn("删除了产品|{}",product);
-			sb.append("名称："+product.getEnName());
-			MsgUtil.setMsgDelete("success");
-			LogUtil.getInstance().log(LogType.DEL, sb.toString());
+			if(productService.delProduct(productId)){
+				logger.warn("删除了产品|{}",product);
+				sb.append("名称："+product.getEnName());
+				LogUtil.getInstance().log(LogType.DEL, sb.toString());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"删除产品【"+product.getEnName()+"】成功！");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"删除产品【"+product.getEnName()+"】失败！");
+			}
 		}
-		return "redirect:/admin/goods/product/products/1.html";
+		return vo;
 	}
 	
 	@Deprecated
@@ -240,13 +251,14 @@ public class ProductController {
 			}
 			temp.setPublish(true);
 			productService.saveProduct(temp);
-			MsgUtil.setMsg("success", "产品发布成功！");
 		}
 		return "redirect:/admin/goods/product/products/1.html";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{productId}/release",method=RequestMethod.GET)
-	public String releaseProduct(HttpServletRequest request, @PathVariable Integer productId, ModelMap map){
+	public MessageVo releaseProduct(HttpServletRequest request, @PathVariable Integer productId, ModelMap map){
+		MessageVo vo = null;
 		if(productId!=null){
 			Product temp = productService.loadProductById(productId);
 			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
@@ -275,12 +287,12 @@ public class ProductController {
 			if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
 				productService.saveProduct(temp);
 				logger.info("生成产品|{}页面成功",temp.getEnName());
-				MsgUtil.setMsg("success", "产品发布成功！");
+				vo = new MessageVo(Constant.SUCCESS_CODE,"生产产品【"+temp.getEnName()+"】页面成功！");
 			}else{
-				MsgUtil.setMsg("error", "产品发布失败！");
+				vo = new MessageVo(Constant.ERROR_CODE,"生产产品【"+temp.getEnName()+"】页面失败！");
 			}
 		}
-		return "redirect:/admin/goods/product/products/1.html";
+		return vo;
 	}
 	
 	

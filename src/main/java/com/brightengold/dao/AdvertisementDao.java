@@ -23,4 +23,6 @@ public interface AdvertisementDao {
 	long findAllCount();
 	
 	List<Advertisement> findList(RequestParam param);
+	
+	void updateAdvertisement(Advertisement ad);
 }
