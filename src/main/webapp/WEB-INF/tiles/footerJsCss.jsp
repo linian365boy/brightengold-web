@@ -78,18 +78,18 @@
 		  $("#menuText").val(text);
 		  $(".sidebar .sidebar-menu li").removeClass("active");
 	      $("a[title='"+text+"']").parents(".sidebar-menu li").addClass("active");
-		  $('#menuForm').ajaxForm(function(data) {
-	         $("#menuForm").prop("action","#");
-	         $("#pmenuText").val("");
-	    	 $("#menuText").val("");
-	    	 if(data.indexOf("<title>login page</title>")!=-1){
-	    		 console.info(data);
-	    		 top.location.href="${ctx}admin/login.html";
-	    	 }else{
-		    	 $("div.content-wrapper").html(data);
-	    	 }
-	      });
-		  $('#menuForm').submit();
+		  $('#menuForm').ajaxSubmit({
+			  success:function(data) {
+			         $("#menuForm").prop("action","#");
+			         $("#pmenuText").val("");
+			    	 $("#menuText").val("");
+			    	 if(data.indexOf("<title>login page</title>")!=-1){
+			    		 top.location.href="${ctx}admin/login.html";
+			    	 }else{
+				    	 $("div.content-wrapper").html(data);
+			    	 }
+			  }
+		  });
 	  }
 		function runningFormatter(value, row, index){
 			  return (index+1)+parseInt($(".page-size").text())*(parseInt($(".page-number.active").text())-1);
