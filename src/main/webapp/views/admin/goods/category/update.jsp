@@ -36,21 +36,6 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#form').ajaxForm({
-		dataType:'json',
-		success:function(json) { 
-            if(JSON.stringify(json).indexOf("login")!=-1){
-	    		 top.location.href="${ctx}admin/login.html";
-	    	}else{
-	    		if(json.code==200){
-	    			$("button[name='refresh']",top.document).click();
-	    			top.art.dialog.list['bianji'].close();
-	    		}else{
-	    			$(".has-error").removeClass("hide");
-	    		}
-	    	}
-        }
-	}); 
 	$("#form").validate({
 			rules:{
 				"name":{
@@ -83,6 +68,23 @@ $(document).ready(function(){
 			},
 			success: function(element) {
 			      jQuery(element).closest('.form-group').removeClass('has-error');
+			},
+			submitHandler: function(form){      
+				$(form).ajaxSubmit({
+					dataType:'json',
+					success:function(json) { 
+			            if(JSON.stringify(json).indexOf("login")!=-1){
+				    		 top.location.href="${ctx}admin/login.html";
+				    	}else{
+				    		if(json.code==200){
+				    			$("button[name='refresh']",top.document).click();
+				    			top.art.dialog.list['bianji'].close();
+				    		}else{
+				    			$(".has-error").removeClass("hide");
+				    		}
+				    	}
+			        }
+				});
 			}
 	});
 });

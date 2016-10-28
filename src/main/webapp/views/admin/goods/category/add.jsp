@@ -36,21 +36,6 @@
 </style>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$('#form').ajaxForm({
-			dataType:'json',
-			success:function(json) { 
-	            if(JSON.stringify(json).indexOf("login")!=-1){
-		    		 top.location.href="${ctx}admin/login.html";
-		    	}else{
-		    		if(json.code==200){
-		    			$("button[name='refresh']",top.document).click();
-		    			top.art.dialog.list['tianjia'].close();
-		    		}else{
-		    			$(".has-error").removeClass("hide");
-		    		}
-		    	}
-	        }
-		}); 
 		$.getJSON("${ctx}admin/goods/category/getParentByAjax/1.html",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
@@ -88,10 +73,27 @@
 				}
 			},
 			highlight: function(element) {
-			      jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+			    jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
 			},
 			success: function(element) {
-			      jQuery(element).closest('.form-group').removeClass('has-error');
+			    jQuery(element).closest('.form-group').removeClass('has-error');
+			},
+			submitHandler: function(form){
+				$(form).ajaxSubmit({
+					dataType:'json',
+					success:function(json) {
+			            if(JSON.stringify(json).indexOf("login")!=-1){
+				    		 top.location.href="${ctx}admin/login.html";
+				    	}else{
+				    		if(json.code==200){
+				    			$("button[name='refresh']",top.document).click();
+				    			top.art.dialog.list['tianjia'].close();
+				    		}else{
+				    			$(".has-error").removeClass("hide");
+				    		}
+				    	}
+			        }
+				});
 			}
 		});
 	});
