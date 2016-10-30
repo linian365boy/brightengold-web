@@ -48,7 +48,7 @@
 		update tb_product set status = #{status} where id = #{id}
 	</update>
 	
-	<select id="findOne">
+	<select id="findOne" parameterType="int" resultType="Product">
 		select * from tb_product where id=#{productId}
 	</select>
 	

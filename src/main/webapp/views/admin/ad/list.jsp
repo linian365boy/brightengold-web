@@ -7,27 +7,25 @@
 		art.dialog.open(url,{
 			title:'添加滚动图片',
 			id:'tianjia',
-			width: 550,
+			width: 768,
 			height: 440,
 			resize: false
 		});
 	};
 	var update = function(obj){
-		var newsId = $(obj).attr("name");
-		var url = '${ctx}admin/ad/'+newsId+'/update.html';
+		var url = '${ctx}admin/ad/'+obj.id+'/update.html';
 		art.dialog.open(url,{
 			title:'添加滚动图片',
-			id:'tianjia',
-			width: 550,
+			id:'bianji',
+			width: 768,
 			height: 440,
 			resize: false
 		});
 	};
 	//del
 	var del = function(obj){
-		var newsId = $(obj).attr("name");
 		art.dialog.confirm('确定删除此新闻？',function(){
-			var url = '${ctx}admin/ad/'+newsId+'/delete.html';
+			var url = '${ctx}admin/ad/'+obj.id+'/delete.html';
 			window.location.href=url;
 		});
 	};
@@ -82,7 +80,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-			<table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+            <div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+			<table id="table" data-toolbar="#toolbar"
+			 data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 
@@ -96,7 +100,7 @@
     				<th data-formatter="runningFormatter">序号</th>
     				<th data-formatter="adImgFormatter">图片</th>
 					<th data-field="name">图片名称</th>
-					<th data-field="adHrefFormatter">跳转路径</th>
+					<th data-formatter="adHrefFormatter">跳转路径</th>
 					<th data-field="width">宽度</th>
 					<th data-field="height">高度</th>
 					<th data-field="priority">排序号</th>

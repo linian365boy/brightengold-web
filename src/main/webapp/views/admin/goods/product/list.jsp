@@ -3,33 +3,34 @@
     <%@include file="../../../commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var productId = $(obj).attr("name");
-		location.href= '${ctx}admin/goods/product/'+productId+'/update.html';
+		$.get('${ctx}admin/goods/product/'+obj.id+'/update.html',function(data){
+			$("div.content-wrapper").html(data);
+		});
 	};
 		
 	var tianjia = function(){
-		location.href="${ctx}admin/goods/product/add.html";
+		$.get("${ctx}admin/goods/product/add.html",function(data){
+			$("div.content-wrapper").html(data);
+		});
 	};
 		
 	var del = function(obj){
-		var productId = $(obj).attr("name");
 		art.dialog.confirm('确定删除此商品',function(){
-			var url = '${ctx}admin/goods/product/'+productId+'/del.html';
+			var url = '${ctx}admin/goods/product/'+obj.id+'/del.html';
 			window.location.href=url;
 		});
 	};
 	
 	var publish = function(obj){
-		var productId = $(obj).attr("name");
-		$.get("${ctx}admin/goods/product/"+productId+"/checkPub.html",function(rs){
+		$.get("${ctx}admin/goods/product/"+obj.id+"/checkPub.html",function(rs){
 			if(rs=="1"){
 				art.dialog.confirm('此商品已发布，确定重新发布？',function(){
-					var url = '${ctx}admin/goods/product/'+productId+'/release.html';
+					var url = '${ctx}admin/goods/product/'+obj.id+'/release.html';
 					window.location.href=url;
 				});
 			}else{
 				art.dialog.confirm('确定发布此商品？',function(){
-					var url = '${ctx}admin/goods/product/'+productId+'/release.html';
+					var url = '${ctx}admin/goods/product/'+obj.id+'/release.html';
 					window.location.href=url;
 				});
 			}
@@ -105,7 +106,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar" 
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 

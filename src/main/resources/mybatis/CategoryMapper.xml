@@ -14,6 +14,18 @@
 		<result column="parentName" property="parentName" jdbcType="VARCHAR"/>
 		<result column="columnName" property="columnName" jdbcType="VARCHAR"/>
 	</resultMap>
+	<resultMap type="Category" id="CategoryChildMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="enName" property="enName" jdbcType="VARCHAR"/>
+		<result column="parentId" property="parentId" jdbcType="INTEGER"/>
+		<result column="columnId" property="columnId" jdbcType="INTEGER"/>
+		<collection property="children" ofType="Category">
+			<id column="id" property="id" jdbcType="INTEGER"/>
+			<result column="enName" property="enName" jdbcType="VARCHAR"/>
+		</collection>
+	</resultMap>
+	
 	<select id="findParentByAjax" resultType="Category">
 		select c.id,c.enName from tb_category c where c.parentId is null order by c.createDate asc
 	</select>
@@ -59,7 +71,7 @@
 		order by c1.createDate desc,c1.id desc limit #{offset},#{limit}
 	</select>
 	
-	<select id="findOneById" parameterType="int" resultType="Category">
+	<select id="findOneById" parameterType="int" resultMap="CategoryChildMap">
 		select * from tb_category where id=#{categoryId}
 	</select>
 	

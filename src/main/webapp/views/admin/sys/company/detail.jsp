@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@include file="/views/commons/include.jsp" %>
-<script type="text/javascript" src="${ctx }resources/plugins/datepicker/bootstrap-datepicker.js"></script>
+<%@include file="/views/commons/include.jsp" %>
+<script type="text/javascript" src="/resources/plugins/datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="${ctx }resources/plugins/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="${ctx }resources/plugins/ckeditor/lang/zh-cn.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<link rel="stylesheet" href="/resources/plugins/datetimepicker/bootstrap-datetimepicker.min.css"/>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#form").validate({
@@ -44,8 +47,9 @@
 			      jQuery(element).closest('.form-group').removeClass('has-error');
 			}
 		});
-		
+	    CKEDITOR.replace('introduce');
 	});
+	$('#createDate').datetimepicker({format: 'yyyy-mm-dd'});
 </script>
 
 	<!-- Content Header (Page header) -->
@@ -70,7 +74,6 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            
 		<div id="tab1" class="tab_content">
 			<form id="form" action="${ctx }admin/sys/company/update.html" method="post" 
 			enctype="multipart/form-data" class="form-horizontal">
@@ -98,8 +101,8 @@
 				   <div class="form-group">
 					    <label for="createDate" class="col-sm-2 control-label">公司创建日期</label>
 					    <div class="col-sm-8">
-					      <input id="createDate" class="form-control" name="createDate" 
-					      class="Wdate" onfocus="WdatePicker({maxDate:'%y-%M-%d'})" value='<fmt:formatDate value="${model.createDate }" pattern="yyyy-MM-dd"/>'/>
+					      <input id="createDate" readonly class="form-control" name="createDate" 
+					      value='<fmt:formatDate value="${model.createDate }" pattern="yyyy-MM-dd"/>'/>
 					    </div>
 				   </div>
 				   <div class="form-group">

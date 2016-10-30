@@ -25,8 +25,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.utils.PageRainier;
+
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
+import com.brightengold.model.Category;
 import com.brightengold.model.Column;
 import com.brightengold.model.Company;
 import com.brightengold.model.Info;
@@ -45,9 +49,6 @@ import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
-
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/goods/product")
@@ -87,7 +88,15 @@ public class ProductController {
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.GET)
 	public String update(@PathVariable Integer productId,Model model) {
 		if (productId != null) {
-			model.addAttribute("model",productService.loadProductById(productId));
+			Product product = productService.loadProductById(productId);
+			model.addAttribute("model",product);
+			if(product.getCategoryId() != null){
+				Category category = categoryService.loadCategoryById(product.getCategoryId());
+				model.addAttribute("category",category);
+				if(category != null && category.getParentId() != null){
+					model.addAttribute("parentCategory",categoryService.loadCategoryById(category.getParentId()));
+				}
+			}
 			model.addAttribute("parents", categoryService.findParentByAjax());
 		}
 		return "admin/goods/product/update";

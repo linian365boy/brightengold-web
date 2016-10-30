@@ -2,6 +2,7 @@ package com.brightengold.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -48,6 +49,8 @@ public class Category implements Serializable{
 	private String parentName;
 	//分类所在的栏目名称
 	private String columnName;
+	//子分类
+	private transient Set<Category> children;
 	
 	//使用mybatis resuleMap的setter getter方式注入属性，必须要有一个空参数的构造方法
 	public Category(){}
@@ -123,6 +126,12 @@ public class Category implements Serializable{
 	}
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
+	}
+	public Set<Category> getChildren() {
+		return children;
+	}
+	public void setChildren(Set<Category> children) {
+		this.children = children;
 	}
 	@Override
 	public String toString() {

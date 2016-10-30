@@ -59,10 +59,13 @@
 				}
 			},"html");
 		};
+		
+		var publishDateFormatter=function(value, row, index){
+			return row.publishDate?row.publishDate:"<span class='label label-default' title='未发布'>未发布</span>";
+		};
 		$("#table").bootstrapTable();
 </script>
-
-<!-- Content Header (Page header) -->
+	<!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         	新闻管理
@@ -85,7 +88,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar" 
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 
@@ -100,7 +109,7 @@
 					<th data-field="title">新闻标题</th>
 					<th data-field="columnName">所在栏目</th>
 					<th data-field="createDate">创建日期</th>
-					<th data-field="publishDate">发布日期</th>
+					<th data-formatter="publishDateFormatter">发布日期</th>
 					<th data-field="priority">优先值</th>
 					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr> 

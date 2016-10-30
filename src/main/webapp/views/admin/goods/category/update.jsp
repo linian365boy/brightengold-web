@@ -116,7 +116,7 @@ function changeCol(obj){
 </script>
 </head>
 <body>
-	 <form id="form" class="form-horizontal" action="#" method="post" target="_parent">
+	 <form id="form" class="form-horizontal content" action="#" method="post" target="_parent">
 		<div class="box-body">
 			 <div class="form-group">
 			    <label for="parentCs" class="col-sm-2 control-label">所属栏目</label>
