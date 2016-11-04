@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@include file="../../../commons/include.jsp" %>
+    <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
 		var url = '${ctx}admin/goods/category/'+obj.id+'/update.html';
@@ -34,7 +34,7 @@
 			    		if(json.code==200){
 			    			$("button[name='refresh']",window.document).click();
 			    		}else{
-			    			art.dialog.tips("<span>删除失败，系统发生错误！</span>", 1.5);
+			    			art.dialog.tips(json.message, 1.5);
 			    		}
 			    	}
 				},"json");

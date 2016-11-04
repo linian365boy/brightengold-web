@@ -21,8 +21,8 @@
 		<result column="parentId" property="parentId" jdbcType="INTEGER"/>
 		<result column="columnId" property="columnId" jdbcType="INTEGER"/>
 		<collection property="children" ofType="Category">
-			<id column="id" property="id" jdbcType="INTEGER"/>
-			<result column="enName" property="enName" jdbcType="VARCHAR"/>
+			<id column="child_id" property="id" jdbcType="INTEGER"/>
+			<result column="child_enName" property="enName" jdbcType="VARCHAR"/>
 		</collection>
 	</resultMap>
 	
@@ -72,7 +72,8 @@
 	</select>
 	
 	<select id="findOneById" parameterType="int" resultMap="CategoryChildMap">
-		select * from tb_category where id=#{categoryId}
+		select c1.*,c2.id as child_id,c2.enName as child_enName from tb_category c1 left join tb_category c2 
+		on c2.parentId = c1.id where c1.id=#{categoryId}
 	</select>
 	
 	<insert id="save">

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,18 +87,17 @@ public class RoleController {
 	
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public MessageVo add(Role role, HttpServletRequest request) {
+	public MessageVo add(Role role) {
 		MessageVo vo = null;
-		try {
-			String marking = UUIDGenerator.getUUID().toUpperCase();
-			role.setName("ROLE_"+marking);
-			role.setCreateDate(new Date());
-			roleService.saveRole(role);
+		String marking = UUIDGenerator.getUUID().toUpperCase();
+		role.setName("ROLE_"+marking);
+		role.setCreateDate(new Date());
+		if(roleService.saveRole(role)){
 			LogUtil.getInstance().log(LogType.ADD,"角色："+role.getDescribes());
 			logger.info("添加角色{}成功！",role);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"添加角色"+role.getDescribes()+"成功！");
-		} catch (Exception e) {
-			logger.error("添加角色发生错误",e);
+		}else{
+			logger.error("添加角色{}发生错误!",role);
 			vo = new MessageVo(Constant.ERROR_CODE,"添加角色"+role.getDescribes()+"失败！");
 		}
 		return vo;
@@ -117,11 +117,11 @@ public class RoleController {
 		MessageVo vo = null;
 		if(roleName!=null){
 			Role temp = roleService.loadRoleByName(role.getName());
-			String ryName = temp.getDescribes();
-			temp.setDescribes(role.getDescribes());
-			if(roleService.updateRole(temp)){
-				logger.info("修改角色信息|{}",temp);
-				LogUtil.getInstance().log(LogType.EDIT,"角色由\""+ryName+"\"修改为：\""+temp.getDescribes()+"\"");
+			role.setCreateDate(temp.getCreateDate());
+			role.setDefaultOrNo(temp.isDefaultOrNo());
+			if(roleService.updateRole(role)){
+				logger.info("修改角色信息|{}",role);
+				LogUtil.getInstance().log(LogType.EDIT,"角色由\""+temp.getDescribes()+"\"修改为：\""+role.getDescribes()+"\"");
 				vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+temp.getDescribes()+"】修改成功！");
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"角色【"+temp.getDescribes()+"】修改失败！");
@@ -131,7 +131,7 @@ public class RoleController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/{roleName}/del",method=RequestMethod.GET)
+	@RequestMapping(value="/{roleName}/del",method=RequestMethod.POST)
 	public MessageVo del(@PathVariable String roleName){
 		MessageVo vo = null;
 		if(roleName!=null){
@@ -139,7 +139,7 @@ public class RoleController {
 			if(roleService.delRole(roleName)){
 				LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDescribes());
 				logger.warn("删除角色为{}",role.getDescribes());
-				vo = new MessageVo(Constant.ERROR_CODE,"删除角色【"+role.getDescribes()+"】成功！");
+				vo = new MessageVo(Constant.SUCCESS_CODE,"删除角色【"+role.getDescribes()+"】成功！");
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"删除角色【"+role.getDescribes()+"】失败！");
 			}
@@ -150,6 +150,14 @@ public class RoleController {
 	@RequestMapping(value="/qxfp",method=RequestMethod.GET)
 	public String qxfp(){
 		return "admin/sys/role/qxfp";
+	}
+	
+	@RequestMapping(value="/{roleName}/viewResource",method=RequestMethod.GET)
+	public String viewResource(@PathVariable("roleName") String roleId,ModelMap map){
+		List<Resource> resources = roleService.findResourceById(roleId);
+		map.put("resources", resources);
+		map.put("roleDesc", roleService.findRoleDesc(roleId));
+		return "admin_unless/sys/role/viewResource";
 	}
 	
 	@RequestMapping(value="/{roleName}/distribute",method=RequestMethod.POST)

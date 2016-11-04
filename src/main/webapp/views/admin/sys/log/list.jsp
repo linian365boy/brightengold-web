@@ -43,9 +43,9 @@
     				<th data-formatter="runningFormatter">序号</th>
 	                <th data-field="type">操作</th>
 	                <th data-field="operatorRealName">操作员</th>
-	                <!-- <th width="16%">模块</th> -->
+	                <th data-field="menuName">菜单模块</th>
 	                <th data-field="createTime">操作日期</th>
-	                <th data-formatter="actionFormatter" data-events="actionEvents">内容</th>
+	                <th data-field="content">内容</th>
 				</tr> 
                 </thead>
                 <%-- <tbody>

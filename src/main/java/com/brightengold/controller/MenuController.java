@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,6 +65,29 @@ public class MenuController {
 		List<Menu> parentMenu = menuService.findParentByAjax();
 		map.put("parentMenu", parentMenu);
 		return "admin_unless/sys/menu/add";
+	}
+	
+	@RequestMapping("/{menuId}/update")
+	public String updateUI(@PathVariable("menuId") Integer menuId, ModelMap map){
+		Menu menu = menuService.loadMenuById(menuId);
+		List<Menu> parentMenu = menuService.findParentByAjax();
+		map.put("model", menu);
+		map.put("parentMenu", parentMenu);
+		return "admin_unless/sys/menu/update";
+	}
+	
+	@RequestMapping(value="/{menuId}/update",method=RequestMethod.POST)
+	public MessageVo doUpdate(@PathVariable("menuId") Integer menuId, Menu menu){
+		MessageVo vo = null;
+		Menu tempMenu = menuService.loadMenuById(menuId);
+		if(menuService.updateMenu(menu)){
+			logger.info("原菜单{}，修改成菜单{}成功!",tempMenu,menu);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"修改后台菜单成功！");
+		}else{
+			logger.info("原菜单{}，修改成菜单{}失败!",tempMenu,menu);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改后台菜单失败！");
+		}
+		return vo;
 	}
 	
 	@ResponseBody

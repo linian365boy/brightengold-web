@@ -17,7 +17,17 @@
 	var del = function(obj){
 		art.dialog.confirm('确定删除此商品',function(){
 			var url = '${ctx}admin/goods/product/'+obj.id+'/del.html';
-			window.location.href=url;
+			$.post(url,function(json){
+				if(JSON.stringify(json).indexOf("login")!=-1){
+		    		 top.location.href="${ctx}admin/login.html";
+		    	}else{
+		    		if(json.code==200){
+		    			$("button[name='refresh']",window.document).click();
+		    		}else{
+		    			art.dialog.tips(json.message, 1.5);
+		    		}
+		    	}
+			},"json");
 		});
 	};
 	

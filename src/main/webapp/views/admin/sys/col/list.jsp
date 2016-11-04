@@ -3,13 +3,12 @@
     <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var categoryId = $(obj).attr("name");
-		var url = '${ctx}admin/sys/col/'+categoryId+'/update.html';
+		var url = '${ctx}admin/sys/col/'+obj.id+'/update.html';
 		art.dialog.open(url,{
-			title:'编辑分类信息',
+			title:'编辑栏目信息',
 			id:'bianji',
-			width:550,
-			height:340,
+			width:768,
+			height:360,
 			resize: false
 			});
 		};
@@ -19,31 +18,33 @@
 			art.dialog.open(url,{
 				title:'添加栏目类别',
 				id:'tianjia',
-				width: 550,
-				height: 340,
+				width: 768,
+				height: 360,
 				resize: false
 			});
 		};
 		
 		var del = function(obj){
-			var categoryId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此栏目？',function(){
-				var url = '${ctx}admin/sys/col/'+categoryId+'/delete.html';
-				$.getJSON(url,function(json){
-					art.dialog.alert(json.message,function(){
-						if(json.code==200){
-							$("#searchForm").submit();
-						}
-					});
-				});
+			art.dialog.confirm('确定删除此['+obj.enName+']栏目？',function(){
+				var url = '${ctx}admin/sys/col/'+obj.id+'/delete.html';
+				$.post(url,function(json){
+					if(JSON.stringify(json).indexOf("login")!=-1){
+			    		 top.location.href="${ctx}admin/login.html";
+			    	}else{
+			    		if(json.code==200){
+			    			$("button[name='refresh']",window.document).click();
+			    		}else{
+			    			art.dialog.tips(json.message, 1.5);
+			    		}
+			    	}
+				},"json");
 			});
 		};
-		var setPublish = function(obj){
-			var categoryId = $(obj).attr("name");
-			art.dialog.open("${ctx}admin/sys/col/"+categoryId+"/setPublishContent.html",{
+		var setPublishType = function(obj){
+			art.dialog.open("${ctx}admin/sys/col/"+obj.id+"/setPublishContent.html",{
 				title:'发布内容设置',
 				id:'setPublish',
-				width: 550,
+				width: 768,
 				height: 300,
 				resize: false
 			});
@@ -51,6 +52,19 @@
 		$(function(){
 			 $('[data-toggle="tooltip"]').tooltip();
 		});
+		
+		var typeFormatter = function(value, row, index){
+			return row.type==1?"<a class='changeType' title='点击修改发布类型' href='javascript:void(0);'>产品列表</a>":
+				(row.type==0?"<a class='changeType' title='点击修改发布类型' href='javascript:void(0);'>信息列表</a>":
+					"<a class='changeType' title='点击修改发布类型' href='javascript:void(0);'>文章标题</a>");
+		};
+		
+		window.typeEvents = {
+			    'click .changeType': function (e, value, row, index) {
+			    	setPublishType(row);
+			    }
+		};
+		
 		$("#table").bootstrapTable();
 </script>
 
@@ -77,7 +91,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar" 
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 
@@ -93,6 +113,7 @@
 					<th data-field="code">栏目代码</th>
 					<th data-field="parentName">父级栏目</th>
 					<th data-field="priority">排序号</th>
+					<th data-formatter="typeFormatter" data-events="typeEvents">发布类型</th>
 					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr> 
                 </thead>

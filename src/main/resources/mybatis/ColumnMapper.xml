@@ -32,8 +32,8 @@
 		<!-- 非表字段 -->
 		<result column="parentName" property="parentName" jdbcType="VARCHAR"/>
 		<collection property="childColumn" ofType="Column">
-			<id column="id" property="id" jdbcType="INTEGER"/>
-			<result column="name" property="name" jdbcType="VARCHAR"/>
+			<id column="child_id" property="id" jdbcType="INTEGER"/>
+			<result column="child_name" property="name" jdbcType="VARCHAR"/>
 		</collection>
 	</resultMap>
 	
@@ -42,7 +42,7 @@
 	</select>
 	
 	<select id="loadColumnByCode" resultType="Column" parameterType="java.lang.String">
-		select c from tb_column c where c.code = #{code}
+		select * from tb_column c where c.code = #{code}
 	</select>
 	
 	<select id="findChildrenByParentId" parameterType="int" resultType="Column">
@@ -54,7 +54,8 @@
 	</select>
 	
 	<select id="findOne" resultMap="ColumnAndChildMap" parameterType="int">
-		select * from tb_column c where id=#{id}
+		select c1.*,c2.id as child_id,c2.name as child_name from tb_column c1 left join 
+		tb_column c2 on c2.parentId=c1.id where c1.id=#{id}
 	</select>
 	
 	<select id="save" parameterType="Column">

@@ -117,7 +117,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar" 
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 

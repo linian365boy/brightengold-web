@@ -2,13 +2,13 @@
     pageEncoding="UTF-8"%>
     <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
-	var update = function(id){
-		var url = '${ctx}admin/sys/menu/'+id+'/update.html';
+	var update = function(obj){
+		var url = '${ctx}admin/sys/menu/'+obj.id+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑菜单',
 			id:'bianji',
-			width:450,
-			height:300,
+			width:768,
+			height:360,
 			resize: false
 			});
 		};
@@ -18,15 +18,25 @@
 			art.dialog.open(url,{
 				title:'添加菜单',
 				id:'tianjia',
-				width: 450,
-				height: 330,
+				width: 768,
+				height: 360,
 				resize: false
 			});
 		};
 		var deleteMenu = function(id){
 			art.dialog.confirm('确定删除此菜单？',function(){
-				var url = '${ctx}admin/sys/menu/'+id+'/del.html';
-				window.location.href=url;
+				var url = '${ctx}admin/sys/menu/'+obj.id+'/del.html';
+				$.post(url,function(json){
+					if(JSON.stringify(json).indexOf("login")!=-1){
+			    		 top.location.href="${ctx}admin/login.html";
+			    	}else{
+			    		if(json.code==200){
+			    			$("button[name='refresh']",window.document).click();
+			    		}else{
+			    			art.dialog.tips(json.message, 1.5);
+			    		}
+			    	}
+				},"json");
 			});
 		};
 		<!--
@@ -57,7 +67,13 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table" data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true" 
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toggle="table" data-toolbar="#toolbar" 
+              class="table table-striped" data-search="true" data-show-refresh="true" 
               data-show-columns="true" 
               data-show-export="true" 
               data-show-pagination-switch="true" 
@@ -71,7 +87,7 @@
     				<th data-formatter="runningFormatter">序号</th>
                 	<th data-field="name">资源名称</th>
 	                <th data-field="mark">别名</th>
-	                <th data-field="parentMenuName">父级资源</th>
+	                <th data-field="parentMenuName">父级菜单</th>
 					<th data-field="url">跳转路径</th>
 					<th data-field="priority">排序号</th>
 					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>

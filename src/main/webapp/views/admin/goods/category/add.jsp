@@ -17,23 +17,6 @@
 <!-- Theme style -->
 <link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
-<style type="text/css">
-	.selectpicker {
-		background-color: #fff;
-	    background-image: none;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-	    color: #555;
-	    display: block;
-	    font-size: 14px;
-	    height: 34px;
-	    line-height: 1.42857;
-	    padding: 6px 12px;
-	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-	    vertical-align: middle;
-	}
-</style>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$.getJSON("${ctx}admin/goods/category/getParentByAjax/1.html",function(returnJson){
@@ -89,6 +72,7 @@
 				    			$("button[name='refresh']",top.document).click();
 				    			top.art.dialog.list['tianjia'].close();
 				    		}else{
+				    			$("span.help-block").html(json.message);
 				    			$(".has-error").removeClass("hide");
 				    		}
 				    	}
@@ -160,7 +144,7 @@
 			  </div>
 			  <div class="form-group has-error hide">
 			  	  <label class="col-sm-3 control-label">&nbsp;</label>
-                  <span class="help-block">新增失败，系统发生错误！</span>
+                  <span class="help-block"></span>
                </div>
 			  <div class="form-group">
 			  <div class="col-sm-offset-4 col-sm-8">

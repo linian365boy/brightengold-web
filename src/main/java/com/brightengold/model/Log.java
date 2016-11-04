@@ -6,6 +6,8 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Log implements Serializable {
 	/**
 	 * 
@@ -31,6 +33,7 @@ public class Log implements Serializable {
 	/**
 	 * 操作T时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date createTime;
 	/**
 	 * 后台菜单名称
