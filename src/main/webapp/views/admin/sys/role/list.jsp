@@ -44,7 +44,9 @@
 		};
 		
 		function qxfp(obj){
-			window.location.href = '${ctx}admin/sys/role/qxfp.html';
+			$.get("${ctx}admin/sys/role/"+obj.name+"/qxfp.html",function(data){
+				$("div.content-wrapper").html(data);
+			});
 		}
 		
 		function view(obj){

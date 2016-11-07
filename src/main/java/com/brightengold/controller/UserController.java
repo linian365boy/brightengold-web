@@ -1,13 +1,16 @@
 package com.brightengold.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +64,9 @@ public class UserController {
 		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		//排除当前用户
 		users = userService.findAllUser(param, u.getId());
+		for(User user : users.getResult()){
+			user.setRoles(roleService.findNoDefaultRoleByUser(user.getId()));
+		}
 		ReturnData<User> datas = new ReturnData<User>(users.getTotalRowNum(), users.getResult());
 		return datas;
 	}
@@ -79,9 +85,8 @@ public class UserController {
 			//日志记录
 			Role role = roleService.loadRoleByName(request.getParameter("role"));
 			Role defaultR = roleService.findDefault();
-			Set<Role> roles = new HashSet<Role>();
-			roles.add(role);		//设置用户选择的权限
-			roles.add(defaultR);	//设置默认权限
+			//设置用户选择的权限；设置默认权限
+			List<Role> roles = Arrays.asList(role,defaultR);
 			user.setRoles(roles);
 			userService.saveUser(user);
 			LogUtil.getInstance().log(LogType.ADD,"用户名："+user.getUsername()+" 姓名："+user.getRealName());
@@ -93,65 +98,84 @@ public class UserController {
 		return vo;
 	}
 	
-	@RequestMapping(value="/{username}",method=RequestMethod.GET)
-	public String detail(@PathVariable String username,Model model){
-		if(username!=null&&username!=""){
-			model.addAttribute("model",userService.loadUserByName(username));
-		}
+	@RequestMapping(value="/{userId}",method=RequestMethod.GET)
+	public String detail(@PathVariable Integer userId,Model model){
+		model.addAttribute("model",userService.loadUserById(userId));
 		return "admin_unless/sys/user/detail";
 	}
 	
-	@RequestMapping(value="/{username}/update",method=RequestMethod.GET)
-	public String update(@PathVariable String username,Model model) {
-		if (username != null) {
-			model.addAttribute("model",userService.loadUserByName(username));
-			model.addAttribute("rolesAjax", roleService.findAllByAjax());
-		}
+	@RequestMapping(value="/{userId}/update",method=RequestMethod.GET)
+	public String update(@PathVariable Integer userId,Model model) {
+		model.addAttribute("model",userService.loadUserById(userId));
+		model.addAttribute("rolesAjax", roleService.findAllByAjax());
 		return "admin_unless/sys/user/update";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/{username}/update",method=RequestMethod.POST)
-	public MessageVo update(HttpServletRequest request,@PathVariable String username,User user) {
-		Set<Role> roles = null;
+	@RequestMapping(value="/{userId}/update",method=RequestMethod.POST)
+	public MessageVo update(HttpServletRequest request,@PathVariable Integer userId,User user) {
+		List<Role> roles = null;
 		StringBuilder content = new StringBuilder();
 		MessageVo vo = null;
-		if(user.getId()!=null){
-			User temp = userService.loadUserById(user.getId());
-			if(!temp.getUsername().equals(user.getUsername())){
-				content.append("用户名由\""+temp.getUsername()+"\""+"修改为\""+user.getUsername()+"\";");
-			}else{
-				content.append("用户名："+temp.getUsername());
+		User temp = userService.loadUserById(user.getId());
+		//判断角色是否修改标志,true  修改 ；false 未修改
+		boolean roleIsUpdateFlag = true;
+		if(!temp.getUsername().equals(user.getUsername())){
+			content.append("用户名由\""+temp.getUsername()+"\""+"修改为\""+user.getUsername()+"\";");
+		}else{
+			content.append("用户名："+temp.getUsername());
+		}
+		if(!temp.getRealName().equals(user.getRealName())){
+			content.append("姓名由\""+temp.getRealName()+"\"修改为\""+user.getRealName()+"\"");
+		}else{
+			content.append("姓名："+temp.getRealName());
+		}
+		
+		roles = new ArrayList<Role>();
+		String role = request.getParameter("role");
+		String enabled = request.getParameter("enabled");
+		user.setPassword(temp.getPassword());
+		user.setAccountNonLocked(temp.isAccountNonLocked());
+		user.setLastCloseDate(temp.getLastCloseDate());
+		if(enabled!=null){
+			user.setEnabled(true);
+		}else{
+			user.setEnabled(false);
+			user.setLastCloseDate(new Date());
+		}
+		
+		//判断是否修改角色
+		if(StringUtils.isBlank(role) && CollectionUtils.isEmpty(temp.getRoles())){
+			//没有修改角色
+			roleIsUpdateFlag = false;
+		}else{
+			for(Role r : temp.getRoles()){
+				if(role.equals(r.getName())){
+					//没有修改角色
+					roleIsUpdateFlag = false;
+					break;
+				}
 			}
-			if(!temp.getRealName().equals(user.getRealName())){
-				content.append("姓名由\""+temp.getRealName()+"\"修改为\""+user.getRealName()+"\"");
+		}
+		if(userService.updateUser(user)){
+			if(roleIsUpdateFlag){
+				if(roleService.updateUserRole(user.getId(),roles)){
+					LogUtil.getInstance().log(LogType.EDIT,content.toString());
+					logger.info("用户从：{}，修改为：{}",temp,user);
+					vo = new MessageVo(Constant.SUCCESS_CODE,"用户【"+user.getUsername()+"】修改成功！");
+				}else{
+					LogUtil.getInstance().log(LogType.EDIT,content.toString());
+					logger.info("用户从：{}，修改为：{}",temp,user);
+					vo = new MessageVo(Constant.ERROR_CODE,"用户【"+user.getUsername()+"】修改失败！");
+				}
 			}else{
-				content.append("姓名："+temp.getRealName());
-			}
-			
-			roles = new HashSet<Role>();
-			String role = request.getParameter("role");
-			String enabled = request.getParameter("enabled");
-			user.setPassword(temp.getPassword());
-			user.setAccountNonLocked(temp.isAccountNonLocked());
-			user.setLastCloseDate(temp.getLastCloseDate());
-			if(enabled!=null){
-				user.setEnabled(true);
-			}else{
-				user.setEnabled(false);
-				user.setLastCloseDate(new Date());
-			}
-			roles.add(roleService.findDefault());
-			roles.add(roleService.loadRoleByName(role));
-			user.setRoles(roles);
-			if(userService.updateUser(user)){
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 				logger.info("用户从：{}，修改为：{}",temp,user);
 				vo = new MessageVo(Constant.SUCCESS_CODE,"用户【"+user.getUsername()+"】修改成功！");
-			}else{
-				logger.warn("用户{}修改信息失败",temp);
-				vo = new MessageVo(Constant.ERROR_CODE,"用户【"+user.getUsername()+"】修改失败！");
 			}
+		}else{
+			logger.warn("用户{}修改信息失败",temp);
+			vo = new MessageVo(Constant.ERROR_CODE,"用户【"+user.getUsername()+"】修改失败！");
 		}
 		return vo;
 	}

@@ -18,8 +18,9 @@
 		select r.id,r.name,r.descn from tb_resource r where r.menuId = #{menuId} order by priority desc
 	</select>
 	
-	<select id="findResourceByRole" resultType="int" parameterType="java.lang.String">
-		select rr.resourceId,rr.menuId from tb_role_resource rr where rr.roleId = #{name} order by priority desc
+	<select id="findResourceByRole" resultType="Resource" parameterType="java.lang.String">
+		select tr.id,tr.menuId from tb_role_resource rr inner join tb_resource tr on (rr.resourceId=tr.id) 
+		inner join tb_role tro on (rr.roleId=tro.name) where rr.roleId = #{name} order by tr.priority desc
 	</select>
 	
 	<select id="loadResourceByResourceId" parameterType="long" resultType="Resource">
@@ -30,4 +31,15 @@
 		select re.resString,r.name from tb_role r join tb_role_resource rr on r.name=rr.roleId join tb_resource re 
 		on re.id=rr.resourceId where re.resType=#{type} order by re.priority
 	</select>
+	
+	<delete id="delRoleResources" parameterType="java.lang.String">
+		delete from tb_role_resource where roleId = #{roleName}
+	</delete>
+	
+	<update id="updateRoleResources">
+		insert into tb_role_resource(roleId,resourceId) values 
+		<foreach collection="resources" item="item" open="(" separator=","  close=")">  
+         	#{roleName}, #{item.id}
+    	</foreach>
+	</update>
 </mapper>

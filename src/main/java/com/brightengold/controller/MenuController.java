@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,25 +111,66 @@ public class MenuController {
 	}
 	
 	private String generateJsonString(HttpServletRequest request,HttpSession session) {
-		String output = "";
+		String output = null;
 		String roleName = request.getParameter("name");
 		String id = request.getParameter("id");
 		String flag = request.getParameter("flag");
-		if(id!=null&&!"0".equals(id)&&roleName!=null&&roleName.trim()!=""){
-			output = generateTreeNodeXmlString(Long.parseLong(id),roleName);
+		if(id!=null && !("0".equals(id)) && StringUtils.isNotBlank(roleName)){
+			logger.info("enter here id|{}, roleName|{}",id,roleName);
+			output = generateTreeNodeJsonString(Integer.parseInt(id),roleName);
 		}else{
-			if("true".equals(flag)){
-				flag = "true";
-			}else{
-				flag = "false";
-			}
 			output = generateInitTreeString(session,roleName,Boolean.parseBoolean(flag));
 		}
 		return output;
 	}
 	
-	private String generateTreeNodeXmlString(long parseLong, String roleName) {
-		return null;
+	/**
+	 * generateTreeNodeXmlString:获取第三级资源
+	 * @author tanfan 
+	 * @param parseLong
+	 * @param roleName
+	 * @return 
+	 * @since JDK 1.7
+	 */
+	private String generateTreeNodeJsonString(int menuId, String roleName) {
+		StringBuilder sb = new StringBuilder();
+		List<Resource> resources = resourceService.findResourceByParentId(menuId);
+		List<Resource> resourceNames = resourceService.findResourceByRole(roleName);
+		sb.append("{\"id\": \""+menuId+"\",\"item\":[");
+		Resource res = null;
+		boolean flag = false;
+		int itIndex = 0;
+		for(Iterator<Resource>  resIt = resources.iterator();resIt.hasNext();){
+			res = resIt.next();
+			for(Iterator<Resource> it=resourceNames.iterator();it.hasNext();){
+				Integer id = it.next().getId();
+				if(res.getId()==id){
+					flag = true;
+					if(itIndex>0){
+						sb.append(",");
+					}
+					sb.append("{\"id\": \"r_"+res.getId()+"\",\"text\":\""+res.getDescn()+"\",\"checked\":\"1\"}");
+					itIndex ++;
+					break;
+				}
+				flag = false;
+			}
+			if(!flag){
+				if(itIndex>0){
+					sb.append(",");
+				}
+				sb.append("{\"id\":\"r_"+res.getId()+"\",\"text\":\""+res.getDescn()+"\"}");
+				itIndex ++;
+			}
+		}
+		sb.append("]}");
+		return sb.toString();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/findAllMenu",method=RequestMethod.GET)
+	public Object findAllMenu(HttpServletRequest request, HttpSession session){
+		return this.generateJsonString(request,session);
 	}
 
 	@ResponseBody
@@ -149,7 +191,7 @@ public class MenuController {
 	 * @Author: 李年
 	 * @CreateDate: 2013-5-9
 	 */
-	private String generateInitTreeString(HttpSession session,String name,boolean flag){
+	private String generateInitTreeString(HttpSession session, String name, boolean flag){
 		Iterator<Menu> it = null;
 		List<Menu> children = null;
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -162,7 +204,7 @@ public class MenuController {
 		}
 		String displayName;
 		boolean flags = false;
-		jsonStr.append("{\"tree\":{\"id\": \"0\",\"item\":[");
+		jsonStr.append("{\"id\": \"0\",\"item\":[");
 		int menusIndex = 0;
 		for(Menu menu : menus){
 			if(flag){
@@ -216,48 +258,12 @@ public class MenuController {
 			}
 			jsonStr.append("]}");
 		}
-		jsonStr.append("]}}");
+		jsonStr.append("]}");
 		logger.info("能够访问的菜单json字符串menuJson=>{}",jsonStr.toString());
 		session.setAttribute("menuJson", jsonStr.toString());
 		return jsonStr.toString();
 	}
 	
-	/**
-	 * @FunName: generateTreeNodeXmlString
-	 * @Description:  获取第三级资源
-	 * @param menuId
-	 * @param name
-	 * @return
-	 * @Author: 李年
-	 * @CreateDate: 2013-5-9
-	 */
-	/*public String generateTreeNodeXmlString(Long menuId,String name){
-		StringBuilder sb = new StringBuilder();
-		List<Resource> resources = resourceService.findResourceByParentId(menuId);
-		List<Resource> resourceNames = resourceService.findResourceByRole(name);
-		sb.append("<?xml version='1.0' encoding='UTF-8'?>");
-		sb.append("<tree id='"+menuId+"'>");
-		Resource res = null;
-		boolean flag = false;
-		for(Iterator<Resource>  resIt = resources.iterator();resIt.hasNext();){
-			res = resIt.next();
-			for(Iterator<Resource> it=resourceNames.iterator();it.hasNext();){
-				Integer id = it.next().getId();
-				if(res.getId()==id){
-					flag = true;
-					sb.append("<item id='r_"+res.getId()+"' text='"+res.getDescn()+"' checked='1'/>");
-					//it.remove();
-					break;
-				}
-				flag = false;
-			}
-			if(!flag)
-			sb.append("<item id='r_"+res.getId()+"' text='"+res.getDescn()+"'/>");
-		}
-		sb.append("</tree>");
-		return sb.toString();
-	}*/
-
 	public PageRainier<Menu> getMenus() {
 		return menus;
 	}

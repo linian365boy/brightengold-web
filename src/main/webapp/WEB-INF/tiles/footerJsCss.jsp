@@ -31,7 +31,7 @@
 			var pmenuText = "${pmenuText}";
 			var menuText = "${menuText}";
 			$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+new Date().getTime(),function(json){
-				var pMenu = json.tree.item;
+				var pMenu = json.item;
 				var str = "";
 				if((pMenu!=null)&&(pMenu.length!=0)){
 					for(var i=0;i<pMenu.length;i++){

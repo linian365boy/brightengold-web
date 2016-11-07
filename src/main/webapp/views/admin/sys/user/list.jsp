@@ -3,17 +3,15 @@
     <%@include file="../../../commons/include.jsp" %>
 
 <script type="text/javascript">
-
 	function detail(obj){
 		var myDialog = art.dialog({
 			id:'detail',
 			title:'员工详情',
-			width:400,
+			width:768,
 			resize: false
 		});
-		var username = $(obj).attr("name");
 		jQuery.ajax({
-			url:'${ctx}admin/sys/user/'+username+".html",
+			url:'${ctx}admin/sys/user/'+obj.id+".html",
 			type:'GET',
 			success:function(data){
 				myDialog.content(data);
@@ -26,12 +24,11 @@
 	}
 	
 	var update = function(obj){
-		var username = $(obj).attr("name");
-		var url = '${ctx}admin/sys/user/'+username+'/update.html';
+		var url = '${ctx}admin/sys/user/'+obj.id+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑员工信息',
 			id:'bianji',
-			width:450,
+			width:768,
 			height:300,
 			resize: false
 			});
@@ -42,7 +39,7 @@
 			art.dialog.open(url,{
 				title:'添加用户',
 				id:'tianjia',
-				width: 450,
+				width: 768,
 				height: 330,
 				resize: false
 			});
@@ -50,8 +47,7 @@
 		
 		var resetPassword = function(obj){
 			art.dialog.confirm('密码将重置为888888，是否确认继续？',function(){
-			var username = $(obj).attr("name");
-			var url = '${ctx}admin/sys/user/'+username+'/reset.html';
+			var url = '${ctx}admin/sys/user/'+obj.id+'/reset.html';
 			jQuery.ajax({
 				url:url,
 				success:function(data){
@@ -74,21 +70,45 @@
 		};
 		
 		var unsubscribe = function(obj){
-			var username = $(obj).attr("name");
 			art.dialog.confirm('注销后将不能使用此账户！是否确定注销此账户？',function(){
-				var url = '${ctx}admin/sys/user/'+username+'/unsubscribe.html';
+				var url = '${ctx}admin/sys/user/'+obj.id+'/unsubscribe.html';
 				window.location.href=url;
 			});
 		};
 		
 		var userRoleFormatter=function(value, row, index){
-			return "";
+			var roles = row.roles;
+			console.info(roles);
+			if(roles && roles.length>0){
+				return roles.get(0).describes;
+			}
+			return "--";
 		}
 		
 		var userStatusFormatter=function(value, row, index){
 			return row.accountNonLocked?(row.enabled?"<span class='label label-success' title='正常'>正常</span>":
 				"<span class='label label-warning' title='禁用'>禁用</span>"):"<span class='label label-danger' title='注销'>注销</span>" ;
 		}
+		
+		var userActionFormatter = function(value, row, index){
+			return [
+			        '<a class="label label-info edit" href="javascript:void(0)" title="修改">修改</a>',
+					'<a class="label label-danger ml10 reset" href="javascript:void(0)" title="重置密码">重置密码</a>',
+					'<a class="label label-info ml10 unsubscribe" href="javascript:void(0)" title="注销">注销</a>'
+			    ].join('');
+		};
+		
+		window.userActionEvents = {
+			'click .edit': function (e, value, row, index) {
+		    	update(row);
+		    },
+		    'click .reset': function (e, value, row, index) {
+		    	resetPassword(row);
+		    },
+		    'click .unsubscribe': function (e, value, row, index) {
+		    	unsubscribe(row);
+		    }
+		};
 		$("#table").bootstrapTable();
 </script>
 
@@ -135,11 +155,11 @@
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>
-                	<th data-field="username">员工号</th>
+                	<th data-field="username">用户名</th>
 	                <th data-field="realName">姓名</th>
 					<th data-formatter="userRoleFormatter">角色</th>
 					<th data-formatter="userStatusFormatter">状态</th>
-					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+					<th data-formatter="userActionFormatter" data-events="userActionEvents">操作</th>
 				</tr> 
                 </thead>
                 <%-- <tbody>

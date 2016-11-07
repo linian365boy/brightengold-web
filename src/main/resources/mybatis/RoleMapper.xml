@@ -37,17 +37,20 @@
 		select describes from tb_role where name=#{roleId}
 	</select>
 	
-	<select id="finAllByAjax">
+	<select id="finAllByAjax" resultType="Role">
 		select r.name,r.describes from tb_role r where r.defaultOrNo is false
 	</select>
 	
-	<select id="findRoleByUser">
-		select r from tb_role r inner join tb_user_role ur on r.name=ur.roleId 
-		where u.id =#{userId}
+	<select id="findRoleByUser" parameterType="int" resultType="Role">
+		select r.name,r.describes from tb_role r inner join tb_user_role ur on r.name=ur.roleId where ur.userId =#{userId}
 	</select>
 	
-	<select id="findDefaultRole">
-		select * from tb_role r where r.defaultOrNo is true
+	<select id="findNoDefaultRoleByUser" parameterType="int" resultType="Role">
+		select r.name,r.describes from tb_role r inner join tb_user_role ur on r.name=ur.roleId where ur.userId =#{userId} and r.defaultOrNo is false
+	</select>
+	
+	<select id="findDefaultRole" resultType="Role">
+		select * from tb_role r where r.defaultOrNo is true limit 1
 	</select>
 	
 	<select id="findAllCount" resultType="long">
@@ -68,4 +71,14 @@
 		select * from tb_resource tr inner join tb_role_resource trr on tr.id=trr.resourceId where trr.roleId = #{roleId}
 	</select>
 	
+	<delete id="deleteByUserId" parameterType="int">
+		delete from tb_user_role where userId=#{userId}
+	</delete>
+	
+	<insert id="insertUserRole">
+		insert into tb_user_role(userId,roleId) values
+		<foreach collection="roles" item="item" open="(" separator=","  close=")"> 
+			#{userId},#{item.name}
+		</foreach>
+	</insert>
 </mapper>

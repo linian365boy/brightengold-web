@@ -49,8 +49,8 @@
 		select * from tb_user u where u.username like concat('%',#{un},'%')
 	</select>
 	
-	<select id="findOne"  parameterType="int" resultType="User">
-		select * from tb_user where id=#{id}
+	<select id="findOne"  parameterType="int" resultMap="userRoleMap">
+		select u.*,ur.roleId as name from tb_user u left join tb_user_role ur on u.id = ur.userId where u.id = #{id}
 	</select>
 	
 	<select id="getPasswordById" resultType="java.lang.String" parameterType="int">
