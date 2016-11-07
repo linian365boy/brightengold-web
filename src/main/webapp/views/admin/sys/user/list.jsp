@@ -3,17 +3,15 @@
     <%@include file="../../../commons/include.jsp" %>
 
 <script type="text/javascript">
-
 	function detail(obj){
 		var myDialog = art.dialog({
 			id:'detail',
 			title:'员工详情',
-			width:400,
+			width:768,
 			resize: false
 		});
-		var username = $(obj).attr("name");
 		jQuery.ajax({
-			url:'${ctx}admin/sys/user/'+username+".html",
+			url:'${ctx}admin/sys/user/'+obj.id+".html",
 			type:'GET',
 			success:function(data){
 				myDialog.content(data);
@@ -26,13 +24,12 @@
 	}
 	
 	var update = function(obj){
-		var username = $(obj).attr("name");
-		var url = '${ctx}admin/sys/user/'+username+'/update.html';
+		var url = '${ctx}admin/sys/user/'+obj.id+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑员工信息',
 			id:'bianji',
-			width:450,
-			height:300,
+			width:768,
+			height:340,
 			resize: false
 			});
 		};
@@ -42,53 +39,78 @@
 			art.dialog.open(url,{
 				title:'添加用户',
 				id:'tianjia',
-				width: 450,
-				height: 330,
+				width: 768,
+				height: 350,
 				resize: false
 			});
 		};
 		
 		var resetPassword = function(obj){
-			art.dialog.confirm('密码将重置为888888，是否确认继续？',function(){
-			var username = $(obj).attr("name");
-			var url = '${ctx}admin/sys/user/'+username+'/reset.html';
-			jQuery.ajax({
-				url:url,
-				success:function(data){
-					art.dialog({
-						title:'提示消息',
-						content:'<span style="color:red">'+data+'</span>',
-						width:300,
-						time:2.5
-					});
-				},
-				error:function(data){
-					art.dialog({
-						title:'提示消息',
-						content:'连接失败!',
-						time:2.5
-					});
-				}
-			});
+			art.dialog.confirm('密码将重置为用户名'+obj.username+'，是否确认继续？',function(){
+			var url = '${ctx}admin/sys/user/'+obj.username+'/reset.html';
+			jQuery.get(url,function(json){
+					if(JSON.stringify(json).indexOf("login")!=-1){
+			    		 top.location.href="${ctx}admin/login.html";
+			    	}else{
+			    		art.dialog.tips(json.message, 2);
+			    	}
+				},"json");
 			});
 		};
 		
 		var unsubscribe = function(obj){
-			var username = $(obj).attr("name");
 			art.dialog.confirm('注销后将不能使用此账户！是否确定注销此账户？',function(){
-				var url = '${ctx}admin/sys/user/'+username+'/unsubscribe.html';
-				window.location.href=url;
+				var url = '${ctx}admin/sys/user/'+obj.username+'/unsubscribe.html';
+				jQuery.get(url,function(json){
+					if(JSON.stringify(json).indexOf("login")!=-1){
+			    		 top.location.href="${ctx}admin/login.html";
+			    	}else{
+			    		if(json.code==200){
+				    		$("button[name='refresh']",window.document).click();
+			    		}
+			    		art.dialog.tips(json.message, 2);
+			    	}
+				},"json");
 			});
 		};
 		
 		var userRoleFormatter=function(value, row, index){
-			return "";
+			var roles = row.roles;
+			//console.info("roles-=-="+JSON.stringify(roles));
+			if(roles && roles.length>0){
+				return roles[0].describes;
+			}
+			return "--";
 		}
 		
 		var userStatusFormatter=function(value, row, index){
 			return row.accountNonLocked?(row.enabled?"<span class='label label-success' title='正常'>正常</span>":
 				"<span class='label label-warning' title='禁用'>禁用</span>"):"<span class='label label-danger' title='注销'>注销</span>" ;
 		}
+		
+		var userActionFormatter = function(value, row, index){
+			return [
+			        '<a class="label label-info detail" href="javascript:void(0)" title="查看详情">查看详情</a>',
+			        '<a class="label label-info edit ml10" href="javascript:void(0)" title="修改">修改</a>',
+					'<a class="label label-danger ml10 reset" href="javascript:void(0)" title="重置密码">重置密码</a>',
+					'<a class="label label-info ml10 unsubscribe" href="javascript:void(0)" title="注销">注销</a>'
+			    ].join('');
+		};
+		
+		window.userActionEvents = {
+			'click .detail': function(e, value, row, index){
+				detail(row);
+			},
+			'click .edit': function (e, value, row, index) {
+		    	update(row);
+		    },
+		    'click .reset': function (e, value, row, index) {
+		    	resetPassword(row);
+		    },
+		    'click .unsubscribe': function (e, value, row, index) {
+		    	unsubscribe(row);
+		    }
+		};
 		$("#table").bootstrapTable();
 </script>
 
@@ -135,11 +157,11 @@
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>
-                	<th data-field="username">员工号</th>
+                	<th data-field="username">用户名</th>
 	                <th data-field="realName">姓名</th>
 					<th data-formatter="userRoleFormatter">角色</th>
 					<th data-formatter="userStatusFormatter">状态</th>
-					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+					<th data-formatter="userActionFormatter" data-events="userActionEvents">操作</th>
 				</tr> 
                 </thead>
                 <%-- <tbody>

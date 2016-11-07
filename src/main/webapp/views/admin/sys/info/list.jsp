@@ -3,28 +3,39 @@
     <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var infoId = $(obj).attr("name");
-		var url = '${ctx}admin/sys/info/'+infoId+'/update.html';
-		window.location.href=url;
-		};
+		var url = '${ctx}admin/sys/info/'+obj.id+'/update.html';
+		$.get(url,function(data){
+			$("div.content-wrapper").html(data);
+		});
+	};
 		
 		var tianjia = function(){
 			var url = "${ctx}admin/sys/info/add.html";
-			window.location.href=url;
+			$.get(url,function(data){
+				$("div.content-wrapper").html(data);
+			});
 		};
 		
 		var del = function(obj){
-			var infoId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此信息？',function(){
-				var url = '${ctx}admin/sys/info/'+infoId+'/delete.html';
-				window.location.href=url;
+			art.dialog.confirm('确定删除此'+obj.name+'信息？',function(){
+				var url = '${ctx}admin/sys/info/'+obj.id+'/delete.html';
+				$.post(url,function(json){
+					if(JSON.stringify(json).indexOf("login")!=-1){
+			    		 top.location.href="${ctx}admin/login.html";
+			    	}else{
+			    		if(json.code==200){
+			    			$("button[name='refresh']",window.document).click();
+			    		}else{
+			    			art.dialog.tips(json.message, 2);
+			    		}
+			    	}
+				},"json");
 			});
 		};
 		
 		var setPublish = function(obj){
-			var infoId = $(obj).attr("name");
 			art.dialog.confirm('确定删除此信息？',function(){
-				var url = '${ctx}admin/sys/info/'+infoId+'/publishContent.html';
+				var url = '${ctx}admin/sys/info/'+obj.id+'/publishContent.html';
 				window.location.href=url;
 			});
 		};
@@ -40,7 +51,7 @@
       <ol class="breadcrumb">
         <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
-        <li class="active">信息管理管理</li>
+        <li class="active">信息管理</li>
       </ol>
     </section>
 

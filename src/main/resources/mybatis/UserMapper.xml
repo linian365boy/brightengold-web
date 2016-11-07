@@ -18,17 +18,16 @@
 			<result column="describes" property="describes" jdbcType="VARCHAR"/>
 			<result column="remarks" property="remarks" jdbcType="VARCHAR"/>
 			<result column="defaultOrNo" property="defaultOrNo" jdbcType="BOOLEAN"/>
-			<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
 		</collection>
 	</resultMap>
 	
-	<insert id="save">
-		insert into tb_user(id,realName,username,email,password,enabled,accountNonLocked,lastCloseDate) 
-		values(null,#{realName},#{username},#{email},#{password},#{enabled},#{accountNonLocked},#{lastCloseDate})
+	<insert id="save" parameterType="User" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
+		insert into tb_user(realName,username,email,password,enabled,accountNonLocked,lastCloseDate,createDate) 
+		values(#{realName},#{username},#{email},#{password},#{enabled},#{accountNonLocked},#{lastCloseDate},#{createDate})
 	</insert>
 	
 	<update id="updateUser" parameterType="User">
-		update tb_user set realName=#{realName},email=#{email} where id=#{id}
+		update tb_user set realName=#{realName},email=#{email},enabled=#{enabled},username=#{username} where id=#{id}
 	</update>
 	
 	<delete id="delete" parameterType="int">
@@ -41,8 +40,7 @@
 	</select>
 	
 	<select id="findByName" resultMap="userRoleMap">
-		select u.*,r.* from tb_user u inner join tb_user_role ur on u.id = ur.userId inner join tb_role r on 
-		r.name = ur.roleId where u.username = #{username}
+		select u.*,ur.roleId as name from tb_user u left join tb_user_role ur on u.id = ur.userId where u.username = #{username}
 	</select>
 	
 	<select id="findUserByLike" resultType="User">
@@ -50,7 +48,7 @@
 	</select>
 	
 	<select id="findOne"  parameterType="int" resultType="User">
-		select * from tb_user where id=#{id}
+		select u.* from tb_user u where u.id = #{id} limit 1
 	</select>
 	
 	<select id="getPasswordById" resultType="java.lang.String" parameterType="int">

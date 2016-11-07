@@ -69,6 +69,7 @@
 	<bean class="cn.rainier.nian.service.impl.UserServiceImpl" id="userService">
 		<property name="userDao" ref="userDao" />
 		<property name="userCache" ref="nullUserCache"/>
+		<property name="roleDao" ref="roleDao"/>
 	</bean>
 	
 	<bean class="org.springframework.security.core.userdetails.cache.NullUserCache" id="nullUserCache"/>

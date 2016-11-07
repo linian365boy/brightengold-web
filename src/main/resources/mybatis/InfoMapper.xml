@@ -27,7 +27,7 @@
 	</select>
 	
 	<select id="findList" resultType="Info">
-		select * from tb_info order by priority desc limit #{offset},#{limit}
+		select id,code,name,priority from tb_info order by priority desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findAllCount" resultType="long">

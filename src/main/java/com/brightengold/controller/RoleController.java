@@ -7,7 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.annotations.Param;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,9 +33,9 @@ import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
 import cn.rainier.nian.model.Role;
+import cn.rainier.nian.service.MenuService;
+import cn.rainier.nian.service.ResourceService;
 import cn.rainier.nian.service.RoleService;
-import cn.rainier.nian.service.impl.MenuServiceImpl;
-import cn.rainier.nian.service.impl.ResourceServiceImpl;
 import cn.rainier.nian.service.impl.RoleServiceImpl;
 import cn.rainier.nian.utils.PageRainier;
 import cn.rainier.nian.utils.UUIDGenerator;
@@ -46,11 +48,11 @@ public class RoleController {
 	private RoleService roleService;
 	private PageRainier<Role> roles;
 	@Autowired
-	private ResourceServiceImpl resourceService;
+	private ResourceService resourceService;
 	@Autowired
 	private ResourceDetailsMonitor resourceDetailsMonitor;
 	@Autowired
-	private MenuServiceImpl menuService;
+	private MenuService menuService;
 	private static Logger logger = LoggerFactory.getLogger(RoleController.class);
 	
 	/**
@@ -147,8 +149,10 @@ public class RoleController {
 		return vo;
 	}
 	
-	@RequestMapping(value="/qxfp",method=RequestMethod.GET)
-	public String qxfp(){
+	@RequestMapping(value="/{roleName}/qxfp",method=RequestMethod.GET)
+	public String qxfp(@PathVariable String roleName,ModelMap map){
+		Role role = roleService.loadRoleByName(roleName);
+		map.put("role", role);
 		return "admin/sys/role/qxfp";
 	}
 	
@@ -161,59 +165,61 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value="/{roleName}/distribute",method=RequestMethod.POST)
-	public String distribute(@PathVariable String roleName,HttpServletRequest request,HttpSession session){
+	public MessageVo distribute(@PathVariable String roleName,HttpServletRequest request,HttpSession session){
+		MessageVo vo = null;
+		Role model = null;
 		try {
-			if(roleName!=null){
-				//此处strIds既包括menuId也包括resourceId
-				String strIds = request.getParameter("str");
-				String[] strIdArr = null;
-				Role model = roleService.loadRoleByName(roleName);
-				if(strIds!=null&&strIds.trim()!=""){
-					strIdArr = strIds.split(",");
-					List<Resource> ress = new ArrayList<Resource>();
-					List<Menu> menus = new ArrayList<Menu>();
-					List<Resource> resources = null;
-					Resource res = null;
-					Menu menu = null;
-					for(String str : strIdArr){
-						if(str.startsWith("r_")){
-							res = resourceService.loadResourceByResource(Integer.parseInt(str.substring(2)));
-							ress.add(res);
-						}else{
-							menu = menuService.loadMenuById(Integer.parseInt(str));
-							//resources = resourceService.findResourceByParentId(menu.getId());
-							//if(menu.getParentMenu()!=null&&resources!=null&&resources.size()==0){
-							//	ress.addAll(resourceService.findAllResourceByParentId(menu.getId()));
-							//}
-							menus.add(menu);
+			//此处strIds既包括menuId也包括resourceId
+			String strIds = request.getParameter("str");
+			String[] strIdArr = null;
+			model = roleService.loadRoleByName(roleName);
+			boolean result = false;
+			if(StringUtils.isNotBlank(strIds)){
+				strIdArr = strIds.split(",");
+				List<Resource> ress = new ArrayList<Resource>();
+				List<Menu> menus = new ArrayList<Menu>();
+				List<Resource> resources = null;
+				Resource res = null;
+				Menu menu = null;
+				for(String str : strIdArr){
+					if(str.startsWith("r_")){
+						//resource资源
+						res = resourceService.loadResourceByResource(Integer.parseInt(str.substring(2)));
+						ress.add(res);
+					}else{
+						//menu菜单
+						menu = menuService.loadMenuById(Integer.parseInt(str));
+						resources = resourceService.findResourceByParentId(menu.getId());
+						if(menu.getParentId()!=null && resources!=null && resources.size()==0){
+							ress.addAll(resourceService.findAllResourceByParentId(menu.getId()));
 						}
-					}
-					//model.setResources(ress);
-					//model.setMenus(menus);
-				}else{
-					if(strIds!=null){
-						//model.setResources(null);
-						//model.setMenus(null);
+						menus.add(menu);
 					}
 				}
-				roleService.saveRole(model);
+				if(!CollectionUtils.isEmpty(ress)){
+					if(resourceService.updateRoleResources(roleName,ress)){
+						result = true;
+					}
+				}
+				if(result && !CollectionUtils.isEmpty(menus)){
+					if(menuService.updateRoleMenu(roleName,menus)){
+						result = true;
+					}else{
+						result = false;
+					}
+				}
 				LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
-				//logger.warn("角色{}重新分配了权限{}",model.getDesc(),
-				//		ToStringBuilder.reflectionToString(model.getResources(), 
-				//				ToStringStyle.SHORT_PREFIX_STYLE));
-				try {
-					resourceDetailsMonitor.afterPropertiesSet();
-					session.removeAttribute("menuXml");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}else{
-				logger.error("角色{}分配权限失败！",roleName);
+				logger.warn("角色{}重新分配了权限{}，result|{}",model.getDescribes(),ress,result, ToStringStyle.SHORT_PREFIX_STYLE);
+				//重新查询DB
+				resourceDetailsMonitor.afterPropertiesSet();
+				session.removeAttribute("menuJson");
+				vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+model.getDescribes()+"】分配权限成功！");
 			}
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			logger.error("角色{}分配权限失败，发生错误：{}！",roleName,e);
+			vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+(model==null?roleName:model.getDescribes())+"】分配权限成功！");
 		}
-		return "redirect:/admin/sys/role/roles/1.html";
+		return vo;
 	}
 
 	public void setRoleService(RoleServiceImpl roleService) {

@@ -11,6 +11,7 @@
 		<result property="url" column="url" jdbcType="VARCHAR"/>
 		<!-- 非表中字段 -->
 		<result property="parentMenuName" column="parentName" jdbcType="VARCHAR"/>
+		
 	</resultMap>
 	
 	<insert id="save">
@@ -73,4 +74,15 @@
 	<select id="loadMenuByResourceId" resultType="Menu">
 		select m.* from tb_menu m inner join tb_resource r on r.menuId=m.id where r.id = #{resourceId} order by priority desc
 	</select>
+	
+	<delete id="deleteRoleMenu" parameterType="java.lang.String">
+		delete from tb_role_menu where roleId=#{roleName}
+	</delete>
+	
+	<insert id="insertRoleMenu">
+		insert into tb_role_menu(roleId,menuId) values
+		<foreach collection="menus" item="item" separator=","> 
+         	(#{roleName}, #{item.id})
+    	</foreach>
+	</insert>
 </mapper>

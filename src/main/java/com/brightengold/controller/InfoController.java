@@ -90,46 +90,42 @@ public class InfoController {
 		StringBuilder content = new StringBuilder();
 		MessageVo vo = null;
 		try {
-			if(infoId!=null){
-				Info tinfo = infoService.loadOne(infoId);
-				content.append("信息名称："+tinfo.getName());
-				if(!(info.getCode().equals(tinfo.getCode()))){
-					info.setUrl("views/html/info/"+info.getCode()+".htm");
-				}else{
-					info.setUrl(tinfo.getUrl());
-				}
-				if(infoService.updateInfo(info)){
-					logger.info("修改信息内容|{}",info);
-					LogUtil.getInstance().log(LogType.EDIT,content.toString());
-					vo = new MessageVo(Constant.SUCCESS_CODE,"修改信息【"+info.getName()+"】成功！");
-				}else{
-					vo = new MessageVo(Constant.ERROR_CODE,"修改信息【"+info.getName()+"】失败！");
-				}
+			Info tinfo = infoService.loadOne(infoId);
+			content.append("信息名称："+tinfo.getName());
+			if(!(info.getCode().equals(tinfo.getCode()))){
+				info.setUrl("views/html/info/"+info.getCode()+".htm");
+			}else{
+				info.setUrl(tinfo.getUrl());
+			}
+			if(infoService.updateInfo(info)){
+				logger.info("修改信息内容|{}",info);
+				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改信息【"+info.getName()+"】成功！");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"修改信息【"+info.getName()+"】失败！");
 			}
 		} catch (Exception e) {
 			logger.error("修改信息失败！",e);
-			vo = new MessageVo(Constant.ERROR_CODE,"信息Id不存在");
+			vo = new MessageVo(Constant.ERROR_CODE,"修改信息【"+info.getName()+"】失败！");
 		}
 		return vo;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/{infoId}/del",method=RequestMethod.GET)
+	@RequestMapping(value="/{infoId}/delete",method=RequestMethod.POST)
 	public MessageVo del(@PathVariable Integer infoId,HttpServletRequest request){
 		MessageVo vo = null;
-		if(infoId!=null){
-			StringBuilder sb = new StringBuilder();
-			Info info = infoService.loadOne(infoId);
-			if(infoService.deleteInfo(info)){
-				logger.warn("删除信息内容|{}",info);
-				String path = request.getSession().getServletContext().getRealPath("/");
-				FileUtil.delFile(path +File.separator+info.getUrl());
-				sb.append("名称："+info.getName());
-				LogUtil.getInstance().log(LogType.DEL, sb.toString());
-				vo = new MessageVo(Constant.SUCCESS_CODE);
-			}else{
-				vo = new MessageVo(Constant.ERROR_CODE,"删除信息【"+info.getName()+"】失败！");
-			}
+		StringBuilder sb = new StringBuilder();
+		Info info = infoService.loadOne(infoId);
+		if(infoService.deleteInfo(info)){
+			logger.warn("删除信息内容|{}",info);
+			String path = request.getSession().getServletContext().getRealPath("/");
+			FileUtil.delFile(path +File.separator+info.getUrl());
+			sb.append("名称："+info.getName());
+			LogUtil.getInstance().log(LogType.DEL, sb.toString());
+			vo = new MessageVo(Constant.SUCCESS_CODE, "删除信息【"+info.getName()+"】成功！");
+		}else{
+			vo = new MessageVo(Constant.ERROR_CODE,"删除信息【"+info.getName()+"】失败！");
 		}
 		return vo;
 	}

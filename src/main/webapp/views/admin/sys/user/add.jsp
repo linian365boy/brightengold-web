@@ -6,36 +6,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户添加</title>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
-<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
-<link rel="stylesheet" type="text/css"
-	href="${ctx }resources/css/style.css" />
-	<style type="text/css">
-	.selectpicker {
-		background-color: #fff;
-	    background-image: none;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-	    color: #555;
-	    display: block;
-	    font-size: 14px;
-	    height: 34px;
-	    line-height: 1.42857;
-	    padding: 6px 12px;
-	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-	    vertical-align: middle;
-	}
-</style>
+<!-- jQuery 2.2.3 -->
+<script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- jQuery form plugin -->
+<script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
-				str+="<option value="+json.get(i)[0]+">"+json.get(i)[1]+"</option>";
+				str+="<option value="+json.get(i).name+">"+json.get(i).describes+"</option>";
 			}
 			$("#roles").append(str);
 		});
@@ -72,50 +60,72 @@
 			},
 			success: function(element) {
 			      jQuery(element).closest('.form-group').removeClass('has-error');
+			},
+			submitHandler: function(form){
+				$(form).ajaxSubmit({
+					dataType:'json',
+					success:function(json) {
+			            if(JSON.stringify(json).indexOf("login")!=-1){
+				    		 top.location.href="${ctx}admin/login.html";
+				    	}else{
+				    		if(json.code==200){
+				    			$("button[name='refresh']",top.document).click();
+				    			top.art.dialog.list['tianjia'].close();
+				    		}else{
+				    			$("span.help-block").html(json.message);
+				    			$(".has-error").removeClass("hide");
+				    		}
+				    	}
+			        }
+				});
 			}
 		});
 	});
 	</script>
 </head>
 <body>
-	<form id="form" class="form-horizontal" action="${ctx }sys/user/add.html" 
+	<form id="form" class="form-horizontal content" action="${ctx }admin/sys/user/add.html" 
 		method="post" target="_parent">
 		<div class="form-group">
-	    	<label for="username" class="col-sm-3 control-label">用户名<span class="asterisk">*</span></label>
-			<div class="row col-sm-8">
-			     <input type="text" class="form-control" id="username" name="username" autocomplete="off" 
-			     placeholder="用户名">
+	    	<label for="username" class="col-sm-2 control-label">用户名<code>*</code></label>
+			<div class="col-sm-8">
+			     <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
 			</div>
 		</div>
 		
 		<div class="form-group">
-	    	<label for="password" class="col-sm-3 control-label">密码<span class="asterisk">*</span></label>
-			<div class="row col-sm-8">
-			     <input type="password" class="form-control" id="password" name="password" autocomplete="off" 
-			     placeholder="密码">
+	    	<label for="password" class="col-sm-2 control-label">密码<code>*</code></label>
+			<div class="col-sm-8">
+			     <input type="password" class="form-control" id="password" name="password" placeholder="密码">
 			</div>
 		</div>
 		
 		<div class="form-group">
-	    	<label for="realName" class="col-sm-3 control-label">姓名</label>
-			<div class="row col-sm-8">
-			     <input type="password" class="form-control" id="realName" name="realName" autocomplete="off" 
-			     placeholder="姓名">
+	    	<label for="realName" class="col-sm-2 control-label">姓名</label>
+			<div class="col-sm-8">
+			     <input type="text" class="form-control" id="realName" name="realName" placeholder="姓名">
 			</div>
 		</div>
 		<div class="form-group">
-		    <label for="roles" class="col-sm-3 control-label">角色分配</label>
-		    	<div class="row col-xs-8" style="overflow:hidden;">
-		    		<select class="col-xs-7 selectpicker" name="role" id="roles">
+		    <label for="roles" class="col-sm-2 control-label">角色分配</label>
+		    	<div class="col-xs-8" style="overflow:hidden;">
+		    		<select class="col-xs-5 selectpicker" name="role" id="roles">
 			      	</select>
 		    	</div>
 		  </div>
 		  <div class="form-group">
-		  	<label class="col-sm-3 control-label">状态</label>
-		  	<label class="control-label checkbox-inline">
-		  	<input type="checkbox" name="enabled"/>（勾选表示启用此账号，否则禁用）
-		  	</label>
+		  	<div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" name="enabled"> （勾选表示启用此账号，否则禁用）
+                          </label>
+                        </div>
+                      </div>
 		  </div>
+		  <div class="form-group has-error hide">
+			  	  <label class="col-sm-3 control-label">&nbsp;</label>
+                  <span class="help-block"></span>
+               </div>
 		  <div class="form-group">
 			  <div class="col-sm-offset-4 col-sm-8">
 			  	<button type="submit" class="btn btn-primary">保存</button>

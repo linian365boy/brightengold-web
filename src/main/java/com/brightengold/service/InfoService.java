@@ -21,7 +21,6 @@ public class InfoService {
 	
 	public PageRainier<Info> findAll(RequestParam param) {
 		long count = infoDao.findAllCount();
-		//Page<Info> tempPage = infoDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"priority")));
 		PageRainier<Info> page = new PageRainier<Info>(count);
 		page.setResult(infoDao.findList(param));
 		return page;
@@ -53,6 +52,7 @@ public class InfoService {
 		boolean flag = false;
 		try{
 			infoDao.delete(info);
+			flag = true;
 		}catch(Exception e){
 			logger.error("删除信息失败",e);
 		}
