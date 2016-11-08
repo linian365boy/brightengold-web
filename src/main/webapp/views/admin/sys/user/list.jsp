@@ -29,7 +29,11 @@
 			title:'编辑员工信息',
 			id:'bianji',
 			width:768,
+<<<<<<< HEAD
 			height:340,
+=======
+			height:300,
+>>>>>>> branch 'mybatis' of https://github.com/linian365boy/brightengold-web
 			resize: false
 			});
 		};
@@ -40,12 +44,17 @@
 				title:'添加用户',
 				id:'tianjia',
 				width: 768,
+<<<<<<< HEAD
 				height: 350,
+=======
+				height: 330,
+>>>>>>> branch 'mybatis' of https://github.com/linian365boy/brightengold-web
 				resize: false
 			});
 		};
 		
 		var resetPassword = function(obj){
+<<<<<<< HEAD
 			art.dialog.confirm('密码将重置为用户名'+obj.username+'，是否确认继续？',function(){
 			var url = '${ctx}admin/sys/user/'+obj.username+'/reset.html';
 			jQuery.get(url,function(json){
@@ -55,11 +64,34 @@
 			    		art.dialog.tips(json.message, 2);
 			    	}
 				},"json");
+=======
+			art.dialog.confirm('密码将重置为888888，是否确认继续？',function(){
+			var url = '${ctx}admin/sys/user/'+obj.id+'/reset.html';
+			jQuery.ajax({
+				url:url,
+				success:function(data){
+					art.dialog({
+						title:'提示消息',
+						content:'<span style="color:red">'+data+'</span>',
+						width:300,
+						time:2.5
+					});
+				},
+				error:function(data){
+					art.dialog({
+						title:'提示消息',
+						content:'连接失败!',
+						time:2.5
+					});
+				}
+			});
+>>>>>>> branch 'mybatis' of https://github.com/linian365boy/brightengold-web
 			});
 		};
 		
 		var unsubscribe = function(obj){
 			art.dialog.confirm('注销后将不能使用此账户！是否确定注销此账户？',function(){
+<<<<<<< HEAD
 				var url = '${ctx}admin/sys/user/'+obj.username+'/unsubscribe.html';
 				jQuery.get(url,function(json){
 					if(JSON.stringify(json).indexOf("login")!=-1){
@@ -71,14 +103,24 @@
 			    		art.dialog.tips(json.message, 2);
 			    	}
 				},"json");
+=======
+				var url = '${ctx}admin/sys/user/'+obj.id+'/unsubscribe.html';
+				window.location.href=url;
+>>>>>>> branch 'mybatis' of https://github.com/linian365boy/brightengold-web
 			});
 		};
 		
 		var userRoleFormatter=function(value, row, index){
 			var roles = row.roles;
+<<<<<<< HEAD
 			//console.info("roles-=-="+JSON.stringify(roles));
 			if(roles && roles.length>0){
 				return roles[0].describes;
+=======
+			console.info(roles);
+			if(roles && roles.length>0){
+				return roles.get(0).describes;
+>>>>>>> branch 'mybatis' of https://github.com/linian365boy/brightengold-web
 			}
 			return "--";
 		}
@@ -90,6 +132,7 @@
 		
 		var userActionFormatter = function(value, row, index){
 			return [
+<<<<<<< HEAD
 			        '<a class="label label-info detail" href="javascript:void(0)" title="查看详情">查看详情</a>',
 			        '<a class="label label-info edit ml10" href="javascript:void(0)" title="修改">修改</a>',
 					'<a class="label label-danger ml10 reset" href="javascript:void(0)" title="重置密码">重置密码</a>',
@@ -101,6 +144,15 @@
 			'click .detail': function(e, value, row, index){
 				detail(row);
 			},
+=======
+			        '<a class="label label-info edit" href="javascript:void(0)" title="修改">修改</a>',
+					'<a class="label label-danger ml10 reset" href="javascript:void(0)" title="重置密码">重置密码</a>',
+					'<a class="label label-info ml10 unsubscribe" href="javascript:void(0)" title="注销">注销</a>'
+			    ].join('');
+		};
+		
+		window.userActionEvents = {
+>>>>>>> branch 'mybatis' of https://github.com/linian365boy/brightengold-web
 			'click .edit': function (e, value, row, index) {
 		    	update(row);
 		    },
