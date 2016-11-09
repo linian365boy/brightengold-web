@@ -2,28 +2,37 @@
     pageEncoding="UTF-8"%>
     <%@include file="../../commons/include.jsp" %>
 <script type="text/javascript">
-	var update = function(obj){
-		var newsId = $(obj).attr("name");
-		var url = '${ctx}admin/news/'+newsId+'/update.html';
-		window.location.href=url;
+		var tianjia = function(){
+			var url = '${ctx}admin/news/add.html';
+			$.get(url,function(data){
+				$("div.content-wrapper").html(data);
+			});
+		};
+		var update = function(obj){
+			var url = '${ctx}admin/news/'+obj.id+'/update.html';
+			$.get(url,function(data){
+				if(JSON.stringify(data).indexOf("login page")!=-1){
+		    		 location.href="${ctx}admin/login.html";
+		    	}else{
+					$("div.content-wrapper").html(data);
+		    	}
+			});
 		};
 		//del
 		var del = function(obj){
-			var newsId = $(obj).attr("name");
 			art.dialog.confirm('确定删除此新闻？',function(){
-				var url = '${ctx}admin/news/'+newsId+'/del.html';
+				var url = '${ctx}admin/news/'+obj.id+'/del.html';
 				window.location.href=url;
 			});
 		};
 		//purview
 		var purview = function(obj){
-			var newsId = $(obj).attr("name");
-			var url = '${ctx}admin/news/'+newsId+".html";
+			var url = '${ctx}admin/news/'+obj.id+".html";
 			window.open(url);
 		};
 		//publish
 		var publish = function(obj){
-			var newsId = $(obj).attr("name");
+			var newsId = obj.id;
 			$.get("${ctx}admin/news/"+newsId+"/checkPub.html",function(rs){
 				if(rs=="1"){
 					art.dialog.confirm('此新闻已发布，确定重新发布？',function(){

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -153,6 +152,25 @@ public class RoleController {
 	public String qxfp(@PathVariable String roleName,ModelMap map){
 		Role role = roleService.loadRoleByName(roleName);
 		map.put("role", role);
+		StringBuilder sb = new StringBuilder();
+		if(!CollectionUtils.isEmpty(role.getResources())){
+			for(Resource res : role.getResources()){
+				if(StringUtils.isNotBlank(sb.toString())){
+					sb.append(",");
+				}
+				sb.append("r_"+res.getId());
+			}
+		}
+		List<Menu> menus =  menuService.findMenuByRole(roleName);
+		if(!CollectionUtils.isEmpty(menus)){
+			for(Menu menu : menus){
+				if(StringUtils.isNotBlank(sb.toString())){
+					sb.append(",");
+				}
+				sb.append(menu.getId());
+			}
+		}
+		map.put("menuOrResource", sb.toString());
 		return "admin/sys/role/qxfp";
 	}
 	
@@ -164,8 +182,9 @@ public class RoleController {
 		return "admin_unless/sys/role/viewResource";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/{roleName}/distribute",method=RequestMethod.POST)
-	public MessageVo distribute(@PathVariable String roleName,HttpServletRequest request,HttpSession session){
+	public MessageVo distribute(@PathVariable String roleName,HttpServletRequest request){
 		MessageVo vo = null;
 		Role model = null;
 		try {
@@ -200,7 +219,10 @@ public class RoleController {
 					if(resourceService.updateRoleResources(roleName,ress)){
 						result = true;
 					}
+				}else{
+					result = true;
 				}
+				
 				if(result && !CollectionUtils.isEmpty(menus)){
 					if(menuService.updateRoleMenu(roleName,menus)){
 						result = true;
@@ -208,16 +230,20 @@ public class RoleController {
 						result = false;
 					}
 				}
-				LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
-				logger.warn("角色{}重新分配了权限{}，result|{}",model.getDescribes(),ress,result, ToStringStyle.SHORT_PREFIX_STYLE);
-				//重新查询DB
-				resourceDetailsMonitor.afterPropertiesSet();
-				session.removeAttribute("menuJson");
-				vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+model.getDescribes()+"】分配权限成功！");
+				if(result){
+					LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
+					logger.warn("角色{}重新分配了权限{}，result|{}",model.getDescribes(),ress,result, ToStringStyle.SHORT_PREFIX_STYLE);
+					//重新查询DB
+					resourceDetailsMonitor.afterPropertiesSet();
+					request.getSession().removeAttribute("menuJson");
+					vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+model.getDescribes()+"】分配权限成功！");
+				}else{
+					vo = new MessageVo(Constant.ERROR_CODE,"角色【"+(model==null?roleName:model.getDescribes())+"】分配权限失败！");
+				}
 			}
 		} catch (Exception e) {
 			logger.error("角色{}分配权限失败，发生错误：{}！",roleName,e);
-			vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+(model==null?roleName:model.getDescribes())+"】分配权限成功！");
+			vo = new MessageVo(Constant.ERROR_CODE,"角色【"+(model==null?roleName:model.getDescribes())+"】分配权限失败！");
 		}
 		return vo;
 	}

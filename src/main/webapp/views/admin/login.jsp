@@ -12,6 +12,14 @@
 <link rel="shortcut icon" href="${ctx }/resources/dist/img/favicon_16X22.ico"
 	type="image/x-icon" />
 <link href="${ctx }resources/dist/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
+<!-- jQuery 2.2.3 -->
+<script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	 if (window != top)
+	 	top.location.href = location.href;
+});
+</script>
 </head>
 <body>
   <form action="j_spring_security_check" id="login" method="post">

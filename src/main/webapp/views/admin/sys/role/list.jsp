@@ -30,15 +30,11 @@
 			art.dialog.confirm('确定删除此['+obj.describes+']角色？',function(){
 				var url = '${ctx}admin/sys/role/'+obj.name+'/del.html';
 				$.post(url,function(json){
-					if(JSON.stringify(json).indexOf("login")!=-1){
-			    		 top.location.href="${ctx}admin/login.html";
-			    	}else{
 			    		if(json.code==200){
 			    			$("button[name='refresh']",window.document).click();
 			    		}else{
 			    			art.dialog.tips(json.message, 1.5);
 			    		}
-			    	}
 				},"json");
 			});
 		};

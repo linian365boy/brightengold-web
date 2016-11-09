@@ -85,4 +85,8 @@
          	(#{roleName}, #{item.id})
     	</foreach>
 	</insert>
+	
+	<select id="findMenuByRole" parameterType="java.lang.String" resultType="Menu">
+		select m.id,m.name,m.mark,m.priority from tb_role_menu rm inner join tb_menu m on rm.menuId=m.id where rm.roleId = #{roleName}
+	</select>
 </mapper>

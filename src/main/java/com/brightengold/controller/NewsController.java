@@ -104,13 +104,14 @@ public class NewsController {
 	public String update(@PathVariable Integer newsId,ModelMap map){
 		if(newsId!=null){
 			News news = newsService.loadNews(newsId);
-			//Column temp = news.getColumn();
-			//if(temp.getParentColumn()==null){
-			//	map.addAttribute("childs",columnService.findChildrenByParentId(temp.getId()));
-			//}else{
-			//	map.addAttribute("childs",columnService.findChildrenByParentId(temp.getParentColumn().getId()));
-			//}
-			map.addAttribute("news", news);
+			Column temp = columnService.getById(news.getColumnId());
+			if(temp.getParentId()==null){
+				map.addAttribute("childs",columnService.findChildrenByParentId(temp.getId()));
+			}else{
+				map.addAttribute("childs",columnService.findChildrenByParentId(temp.getParentId()));
+			}
+			map.put("news", news);
+			map.put("column", temp);
 		}
 		List<Column> parentCol = columnService.findParentByAjax();
 		map.put("parentCol", parentCol);

@@ -23,7 +23,7 @@
 		inner join tb_role tro on (rr.roleId=tro.name) where rr.roleId = #{name} order by tr.priority desc
 	</select>
 	
-	<select id="loadResourceByResourceId" parameterType="long" resultType="Resource">
+	<select id="loadResourceByResourceId" parameterType="int" resultType="Resource">
 		select r.* from tb_resource r where r.id = #{id}
 	</select>
 	
@@ -36,7 +36,7 @@
 		delete from tb_role_resource where roleId = #{roleName}
 	</delete>
 	
-	<update id="updateRoleResources">
+	<update id="insertRoleResources">
 		insert into tb_role_resource(roleId,resourceId) values 
 		<foreach collection="resources" item="item" separator=",">
          	(#{roleName}, #{item.id})

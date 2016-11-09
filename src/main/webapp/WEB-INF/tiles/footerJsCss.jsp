@@ -62,11 +62,7 @@
 			         $("#menuForm").prop("action","#");
 			         $("#pmenuText").val("");
 			    	 $("#menuText").val("");
-			    	 if(data.indexOf("<title>login page</title>")!=-1){
-			    		 top.location.href="${ctx}admin/login.html";
-			    	 }else{
-				    	 $("div.content-wrapper").html(data);
-			    	 }
+				     $("div.content-wrapper").html(data);
 			  }
 		  });
 	  }
@@ -87,4 +83,12 @@
 				    	del(row);
 				    }
 		};
+		//全局的ajax访问，处理ajax清求时sesion超时  
+	    $.ajaxSetup({
+	           complete: function(xhr, status) {
+	                if (xhr.responseText == 'invalidSession') {
+	                    window.location = "/admin/login.html"; 
+	                }
+	           }
+	  	});
 </script>

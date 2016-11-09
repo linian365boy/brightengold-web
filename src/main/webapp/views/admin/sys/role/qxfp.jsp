@@ -5,26 +5,23 @@
 <script src="${ctx}resources/plugins/dhtmlx/dhtmlxtree.js"></script>
 <script type="text/javascript">
 	$(function(){
+		<%--包括所有被选中的菜单与资源 --%>
 		$("#actionForm").ajaxForm({
+			type:'POST',
 			dataType:'json',
-			beforeSend:function(){
-				var allCheckedBranches = myTree.getAllChecked().split(",");
-				$("#str").attr("value",allCheckedBranches);
-				$("#actionForm").attr("action","${ctx}admin/sys/role/${role.name }/distribute.html");
-				return false;
+			beforeSubmit:function(arr, form, options){
+				var allChecked = myTree.getAllChecked();
+				if(allChecked.length==0){
+					$(".box-header .error").removeClass("hide").html("请选择资源分配给角色！");
+					return false;
+				}
 			},
-			success:function(json) { 
-				if(JSON.stringify(json).indexOf("login")!=-1){
-		    		 top.location.href="${ctx}admin/login.html";
-		    	}else{
+			success:function(json) {
 		    		if(json.code==200){
-		    			$("button[name='refresh']",top.document).click();
-		    			top.art.dialog.list['setPublish'].close();
+		    			$("ul.treeview-menu.menu-open li.active a").click();
 		    		}else{
-		    			$("span.help-block").html(json.message);
-		    			$(".has-error").removeClass("hide");
+		    			$(".box-header .error").removeClass("hide").html(json.message);
 		    		}
-		    	}
 			}
 		});
 		loadTree();
@@ -40,6 +37,15 @@
 		myTree.setXMLAutoLoading("${ctx}admin/sys/menu/findAllMenu.html?name=${role.name}");
 		myTree.setDataMode("json");
 		myTree.enableThreeStateCheckboxes(true);
+		myTree.attachEvent("onCheck", function(id, state){
+			var allCheckedArr = myTree.getAllChecked();
+			if(state==1){
+				$(allCheckedArr).splice(allCheckedArr.length,0,id);
+			}else{
+				$(allCheckedArr).splice($.inArray(id,allCheckedArr),1);
+			}
+			$("#str").val(allCheckedArr.split(","));
+		});
 		myTree.load("${ctx}admin/sys/menu/findAllMenu.html?id=0&name=${role.name}",function(){
 			myTree.openAllItems(0);
 		},"json");
@@ -62,12 +68,12 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="box box-info">
-					<div class="box-header with-border">
-                  		<h3 class="box-title">权限分配</h3>
-                 		 <label class="error">权限分配失败！</label>
-                	</div><!-- /.box-header -->
+					<div class="box-header with-border text-center">
+						<h3 class="box-title pull-left">权限分配</h3>
+						<label class="error hide"></label>
+					</div>
 					<div class="tab_container">
-							<form action="#" id="actionForm" class="form-horizontal" method="post">
+							<form action="${ctx}admin/sys/role/${role.name }/distribute.html" id="actionForm" class="form-horizontal" method="post">
 								<div class="box-body">
 								<div class="form-group">
 			                      <label class="col-sm-2 control-label" for="enName">当前角色：</label>
@@ -81,8 +87,7 @@
 										<div id="tree" ></div>
 			                      	</div>
 			                    </div>
-								<%--包括所有被选中的菜单与资源 --%>
-								<input type="hidden" name="str" id="str"/>
+			                    <input name="str" type="hidden" id="str" value="${menuOrResource }"/>
 								<%--很诡异的一个错误，下面这个input的type不能为submit，否则在IE下会出现提交两次的结果 --%>
 								</div>
 								<div class="box-footer">

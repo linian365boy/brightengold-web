@@ -14,6 +14,7 @@
 	<http pattern="/resources/**" security="none"/>
     <http pattern="/admin/login*" security="none"/>
     <http pattern="/admin/accessDenied.html" security="none"/>
+    <http pattern="/admin/invalidate.html" security="none"/>
     
     <http auto-config="false" request-matcher="regex" use-expressions="true">
     	<access-denied-handler error-page="/admin/accessDenied.html"/>
@@ -21,8 +22,8 @@
     	<form-login login-page="/admin/login.html" default-target-url="/admin/index.html"
     		authentication-failure-url="/admin/login.html"/>
     	<!-- 会话管理配置 -->
-   		<session-management session-authentication-error-url="/admin/login.html" session-fixation-protection="migrateSession">
-   			<concurrency-control expired-url="/admin/login.html" max-sessions="1" error-if-maximum-exceeded="false"/>
+   		<session-management invalid-session-url="/admin/invalidate.html" session-fixation-protection="newSession">
+   			<concurrency-control max-sessions="1" error-if-maximum-exceeded="false"/>
    		</session-management>
    		<logout logout-url="/admin/logout" logout-success-url="/admin/login.html" delete-cookies="JSESSIONID" invalidate-session="true"/>
     </http>

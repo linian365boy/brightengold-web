@@ -48,15 +48,11 @@
 				$(form).ajaxSubmit({
 					dataType:'json',
 					success:function(json) {
-			            if(JSON.stringify(json).indexOf("login")!=-1){
-				    		 location.href="${ctx}admin/login.html";
-				    	}else{
-				    		if(json.code==200){
-				    			$("ul.treeview-menu.menu-open li.active a").click();
-				    		}else{
-				    			$(".box-header .error").removeClass("hide").html(json.message);
-				    		}
-				    	}
+			    		if(json.code==200){
+			    			$("ul.treeview-menu.menu-open li.active a").click();
+			    		}else{
+			    			$(".box-header .error").removeClass("hide").html(json.message);
+			    		}
 			        }
 				});
 			}

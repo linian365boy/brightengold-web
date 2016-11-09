@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@include file="../../../commons/include.jsp" %>
+     <%@include file="/views/commons/include.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,9 +65,6 @@
 				$(form).ajaxSubmit({
 					dataType:'json',
 					success:function(json) {
-			            if(JSON.stringify(json).indexOf("login")!=-1){
-				    		 top.location.href="${ctx}admin/login.html";
-				    	}else{
 				    		if(json.code==200){
 				    			$("button[name='refresh']",top.document).click();
 				    			top.art.dialog.list['tianjia'].close();
@@ -75,7 +72,6 @@
 				    			$("span.help-block").html(json.message);
 				    			$(".has-error").removeClass("hide");
 				    		}
-				    	}
 			        }
 				});
 			}

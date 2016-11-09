@@ -65,17 +65,13 @@
 				$(form).ajaxSubmit({
 					dataType:'json',
 					success:function(json) {
-			            if(JSON.stringify(json).indexOf("login")!=-1){
-				    		 top.location.href="${ctx}admin/login.html";
-				    	}else{
-				    		if(json.code==200){
-				    			$("button[name='refresh']",top.document).click();
-				    			top.art.dialog.list['tianjia'].close();
-				    		}else{
-				    			$("span.help-block").html(json.message);
-				    			$(".has-error").removeClass("hide");
-				    		}
-				    	}
+			    		if(json.code==200){
+			    			$("button[name='refresh']",top.document).click();
+			    			top.art.dialog.list['tianjia'].close();
+			    		}else{
+			    			$("span.help-block").html(json.message);
+			    			$(".has-error").removeClass("hide");
+			    		}
 			        }
 				});
 			}

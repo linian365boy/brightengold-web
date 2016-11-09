@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
- <%@include file="../../../commons/include.jsp" %>
+ <%@include file="/views/commons/include.jsp" %>
  <!DOCTYPE html>
  <html>
 <head>
@@ -18,49 +18,43 @@
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(function(){
-			$("#form").validate({
-				rules:{
-					"desc":{
-						required:true
-					},
-					"priority":{
-						number:true
-					}
+		$("#form").validate({
+			rules:{
+				"describes":{
+					required:true
 				},
-				messages:{
-					"desc":{
-						required:"角色不能为空"
-					},
-					"priority":{
-						number:"请输入数字！"
-					}
-				},
-				highlight: function(element) {
-				      jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
-				},
-				success: function(element) {
-				      jQuery(element).closest('.form-group').removeClass('has-error');
-				},
-				submitHandler: function(form){
-					$(form).ajaxSubmit({
-						dataType:'json',
-						success:function(json) {
-				            if(JSON.stringify(json).indexOf("login")!=-1){
-					    		 top.location.href="${ctx}admin/login.html";
-					    	}else{
-					    		if(json.code==200){
-					    			$("button[name='refresh']",top.document).click();
-					    			top.art.dialog.list['tianjia'].close();
-					    		}else{
-					    			$("span.help-block").html(json.message);
-					    			$(".has-error").removeClass("hide");
-					    		}
-					    	}
-				        }
-					});
+				"priority":{
+					number:true
 				}
-			});
+			},
+			messages:{
+				"describes":{
+					required:"角色不能为空"
+				},
+				"priority":{
+					number:"请输入数字！"
+				}
+			},
+			highlight: function(element) {
+			      jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+			},
+			success: function(element) {
+			      jQuery(element).closest('.form-group').removeClass('has-error');
+			},
+			submitHandler: function(form){
+				$(form).ajaxSubmit({
+					dataType:'json',
+					success:function(json) {
+				    		if(json.code==200){
+				    			$("button[name='refresh']",top.document).click();
+				    			top.art.dialog.list['tianjia'].close();
+				    		}else{
+				    			$("span.help-block").html(json.message);
+				    			$(".has-error").removeClass("hide");
+				    		}
+			        }
+				});
+			}
 		});
 	});
 </script>

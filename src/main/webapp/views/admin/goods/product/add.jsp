@@ -51,18 +51,15 @@
 			      jQuery(element).closest('.form-group').removeClass('has-error');
 			},
 			submitHandler: function(form){
+				CKEDITOR.instances.description.updateElement();
 				$(form).ajaxSubmit({
 					dataType:'json',
 					success:function(json) {
-			            if(JSON.stringify(json).indexOf("login")!=-1){
-				    		 location.href="${ctx}admin/login.html";
-				    	}else{
-				    		if(json.code==200){
-				    			$("ul.treeview-menu.menu-open a").click();
-				    		}else{
-				    			
-				    		}
-				    	}
+			    		if(json.code==200){
+			    			$("ul.treeview-menu.menu-open li.active a").click();
+			    		}else{
+			    			$(".box-header .error").removeClass("hide").html(json.message);
+			    		}
 			        }
 				});
 			}
@@ -116,11 +113,10 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="box box-info">
-                <div class="box-header with-border">
-                  <h3 class="box-title">新增产品
-                  </h3>
-                  <label class="error">新增产品失败！</label>
-                </div><!-- /.box-header -->
+                <div class="box-header with-border text-center">
+					<h3 class="box-title pull-left">新增产品</h3>
+					<label class="error hide"></label>
+				</div>
                 <!-- form start -->
                 <form id="form" class="form-horizontal content" action="${ctx }admin/goods/product/add.html" 
 		method="post" enctype="multipart/form-data">

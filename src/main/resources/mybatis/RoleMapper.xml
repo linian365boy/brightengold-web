@@ -29,8 +29,8 @@
 		delete from tb_role where name=#{roleId}
 	</delete>
 	
-	<select id="findOne" parameterType="java.lang.String" resultType="Role">
-		select * from tb_role where name=#{roleName}
+	<select id="findOne" parameterType="java.lang.String" resultMap="RoleListMap">
+		select tr.*,trr.resourceId as res_id from tb_role tr left join tb_role_resource trr on tr.name=trr.roleId where tr.name=#{roleName}
 	</select>
 	
 	<select id="findRoleDesc" parameterType="java.lang.String" resultType="java.lang.String">

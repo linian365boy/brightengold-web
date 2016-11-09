@@ -7,23 +7,6 @@
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
-<style type="text/css">
-	.selectpicker {
-		background-color: #fff;
-	    background-image: none;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-	    color: #555;
-	    display: block;
-	    font-size: 14px;
-	    height: 34px;
-	    line-height: 1.42857;
-	    padding: 6px 12px;
-	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-	    vertical-align: middle;
-	}
-</style>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#form").validate({
@@ -62,18 +45,15 @@ $(document).ready(function(){
 		      jQuery(element).closest('.form-group').removeClass('has-error');
 		},
 		submitHandler: function(form){
+			CKEDITOR.instances.description.updateElement();
 			$(form).ajaxSubmit({
 				dataType:'json',
 				success:function(json) {
-		            if(JSON.stringify(json).indexOf("login")!=-1){
-			    		 location.href="${ctx}admin/login.html";
-			    	}else{
-			    		if(json.code==200){
-			    			$("ul.treeview-menu.menu-open a").click();
-			    		}else{
-			    			
-			    		}
-			    	}
+		    		if(json.code==200){
+		    			$("ul.treeview-menu.menu-open li.active a").click();
+		    		}else{
+		    			$(".box-header .error").removeClass("hide").html(json.message);
+		    		}
 		        }
 			});
 		}
@@ -117,10 +97,10 @@ $(document).ready(function(){
 		<div class="row">
 		<div class="col-md-12">
 		<div class="box box-info">
-		<div class="box-header with-border">
-                  <h3 class="box-title">编辑产品
+		<div class="box-header with-border text-center">
+                  <h3 class="box-title pull-left">编辑产品
                   </h3>
-                  <label class="error">编辑产品失败！</label>
+                  <label class="error"></label>
                 </div><!-- /.box-header -->
 	<form id="form" class="form-horizontal"
 	 action="${ctx }admin/goods/product/${model.id }/update.html" method="post" enctype="multipart/form-data">
