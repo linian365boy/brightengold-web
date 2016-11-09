@@ -85,12 +85,12 @@
 	<context:component-scan base-package="com.brightengold.controller" />
 	
 	<!-- aop配置 -->
-	<aop:config proxy-target-class="true">
+	<!-- <aop:config proxy-target-class="true">
 		<aop:aspect id="menuAspect" ref="enterMenuAspect">
 			<aop:pointcut expression="execution(* com.brightengold.controller.*.list(..))" id="enterMenuService"/>
 			<aop:after pointcut-ref="enterMenuService" method="doAfter"/>
 		</aop:aspect>
-	</aop:config>
+	</aop:config> -->
 	
 	<beans:bean id="enterMenuAspect" class="com.brightengold.util.EnterMenuAspect"/>
 	

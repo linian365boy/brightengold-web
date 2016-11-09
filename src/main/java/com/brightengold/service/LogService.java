@@ -26,58 +26,8 @@ public class LogService {
 		logDao.save(log);
 	}
 
-	/*private static Specification<Log> findLogSpeci(final String field,final String condition){
-		return new Specification<Log>() {
-			public Predicate toPredicate(Root<Log> root, CriteriaQuery<?> query,
-					CriteriaBuilder cb) {
-				Path<String> path = null;
-				if("type".equals(field)){
-					path = root.get("type");
-				}else if("operator".equals(field)){
-					path = root.get("operatorName");
-				}else if("menu".equals(field)){
-					path = root.get("menu").get("name");
-				}else if("content".equals(field)){
-					path = root.get("content");
-				}else{
-					return null;
-				}
-				return cb.like(path, '%'+condition+'%');
-			}
-		};
-	}*/
-
-
-	/**
-	 *@see 根据用户选中的条件查找日志
-	 */
-	/*public PageRainier<Log> findLog(String field,String condition,String condition2,Integer pageNo,Integer pageSize){
-		PageRainier<Log> page = null;
-		Page<Log> tempPage = null;
-		if("logDate".equals(field)){
-			final Date startDate = (Date)DateConverter.convert(Date.class, condition);
-			final Date endDate = (Date)DateConverter.convert(Date.class, condition2);
-			tempPage = logDao.findAll(new Specification<Log> (){
-				public Predicate toPredicate(Root<Log> root,
-						CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.between(root.<Date>get("logDate"),startDate,endDate);
-				}
-			}, new PageRequest(pageNo-1,pageSize,Direction.DESC,"logDate"));
-		}else{
-			Specification<Log> speci= findLogSpeci(field,condition);
-			tempPage = logDao.findAll(speci,
-					new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"logDate")));
-		}
-		if(tempPage!=null){
-			page = new PageRainier<Log>(tempPage.getTotalElements(),pageNo,pageSize);
-			page.setResult(tempPage.getContent());
-		}
-		return page;
-	}*/
-
 	public PageRainier<Log> findAll(RequestParam param) {
-		//Page<Log> tempPage = logDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
-		long count = logDao.findAllCount();
+		long count = logDao.findAllCount(param);
 		PageRainier<Log> page = new PageRainier<Log>(count);
 		page.setResult(logDao.findList(param));
 		return page;
@@ -90,9 +40,6 @@ public class LogService {
 		log.setType(type.getName());
 		log.setContent(content);
 		log.setCreateTime(new Date());
-		//HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
-		//	      .getRequestAttributes()).getRequest();
-		//log.setMenu((Menu)request.getSession().getAttribute("menu"));
 		log.setOperator(u.getUsername());
 		log.setOperatorRealName(u.getRealName());
 		logDao.save(log);

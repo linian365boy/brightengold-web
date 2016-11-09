@@ -9,7 +9,7 @@ public interface LogDao {
 
 	void save(Log log);
 
-	long findAllCount();
+	long findAllCount(RequestParam param);
 
 	List<Log> findList(RequestParam param);
 
