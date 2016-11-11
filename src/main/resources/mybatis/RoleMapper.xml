@@ -53,8 +53,11 @@
 		select * from tb_role r where r.defaultOrNo is true limit 1
 	</select>
 	
-	<select id="findAllCount" resultType="long">
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
 		select count(*) from tb_role r where r.defaultOrNo is not true
+		<if test="search!=null and search!=''">
+			and describes like concat('%',#{search},'%') 
+		</if>
 	</select>
 	
 	<!-- <select id="findAll" resultMap="RoleListMap" parameterType="com.brightengold.common.vo.RequestParam">
@@ -64,7 +67,11 @@
 	</select> -->
 	
 	<select id="findAll" resultType="Role" parameterType="com.brightengold.common.vo.RequestParam">
-		select * from tb_role r where r.defaultOrNo is not true order by r.priority desc limit #{offset},#{limit}
+		select * from tb_role r where r.defaultOrNo is not true 
+		<if test="search!=null and search!=''">
+			and describes like concat('%',#{search},'%') 
+		</if>
+		order by r.priority desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findResourceByRole" parameterType="java.lang.String" resultType="Resource">

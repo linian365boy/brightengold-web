@@ -17,8 +17,7 @@ public class FeedbackService {
 	private FeedbackDao feedbackDao;
 
 	public PageRainier<Feedback> findAll(RequestParam param) {
-		//Page<Feedback> tempPage = feedbackDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
-		long count = feedbackDao.findAllCount();
+		long count = feedbackDao.findAllCount(param);
 		PageRainier<Feedback> page = new PageRainier<Feedback>(count);
 		page.setResult(feedbackDao.findList(param));
 		return page;

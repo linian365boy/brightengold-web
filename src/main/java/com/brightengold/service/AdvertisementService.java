@@ -29,9 +29,7 @@ public class AdvertisementService {
 	}
 
 	public PageRainier<Advertisement> findAll(RequestParam param) {
-		//Page<Advertisement> tempPage = advertisementDao.findAll(new PageRequest(pageNo-1,pageSize,
-		//		new Sort(Direction.DESC,"priority","id")));
-		long count = advertisementDao.findAllCount();
+		long count = advertisementDao.findAllCount(param);
 		PageRainier<Advertisement> page = new PageRainier<Advertisement>(count);
 		page.setResult(advertisementDao.findList(param));
 		return page;

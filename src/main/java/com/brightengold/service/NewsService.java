@@ -20,7 +20,7 @@ public class NewsService {
 	private static Logger logger = LoggerFactory.getLogger(NewsService.class);
 	
 	public PageRainier<News> findAll(RequestParam param) {
-		long count = newsDao.findAllCount();
+		long count = newsDao.findAllCount(param);
 		PageRainier<News> page = new PageRainier<News>(count);
 		page.setResult(newsDao.findList(param));
 		return page;

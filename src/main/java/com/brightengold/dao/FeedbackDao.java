@@ -12,7 +12,7 @@ public interface FeedbackDao {
 
 	void save(Feedback feedback);
 
-	long findAllCount();
+	long findAllCount(RequestParam param);
 
 	List<Feedback> findList(RequestParam param);
 

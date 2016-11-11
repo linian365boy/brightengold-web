@@ -9,12 +9,23 @@
 		delete from tb_feedback where id=#{id}
 	</delete>
 	
-	<select id="findAllCount" resultType="long">
-		select count(*) from tb_feedback
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+		select count(*) from tb_feedback 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or email like concat ('%',#{search},'%') or content like concat ('%',#{search},'%')
+			</if>
+		</where> 
 	</select>
 	
-	<select id="findList" resultType="Feedback">
-		select * from tb_feedback order by id desc limit #{offset},#{limit}
+	<select id="findList" resultType="Feedback" parameterType="com.brightengold.common.vo.RequestParam">
+		select * from tb_feedback 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or email like concat ('%',#{search},'%') or content like concat ('%',#{search},'%')
+			</if>
+		</where> 
+		order by id desc limit #{offset},#{limit}
 	</select>
 	
 	<insert id="save" parameterType="Feedback">

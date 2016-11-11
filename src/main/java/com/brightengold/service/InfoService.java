@@ -20,7 +20,7 @@ public class InfoService {
 	private static final Logger logger = LoggerFactory.getLogger(InfoService.class);
 	
 	public PageRainier<Info> findAll(RequestParam param) {
-		long count = infoDao.findAllCount();
+		long count = infoDao.findAllCount(param);
 		PageRainier<Info> page = new PageRainier<Info>(count);
 		page.setResult(infoDao.findList(param));
 		return page;

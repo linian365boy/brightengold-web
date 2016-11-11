@@ -27,10 +27,21 @@
 	</select>
 	
 	<select id="findList" resultType="Info">
-		select id,code,name,priority from tb_info order by priority desc limit #{offset},#{limit}
+		select id,code,name,priority from tb_info 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or code like concat ('%',#{search},'%')
+			</if>
+		</where>
+		order by priority desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findAllCount" resultType="long">
-		select count(*) from tb_info
+		select count(*) from tb_info 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or code like concat ('%',#{search},'%')
+			</if>
+		</where>
 	</select>
 </mapper>

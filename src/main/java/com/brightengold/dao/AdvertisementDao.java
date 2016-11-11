@@ -14,13 +14,13 @@ public interface AdvertisementDao {
 	//@Query("update Advertisement set status = :status where id = :id")
 	void updateStatus(@Param("id") Integer id,@Param("status") Integer status);
 	//@Query("select a from Advertisement a where a.status = 1 order by a.priority desc limit :size")
-	List<Advertisement> findIndexAds(@Param("size") int indexAdsSize);
+	List<Advertisement> findIndexAds(@Param("findIndexAds") int indexAdsSize);
 	
 	void save(Advertisement temp);
 	
 	void delete(Integer id);
 	
-	long findAllCount();
+	long findAllCount(RequestParam param);
 	
 	List<Advertisement> findList(RequestParam param);
 	

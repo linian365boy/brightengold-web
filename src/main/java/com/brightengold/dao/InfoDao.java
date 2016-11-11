@@ -23,7 +23,7 @@ public interface InfoDao {
 
 	List<Info> findList(RequestParam param);
 
-	long findAllCount();
+	long findAllCount(RequestParam param);
 
 	void updateInfo(Info info);
 }

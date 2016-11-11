@@ -31,13 +31,23 @@
 		select * from tb_news where id=#{id}
 	</select>
 	
-	<select id="findAllCount" resultType="long">
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
 		select count(*) from tb_news 
+		<where>
+			<if test="search!=null and search!=''">
+				title like concat('%',#{search},'%') or introduce like concat ('%',#{search},'%')
+			</if>
+		</where> 
 	</select>
 	
-	<select id="findList" resultMap="NewsMap">
+	<select id="findList" resultMap="NewsMap" parameterType="com.brightengold.common.vo.RequestParam">
 		select tn.id,tn.title,tn.priority,tn.url,tn.createDate,tn.publishDate,tc.name as columnName 
 		from tb_news tn inner join tb_column tc on tn.columnId=tc.id 
+		<where>
+			<if test="search!=null and search!=''">
+				title like concat('%',#{search},'%') or introduce like concat ('%',#{search},'%')
+			</if>
+		</where> 
 		order by tn.priority desc,tn.id desc limit #{offset},#{limit}
 	</select>
 	

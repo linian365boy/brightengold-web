@@ -21,13 +21,24 @@
 	
 	
 	<!-- 后台系统展示 -->
-	<select id="findAllCount" resultType="long">
-		select count(*) from tb_advertisement
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+		select count(*) from tb_advertisement 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%')
+			</if>
+		</where> 
 	</select>
 	
 	<!-- 后台系统展示 -->
-	<select id="findList" resultType="Advertisement">
-		select * from tb_advertisement order by priority desc,id desc limit #{offset},#{limit}
+	<select id="findList" resultType="Advertisement" parameterType="com.brightengold.common.vo.RequestParam">
+		select * from tb_advertisement 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%')
+			</if>
+		</where> 
+		order by priority desc,id desc limit #{offset},#{limit}
 	</select>
 	
 	<select id="findIndexAds" parameterType="int" resultType="Advertisement">

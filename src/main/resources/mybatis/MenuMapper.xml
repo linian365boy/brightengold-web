@@ -62,13 +62,23 @@
 		select id,name from tb_menu m where m.parentId is null order by priority desc
 	</select>
 	
-	<select id="findList" resultMap="MenuMap">
+	<select id="findList" resultMap="MenuMap" parameterType="com.brightengold.common.vo.RequestParam">
 		select t1.*,t2.name as parentName from tb_menu t1 left join tb_menu t2 on (t1.parentId=t2.id) 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or url like concat ('%',#{search},'%')
+			</if>
+		</where> 
 		order by priority desc limit #{offset},#{limit}
 	</select>
 	
-	<select id="findAllCount" resultType="long">
-		select count(*) from tb_menu
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+		select count(*) from tb_menu 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or url like concat ('%',#{search},'%')
+			</if>
+		</where> 
 	</select>
 	
 	<select id="loadMenuByResourceId" resultType="Menu">

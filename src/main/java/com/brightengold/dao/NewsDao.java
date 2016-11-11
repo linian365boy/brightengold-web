@@ -20,7 +20,7 @@ public interface NewsDao {
 
 	public void save(List<News> tempNewsList);
 
-	public long findAllCount();
+	public long findAllCount(RequestParam param);
 
 	public List<News> findList(RequestParam param);
 
