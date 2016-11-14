@@ -13,8 +13,8 @@
 	</select>
 	
 	<insert id="save">
-		insert into tb_log(id,content,type,operator,operatorRealName,menuName,createTime) 
-		values(null,#{content},#{type},#{operator},#{operatorRealName},#{menuName},#{createTime})
+		insert into tb_log(id,content,type,operator,operatorRealName,createTime) 
+		values(null,#{content},#{type},#{operator},#{operatorRealName},#{createTime})
 	</insert>
 	
 	<select id="findList" resultType="Log">

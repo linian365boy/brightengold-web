@@ -142,12 +142,14 @@ $(document).ready(function(){
 		            			</option>
 		            		</c:forEach>
 	            		</select>
-	            		<select class="col-xs-5 selectpicker" name="childrenC">
-	           				<option value='0'>==请选择==</option>
-	           				<c:forEach items="${category.children }" var="childrenC">
-		      					<option value="${childrenC.id }" >${childrenC.enName }</option>
-		      				</c:forEach>
-	           			</select>
+	            		<c:if test="${fn:length(category.children)>0 }">
+	            			<select class="col-xs-5 selectpicker" name="childrenC">
+		           				<option value='0'>==请选择==</option>
+		           				<c:forEach items="${category.children }" var="childrenC">
+			      					<option value="${childrenC.id }" >${childrenC.enName }</option>
+			      				</c:forEach>
+		           			</select>
+	            		</c:if>
 	             	</c:when>
 	            	<c:otherwise>
 	            	<!-- 二级分类 -->
@@ -198,7 +200,7 @@ $(document).ready(function(){
 			  <div class="form-group">
 			    <label for="priority" class="col-sm-2 control-label">排序号</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" id="priority" name="priority" placeholder="排序号，越大排名越前">
+			      <input type="text" class="form-control" id="priority" name="priority" value="${model.priority }" placeholder="排序号，越大排名越前">
 			    </div>
 			  </div>
 			  <div class="form-group">

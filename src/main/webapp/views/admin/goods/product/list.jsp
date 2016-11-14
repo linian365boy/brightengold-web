@@ -15,7 +15,7 @@
 	};
 		
 	var del = function(obj){
-		art.dialog.confirm('确定删除此商品',function(){
+		art.dialog.confirm('确定删除此商品'+obj.enName+'？',function(){
 			var url = '${ctx}admin/goods/product/'+obj.id+'/del.html';
 			$.post(url,function(json){
 	    		if(json.code==200){
@@ -30,14 +30,26 @@
 	var publish = function(obj){
 		$.get("${ctx}admin/goods/product/"+obj.id+"/checkPub.html",function(rs){
 			if(rs=="1"){
-				art.dialog.confirm('此商品已发布，确定重新发布？',function(){
+				art.dialog.confirm('此商品【'+obj.enName+'】已发布，确定重新发布？',function(){
 					var url = '${ctx}admin/goods/product/'+obj.id+'/release.html';
-					window.location.href=url;
+					$.post(url,function(json){
+						if(json.code==200){
+			    			$("button[name='refresh']",window.document).click();
+			    		}else{
+			    			art.dialog.tips(json.message, 1.5);
+			    		}
+					},"json");
 				});
 			}else{
-				art.dialog.confirm('确定发布此商品？',function(){
+				art.dialog.confirm('确定发布此商品【'+obj.enName+'】？',function(){
 					var url = '${ctx}admin/goods/product/'+obj.id+'/release.html';
-					window.location.href=url;
+					$.post(url,function(json){
+						if(json.code==200){
+			    			$("button[name='refresh']",window.document).click();
+			    		}else{
+			    			art.dialog.tips(json.message, 1.5);
+			    		}
+					},"json");
 				});
 			}
 		},"html");
@@ -45,23 +57,22 @@
 	
 	window.changeStatusEvent = {
 			'click .editStatus': function(e, value, row, index){
-				console.info(23423);
 				var statusStr = "正常";
-				if(status){
+				if(row.status){
 					statusStr = "锁定";
 				}
-				art.dialog.confirm('确定修改状态为'+statusStr+'？',function(){
-					$.post("${ctx}admin/goods/product/"+id+"/changeStatus.html",
-							{status:status},function(text){
+				art.dialog.confirm('确定修改【'+row.enName+'】状态为'+statusStr+'？',function(){
+					$.post("${ctx}admin/goods/product/"+row.id+"/changeStatus.html",
+							{status:row.status},function(text){
 						if(text=="1"){
-							if(status){
-								$("#status_"+id).html("<span class='label label-default' title='点击修改状态'>锁定</span>");
+							if(row.status){
+								$("#status_"+row.id).text("锁定").removeClass("label-info").addClass("label-default");
 							}else{
-								$("#status_"+id).html("<span class='label label-info' title='点击修改状态'>正常</span>");
+								$("#status_"+row.id).text("正常").removeClass("label-default").addClass("label-info");
 							}
-							art.dialog.alert("修改状态成功！");
+							$("button[name='refresh']",window.document).click();
 						}else{
-							art.dialog.alert("修改状态失败！");
+							art.dialog.tips("修改状态失败！", 1.5);
 						}
 					});
 				});
@@ -73,7 +84,6 @@
 	}
 	
 	var isHotFormatter = function(value, row, index){
-		//console.info(JSON.stringify(row));
 		return row.hot ? "<span class='label label-danger' title='热门'>热门</span>" : "<span class='label label-primary' title='非热门'>非热门</span>";
 	}
 	
@@ -82,9 +92,29 @@
 	}
 	
 	var productStatusFormatter = function(value, row, index){
-		return row.status?"<a class='label label-info editStatus' title='点击修改状态' href='javascript:void(0)'>正常</a>"
-				:"<a class='label label-default' title='点击修改状态' href='javascript:void(0)'>锁定</a>";
+		return row.status?"<a id='status_"+row.id+"' class='label label-info editStatus' title='点击修改状态' href='javascript:void(0)'>正常</a>"
+				:"<a id='status_"+row.id+"' class='label label-default editStatus' title='点击修改状态' href='javascript:void(0)'>锁定</a>";
 	}
+	
+	var productActionFormatter = function(value, row, index){
+		 return [
+			        '<a class="label label-info edit" href="javascript:void(0)" title="修改">修改</a>',
+			        '<a class="label label-info publish ml10" href="javascript:void(0)" title="发布">发布</a>',
+					'<a class="label label-danger ml10 remove" href="javascript:void(0)" title="删除">删除</a>'
+			    ].join('');
+	}
+	
+	window.productActionEvents = {
+			'click .publish':function(e, value, row, index){
+				publish(row);
+			},
+			'click .edit': function (e, value, row, index) {
+		    	update(row);
+		    },
+		    'click .remove': function (e, value, row, index) {
+		    	del(row);
+		    }
+	};
 	
 	$("#table").bootstrapTable();
 </script>
@@ -137,7 +167,7 @@
 					<th data-halign="center" data-align="center" data-formatter="isPublishFormatter">是否发布</th>
 					<th data-halign="center" data-align="center" data-formatter="productStatusFormatter" data-events="changeStatusEvent">状态</th>
 					<th data-halign="center" data-align="center" data-field="priority">排序号</th>
-					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+					<th data-formatter="productActionFormatter" data-events="productActionEvents">操作</th>
 				</tr>
                 </thead>
               </table>
