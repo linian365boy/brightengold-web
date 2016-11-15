@@ -18,7 +18,6 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,11 +50,11 @@ public class CompanyController {
 	
 	@ResponseBody
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
-	public MessageVo update(@RequestParam  MultipartFile photos,Company company, HttpServletRequest request){
+	public MessageVo update(MultipartFile photos,Company company, HttpServletRequest request){
 		Company temp = companyService.loadCompany();
 		MessageVo vo = null;
 		try{
-			if(!photos.isEmpty()){
+			if(photos!=null && !photos.isEmpty()){
 				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
 				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
 				FileUtils.copyInputStreamToFile(photos.getInputStream(), new File(newFileName));

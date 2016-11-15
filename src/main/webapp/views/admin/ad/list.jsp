@@ -15,7 +15,7 @@
 	var update = function(obj){
 		var url = '${ctx}admin/ad/'+obj.id+'/update.html';
 		art.dialog.open(url,{
-			title:'添加滚动图片',
+			title:'修改滚动图片',
 			id:'bianji',
 			width: 768,
 			height: 440,
@@ -26,19 +26,27 @@
 	var del = function(obj){
 		art.dialog.confirm('确定删除此新闻？',function(){
 			var url = '${ctx}admin/ad/'+obj.id+'/delete.html';
-			window.location.href=url;
+			$.getJSON(url,function(json){
+	    		if(json.code==200){
+	    			$("button[name='refresh']",window.document).click();
+	    		}else{
+	    			art.dialog.tips(json.message, 1.5);
+	    		}
+			});
 		});
 	};
-	var changeStatus = function(id,objstatus){
+	var changeStatus = function(row){
 		var statusStr = "正常";
-		if(objstatus==0){
+		if(row.status==1){
 			statusStr = "锁定";
 		}
-		art.dialog.confirm("确定修改为"+statusStr+"状态？",function(){
-			var url = '${ctx}admin/ad/'+id+'/updateStatus.html';
-			$.getJSON(url,{'status':objstatus},function(json){
+		art.dialog.confirm("确定修改为【"+statusStr+"】状态？",function(){
+			var url = '${ctx}admin/ad/'+row.id+'/updateStatus.html';
+			$.getJSON(url,{'status':row.status},function(json){
 				if(json.code==200){
-					art.dialog.alert(json.message);
+					$("button[name='refresh']",window.document).click();
+				}else{
+					art.dialog.tips(json.message, 2);
 				}
 			});
 		});
@@ -52,9 +60,15 @@
 	}
 	
 	var adStatusFormatter = function(value, row, index){
-		return row.status==1?"<span title='正常' onclick='changeStatus('"+row.id+"','0');' class='label btn label-success'>正常</span>":
-			"<span title='锁定' onclick='changeStatus('"+row.id+"','1');' class='label btn label-danger'>锁定</span>";
+		return row.status==1?"<span title='正常' class='label btn label-success editStatus'>正常</span>":
+			"<span title='锁定' class='label btn label-danger editStatus'>锁定</span>";
 	}
+	
+	window.adStatusActionEvents = {
+		    'click .editStatus': function (e, value, row, index) {
+		    	changeStatus(row);
+		    }
+	};
 	$("#table").bootstrapTable();
 </script>
 
@@ -104,7 +118,7 @@
 					<th data-field="width">宽度</th>
 					<th data-field="height">高度</th>
 					<th data-field="priority">排序号</th>
-					<th data-formatter="adStatusFormatter">状态</th>
+					<th data-formatter="adStatusFormatter" data-events="adStatusActionEvents">状态</th>
 					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr>
 			</thead> 

@@ -32,6 +32,9 @@
 				},
 				"priority":{
 					number:true
+				},
+				"resString":{
+					required:true
 				}
 			},
 			messages:{
@@ -46,6 +49,9 @@
 				},
 				"priority":{
 					number:"排序号为数字！"
+				},
+				"resString":{
+					required:"包路径不能为空"
 				}
 			},
 			highlight: function(element) {
@@ -87,12 +93,13 @@
 				</div>
 			</div>
 			<div class="form-group">
-		    <label for="parentM" class="col-sm-2 control-label">父级菜单</label>
+		    <label for="parentId" class="col-sm-2 control-label">父级菜单</label>
 		    	<div class="row col-xs-8" style="overflow:hidden;">
-		    		<select class="col-xs-5 selectpicker" name="parentM" id="parentM">
-		    		<c:forEach items="${parentMenu }" var="menu">
-		    			<option value="${menu.id }">${menu.name }</option>
-		    		</c:forEach>
+		    		<select class="col-xs-5 selectpicker" name="parentId" id="parentId">
+		    			<option value="0">==根节点==</option>
+		    			<c:forEach items="${parentMenu }" var="menu">
+		    				<option value="${menu.id }">${menu.name }</option>
+		    			</c:forEach>
 			      	</select>
 		    	</div>
 		  </div>
@@ -100,6 +107,12 @@
 		    	<label for="url" class="col-sm-2 control-label">跳转路径<code>*</code></label>
 				<div class="row col-sm-8">
 				     <input type="text" class="form-control" id="url" name="url" placeholder="跳转路径">
+				</div>
+			</div>
+			<div class="form-group">
+		    	<label for="url" class="col-sm-2 control-label">包路径<code>*</code></label>
+				<div class="row col-sm-8">
+				     <input type="text" class="form-control" id="resString" name="resString" placeholder="跳转路径对应的方法路径">
 				</div>
 			</div>
 			<div class="form-group">

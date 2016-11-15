@@ -15,7 +15,7 @@
 	};
 		
 	var del = function(obj){
-		art.dialog.confirm('确定删除此商品'+obj.enName+'？',function(){
+		art.dialog.confirm('确定删除此商品【'+obj.enName+'】？',function(){
 			var url = '${ctx}admin/goods/product/'+obj.id+'/del.html';
 			$.post(url,function(json){
 	    		if(json.code==200){

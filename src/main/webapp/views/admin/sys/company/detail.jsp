@@ -45,6 +45,20 @@
 			},
 			success: function(element) {
 			      jQuery(element).closest('.form-group').removeClass('has-error');
+			},
+			submitHandler: function(form){
+				CKEDITOR.instances.introduce.updateElement();
+				$(form).ajaxSubmit({
+					dataType:'json',
+					success:function(json) {
+			    		if(json.code==200){
+			    			art.dialog.tips(json.message, 2);
+			    			$("ul.treeview-menu.menu-open li.active a").click();
+			    		}else{
+			    			$(".box-header .error").removeClass("hide").html(json.message);
+			    		}
+			        }
+				});
 			}
 		});
 	    CKEDITOR.replace('introduce');
@@ -71,6 +85,7 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">公司信息设置</h3>
+              <label class="error hide"></label>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -78,18 +93,18 @@
 			<form id="form" action="${ctx }admin/sys/company/update.html" method="post" 
 			enctype="multipart/form-data" class="form-horizontal">
 				<div class="form-group">
-					    <label for="name" class="col-sm-2 control-label">公司名称<span class="asterisk">*</span></label>
+					    <label for="name" class="col-sm-2 control-label">公司名称<code>*</code></label>
 					    <div class="col-sm-8">
 					      <input type="text" class="form-control" id="name" value="${model.name }" name="name" placeholder="公司名称">
 					    </div>
 				   </div>
 				   <div class="form-group">
-					    <label for="logoPic" class="col-sm-2 control-label">公司logo<span class="asterisk">*</span></label>
+					    <label for="photos" class="col-sm-2 control-label">公司logo<code>*</code></label>
 					    <div class="col-sm-8">
 					      <img src="${ctx }resources/${model.logo }" 
 		            	title="公司logo" alt="公司logo" width="390px" height="130px" 
 		            	name="logoPic" />
-		            	<input type="file" name="photos" title="点击更换公司logo" accept="image/*"/>
+		            	<input type="file" id="photos" name="photos" title="点击更换公司logo" accept="image/*"/>
 					    </div>
 				   </div>
 				   <div class="form-group">
@@ -106,19 +121,19 @@
 					    </div>
 				   </div>
 				   <div class="form-group">
-					    <label for="address" class="col-sm-2 control-label">公司地址<span class="asterisk">*</span></label>
+					    <label for="address" class="col-sm-2 control-label">公司地址<code>*</code></label>
 					    <div class="col-sm-8">
 					      <input id="address" class="form-control" name="address" value="${model.address }"/>
 					    </div>
 				   </div>
 				   <div class="form-group">
-					    <label for="email" class="col-sm-2 control-label">公司邮箱<span class="asterisk">*</span></label>
+					    <label for="email" class="col-sm-2 control-label">公司邮箱<code>*</code></label>
 					    <div class="col-sm-8">
 					      <input id="email" class="form-control" name="email" value="${model.email }"/>
 					    </div>
 				   </div>
 				   <div class="form-group">
-					    <label for="telPhone" class="col-sm-2 control-label">联系方式<span class="asterisk">*</span></label>
+					    <label for="telPhone" class="col-sm-2 control-label">联系方式<code>*</code></label>
 					    <div class="col-sm-8">
 					      <input id="telPhone" class="form-control" name="telPhone" value="${model.telPhone }"/>
 					    </div>

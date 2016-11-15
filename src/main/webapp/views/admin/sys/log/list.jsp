@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@include file="../../../commons/include.jsp" %>
+    <%@include file="/views/commons/include.jsp" %>
     <script type="text/javascript">
 	<!--
 	$("#table").bootstrapTable();
@@ -43,7 +43,6 @@
     				<th data-formatter="runningFormatter">序号</th>
 	                <th data-field="type">操作</th>
 	                <th data-field="operatorRealName">操作员</th>
-	                <th data-field="menuName">菜单模块</th>
 	                <th data-field="createTime">操作日期</th>
 	                <th data-field="content">内容</th>
 				</tr> 

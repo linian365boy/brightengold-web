@@ -36,6 +36,11 @@ public class AdvertisementService {
 	}
 
 	public void updateStatus(Integer id, Integer status) {
+		if(status==0){
+			status = 1;
+		}else{
+			status = 0;
+		}
 		advertisementDao.updateStatus(id,status);
 	}
 

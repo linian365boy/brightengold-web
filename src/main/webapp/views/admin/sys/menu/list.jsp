@@ -8,7 +8,7 @@
 			title:'编辑菜单',
 			id:'bianji',
 			width:768,
-			height:360,
+			height:400,
 			resize: false
 			});
 		};
@@ -19,12 +19,12 @@
 				title:'添加菜单',
 				id:'tianjia',
 				width: 768,
-				height: 360,
+				height: 400,
 				resize: false
 			});
 		};
-		var deleteMenu = function(id){
-			art.dialog.confirm('确定删除此菜单？',function(){
+		var del = function(obj){
+			art.dialog.confirm('确定删除此【'+obj.name+'】菜单？',function(){
 				var url = '${ctx}admin/sys/menu/'+obj.id+'/del.html';
 				$.post(url,function(json){
 			    		if(json.code==200){

@@ -129,13 +129,13 @@ public class NewsController {
 			news.setCreateDate(temp.getCreateDate());
 			news.setClicks(temp.getClicks());
 			news.setUrl(temp.getUrl());
-			/*if(secondColId !=null && secondColId !=0 ){
-				news.setColumn(columnService.getById(secondColId));
+			if(secondColId !=null && secondColId !=0 ){
+				news.setColumnId(secondColId);
 				news.setDepth(firstColId+"-"+secondColId);
 			}else{
-				news.setColumn(columnService.getById(firstColId));
+				news.setColumnId(firstColId);
 				news.setDepth(String.valueOf(firstColId));
-			}*/
+			}
 			if(newsService.updateNews(news)){
 				logger.info("修改前新闻信息|{}，修改后新闻信息|{}",temp,news);
 				if(!temp.getTitle().equals(news.getTitle())){
@@ -219,31 +219,29 @@ public class NewsController {
 	public MessageVo releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
 		MessageVo vo = new MessageVo();
 		String fPath = null;
-		if(newsId!=null){
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-					request.getServerPort()+request.getContextPath();
-			String realPath = request.getSession().getServletContext().getRealPath("/");
-			String parentPath = Constant.NEWSPATH;
-			News tempNews = newsService.loadNews(newsId);
-			tempNews.setPublishDate(new Date());
-			if(StringUtils.isBlank(tempNews.getUrl())){
-				tempNews.setUrl(Tools.getRndFilename()+".htm");
-			}
-			LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
-			if(tempNews.getPublishDate()!=null){
-				 fPath = realPath +Constant.NEWSPATH+File.separator+tempNews.getUrl();
-				 FileUtil.delFile(fPath);
-			}
-			map.put("ctx", basePath);
-			map.put("model", tempNews);
-			//生成唯一的新闻页面路径，不需要根据页码生成页面
-			if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
-				newsService.saveNews(tempNews);
-				vo.setCode(Constant.SUCCESS_CODE);
-				vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
-				logger.info("发布成功新闻|{}",tempNews.getTitle());
-				return vo;
-			}
+		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+				request.getServerPort()+request.getContextPath();
+		String realPath = request.getSession().getServletContext().getRealPath("/");
+		String parentPath = Constant.NEWSPATH;
+		News tempNews = newsService.loadNews(newsId);
+		tempNews.setPublishDate(new Date());
+		if(StringUtils.isBlank(tempNews.getUrl())){
+			tempNews.setUrl(Tools.getRndFilename()+".htm");
+		}
+		LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
+		if(tempNews.getPublishDate()!=null){
+			 fPath = realPath +Constant.NEWSPATH+File.separator+tempNews.getUrl();
+			 FileUtil.delFile(fPath);
+		}
+		map.put("ctx", basePath);
+		map.put("model", tempNews);
+		//生成唯一的新闻页面路径，不需要根据页码生成页面
+		if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
+			newsService.saveNews(tempNews);
+			vo.setCode(Constant.SUCCESS_CODE);
+			vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
+			logger.info("发布成功新闻|{}",tempNews.getTitle());
+			return vo;
 		}
 		vo.setCode(Constant.ERROR_CODE);
 		vo.setMessage("新闻id不存在");

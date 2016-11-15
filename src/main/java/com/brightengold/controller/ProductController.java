@@ -143,7 +143,7 @@ public class ProductController {
 		try {
 			if(productId!=null){
 				Product tempProduct = productService.loadProductById(productId);
-				if(!photo.isEmpty()){
+				if(photo!=null && !photo.isEmpty()){
 					String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 					String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
 					FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
@@ -163,6 +163,7 @@ public class ProductController {
 				if(product.getPriority()==null){
 					product.setPriority(0);
 				}
+				product.setPublish(false);
 				product.setCreateDate(tempProduct.getCreateDate());
 				product.setCreateUserId(tempProduct.getCreateUserId());
 				if(StringUtils.isBlank(tempProduct.getUrl())){
@@ -232,7 +233,7 @@ public class ProductController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/{productId}/del",method=RequestMethod.GET)
+	@RequestMapping(value="/{productId}/del",method=RequestMethod.POST)
 	public MessageVo del(@PathVariable Integer productId,Product product){
 		MessageVo vo = null;
 		if(productId!=null){
@@ -265,41 +266,37 @@ public class ProductController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/{productId}/release",method=RequestMethod.GET)
+	@RequestMapping(value="/{productId}/release",method=RequestMethod.POST)
 	public MessageVo releaseProduct(HttpServletRequest request, @PathVariable Integer productId, ModelMap map){
 		MessageVo vo = null;
-		if(productId!=null){
-			Product temp = productService.loadProductById(productId);
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-					request.getServerPort()+request.getContextPath();
-			String realPath = request.getSession().getServletContext().getRealPath("/");
-			String parentPath = Constant.PRODUCTPATH;
-			if(StringUtils.isNotBlank(temp.getUrl())){
-				temp.setUrl(temp.getUrl());
-			}else{
-				temp.setUrl(Tools.getRndFilename()+".htm");
-			}
-			temp.setPublish(true);
-			//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
-			map.put("product", temp);
-			//查找相关连产品，根据keyWords
-			List<Product> products = 
-				productService.findRelatedProducts(temp.getId(),temp.getKeyWords(),8);
-			if(!CollectionUtils.isEmpty(products)){
-				map.put("relatedProducts", products);
-			}
-			if(temp.isPublish()){
-				Tools.delFile(realPath + Constant.PRODUCTPATH +File.separator + temp.getUrl());
-			}
-			map.put("ctx", basePath);
-			//生成唯一的产品页面路径，不需要根据页码生成页面
-			if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
-				productService.saveProduct(temp);
-				logger.info("生成产品|{}页面成功",temp.getEnName());
-				vo = new MessageVo(Constant.SUCCESS_CODE,"生产产品【"+temp.getEnName()+"】页面成功！");
-			}else{
-				vo = new MessageVo(Constant.ERROR_CODE,"生产产品【"+temp.getEnName()+"】页面失败！");
-			}
+		Product temp = productService.loadProductById(productId);
+		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
+				request.getServerPort()+request.getContextPath();
+		String realPath = request.getSession().getServletContext().getRealPath("/");
+		String parentPath = Constant.PRODUCTPATH;
+		if(StringUtils.isBlank(temp.getUrl())){
+			temp.setUrl(Tools.getRndFilename()+".htm");
+		}
+		temp.setPublish(true);
+		//生产类似shtml文件（server side include方式嵌入页面），避免全部生成整套文件，需要组装太多数据
+		map.put("product", temp);
+		//查找相关连产品，根据keyWords
+		List<Product> products = 
+			productService.findRelatedProducts(temp.getId(),temp.getKeyWords(),8);
+		if(!CollectionUtils.isEmpty(products)){
+			map.put("relatedProducts", products);
+		}
+		if(temp.isPublish()){
+			Tools.delFile(realPath + Constant.PRODUCTPATH +File.separator + temp.getUrl());
+		}
+		map.put("ctx", basePath);
+		//生成唯一的产品页面路径，不需要根据页码生成页面
+		if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
+			productService.updateProduct(temp);
+			logger.info("生成产品|{}页面成功",temp.getEnName());
+			vo = new MessageVo(Constant.SUCCESS_CODE,"生产产品【"+temp.getEnName()+"】页面成功！");
+		}else{
+			vo = new MessageVo(Constant.ERROR_CODE,"生产产品【"+temp.getEnName()+"】页面失败！");
 		}
 		return vo;
 	}

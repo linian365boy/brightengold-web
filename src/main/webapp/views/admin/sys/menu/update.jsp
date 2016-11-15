@@ -87,12 +87,13 @@ $(document).ready(function(){
 				</div>
 			</div>
 			<div class="form-group">
-		    <label for="parentM" class="col-sm-3 control-label">父级菜单</label>
+		    <label for="parentId" class="col-sm-3 control-label">父级菜单</label>
 		    	<div class="row col-xs-8" style="overflow:hidden;">
-		    		<select class="col-xs-7 selectpicker" name="parentM" id="parentM">
-		    		<c:forEach items="${parentMenu }" var="menu">
-		    			<option value="${menu.id }" ${(menu.id==model.parentId)?'selected':'' }>${menu.name }</option>
-		    		</c:forEach>
+		    		<select class="col-xs-7 selectpicker" name="parentId" id="parentId">
+		    			<option value="0">==根节点==</option>
+			    		<c:forEach items="${parentMenu }" var="menu">
+			    			<option value="${menu.id }" ${(menu.id==model.parentId)?'selected':'' }>${menu.name }</option>
+			    		</c:forEach>
 			      	</select>
 		    	</div>
 		  </div>

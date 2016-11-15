@@ -11,31 +11,33 @@
 		var update = function(obj){
 			var url = '${ctx}admin/news/'+obj.id+'/update.html';
 			$.get(url,function(data){
-				if(JSON.stringify(data).indexOf("login page")!=-1){
-		    		 location.href="${ctx}admin/login.html";
-		    	}else{
-					$("div.content-wrapper").html(data);
-		    	}
+				$("div.content-wrapper").html(data);
 			});
 		};
 		//del
 		var del = function(obj){
-			art.dialog.confirm('确定删除此新闻？',function(){
+			art.dialog.confirm('确定删除此【'+obj.title+'】新闻？',function(){
 				var url = '${ctx}admin/news/'+obj.id+'/del.html';
-				window.location.href=url;
+				$.getJSON(url,function(json){
+		    		if(json.code==200){
+		    			$("button[name='refresh']",window.document).click();
+		    		}else{
+		    			art.dialog.tips(json.message, 1.5);
+		    		}
+				});
 			});
 		};
 		//purview
-		var purview = function(obj){
+		/* var purview = function(obj){
 			var url = '${ctx}admin/news/'+obj.id+".html";
 			window.open(url);
-		};
+		}; */
 		//publish
 		var publish = function(obj){
 			var newsId = obj.id;
 			$.get("${ctx}admin/news/"+newsId+"/checkPub.html",function(rs){
 				if(rs=="1"){
-					art.dialog.confirm('此新闻已发布，确定重新发布？',function(){
+					art.dialog.confirm('此新闻【'+obj.title+'】已发布，确定重新发布？',function(){
 						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
 							var dialog = art.dialog({
 								id:"publish",
@@ -43,15 +45,14 @@
 							});
 							if(data.code==200){
 								dialog.content('恭喜您，发布成功！').time(2.5);
-								$("#"+newsId).html(data.data);
+								$("button[name='refresh']",window.document).click();
 							}else{
 								dialog.content('对不起，发布失败！').time(2.5);
 							}
 						});
 					});
 				}else{
-					art.dialog.confirm('确定发布此新闻？',function(){
-						var newsId = $(obj).attr("name");
+					art.dialog.confirm('确定发布此【'+obj.title+'】新闻？',function(){
 						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
 							var dialog = art.dialog({
 								id:"publish",
@@ -59,7 +60,7 @@
 							});
 							 if(data.code==200){
 								dialog.content('恭喜您，发布成功！').time(2.5);
-								$("#"+newsId).html(data.data);
+								$("button[name='refresh']",window.document).click();
 							}else{
 								dialog.content('对不起，发布失败！').time(2.5);
 							} 
@@ -71,6 +72,26 @@
 		
 		var publishDateFormatter=function(value, row, index){
 			return row.publishDate?row.publishDate:"<span class='label label-default' title='未发布'>未发布</span>";
+		};
+		
+		var newsActionFormatter = function(value, row, index){
+			 return [
+				        '<a class="label label-info edit" href="javascript:void(0)" title="修改">修改</a>',
+				        '<a class="label label-info publish ml10" href="javascript:void(0)" title="发布">发布</a>',
+						'<a class="label label-danger ml10 remove" href="javascript:void(0)" title="删除">删除</a>'
+				    ].join('');
+		}
+		
+		window.newsActionEvents = {
+				'click .publish':function(e, value, row, index){
+					publish(row);
+				},
+				'click .edit': function (e, value, row, index) {
+			    	update(row);
+			    },
+			    'click .remove': function (e, value, row, index) {
+			    	del(row);
+			    }
 		};
 		$("#table").bootstrapTable();
 </script>
@@ -120,35 +141,9 @@
 					<th data-field="createDate">创建日期</th>
 					<th data-formatter="publishDateFormatter">发布日期</th>
 					<th data-field="priority">优先值</th>
-					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+					<th data-formatter="newsActionFormatter" data-events="newsActionEvents">操作</th>
 				</tr> 
                 </thead>
-                <%-- <tbody>
-                <c:forEach items="${page.result }" var="news" varStatus="status">
-				<tr>
-					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td><a href="${ctx }admin/news/${news.id}.html" title="${news.title }" target="_blank">${news.title }</a></td>
-					<td>${news.columnName }</td>
-					<td>${news.createDate }</td>
-					<td id="${news.id }">
-						<c:choose>
-							<c:when test="${ empty news.publishDate}">
-								<span class='label label-default' title='未发布'>未发布</span>
-							</c:when>
-							<c:otherwise>
-								${ news.publishDate}
-							</c:otherwise>
-						</c:choose>
-					</td>
-					<td>${ news.priority}</td>
-					<td>
-						<span class="label label-info" name="${news.id }" onclick="update(this);">修改</span>
-						<span class="label label-primary" name="${news.id }" onclick="publish(this);">发布</span>
-						<span class="label label-danger" name="${news.id }" onclick="del(this);">删除</span>
-					</td>
-				</tr>
-				</c:forEach>
-                </tbody> --%>
               </table>
             </div>
             <!-- /.box-body -->

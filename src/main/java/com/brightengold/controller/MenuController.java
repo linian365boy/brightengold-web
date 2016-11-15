@@ -33,6 +33,7 @@ import cn.rainier.nian.model.User;
 import cn.rainier.nian.service.MenuService;
 import cn.rainier.nian.service.ResourceService;
 import cn.rainier.nian.utils.PageRainier;
+import cn.rainier.nian.utils.ResourceType;
 
 @Controller
 @RequestMapping("/admin/sys/menu")
@@ -93,10 +94,23 @@ public class MenuController {
 	
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public MessageVo add(Menu menu){
+	public MessageVo add(Menu menu,Resource resource){
 		MessageVo vo = null;
 		try{
-			if(menuService.saveMenu(menu)){
+			if(0==menu.getParentId()){
+				menu.setParentId(null);
+			}
+			int updateCount = menuService.saveMenu(menu);
+			//返回的主键在menu里面，不在返回值里面
+			logger.info("新增的menu信息|{}",menu);
+			resource.setMenuId(menu.getId());
+			resource.setDescn(menu.getName());
+			resource.setDisplay(true);
+			resource.setName(menu.getName());
+			resource.setPriority(0);
+			resource.setResType(ResourceType.METHOD.getType());
+			if(updateCount>0 && resourceService.saveResource(resource)){
+				//TODO 把该资源加入到超级管理员内
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
 				logger.info("添加菜单{}成功！",menu);
 				vo = new MessageVo(Constant.SUCCESS_CODE);
@@ -106,6 +120,25 @@ public class MenuController {
 			}
 		}catch(Exception e){
 			logger.error("新增菜单报错！",e);
+		}
+		return vo;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/{menuId}/del",method=RequestMethod.POST)
+	public MessageVo del(@PathVariable("menuId") Integer menuId){
+		MessageVo vo = null;
+		//1、先判断是否有子节点
+		long count = menuService.findChildMenuCount(menuId);
+		if(count==0){
+			//2、删除
+			if(menuService.delMenu(menuId)){
+				vo = new MessageVo(Constant.SUCCESS_CODE,"删除菜单成功！");
+			}else{
+				vo = new MessageVo(Constant.ERROR_CODE,"删除菜单失败！");
+			}
+		}else{
+			vo = new MessageVo(Constant.ERROR_CODE,"该菜单下有"+count+"个子菜单，请先删除子菜单！");
 		}
 		return vo;
 	}

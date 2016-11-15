@@ -42,4 +42,9 @@
          	(#{roleName}, #{item.id})
     	</foreach>
 	</update>
+	
+	<insert id="saveResource" parameterType="Resource">
+		insert into tb_resource(descn,name,priority,resString,resType,menuId,display) 
+		values(#{descn},#{name},#{priority},#{resString},#{resType},#{menuId},#{display})
+	</insert>
 </mapper>

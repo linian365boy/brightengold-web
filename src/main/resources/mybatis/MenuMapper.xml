@@ -14,9 +14,9 @@
 		
 	</resultMap>
 	
-	<insert id="save">
-		insert into tb_menu(id,name,mark,url,priority,parentId) 
-		values(null,#{name},#{mark},#{url},#{priority},#{parentId})
+	<insert id="save" parameterType="Menu" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+		insert into tb_menu(name,mark,url,priority,parentId) 
+		values(#{name},#{mark},#{url},#{priority},#{parentId})
 	</insert>
 	
 	<update id="update" parameterType="Menu">
@@ -98,5 +98,9 @@
 	
 	<select id="findMenuByRole" parameterType="java.lang.String" resultType="Menu">
 		select m.id,m.name,m.mark,m.priority from tb_role_menu rm inner join tb_menu m on rm.menuId=m.id where rm.roleId = #{roleName}
+	</select>
+	
+	<select id="findChildMenuCount" resultType="long" parameterType="int" >
+		select count(1) from tb_menu where parentId=#{menuId}
 	</select>
 </mapper>

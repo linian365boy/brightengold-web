@@ -111,7 +111,7 @@ public class AdvertisementController {
 		try{
 			temp = service.loadAdvertisement(id);
 			ad.setCreateDate(temp.getCreateDate());
-			if(!photo.isEmpty()){
+			if(photo!=null && !photo.isEmpty()){
 				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
 				FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));

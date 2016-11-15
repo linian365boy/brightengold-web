@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@include file="../../commons/include.jsp" %>
+    <%@include file="/views/commons/include.jsp" %>
 <!DOCTYPE html >
 <html>
 <head>
@@ -10,6 +10,7 @@
 <script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/additional-methods.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
 <!-- Theme style -->
@@ -73,6 +74,7 @@
 			    			$("button[name='refresh']",top.document).click();
 			    			top.art.dialog.list['tianjia'].close();
 			    		}else{
+			    			$("span.help-block").html(json.message);
 			    			$(".has-error").removeClass("hide");
 			    		}
 			        }
@@ -123,7 +125,7 @@
   </div>
   <div class="form-group has-error hide">
   	  <label class="col-sm-3 control-label">&nbsp;</label>
-      <span class="help-block">新增失败，系统发生错误！</span>
+      <span class="help-block"></span>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-8">

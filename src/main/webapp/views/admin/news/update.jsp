@@ -63,7 +63,7 @@
 			$(obj).next().remove();
 			var html = "";
 			if(json.length>0){
-				html+='<select class="col-xs-5 selectpicker" name="secondCol" >';
+				html+='<select class="col-xs-5 selectpicker" name="secondColId" >';
 				html+='<option value="">--请选择--</option>';
 				$.each(json,function(i,n){
 					html+="<option value='"+n.id+"'>"+n.name+"</option>";

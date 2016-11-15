@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,17 @@ public class LogService {
 
 
 	public void log(LogType type, String content) {
-		Log log = new Log();
-		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		log.setType(type.getName());
-		log.setContent(content);
-		log.setCreateTime(new Date());
-		log.setOperator(u.getUsername());
-		log.setOperatorRealName(u.getRealName());
-		logDao.save(log);
+		//内容不为空，插入DB
+		if(StringUtils.isNotBlank(content)){
+			Log log = new Log();
+			User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+			log.setType(type.getName());
+			log.setContent(content);
+			log.setCreateTime(new Date());
+			log.setOperator(u.getUsername());
+			log.setOperatorRealName(u.getRealName());
+			logDao.save(log);
+		}
 	}
 
 	public void log(LogType type, 

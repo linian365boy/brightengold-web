@@ -10,6 +10,7 @@
 <script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/additional-methods.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
 <!-- Theme style -->
@@ -69,8 +70,9 @@
 					success:function(json) {
 			    		if(json.code==200){
 			    			$("button[name='refresh']",top.document).click();
-			    			top.art.dialog.list['tianjia'].close();
+			    			top.art.dialog.list['bianji'].close();
 			    		}else{
+			    			$("span.help-block").html(json.message);
 			    			$(".has-error").removeClass("hide");
 			    		}
 			        }
@@ -121,6 +123,10 @@
     </div>
   </div>
   <input type="hidden" name="id" value="${model.id }"/>
+   <div class="form-group has-error hide">
+  	  <label class="col-sm-3 control-label">&nbsp;</label>
+      <span class="help-block"></span>
+  </div>
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-8">
       <button type="submit" class="btn btn-primary">保存</button>

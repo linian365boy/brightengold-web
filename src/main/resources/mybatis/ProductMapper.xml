@@ -36,7 +36,7 @@
 	
 	<update id="updateProduct">
 		update tb_product set enName=#{enName},categoryId=#{categoryId},picUrl=#{picUrl},introduce=#{introduce},
-		description=#{description},hot=#{hot},url=#{url},keyWords=#{keyWords},priority=#{priority} where id=#{id}
+		description=#{description},hot=#{hot},url=#{url},keyWords=#{keyWords},priority=#{priority},publish=#{publish} where id=#{id}
 	</update>
 	
 	<select id="findAllListByCateId" resultType="Product">
