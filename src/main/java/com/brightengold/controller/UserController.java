@@ -48,8 +48,7 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
-	private PageRainier<User> users;
-	private static Logger logger = LoggerFactory.getLogger(UserController.class);
+	private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@RequestMapping({"/users/list"})
 	public String list(ModelMap map,HttpServletRequest request){
@@ -62,7 +61,7 @@ public class UserController {
 	public ReturnData<User> getJsonList(RequestParam param){
 		User u = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		//排除当前用户
-		users = userService.findAllUser(param, u.getId());
+		PageRainier<User> users = userService.findAllUser(param, u.getId());
 		for(User user : users.getResult()){
 			user.setRoles(roleService.findNoDefaultRoleByUser(user.getId()));
 		}
@@ -269,14 +268,6 @@ public class UserController {
 			logger.error("修改密码出错：",e);
 		}
 		return actionMsg;
-	}
-
-	public PageRainier<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(PageRainier<User> users) {
-		this.users = users;
 	}
 
 	public void setUserService(UserServiceImpl userService) {

@@ -29,9 +29,7 @@ import cn.rainier.nian.utils.PageRainier;
 public class FeedbackController {
 	@Autowired
 	private FeedbackService feedbackService;
-	private PageRainier<Feedback> feedbacks;
-	private Integer pageSize = 10;
-	private static Logger logger = LoggerFactory.getLogger(FeedbackController.class);
+	private final static Logger logger = LoggerFactory.getLogger(FeedbackController.class);
 	
 	@RequestMapping({"/feedbacks/list"})
 	public String list(ModelMap map,HttpServletRequest request){
@@ -42,7 +40,7 @@ public class FeedbackController {
 	@ResponseBody
 	@RequestMapping({"/feedbacks/getJsonList"})
 	public ReturnData<Feedback> getJsonList(RequestParam param){
-		feedbacks = feedbackService.findAll(param);
+		PageRainier<Feedback> feedbacks = feedbackService.findAll(param);
 		ReturnData<Feedback> datas = new ReturnData<Feedback>(feedbacks.getTotalRowNum(), feedbacks.getResult());
 		return datas;
 	}
@@ -71,21 +69,4 @@ public class FeedbackController {
 		}
 		return vo;
 	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public PageRainier<Feedback> getFeedbacks() {
-		return feedbacks;
-	}
-
-	public void setFeedbacks(PageRainier<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
-	}
-	
 }

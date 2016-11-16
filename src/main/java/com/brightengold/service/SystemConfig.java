@@ -24,6 +24,21 @@ public class SystemConfig {
 	//前端页面展示的公司介绍长度
 	@Value("#{configProperties['company.length']}")
 	private int companyLength = 500;
+	//存放html页面的路径地址
+	@Value("#{configProperties['html.path']}")
+	private String htmlPath;
+	//存放图片的路径地址
+	@Value("#{configProperties['pic.path']}")
+	private String picPath;
+	//存放公司信息配置的路径
+	@Value("#{configProperties['companyConfig.path']}")
+	private String companyConfigPath;
+	//存放网站配置信息的路径
+	@Value("#{configProperties['webConfig.path']}")
+	private String webConfigPath;
+	//静态资源访问url地址
+	@Value("#{configProperties['static.accessPath']}")
+	private String staticAceessUrl;
 	
 	/**
 	 * 首页滚动图片最大数量
@@ -63,22 +78,30 @@ public class SystemConfig {
 	public String getFrom() {
 		return from;
 	}
-	public void setFrom(String from) {
-		this.from = from;
-	}
 	public String getTo() {
 		return to;
-	}
-	public void setTo(String to) {
-		this.to = to;
 	}
 	public int getCompanyLength() {
 		return companyLength;
 	}
-	public void setCompanyLength(int companyLength) {
-		this.companyLength = companyLength;
+	public String getHtmlPath() {
+		return htmlPath;
 	}
-	
+	public String getPicPath() {
+		return picPath;
+	}
+	public String getCompanyConfigPath() {
+		return companyConfigPath;
+	}
+	public void setCompanyConfigPath(String companyConfigPath) {
+		this.companyConfigPath = companyConfigPath;
+	}
+	public String getWebConfigPath() {
+		return webConfigPath;
+	}
+	public String getStaticAceessUrl() {
+		return staticAceessUrl;
+	}
 }
 
 	

@@ -33,8 +33,7 @@ public class ColumnController {
 	private ColumnService columnService;
 	@Autowired
 	private CategoryService categoryService;
-	private PageRainier<Column> columns;
-	private static Logger logger = LoggerFactory.getLogger(ColumnController.class);
+	private final static Logger logger = LoggerFactory.getLogger(ColumnController.class);
 	
 	@RequestMapping(value={"/cols/list"})
 	public String list(HttpServletRequest request,ModelMap map){
@@ -45,7 +44,7 @@ public class ColumnController {
 	@ResponseBody
 	@RequestMapping(value={"/cols/getJsonList"})
 	public ReturnData<Column> getJsonList(RequestParam param){
-		columns = columnService.findAll(param);
+		PageRainier<Column> columns = columnService.findAll(param);
 		ReturnData<Column> datas = new ReturnData<Column>(columns.getTotalRowNum(), columns.getResult());
 		return datas;
 	}

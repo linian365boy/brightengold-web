@@ -40,13 +40,11 @@ import cn.rainier.nian.utils.PageRainier;
 public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
-	private PageRainier<Category> categorys;
 	@Autowired
 	private ColumnService columnService;
 	@Autowired
 	private ProductService productService;
-	private Integer pageSize = 10;
-	private static Logger logger = LoggerFactory.getLogger(CategoryController.class);
+	private final static Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
 	/**
 	 * list:如果需要定位用户进入到哪个栏目菜单，需要传入HttpServletRequest、ModelMap两个参数，顺序不定
@@ -66,7 +64,7 @@ public class CategoryController {
 	@ResponseBody
 	@RequestMapping("/categorys/getJsonList")
 	public ReturnData<Category> getJsonList(RequestParam param){
-		categorys = categoryService.findAll(param);
+		PageRainier<Category> categorys = categoryService.findAll(param);
 		ReturnData<Category> datas = new ReturnData<Category>(categorys.getTotalRowNum(), categorys.getResult());
 		return datas;
 	}
@@ -243,21 +241,5 @@ public class CategoryController {
 	public List<Object[]> getChildrenCate(@PathVariable Integer parentCateId){
 		List<Object[]> childrenCateArr = categoryService.findChildrenByParentCateId(parentCateId);
 		return childrenCateArr;
-	}
-	
-	public PageRainier<Category> getCategorys() {
-		return categorys;
-	}
-
-	public void setCategorys(PageRainier<Category> categorys) {
-		this.categorys = categorys;
-	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
 	}
 }

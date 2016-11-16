@@ -34,8 +34,7 @@ import cn.rainier.nian.utils.PageRainier;
 public class InfoController {
 	@Autowired
 	private InfoService infoService;
-	private PageRainier<Info> page;
-	private static Logger logger = LoggerFactory.getLogger(InfoController.class);
+	private final static Logger logger = LoggerFactory.getLogger(InfoController.class);
 	
 	@RequestMapping({"/list"})
 	public String list(HttpServletRequest request,ModelMap map){
@@ -46,7 +45,7 @@ public class InfoController {
 	@ResponseBody
 	@RequestMapping({"/getJsonList"})
 	public ReturnData<Info> getJsonList(RequestParam param){
-		page = infoService.findAll(param);
+		PageRainier<Info> page = infoService.findAll(param);
 		ReturnData<Info> datas = new ReturnData<Info>(page.getTotalRowNum(), page.getResult());
 		return datas;
 	}
@@ -128,11 +127,5 @@ public class InfoController {
 			vo = new MessageVo(Constant.ERROR_CODE,"删除信息【"+info.getName()+"】失败！");
 		}
 		return vo;
-	}
-	public PageRainier<Info> getPage() {
-		return page;
-	}
-	public void setPage(PageRainier<Info> page) {
-		this.page = page;
 	}
 }

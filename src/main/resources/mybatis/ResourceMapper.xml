@@ -43,8 +43,12 @@
     	</foreach>
 	</update>
 	
-	<insert id="saveResource" parameterType="Resource">
+	<insert id="saveResource" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="Resource">
 		insert into tb_resource(descn,name,priority,resString,resType,menuId,display) 
 		values(#{descn},#{name},#{priority},#{resString},#{resType},#{menuId},#{display})
+	</insert>
+	
+	<insert id="insertSuperRoleResource" parameterType="Resource">
+		insert into tb_role_resource(roleId,resourceId) values('ROLE_SUPER',#{id})
 	</insert>
 </mapper>

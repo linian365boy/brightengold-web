@@ -68,8 +68,7 @@ public class ProductController {
 	private SystemConfig systemConfig;
 	@Autowired
 	private ColumnService columnService;
-	private PageRainier<Product> products;
-	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private final static Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@RequestMapping(value={"/products/list"})
 	public String list(HttpServletRequest request,ModelMap map){
@@ -80,7 +79,7 @@ public class ProductController {
 	@ResponseBody
 	@RequestMapping("/products/getJsonList")
 	public ReturnData<Product> getJsonList(RequestParam param){
-		products = productService.findAll(param);
+		PageRainier<Product> products = productService.findAll(param);
 		ReturnData<Product> datas = new ReturnData<Product>(products.getTotalRowNum(), products.getResult());
 		return datas;
 	}
@@ -123,7 +122,7 @@ public class ProductController {
 			//info信息
 			List<Info> infos = infoService.findList();
 			//企业信息
-			Company company = companyService.loadCompany();
+			Company company = companyService.loadCompany(systemConfig.getCompanyConfigPath());
 			model.put("infos", infos);
 			model.put("company", company);
 			model.put("verticalCol", verticalCol);
@@ -174,7 +173,8 @@ public class ProductController {
 				logger.info("修改产品信息|{}",product);
 				LogUtil.getInstance().log(LogType.EDIT,content.toString());
 				//删除页面
-				String path = request.getSession().getServletContext().getRealPath("/");
+				//String path = request.getSession().getServletContext().getRealPath("/");
+				String path = systemConfig.getHtmlPath();
 				Tools.delFile(path + Constant.PRODUCTPRE + File.separator+productId+".htm");
 				Tools.delFile(path + Constant.PRODUCTPATH + File.separator+product.getUrl());
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改产品【"+product.getEnName()+"】信息成功！");
@@ -272,8 +272,8 @@ public class ProductController {
 		Product temp = productService.loadProductById(productId);
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
-		String realPath = request.getSession().getServletContext().getRealPath("/");
-		String parentPath = Constant.PRODUCTPATH;
+		//String realPath = request.getSession().getServletContext().getRealPath("/");
+		String realPath = systemConfig.getHtmlPath();
 		if(StringUtils.isBlank(temp.getUrl())){
 			temp.setUrl(Tools.getRndFilename()+".htm");
 		}
@@ -291,7 +291,7 @@ public class ProductController {
 		}
 		map.put("ctx", basePath);
 		//生成唯一的产品页面路径，不需要根据页码生成页面
-		if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + parentPath, temp.getUrl())){
+		if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + Constant.PRODUCTPATH, temp.getUrl())){
 			productService.updateProduct(temp);
 			logger.info("生成产品|{}页面成功",temp.getEnName());
 			vo = new MessageVo(Constant.SUCCESS_CODE,"生产产品【"+temp.getEnName()+"】页面成功！");
@@ -327,13 +327,4 @@ public class ProductController {
 			return "0";
 		}
 	}
-
-	public PageRainier<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(PageRainier<Product> products) {
-		this.products = products;
-	}
-
 }

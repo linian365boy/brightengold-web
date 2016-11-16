@@ -26,6 +26,7 @@ import com.brightengold.model.News;
 import com.brightengold.service.ColumnService;
 import com.brightengold.service.LogUtil;
 import com.brightengold.service.NewsService;
+import com.brightengold.service.SystemConfig;
 import com.brightengold.util.Constant;
 import com.brightengold.util.ConstantVariable;
 import com.brightengold.util.FreemarkerUtil;
@@ -46,7 +47,8 @@ public class NewsController {
 	private NewsService newsService;
 	@Autowired
 	private ColumnService columnService;
-	private PageRainier<News> news;
+	@Autowired
+	private SystemConfig systemConfig;
 	
 	@RequestMapping({"/news/list"})
 	public String list(HttpServletRequest request,ModelMap map){
@@ -57,7 +59,7 @@ public class NewsController {
 	@ResponseBody
 	@RequestMapping({"/news/getJsonList"})
 	public ReturnData<News> getJsonList(RequestParam param){
-		news = newsService.findAll(param);
+		PageRainier<News> news = newsService.findAll(param);
 		ReturnData<News> datas = new ReturnData<News>(news.getTotalRowNum(), news.getResult());
 		return datas;
 	}
@@ -221,8 +223,8 @@ public class NewsController {
 		String fPath = null;
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
-		String realPath = request.getSession().getServletContext().getRealPath("/");
-		String parentPath = Constant.NEWSPATH;
+		//String realPath = request.getSession().getServletContext().getRealPath("/");
+		String realPath = systemConfig.getHtmlPath();
 		News tempNews = newsService.loadNews(newsId);
 		tempNews.setPublishDate(new Date());
 		if(StringUtils.isBlank(tempNews.getUrl())){
@@ -236,22 +238,21 @@ public class NewsController {
 		map.put("ctx", basePath);
 		map.put("model", tempNews);
 		//生成唯一的新闻页面路径，不需要根据页码生成页面
-		if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+parentPath, tempNews.getUrl())){
-			newsService.saveNews(tempNews);
-			vo.setCode(Constant.SUCCESS_CODE);
-			vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
-			logger.info("发布成功新闻|{}",tempNews.getTitle());
-			return vo;
+		if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+Constant.NEWSPATH, tempNews.getUrl())){
+			if(newsService.saveNews(tempNews)){
+				vo.setCode(Constant.SUCCESS_CODE);
+				vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
+				logger.info("发布成功新闻|{}",tempNews);
+			}else{
+				vo.setCode(Constant.ERROR_CODE);
+				vo.setMessage("发布新闻失败！");
+				logger.error("发布新闻|{}失败，save News error",tempNews);
+			}
+		}else{
+			vo.setCode(Constant.ERROR_CODE);
+			vo.setMessage("发布新闻失败！");
+			logger.error("发布新闻|{}失败，Freemarker fprint error",tempNews);
 		}
-		vo.setCode(Constant.ERROR_CODE);
-		vo.setMessage("新闻id不存在");
 		return vo;
-	}
-	
-	public PageRainier<News> getNews() {
-		return news;
-	}
-	public void setNews(PageRainier<News> news) {
-		this.news = news;
 	}
 }

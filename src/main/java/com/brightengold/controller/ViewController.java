@@ -139,13 +139,13 @@ public class ViewController {
 		}
 		map.put("categorys", categorysList);
  		//企业信息
-		Company company = companyService.loadCompany();
+		Company company = companyService.loadCompany(systemConfig.getCompanyConfigPath());
 		map.put("company", company);
 		//info信息
 		List<Info> infos = infoService.findList();
 		map.put("infos", infos);
 		//网站关键字
-		WebConfig webConfig = configService.loadSystemConfig();
+		WebConfig webConfig = configService.loadSystemConfig(systemConfig.getWebConfigPath());
 		map.put("webConfig", webConfig);
 	}
 	

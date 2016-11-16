@@ -34,8 +34,8 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">网站设置信息</h3>
+            <div class="box-header with-border text-center">
+              <h3 class="box-title pull-left">网站设置信息</h3>
               <label class="error hide"></label>
             </div>
             <!-- /.box-header -->

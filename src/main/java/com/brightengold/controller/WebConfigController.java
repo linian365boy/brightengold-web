@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.brightengold.model.WebConfig;
 import com.brightengold.service.LogUtil;
+import com.brightengold.service.SystemConfig;
 import com.brightengold.service.WebConfigService;
 import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
@@ -32,21 +33,23 @@ import com.brightengold.vo.MessageVo;
 public class WebConfigController {
 	@Autowired
 	private WebConfigService webConfigService;
+	@Autowired
+	private SystemConfig systemConfig;
 	private static final Logger logger = LoggerFactory.getLogger(WebConfigController.class);
 	
 	@RequestMapping(value={"/detail","/",""},method=RequestMethod.POST)
 	public String detail(Model model) {
-		model.addAttribute("model",webConfigService.loadSystemConfig());
+		model.addAttribute("model",webConfigService.loadSystemConfig(systemConfig.getWebConfigPath()));
 		return "admin/sys/webconfig/detail";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
 	public MessageVo update(WebConfig config, HttpServletRequest request){
-		WebConfig webConfig = webConfigService.loadSystemConfig();
+		WebConfig webConfig = webConfigService.loadSystemConfig(systemConfig.getWebConfigPath());
 		MessageVo vo = null;
 		try{
-			boolean flag = webConfigService.saveOrUpdateSystem(config);
+			boolean flag = webConfigService.saveOrUpdateSystem(systemConfig.getWebConfigPath(),config);
 			if(flag){
 				StringBuilder content = new StringBuilder();
 				if(!webConfig.getKeyword().equals(config.getKeyword())){

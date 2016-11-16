@@ -103,8 +103,8 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">在这，你可以动态生成您网站的访问页面</h3>
+            <div class="box-header with-border text-center">
+              <h3 class="box-title pull-left">在这，你可以动态生成您网站的访问页面</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

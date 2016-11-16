@@ -34,10 +34,8 @@
 		<property name="locations">
 			<!-- 禁止调整加载顺序(注：系统以list最后一个有效的value元素为准) -->
 			<list>
-				<!-- 服务器生产环境配置 -->
-				<!-- <value>file:/etc/project/web/*.properties</value> -->
-				<!-- 本地开发环境配置 -->
-				<value>classpath:*.properties</value>
+				<value>classpath:jdbc.properties</value>
+				<value>classpath:common.properties</value>
 			</list>
 		</property>
 	</bean>

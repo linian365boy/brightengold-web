@@ -22,7 +22,6 @@ import cn.rainier.nian.utils.PageRainier;
 public class LogController {
 	@Autowired
 	private LogService logService;
-	private PageRainier<Log> logs;
 	@RequestMapping({"/logs/list"})
 	public String list(HttpServletRequest request,ModelMap map){
 		map.put("ajaxListUrl", "admin/sys/log/logs/getJsonList.html");
@@ -32,16 +31,8 @@ public class LogController {
 	@ResponseBody
 	@RequestMapping({"/logs/getJsonList"})
 	public ReturnData<Log> getJsonList(RequestParam param){
-		logs = logService.findAll(param);
+		PageRainier<Log> logs = logService.findAll(param);
 		ReturnData<Log> datas = new ReturnData<Log>(logs.getTotalRowNum(), logs.getResult());
 		return datas;
-	}
-	
-	public PageRainier<Log> getLogs() {
-		return logs;
-	}
-
-	public void setLogs(PageRainier<Log> logs) {
-		this.logs = logs;
 	}
 }

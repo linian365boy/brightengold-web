@@ -38,8 +38,7 @@ import cn.rainier.nian.utils.PageRainier;
 public class AdvertisementController {
 	@Autowired
 	private AdvertisementService service;
-	private PageRainier<Advertisement> page;
-	private static Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
+	private final static Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
 	
 	@RequestMapping(value={"/ads/list"})
 	public String list(HttpServletRequest request,ModelMap map){
@@ -50,7 +49,7 @@ public class AdvertisementController {
 	@ResponseBody
 	@RequestMapping(value={"/ads/getJsonList"})
 	public ReturnData<Advertisement> getJsonList(RequestParam param){
-		page = service.findAll(param);
+		PageRainier<Advertisement> page = service.findAll(param);
 		ReturnData<Advertisement> datas = new ReturnData<Advertisement>(page.getTotalRowNum(), page.getResult());
 		return datas;
 	}

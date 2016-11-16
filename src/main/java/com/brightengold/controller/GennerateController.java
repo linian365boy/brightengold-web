@@ -69,7 +69,6 @@ public class GennerateController {
 	private WebConfigService configService;
 	
 	private Integer pageSize = 16;
-	private Integer pageNo = 1;
 	
 	@RequestMapping(value={"/generate"},method=RequestMethod.POST)
 	public String toGennerateHtml(ModelMap map){
@@ -87,7 +86,8 @@ public class GennerateController {
 	public String generateAll(ModelMap map, HttpServletRequest request){
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
-		String path = request.getSession().getServletContext().getRealPath("/");
+		//String path = request.getSession().getServletContext().getRealPath("/");
+		String path = systemConfig.getHtmlPath();
 		String style_v = (String) request.getSession().getAttribute("style_v");
 		String templateName = "columnTemplate.ftl";
 		Column parentCol = null;
@@ -134,7 +134,7 @@ public class GennerateController {
 		for(Category cate : cateList){
 			map.put("category", cate);
 			//map.put("column", cate.getColumn());
-			publishAllProducts(request,cate,map);
+			publishAllProducts(cate,map);
 			if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 					path+Constant.CATEGORYPRODUCTPATH, cate.getEnName().replaceAll("\\s*", "")+".htm")){
 				logger.error("生成{}分类页面失败",cate.getEnName());
@@ -142,11 +142,11 @@ public class GennerateController {
 				logger.info("生成{}分类页面成功",cate.getEnName());
 			}
 		}
-		return "Constant.SUCCESS_CODE";
+		return "200";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value={"/{code}/generate",""},method=RequestMethod.POST)
+	@RequestMapping(value={"/{code}/generate"},method=RequestMethod.POST)
 	public String gennerateHtml(@PathVariable String code,ModelMap map, HttpServletRequest request){
 		//检查code是否存在
 		long count = 0;
@@ -156,7 +156,8 @@ public class GennerateController {
 			count = columnService.countColumnByCode(code);
 		}
 		String style_v = (String) request.getSession().getAttribute("style_v");
-		String path = request.getSession().getServletContext().getRealPath("/");
+		//String path = request.getSession().getServletContext().getRealPath("/");
+		String path = systemConfig.getHtmlPath();
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
 		map.put("ctx", basePath);
@@ -175,7 +176,7 @@ public class GennerateController {
 					map.put("hotProducts", products);
 					if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
 						logger.error("生成{}页面失败！",code);
-						return "Constant.ERROR_CODE";
+						return "500";
 					}else{
 						logger.info("生成{}页面成功！",code);
 					}
@@ -198,16 +199,16 @@ public class GennerateController {
 					if(!FreemarkerUtil.fprint(templateName, map, 
 							path+Constant.COLUMNPATHPRE, code+".htm")){
 						logger.error("生成{}页面失败！",code);
-						return "Constant.ERROR_CODE";
+						return "500";
 					}else{
 						logger.info("生成{}页面成功！",code);
 					}
 				}
 			}catch(Exception e){
 				logger.error("生成{}页面失败！",code,e);
-				return "Constant.ERROR_CODE";
+				return "500";
 			}
-			return "Constant.SUCCESS_CODE";
+			return "200";
 		}else{
 			//按分类英文名称查询是否有记录
 			Category cate = categoryService.loadCategoryByEname(code);
@@ -215,37 +216,36 @@ public class GennerateController {
 				gennerateCommon(map);
 				map.put("category", cate);
 				//map.put("column", cate.getColumn());
-				publishAllProducts(request,cate,map);
+				publishAllProducts(cate,map);
 				if(!FreemarkerUtil.fprint("categoryTemplate.ftl", map, 
 						path+Constant.CATEGORYPRODUCTPATH, 
 						cate.getEnName().replaceAll("\\s*", "")+".htm")){
 					logger.error("生成{}页面失败！",code);
-					return "Constant.ERROR_CODE";
+					return "500";
 				}else{
 					logger.info("生成{}页面成功",code);
 				}
-				return "Constant.SUCCESS_CODE";
+				return "200";
 			}
 			return "501";
 		}
 	}
 	
-	private void publishAllProducts(HttpServletRequest request, Category cate,
-			ModelMap modelMap) {
+	private void publishAllProducts(Category cate,ModelMap modelMap) {
 		 Map<String,Object> map = null;
 		 long count = productService.countByCateId((cate.getId()));
 		 logger.info("分类Name|{}下共有{}个产品是已发布并且状态正常的.",cate.getName(),count);
 		 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * count/this.pageSize));
 		 PageRainier<Product> page = null;
-		 String path = request.getSession().getServletContext().getRealPath("/");
-		 String parentPath = "";
+		 //String path = request.getSession().getServletContext().getRealPath("/");
+		 String path = systemConfig.getHtmlPath();
 		 for(int i=0;i<totalPageNum;i++){
 			 map = Maps.newHashMap(modelMap);
 			 //得到该栏目下所有的产品
 			 page = productService.findAllByCateId((i+1), pageSize, cate.getId()); 
 			 logger.info("第{}页下共有{}个产品是已发布并且状态正常的.",(i+1),page.getResult().size());
 			 map.put("productPage", page);
-			 parentPath = path + Constant.CATEPRE ;
+			 String parentPath = path + Constant.CATEPRE ;
 			 //列表的页面生成
 			 FreemarkerUtil.fprint("categoryProductList.ftl", map, parentPath+File.separator+cate.getId(),(i+1)+".htm");
 			 map.clear();
@@ -261,15 +261,15 @@ public class GennerateController {
 			 logger.info("栏目Name|{}下共有{}个产品是已发布并且状态正常的.",col.getEnName(),count);
 			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * count/this.pageSize));
 			 PageRainier<Product> page = null;
-			 String path = request.getSession().getServletContext().getRealPath("/");
-			 String parentPath = null;
+			 //String path = request.getSession().getServletContext().getRealPath("/");
+			 String path = systemConfig.getHtmlPath();
 			 for(int i=0;i<totalPageNum;i++){
 				 map.putAll(modelMap);
 				 //page = productService.findAllByColId((i+1), pageSize, col.getId()); //得到该栏目下所有的产品
 				 page = productService.findPageByColId((i+1), pageSize, col.getId()); //分页得到该栏目下所有的产品
 				 logger.info("第{}页共有{}个产品发布！",(i+1),page.getResult().size());
 				 map.put("productPage", page);
-				 parentPath = path + Constant.PRODUCTPRE + File.separator +col.getCode();
+				 String parentPath = path + Constant.PRODUCTPRE + File.separator +col.getCode();
 				 //列表的页面生成
 				 if(!FreemarkerUtil.fprint("productList.ftl", map, parentPath,(i+1)+".htm")){
 					 logger.error("生成产品列表页面|{}失败",(i+1));
@@ -293,13 +293,13 @@ public class GennerateController {
 			 int totalPageNum = Math.max(1, (int) Math.ceil(1.0 * 
 					 newsService.countByColId(col.getId(),col.getDepth())/this.pageSize));
 			 PageRainier<News> page = null;
-			 String path = request.getSession().getServletContext().getRealPath("/");
-			 String parentPath = "";
+			 //String path = request.getSession().getServletContext().getRealPath("/");
+			 String path = systemConfig.getHtmlPath();
 			 for(int i=0;i<totalPageNum;i++){
 				 map.putAll(modelMap);
 				 page = newsService.findAllByColId(new RequestParam(i*pageSize,pageSize), col.getId(),col.getDepth()); //得到所有的新闻
 				 map.put("newsPage", page);
-				 parentPath = path + Constant.NEWSPRE + File.separator +col.getCode();
+				 String parentPath = path + Constant.NEWSPRE + File.separator +col.getCode();
 				 //列表的页面生成
 				 if(!FreemarkerUtil.fprint("newsList.ftl", map, parentPath,(i+1)+".htm")){
 					 logger.info("生成新闻列表页面|{}失败",(i+1));
@@ -352,7 +352,7 @@ public class GennerateController {
 		}
 		map.put("categorys", categorysList);
  		//企业信息
-		Company company = companyService.loadCompany();
+		Company company = companyService.loadCompany(systemConfig.getCompanyConfigPath());
 		//对公司描述信息introduce（含html代码）进行截取
 		company.setIntroduce(
 				HtmlStringUtil.subStringHTML(company.getIntroduce(), systemConfig.getCompanyLength(), 
@@ -362,44 +362,13 @@ public class GennerateController {
 		List<Info> infos = infoService.findList();
 		map.put("infos", infos);
 		//网站关键字
-		WebConfig webConfig = configService.loadSystemConfig();
+		WebConfig webConfig = configService.loadSystemConfig(systemConfig.getWebConfigPath());
 		map.put("webConfig", webConfig);
 	}
-	
-	@RequestMapping(value="/index",method=RequestMethod.GET)
-	public String gennerateIndex(HttpServletRequest request){
-		try{
-			String basePath = request.getScheme()+"://"+request.getServerName()+":"+
-					request.getServerPort()+request.getContextPath();
-			String path = request.getSession().getServletContext().getRealPath("/");
-			Map<String,Object> root = new HashMap<String,Object>();
-			root.put("ctx", basePath);
-			FreemarkerUtil.fprint("index.ftl", root, path+File.separator, "index.htm");
-			logger.info("生成首页成功！");
-		}catch(Exception e){
-			logger.error("生成页面发生错误",e);
-		}
-		return "redirect:/admin/sys/html/generate.html";
-	}
-	
-	@RequestMapping(value="/gennerateHtml",method=RequestMethod.GET)
-	public String gennerate(){
-		return "index";
-	}
-	
 	public Integer getPageSize() {
 		return pageSize;
 	}
-
-	public Integer getPageNo() {
-		return pageNo;
-	}
-
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
-	}
-
-	public void setPageNo(Integer pageNo) {
-		this.pageNo = pageNo;
 	}
 }

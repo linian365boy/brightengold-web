@@ -45,14 +45,13 @@ import cn.rainier.nian.utils.UUIDGenerator;
 public class RoleController {
 	@Autowired
 	private RoleService roleService;
-	private PageRainier<Role> roles;
 	@Autowired
 	private ResourceService resourceService;
 	@Autowired
 	private ResourceDetailsMonitor resourceDetailsMonitor;
 	@Autowired
 	private MenuService menuService;
-	private static Logger logger = LoggerFactory.getLogger(RoleController.class);
+	private final static Logger logger = LoggerFactory.getLogger(RoleController.class);
 	
 	/**
 	 * @FunName: getRolesByAjax
@@ -76,7 +75,7 @@ public class RoleController {
 	@ResponseBody
 	@RequestMapping({"/roles/getJsonList"})
 	public ReturnData<Role> getJsonList(RequestParam param){
-		roles = roleService.findAll(param);
+		PageRainier<Role> roles = roleService.findAll(param);
 		ReturnData<Role> datas = new ReturnData<Role>(roles.getTotalRowNum(), roles.getResult());
 		return datas;
 	}
@@ -233,7 +232,7 @@ public class RoleController {
 				if(result){
 					LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
 					logger.warn("角色{}重新分配了权限{}，result|{}",model.getDescribes(),ress,result, ToStringStyle.SHORT_PREFIX_STYLE);
-					//重新查询DB
+					//重新查询DB，更新权限
 					resourceDetailsMonitor.afterPropertiesSet();
 					request.getSession().removeAttribute("menuJson");
 					vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+model.getDescribes()+"】分配权限成功！");
@@ -250,13 +249,5 @@ public class RoleController {
 
 	public void setRoleService(RoleServiceImpl roleService) {
 		this.roleService = roleService;
-	}
-
-	public PageRainier<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(PageRainier<Role> roles) {
-		this.roles = roles;
 	}
 }

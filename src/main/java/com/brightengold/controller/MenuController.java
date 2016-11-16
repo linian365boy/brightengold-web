@@ -27,6 +27,7 @@ import com.brightengold.util.LogType;
 import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
+import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
 import cn.rainier.nian.model.User;
@@ -44,9 +45,9 @@ public class MenuController {
 	private MenuService menuService;
 	@Autowired
 	private ResourceService resourceService;
-	private PageRainier<Menu> menus;
-	private Integer pageSize = 10;
-	private static Logger logger = LoggerFactory.getLogger(MenuController.class);
+	@Autowired
+	private ResourceDetailsMonitor resourceDetailsMonitor;
+	private final static Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
 	@RequestMapping({"/menus/list"})
 	public String list(HttpServletRequest request,ModelMap map){
@@ -57,7 +58,7 @@ public class MenuController {
 	@ResponseBody
 	@RequestMapping({"/menus/getJsonList"})
 	public ReturnData<Menu> getJsonList(RequestParam param){
-		menus = menuService.findAll(param);
+		PageRainier<Menu> menus = menuService.findAll(param);
 		ReturnData<Menu> datas = new ReturnData<Menu>(menus.getTotalRowNum(),menus.getResult());
 		return datas;
 	}
@@ -110,7 +111,8 @@ public class MenuController {
 			resource.setPriority(0);
 			resource.setResType(ResourceType.METHOD.getType());
 			if(updateCount>0 && resourceService.saveResource(resource)){
-				//TODO 把该资源加入到超级管理员内
+				//重新查询DB
+				resourceDetailsMonitor.afterPropertiesSet();
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
 				logger.info("添加菜单{}成功！",menu);
 				vo = new MessageVo(Constant.SUCCESS_CODE);
@@ -295,21 +297,5 @@ public class MenuController {
 		logger.info("能够访问的菜单json字符串menuJson=>{}",jsonStr.toString());
 		session.setAttribute("menuJson", jsonStr.toString());
 		return jsonStr.toString();
-	}
-	
-	public PageRainier<Menu> getMenus() {
-		return menus;
-	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setMenus(PageRainier<Menu> menus) {
-		this.menus = menus;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
 	}
 }

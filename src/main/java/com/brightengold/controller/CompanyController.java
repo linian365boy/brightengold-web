@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.brightengold.model.Company;
 import com.brightengold.service.CompanyService;
 import com.brightengold.service.LogUtil;
+import com.brightengold.service.SystemConfig;
 import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
@@ -35,35 +36,39 @@ import com.brightengold.vo.MessageVo;
 public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
-	private static Logger logger = LoggerFactory.getLogger(CompanyController.class);
+	@Autowired
+	private SystemConfig systemConfig;
+	private final static Logger logger = LoggerFactory.getLogger(CompanyController.class);
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
 	}
 	
-	@RequestMapping(value={"/detail","/",""},method=RequestMethod.POST)
-	public String detail(Model model) {
-		model.addAttribute("model",companyService.loadCompany());
+	@RequestMapping(value={"/detail"},method=RequestMethod.POST)
+	public String detail(ModelMap map) {
+		map.put("model",companyService.loadCompany(systemConfig.getCompanyConfigPath()));
+		map.put("staticAccessPath",systemConfig.getStaticAceessUrl());
 		return "admin/sys/company/detail";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
-	public MessageVo update(MultipartFile photos,Company company, HttpServletRequest request){
-		Company temp = companyService.loadCompany();
+	public MessageVo update(MultipartFile photos,Company company){
+		Company temp = companyService.loadCompany(systemConfig.getCompanyConfigPath());
 		MessageVo vo = null;
 		try{
 			if(photos!=null && !photos.isEmpty()){
-				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
+				//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
+				String realPath = systemConfig.getPicPath()+File.separator+"company";
 				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
 				FileUtils.copyInputStreamToFile(photos.getInputStream(), new File(newFileName));
-				String url = newFileName.substring(realPath.lastIndexOf("upload"));
+				String url = newFileName.substring(realPath.lastIndexOf("company"));
 				company.setLogo(url.replace("\\", "/"));
 			}else{
 				company.setLogo(temp.getLogo());
 			}
-			boolean flag = companyService.save(company);
+			boolean flag = companyService.save(systemConfig.getCompanyConfigPath(),company);
 			logger.info("修改公司前信息|{}，修改公司后信息|{}",temp,company);
 			if(flag){
 				StringBuilder content = new StringBuilder();
