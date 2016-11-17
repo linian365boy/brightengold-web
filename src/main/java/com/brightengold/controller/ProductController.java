@@ -25,9 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.rainier.nian.model.User;
-import cn.rainier.nian.utils.PageRainier;
-
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 import com.brightengold.model.Category;
@@ -49,6 +46,9 @@ import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
+
+import cn.rainier.nian.model.User;
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/goods/product")
@@ -73,6 +73,7 @@ public class ProductController {
 	@RequestMapping(value={"/products/list"})
 	public String list(HttpServletRequest request,ModelMap map){
 		map.put("ajaxListUrl", "admin/goods/product/products/getJsonList.html");
+		map.put("staticAccessPath", systemConfig.getStaticAceessUrl());
 		return "admin/goods/product/list";
 	}
 	

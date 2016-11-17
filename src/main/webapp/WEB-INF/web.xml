@@ -19,6 +19,9 @@
 	<listener>
 	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	  </listener>
+	   <listener>
+	    <listener-class>com.brightengold.listener.InitListener</listener-class>
+	  </listener>
   	<!-- spring security -->
   	<filter>
 	    <filter-name>springSecurityFilterChain</filter-name>

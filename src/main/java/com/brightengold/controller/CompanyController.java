@@ -48,7 +48,6 @@ public class CompanyController {
 	@RequestMapping(value={"/detail"},method=RequestMethod.POST)
 	public String detail(ModelMap map) {
 		map.put("model",companyService.loadCompany(systemConfig.getCompanyConfigPath()));
-		map.put("staticAccessPath",systemConfig.getStaticAceessUrl());
 		return "admin/sys/company/detail";
 	}
 	
@@ -60,10 +59,10 @@ public class CompanyController {
 		try{
 			if(photos!=null && !photos.isEmpty()){
 				//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
-				String realPath = systemConfig.getPicPath()+File.separator+"company";
+				String realPath = systemConfig.getPicPath()+File.separator+"upload/company";
 				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
 				FileUtils.copyInputStreamToFile(photos.getInputStream(), new File(newFileName));
-				String url = newFileName.substring(realPath.lastIndexOf("company"));
+				String url = newFileName.substring(realPath.lastIndexOf("upload"));
 				company.setLogo(url.replace("\\", "/"));
 			}else{
 				company.setLogo(temp.getLogo());

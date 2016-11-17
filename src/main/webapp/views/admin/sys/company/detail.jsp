@@ -101,7 +101,7 @@
 				   <div class="form-group">
 					    <label for="photos" class="col-sm-2 control-label">公司logo<code>*</code></label>
 					    <div class="col-sm-8">
-					      <img src="${staticAccessPath }/image/${model.logo }" 
+					      <img src="${applicationScope.staticAccessPath }/${model.logo }" 
 		            	title="公司logo" alt="公司logo" width="390px" height="130px" 
 		            	name="logoPic" />
 		            	<input type="file" id="photos" name="photos" title="点击更换公司logo" accept="image/*"/>

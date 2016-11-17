@@ -3,6 +3,7 @@ package com.brightengold.controller;
 import java.io.File;
 import java.util.Date;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
@@ -23,6 +24,7 @@ import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 import com.brightengold.service.AdvertisementService;
 import com.brightengold.service.LogUtil;
+import com.brightengold.service.SystemConfig;
 import com.brightengold.util.Constant;
 import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
@@ -38,11 +40,14 @@ import cn.rainier.nian.utils.PageRainier;
 public class AdvertisementController {
 	@Autowired
 	private AdvertisementService service;
+	@Resource
+	private SystemConfig systemConfig;
 	private final static Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
 	
 	@RequestMapping(value={"/ads/list"})
 	public String list(HttpServletRequest request,ModelMap map){
 		map.put("ajaxListUrl", "admin/ad/ads/getJsonList.html");
+		map.put("staticAccessPath", systemConfig.getStaticAceessUrl());
 		return "admin/ad/list";
 	}
 	
