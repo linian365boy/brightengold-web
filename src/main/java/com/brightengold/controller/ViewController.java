@@ -225,7 +225,7 @@ public class ViewController {
         response.setHeader("Pragma", "no-cache");
         // return a jpeg  
         response.setContentType("image/jpeg");  
-        // create the text for the image  
+        // create the text for the image
         String capText = captchaProducer.createText();  
         // store the text in the session  
         session.setAttribute(Constant.VERIFY_CODE_KEY, capText);
@@ -242,6 +242,43 @@ public class ViewController {
         } catch (IOException e) {
         	logger.error("write verify code error",e);
 		} finally {  
+            try {
+				out.close();
+			} catch (IOException e) {
+				logger.error("out close error",e);
+			}  
+        }
+	}
+	
+	@RequestMapping("/getLoginVerifyCode")
+	public void getLoginVerifyCode(HttpServletRequest request,HttpServletResponse response){
+		HttpSession session = request.getSession();  
+	    response.setDateHeader("Expires", 0);
+        // Set standard HTTP/1.1 no-cache headers.  
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");  
+        // Set IE extended HTTP/1.1 no-cache headers (use addHeader).  
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");  
+        // Set standard HTTP/1.0 no-cache header.  
+        response.setHeader("Pragma", "no-cache");
+        // return a jpeg  
+        response.setContentType("image/jpeg");  
+        // create the text for the image
+        String capText = captchaProducer.createText();  
+        // store the text in the session  
+        session.setAttribute(cn.rainier.nian.utils.Constant.LOGIN_VERIFY_CODE_KEY, capText);
+        logger.debug("verify code|{}",capText);
+        // create the image with the text  
+        BufferedImage bi = null;
+        ServletOutputStream out = null;
+        try { 
+        	bi = captchaProducer.createImage(capText);
+        	out = response.getOutputStream();  
+            // write the data out
+            ImageIO.write(bi, "jpg", out);  
+            out.flush();  
+        } catch (IOException e) {
+        	logger.error("write verify code error",e);
+		} finally {
             try {
 				out.close();
 			} catch (IOException e) {

@@ -74,4 +74,5 @@ public class Constant {
 	 * 验证码key
 	 */
 	public static final String VERIFY_CODE_KEY = "verifyCode";
+	
 }

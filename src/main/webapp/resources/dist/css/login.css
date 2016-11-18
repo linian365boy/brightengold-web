@@ -23,12 +23,12 @@ body
     background-image: -ms-linear-gradient(top, #fff, #eee);
     background-image: -o-linear-gradient(top, #fff, #eee);
     background-image: linear-gradient(top, #fff, #eee);  
-    height: 240px;
+    height: 400px;
     width: 400px;
     margin: -150px 0 0 -230px;
     padding: 30px;
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     z-index: 0;
     -moz-border-radius: 3px;
@@ -126,9 +126,14 @@ fieldset
 
 /*--------------------*/
 
-#inputs input
+#inputs input.login
 {
     background: #f1f1f1 url(../img/login-sprite.png) no-repeat;
+}
+
+#username,#password,#captcha
+{
+    background-position: 5px -2px !important;
     padding: 15px 15px 15px 30px;
     margin: 0 0 10px 0;
     width: 353px; /* 353 + 2 + 45 = 400 */
@@ -139,16 +144,11 @@ fieldset
     -moz-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
     -webkit-box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
     box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+    background: #f1f1f1;
 }
 
-#username
-{
-    background-position: 5px -2px !important;
-}
-
-#password
-{
-    background-position: 5px -52px !important;
+#captcha{
+	width:100px;
 }
 
 #inputs input:focus
