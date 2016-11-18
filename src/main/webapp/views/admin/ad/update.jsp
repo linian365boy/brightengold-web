@@ -94,7 +94,7 @@
   <div class="form-group">
     <label for="photo" class="col-sm-2 control-label">图片<code>*</code></label>
     <div class="col-sm-8">
-    	<img alt="" src="${ctx }resources/${model.picUrl}" width="107px" height="50px"/>
+    	<img alt="" src="${applicationScope.staticAccessPath }/${model.picUrl}" width="107px" height="50px"/>
       <input type="file" id="photo" name="photo" placeholder="图片">
     </div>
   </div>

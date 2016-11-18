@@ -32,6 +32,7 @@ import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ResultVo;
 import com.brightengold.vo.ReturnData;
 
+import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
 
 @Controller
@@ -47,7 +48,6 @@ public class AdvertisementController {
 	@RequestMapping(value={"/ads/list"})
 	public String list(HttpServletRequest request,ModelMap map){
 		map.put("ajaxListUrl", "admin/ad/ads/getJsonList.html");
-		map.put("staticAccessPath", systemConfig.getStaticAceessUrl());
 		return "admin/ad/list";
 	}
 	
@@ -65,8 +65,9 @@ public class AdvertisementController {
 		MessageVo vo = null;
 		try{
 			if(!photo.isEmpty()){
-				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/ads");
-				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
+				//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/ads");
+				String realPath = systemConfig.getPicPath()+File.separator+"upload"+File.separator+"ads";
+				String newFileName = realPath+File.separator+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
 				FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
 				String url = newFileName.substring(realPath.lastIndexOf("upload"));
 				ad.setPicUrl(url.replace("\\", "/"));
@@ -116,8 +117,10 @@ public class AdvertisementController {
 			temp = service.loadAdvertisement(id);
 			ad.setCreateDate(temp.getCreateDate());
 			if(photo!=null && !photo.isEmpty()){
-				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
-				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
+				//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/ads");
+				String realPath = systemConfig.getPicPath()+File.separator+"upload"+File.separator+"ads";
+				String newFileName = realPath+File.separator+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
+				FileUtil.delFile(systemConfig.getPicPath()+File.separator+temp.getPicUrl());
 				FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
 				String url = newFileName.substring(realPath.lastIndexOf("upload"));
 				ad.setPicUrl(url.replace("\\", "/"));

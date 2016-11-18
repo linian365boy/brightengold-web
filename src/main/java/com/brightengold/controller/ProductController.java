@@ -48,6 +48,7 @@ import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
 import cn.rainier.nian.model.User;
+import cn.rainier.nian.utils.FileUtil;
 import cn.rainier.nian.utils.PageRainier;
 
 @Controller
@@ -73,7 +74,6 @@ public class ProductController {
 	@RequestMapping(value={"/products/list"})
 	public String list(HttpServletRequest request,ModelMap map){
 		map.put("ajaxListUrl", "admin/goods/product/products/getJsonList.html");
-		map.put("staticAccessPath", systemConfig.getStaticAceessUrl());
 		return "admin/goods/product/list";
 	}
 	
@@ -144,8 +144,11 @@ public class ProductController {
 			if(productId!=null){
 				Product tempProduct = productService.loadProductById(productId);
 				if(photo!=null && !photo.isEmpty()){
-					String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
-					String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
+					//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
+					String realPath = systemConfig.getPicPath()+File.separator+"upload"+File.separator+"products";
+					String newFileName = realPath+File.separator+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
+					//把前一张图片删除
+					FileUtil.delFile(systemConfig.getPicPath()+File.separator+tempProduct.getPicUrl());
 					FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
 					String url = newFileName.substring(realPath.lastIndexOf("upload"));
 					product.setPicUrl(url.replace("\\", "/"));
@@ -209,8 +212,9 @@ public class ProductController {
 			}else{
 				product.setCategoryId(Integer.parseInt(categoryId));
 			}
-			String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
-			String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
+			//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
+			String realPath = systemConfig.getPicPath()+File.separator+"upload"+File.separator+"products";
+			String newFileName = realPath+File.separator+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
 			FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
 			String url = newFileName.substring(realPath.lastIndexOf("upload"));
 			product.setPicUrl(url.replace("\\", "/"));

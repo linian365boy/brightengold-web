@@ -30,6 +30,8 @@ import com.brightengold.util.LogType;
 import com.brightengold.util.Tools;
 import com.brightengold.vo.MessageVo;
 
+import cn.rainier.nian.utils.FileUtil;
+
 @Controller
 @RequestMapping("/admin/sys/company")
 @Scope("prototype")
@@ -59,8 +61,10 @@ public class CompanyController {
 		try{
 			if(photos!=null && !photos.isEmpty()){
 				//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
-				String realPath = systemConfig.getPicPath()+File.separator+"upload/company";
-				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
+				String realPath = systemConfig.getPicPath()+File.separator+"upload"+File.separator+"company";
+				String newFileName = realPath+File.separator+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
+				//把前一张图片删除
+				FileUtil.delFile(systemConfig.getPicPath()+File.separator+temp.getLogo());
 				FileUtils.copyInputStreamToFile(photos.getInputStream(), new File(newFileName));
 				String url = newFileName.substring(realPath.lastIndexOf("upload"));
 				company.setLogo(url.replace("\\", "/"));

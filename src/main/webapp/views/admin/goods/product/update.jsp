@@ -120,7 +120,7 @@ $(document).ready(function(){
 			  <div class="form-group">
 			    <label for="photo" class="col-sm-2 control-label">商品图片<code>*</code></label>
 			    <div class="col-sm-10">
-			    <img alt="${model.enName }" width="100px" height="100px" title="${model.enName }" src="${ctx }resources/${model.picUrl}" >
+			    <img alt="${model.enName }" width="100px" height="100px" title="${model.enName }" src="${applicationScope.staticAccessPath }/${model.picUrl}" >
 			      <input type="file" name="photo" id="photo"/>
 			    </div>
 			  </div>

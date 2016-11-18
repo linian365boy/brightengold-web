@@ -80,7 +80,7 @@
 	}
 	
 	var productImgFormatter = function(value, row, index){
-		return "<img src='${staticAccessPath }/"+row.picUrl+"' title='"+row.enName+"' alt='"+row.enName+"' width='50' height='50'></img>";
+		return "<img src='${applicationScope.staticAccessPath }/"+row.picUrl+"' title='"+row.enName+"' alt='"+row.enName+"' width='50' height='50'></img>";
 	}
 	
 	var isHotFormatter = function(value, row, index){
