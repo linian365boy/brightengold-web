@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.brightengold.dao.FeedbackDao">
+	<select id="findOne" parameterType="int" resultType="Feedback">
+		select * from tb_feedback where id=#{id}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_feedback where id=#{id}
+	</delete>
+	
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+		select count(*) from tb_feedback 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or email like concat ('%',#{search},'%') or content like concat ('%',#{search},'%')
+			</if>
+		</where> 
+	</select>
+	
+	<select id="findList" resultType="Feedback" parameterType="com.brightengold.common.vo.RequestParam">
+		select * from tb_feedback 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or email like concat ('%',#{search},'%') or content like concat ('%',#{search},'%')
+			</if>
+		</where> 
+		order by id desc limit #{offset},#{limit}
+	</select>
+	
+	<insert id="save" parameterType="Feedback">
+		insert into tb_feedback(id,name,telePhone,email,content,createTime,productName) 
+		values(null,#{name},#{telePhone},#{email},#{content},#{createTime},#{productName})
+	</insert>
+</mapper>

@@ -2,46 +2,44 @@ package com.brightengold.service;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import cn.rainier.nian.utils.PageRainier;
-
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.CategoryDao;
 import com.brightengold.model.Category;
 
-@Component("categoryService")
+import cn.rainier.nian.utils.PageRainier;
+
+@Service("categoryService")
 public class CategoryService {
 	@Autowired
 	private CategoryDao categoryDao;
+	private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
-	public PageRainier<Category> findAll(Integer pageNo, Integer pageSize) {
-		Page<Category> tempPage = categoryDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id")));
-		PageRainier<Category> page = new PageRainier<Category>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+	public PageRainier<Category> findAll(RequestParam param) {
+		long count = categoryDao.findAllCount(param);
+		PageRainier<Category> page = new PageRainier<Category>(count);
+		page.setResult(categoryDao.findList(param));
 		return page;
 	}
 
-	public List<Object[]> findParentByAjax() {
+	public List<Category> findParentByAjax() {
 		return this.categoryDao.findParentByAjax();
+	}
+	
+	public List<Object[]> findChildrenByParentCateId(int parentCateId){
+		return categoryDao.findChildrenByParentCateId(parentCateId);
 	}
 
 	public Category loadCategoryById(Integer categoryId) {
-		return categoryDao.findOne(categoryId);
+		return categoryDao.findOneById(categoryId);
 	}
 
-	public Category saveCategory(Category temp) {
-		return categoryDao.save(temp);
+	public void saveCategory(Category temp) {
+		categoryDao.save(temp);
 	}
 
 	public Category loadCategoryByName(String enName) {
@@ -52,8 +50,8 @@ public class CategoryService {
 		categoryDao.delete(categoryId);
 	}
 
-	public boolean checkHasChildren(Category temp) {
-		return categoryDao.checkHasChildren(temp)>0?true:false;
+	public boolean checkHasChildren(Integer cateId) {
+		return categoryDao.checkHasChildren(cateId)>0?true:false;
 	}
 	/**
 	 * 根据英文名称查询分类是否存在
@@ -61,10 +59,10 @@ public class CategoryService {
 	 * @return
 	 */
 	public long countByCateEname(String enName) {
-		return categoryDao.count(countSpec(enName));
+		return categoryDao.countByEname(enName);
 	}
 
-	private Specification<Category> countSpec(final String enName) {
+	/*private Specification<Category> countSpec(final String enName) {
 		return new Specification<Category>(){
 			@Override
 			public Predicate toPredicate(Root<Category> root,
@@ -72,10 +70,10 @@ public class CategoryService {
 				return cb.equal(root.<String>get("enName"), enName);
 			}
 		};
-	}
+	}*/
 
-	public Category loadCategoryByEname(String code) {
-		return categoryDao.findOne(countSpec(code));
+	public Category loadCategoryByEname(String enName) {
+		return categoryDao.findOneByEnName(enName);
 	}
 
 	public List<Category> findCateByColId(Integer id) {
@@ -86,5 +84,20 @@ public class CategoryService {
 		return categoryDao.findAll();
 	}
 	
-	
+	public List<Category> findAllParentCateList() {
+		return categoryDao.findAllParentCateList();
+	}
+
+	public boolean updateCategory(Category category) {
+		boolean flag = false;
+		try{
+			categoryDao.updateCategory(category);
+			flag = true;
+		}catch(Exception e){
+			logger.info("修改分类报错！",e);
+			flag = false;
+		}
+		return flag;
+	}
+
 }

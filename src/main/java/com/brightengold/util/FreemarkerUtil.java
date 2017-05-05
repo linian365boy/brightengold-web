@@ -8,11 +8,16 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class FreemarkerUtil {
+	private final static Logger logger = LoggerFactory.getLogger(FreemarkerUtil.class);
 	public static Template getTemplate(String name){
 		try{
 			Configuration cfg = new Configuration();
@@ -21,7 +26,7 @@ public class FreemarkerUtil {
 			Template temp = cfg.getTemplate(name);
 			return temp;
 		}catch(IOException e){
-			e.printStackTrace();
+			logger.error("FreemarkerUtil getTemplate error",e);
 		}
 		return null;
 	}
@@ -31,34 +36,35 @@ public class FreemarkerUtil {
 			Template temp = getTemplate(name);
 			temp.process(root, new PrintWriter(System.out));
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error("freemarker process error",e);
 		}
 	}
 	
-	//FreemarkerUtil.fprint("category.ftl", root, path+File.separator+"fireworksweb"+File.separator, "category.html");
-	public static void fprint(String name,Map<String,Object> root,String outFile,String fileName){
+	public static boolean fprint(String name,Map<String,Object> root,String outFile,String fileName) {
 		Writer out = null;
+		boolean flag = false;
 		try {
 			File file = new File(outFile);
 			if(!file.exists()){
 				file.mkdirs();
 			}
-			//out = new BufferedWriter(file+File.separator+fileName);
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file+File.separator+fileName),"UTF-8"));
 			Template temp = getTemplate(name);
 			temp.setEncoding("UTF-8");
 			temp.process(root,out);
+			flag = true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("freemarker process IOException",e);
 		} catch (TemplateException e) {
-			e.printStackTrace();
+			logger.error("freemarker process TemplateException",e);
 		} finally{
 			if(out!=null)
 				try {
 					out.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("freemarker fprint Writer close error",e);
 				}
 		}
+		return flag;
 	}
 }

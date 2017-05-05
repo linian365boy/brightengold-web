@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xmlns:aop="http://www.springframework.org/schema/aop"
-  xmlns:tx="http://www.springframework.org/schema/tx"
-  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.2.xsd
@@ -14,130 +12,119 @@
            http://www.springframework.org/schema/tx
           http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
           http://www.springframework.org/schema/data/jpa
-          http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
-   <import resource="application-security.xml"/>
-   <bean id="messageSource"
-    class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basenames">
-      <list>
-        <value>messages</value>
-        <!-- <value>i18n/messages</value> -->
-      </list>
-    </property>
-    <!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称 -->  
-    <property name="useCodeAsDefaultMessage" value="true"/> 
-  </bean>
-  
-  <context:component-scan base-package="com.brightengold" />
-  <!-- 定义受环境影响易变的变量 -->
-	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+          http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd
+          http://www.springframework.org/schema/task
+    	  http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+	<import resource="application-security.xml" />
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages</value>
+				<!-- <value>i18n/messages</value> -->
+			</list>
+		</property>
+		<!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称 -->
+		<property name="useCodeAsDefaultMessage" value="true" />
+	</bean>
+	<context:component-scan base-package="com.brightengold" />
+	<!-- 定义受环境影响易变的变量 -->
+	<bean id="configProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<!-- 禁止调整加载顺序(注：系统以list最后一个有效的value元素为准) -->
 			<list>
-				<!-- 服务器生产环境配置 -->
-				<!-- <value>file:/etc/project/web/*.properties</value> -->
-				<!-- 本地开发环境配置 -->
-				<value>classpath:*.properties</value>
+				<value>classpath:jdbc.properties</value>
+				<value>classpath:common.properties</value>
 			</list>
 		</property>
-   </bean>
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
-        <property name="ignoreResourceNotFound" value="true" />
-        <property name="properties" ref="configProperties" />
-    </bean>
-  <bean id="dataSource" destroy-method="close"
-    class="org.apache.commons.dbcp.BasicDataSource">
-    <property name="driverClassName" value="${jdbc.driver}"></property>
-    <property name="url" value="${jdbc.url}"></property>
-    <property name="username" value="${jdbc.username}"></property>
-    <property name="password" value="${jdbc.password}"></property>
-    <property name="maxActive" value="1000"></property>
-    <property name="maxWait" value="3000"></property>
-    <property name="maxIdle" value="20"></property>
-  </bean>
+	</bean>
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="properties" ref="configProperties" />
+	</bean>
 
-  <!-- 配置了两个Spring Data Jpa配置 -->
-  <!-- 引入auth_core.jar start -->
-  <!-- 配置了auth_core.jar的jpa repositories -->
-  <jpa:repositories base-package="cn.rainier.nian.dao"
-    transaction-manager-ref="transactionManager"
-    entity-manager-factory-ref="entityManagerFactory" />
+	<!-- 添加数据源参数 -->
+	<import resource="classpath:/dataSource.xml" />
+	
+	<!-- spring和MyBatis整合 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:/mybatis/mybatis-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描domain目录, 省掉mybatis-config.xml的configuration里的手工配置 -->
+		<property name="typeAliasesPackage" value="com.brightengold.model,cn.rainier.nian.model" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:/mybatis/*Mapper.xml"></property>
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<property name="basePackage" value="com.brightengold.dao,cn.rainier.nian.dao" />
+	</bean>
+	
+	<!-- 引入auth_core自带的userService -->
+	<bean class="cn.rainier.nian.service.impl.UserServiceImpl" id="userService">
+		<property name="userDao" ref="userDao" />
+		<property name="userCache" ref="nullUserCache"/>
+		<property name="roleDao" ref="roleDao"/>
+	</bean>
+	
+	<bean class="org.springframework.security.core.userdetails.cache.NullUserCache" id="nullUserCache"/>
 
-  <!-- 引入auth_core自带的userService -->
-  
-  <bean class="cn.rainier.nian.service.OutCSVForUser" id="outUser"/>
+	<bean id="roleService" class="cn.rainier.nian.service.impl.RoleServiceImpl">
+		<property name="roleDao" ref="roleDao" />
+		<property name="userDao" ref="userDao"/>
+	</bean>
 
-  <bean class="cn.rainier.nian.service.impl.UserServiceImpl" id="userService">
-    <property name="userDao" ref="userDao" />
-    <property name="outCSV" ref="outUser"/>
-  </bean>
+	<bean id="menuService" class="cn.rainier.nian.service.impl.MenuServiceImpl">
+		<property name="menuDao" ref="menuDao" />
+	</bean>
 
-  <bean class="cn.rainier.nian.service.OutCSVForRole" id="outRole">
-  	<property name="resourceDao" ref="resourceDao"/>
-  </bean>
+	<bean id="resourceService" class="cn.rainier.nian.service.impl.ResourceServiceImpl">
+		<property name="resourceDao" ref="resourceDao" />
+	</bean>
 
-  <bean id="roleService" class="cn.rainier.nian.service.impl.RoleServiceImpl">
-    <property name="roleDao" ref="roleDao" />
-    <property name="outCSV" ref="outRole"/>
-  </bean>
+	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+		<property name="config">
+			<bean class="com.google.code.kaptcha.util.Config">
+				<constructor-arg>
+					<props>
+						<prop key="kaptcha.border">yes</prop>
+						<prop key="kaptcha.border.color">105,179,90</prop>
+						<prop key="kaptcha.textproducer.font.color">blue</prop>
+						<prop key="kaptcha.image.width">125</prop>
+						<prop key="kaptcha.image.height">37</prop>
+						<prop key="kaptcha.textproducer.font.size">37</prop>
+						<prop key="kaptcha.textproducer.char.length">4</prop>
+					</props>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
 
-  <bean id="menuService" class="cn.rainier.nian.service.impl.MenuServiceImpl">
-    <property name="menuDao" ref="menuDao" />
-  </bean>
-
-  <bean id="resourceDao" class="cn.rainier.nian.dao.impl.ResourceDaoImpl">
-    <property name="ds" ref="dataSource" />
-  </bean>
-
-  <bean id="resourceService" class="cn.rainier.nian.service.impl.ResourceServiceImpl">
-    <property name="resourceDao" ref="resourceDao" />
-    <property name="menuDao" ref="menuDao" />
-  </bean>
-
-  <!-- 引入auth_core.jar end -->
-
-  <jpa:repositories base-package="com.brightengold.dao"
-    transaction-manager-ref="transactionManager"
-    entity-manager-factory-ref="entityManagerFactory" />
-
-  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-    <property name="entityManagerFactory" ref="entityManagerFactory" />
-  </bean>
-
-  <tx:annotation-driven transaction-manager="transactionManager" />
-  <!-- Jpa Entity Manager 配置 -->
-  <bean id="entityManagerFactory"
-    class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-    <property name="dataSource" ref="dataSource" />
-    <property name="persistenceXmlLocation" value="classpath:jpa/persistence.xml" />
-    <property name="persistenceUnitName" value="sunshinecig" />
-  </bean>
-
-  <aop:aspectj-autoproxy proxy-target-class="true" />
-
-  <aop:config proxy-target-class="true">
-    <aop:pointcut expression="(execution(* com.brightengold.service.*.*(..))) or (execution(* cn.rainier.nian.service.impl.*.*(..))) "
-      id="business" />
-    <aop:advisor advice-ref="txAdvice" pointcut-ref="business" />
-  </aop:config>
-
-  <tx:advice id="txAdvice" transaction-manager="transactionManager">
-    <tx:attributes>
-      <tx:method name="save*" propagation="REQUIRED" />
-      <tx:method name="update*" propagation="REQUIRED"/>
-      <tx:method name="edit*" propagation="REQUIRED"/>
-      <tx:method name="del*" propagation="REQUIRED"/>
-      <tx:method name="load*" read-only="true" />
-      <tx:method name="find*" read-only="true"/>
-      <tx:method name="batch*" propagation="REQUIRED"/>
-      <tx:method name="get*" propagation="REQUIRED"/>
-      <tx:method name="log*" propagation="REQUIRED"/>
-      <tx:method name="changePassword" propagation="REQUIRED"/>
-      <tx:method name="resetPassword" propagation="REQUIRED"/>
-      <tx:method name="unsubscribe" propagation="REQUIRED"/>
-    </tx:attributes>
-  </tx:advice>
-  
-  <!-- 获取本地 -->  
-  <!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${email.host}" />
+		<property name="protocol" value="${email.protocol}" />
+		<property name="port" value="${email.port}" />
+		<property name="username" value="${email.username}" />
+		<property name="password" value="${email.password}" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="prop">true</prop>
+				<prop key="mail.smtp.timeout">25000</prop>
+				<!-- 启动调试开关 -->
+				<prop key="mail.debug">${email.debug}</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 发送邮件支持异步方法执行 -->
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="5" />
+		<property name="maxPoolSize" value="10" />
+		<property name="queueCapacity" value="25" />
+	</bean>
+	
 </beans>

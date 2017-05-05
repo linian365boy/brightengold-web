@@ -1,16 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@include file="../../commons/include.jsp" %>
+    <%@include file="/views/commons/include.jsp" %>
 <!DOCTYPE html >
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
- <script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
- <script type="text/javascript" src="${ctx }resources/js/additional-methods.min.js"></script>
-<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="${ctx }resources/css/style.css" rel="stylesheet"/>
+<!-- jQuery 2.2.3 -->
+<script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- jQuery form plugin -->
+<script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/additional-methods.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 <title>添加滚动图片</title>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -60,34 +65,48 @@
 			},
 			success: function(element) {
 			      jQuery(element).closest('.form-group').removeClass('has-error');
+			},
+			submitHandler: function(form){
+				$(form).ajaxSubmit({
+					dataType:'json',
+					success:function(json) {
+			    		if(json.code==200){
+			    			$("button[name='refresh']",top.document).click();
+			    			top.art.dialog.list['tianjia'].close();
+			    		}else{
+			    			$("span.help-block").html(json.message);
+			    			$(".has-error").removeClass("hide");
+			    		}
+			        }
+				});
 			}
 		});
 	});
 </script>
 </head>
 <body>
-	<form class="form-horizontal" id="form" method="post" 
+	<form class="form-horizontal content" id="form" method="post" 
 	enctype="multipart/form-data" action="${ctx }admin/ad/save.html" target="_parent">
   <div class="form-group">
-    <label for="name" class="col-sm-2 control-label">名称<span class="asterisk">*</span></label>
+    <label for="name" class="col-sm-2 control-label">名称<code>*</code></label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="name" name="name" placeholder="名称">
     </div>
   </div>
   <div class="form-group">
-    <label for="photo" class="col-sm-2 control-label">图片<span class="asterisk">*</span></label>
+    <label for="photo" class="col-sm-2 control-label">图片<code>*</code></label>
     <div class="col-sm-8">
       <input type="file" id="photo" name="photo" placeholder="图片">
     </div>
   </div>
   <div class="form-group">
-    <label for="width" class="col-sm-2 control-label">宽度<span class="asterisk">*</span></label>
+    <label for="width" class="col-sm-2 control-label">宽度<code>*</code></label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="width" name="width" placeholder="宽度（单位：像素）">
     </div>
   </div>
   <div class="form-group">
-    <label for="height" class="col-sm-2 control-label">高度<span class="asterisk">*</span></label>
+    <label for="height" class="col-sm-2 control-label">高度<code>*</code></label>
     <div class="col-sm-8">
       <input type="text" class="form-control" id="height" name="height" placeholder="高度（单位：像素）">
     </div>
@@ -103,6 +122,10 @@
     <div class="col-sm-8">
       <input type="text" class="form-control" id="priority" name="priority" placeholder="排序号，越大排名越前">
     </div>
+  </div>
+  <div class="form-group has-error hide">
+  	  <label class="col-sm-3 control-label">&nbsp;</label>
+      <span class="help-block"></span>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-8">

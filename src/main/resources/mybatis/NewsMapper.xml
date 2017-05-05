@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.brightengold.dao.NewsDao">
+	<resultMap type="News" id="NewsMap">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+		<result property="title" column="title" jdbcType="VARCHAR"/>	
+		<result property="priority" column="priority" jdbcType="INTEGER"/>	
+		<result property="url" column="url" jdbcType="VARCHAR"/>	
+		<result property="createDate" column="createDate" jdbcType="DATE"/>	
+		<result property="publishDate" column="publishDate" jdbcType="DATE"/>	
+		<result property="columnName" column="columnName" jdbcType="VARCHAR"/>	
+	</resultMap>
+	
+	<update id="updateClicks">
+		update News set clicks = #{clicks} where id = #{newsId}
+	</update>
+	<insert id="save">
+		insert into tb_news(id,title,introduce,content,priority,url,createDate,publishDate,clicks,keyWords,columnId,type,depth) 
+		values(null,#{title},#{introduce},#{content},#{priority},#{url},#{createDate},#{publishDate},#{clicks},#{keyWords},#{columnId},#{type},#{depth})
+	</insert>
+	
+	<update id="updateNews">
+		update tb_news set title=#{title},introduce=#{introduce},content=#{content},priority=#{priority},
+		url=#{url},keyWords=#{keyWords},columnId=#{columnId},type=#{type},depth=#{depth} where id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_news where id=#{newsId}
+	</delete>
+	<select id="findOne" parameterType="int" resultType="News">
+		select * from tb_news where id=#{id}
+	</select>
+	
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+		select count(*) from tb_news 
+		<where>
+			<if test="search!=null and search!=''">
+				title like concat('%',#{search},'%') or introduce like concat ('%',#{search},'%')
+			</if>
+		</where> 
+	</select>
+	
+	<select id="findList" resultMap="NewsMap" parameterType="com.brightengold.common.vo.RequestParam">
+		select tn.id,tn.title,tn.priority,tn.url,tn.createDate,tn.publishDate,tc.name as columnName 
+		from tb_news tn inner join tb_column tc on tn.columnId=tc.id 
+		<where>
+			<if test="search!=null and search!=''">
+				title like concat('%',#{search},'%') or introduce like concat ('%',#{search},'%')
+			</if>
+		</where> 
+		order by tn.priority desc,tn.id desc limit #{offset},#{limit}
+	</select>
+	
+	<select id="findIndexNews" resultType="News">
+		select * from tb_news where publishDate is not null order by priority desc,createDate desc limit #{indexNewsSize}
+	</select>
+	
+	<select id="findAllCountByColId" parameterType="long">
+		select count(*) from tb_news where columnId=#{colId} and publishDate is not null
+	</select>
+	
+	<select id="countByColId" parameterType="long">
+		select count(*) from tb_news where columnId=#{colId} and publishDate is not null
+	</select>
+</mapper>

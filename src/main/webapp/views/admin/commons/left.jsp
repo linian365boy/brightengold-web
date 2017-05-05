@@ -129,15 +129,6 @@
 			<p><strong>Copyright &copy; <%=now.get(Calendar.YEAR) %> linian365boy@foxmail.com</strong></p>
 		</footer>
 	</aside><!-- end of sidebar -->
-	
-	<%
-		if(request.getParameter("menuId")!=null){
-			WebApplicationContext app = ContextLoader.getCurrentWebApplicationContext();
-			MenuServiceImpl menuService = (MenuServiceImpl)app.getBean("menuService");
-			Menu menu = menuService.loadMenuById(Long.parseLong(request.getParameter("menuId")));
-			session.setAttribute("menu", menu);
-		}
-	%>
 	<script type="text/javascript">
   	if(typeof(str)!='undefined'){
   		$("#footer").before(str);

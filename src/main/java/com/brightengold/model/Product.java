@@ -3,23 +3,9 @@ package com.brightengold.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import cn.rainier.nian.model.User;
-
-@Entity
-@Table
 public class Product implements Serializable{
 	/**
 	 * 
@@ -33,7 +19,7 @@ public class Product implements Serializable{
 	/**
 	 * 产品种类
 	 */
-	private Category category;
+	private Integer categoryId;
 	/**
 	 * 图片url
 	 */
@@ -66,41 +52,38 @@ public class Product implements Serializable{
 	/**
 	 * 产品创建人
 	 */
-	private User createUser;
-	/**
-	 * 发布后的页码
-	 */
-	private int pageNum;
+	private Integer createUserId;
 	/**
 	 * 锁定或正常两种状态
 	 * true正常  false锁定
 	 */
 	private boolean status;
+	/**
+	 * 产品关键字，相关产品显示需要，分号隔开不同的关键字
+	 */
+	private String keyWords;
+	/**
+	 * 排序值（越大排名越前，默认为0）
+	 */
+	private Integer priority;
 	
-	@Id
-	@GeneratedValue
+	//临时变量
+	private String categoryEnName;
+	
+	public Product(){}
+	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=30)
 	public String getEnName() {
 		return enName;
 	}
 	public void setEnName(String enName) {
 		this.enName = enName;
 	}
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
-	@JoinColumn(name="categoryId")
-	public Category getCategory() {
-		return category;
-	}
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-	@Column(length=100)
 	public String getPicUrl() {
 		return picUrl;
 	}
@@ -110,27 +93,17 @@ public class Product implements Serializable{
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
 	}
-	@Column(length=100)
 	public String getUrl() {
 		return url;
 	}
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
-	}
-	@ManyToOne(cascade={CascadeType.MERGE})
-	@JoinColumn(name="createUserId")
-	public User getCreateUser() {
-		return createUser;
-	}
-	public void setCreateUser(User createUser) {
-		this.createUser = createUser;
 	}
 	public boolean isHot() {
 		return hot;
@@ -147,13 +120,6 @@ public class Product implements Serializable{
 	public String getIntroduce() {
 		return introduce;
 	}
-	public int getPageNum() {
-		return pageNum;
-	}
-	public void setPageNum(int pageNum) {
-		this.pageNum = pageNum;
-	}
-	@Lob
 	public String getDescription() {
 		return description;
 	}
@@ -165,5 +131,40 @@ public class Product implements Serializable{
 	}
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+	public String getKeyWords() {
+		return keyWords;
+	}
+	public void setKeyWords(String keyWords) {
+		this.keyWords = keyWords;
+	}
+	
+	public Integer getPriority() {
+		return priority;
+	}
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+	public Integer getCreateUserId() {
+		return createUserId;
+	}
+	public void setCreateUserId(Integer createUserId) {
+		this.createUserId = createUserId;
+	}
+	public String getCategoryEnName() {
+		return categoryEnName;
+	}
+	public void setCategoryEnName(String categoryEnName) {
+		this.categoryEnName = categoryEnName;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

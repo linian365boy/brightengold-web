@@ -3,15 +3,11 @@ package com.brightengold.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-@Entity
-@Table
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Feedback implements Serializable {
 	/**
 	 * 
@@ -37,15 +33,13 @@ public class Feedback implements Serializable {
 	/**
 	 * 反馈时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date createTime;
 	/**
-	 * 备用字段
+	 * 产品名称
 	 */
-	private String temp1;
-	private String temp2;
+	private String productName;
 	
-	@Id
-	@GeneratedValue
 	public Integer getId() {
 		return id;
 	}
@@ -76,23 +70,20 @@ public class Feedback implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getTemp1() {
-		return temp1;
+	public String getProductName() {
+		return productName;
 	}
-	public void setTemp1(String temp1) {
-		this.temp1 = temp1;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
-	public String getTemp2() {
-		return temp2;
-	}
-	public void setTemp2(String temp2) {
-		this.temp2 = temp2;
-	}
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreateTime() {
 		return createTime;
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

@@ -6,20 +6,36 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <meta http-equiv="description" content="brigtengold login"> 
 <meta http-equiv="author" content="brigtengold"> 
-<title>sunshinecig login</title>
-<link rel="icon" href="${ctx }resources/images/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="${ctx }resources/images/favicon.ico" type="image/x-icon" />
-<link href="${ctx }resources/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
-<script language="javascript">if(top.location != self.location){top.location=self.location;}</script>
+<title>login page</title>
+<link rel="icon" href="${ctx }/resources/dist/img/favicon_48X66.ico"
+	type="image/x-icon">
+<link rel="shortcut icon" href="${ctx }/resources/dist/img/favicon_16X22.ico"
+	type="image/x-icon" />
+<link href="${ctx }resources/dist/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
+<!-- jQuery 2.2.3 -->
+<script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	 if (window != top)
+	 	top.location.href = location.href;
+});
+function changeCode(){
+	jQuery('#kaptchaImage').hide().attr('src', '${ctx}views/getLoginVerifyCode.html?' + Math.floor(Math.random()*100)).fadeIn();  
+	event.cancelBubble=true;
+}
+</script>
 </head>
 <body>
-  <form action="j_spring_security_check" id="login" method="post">
+  <form action="${ctx }admin/checkLogin" id="login" method="post">
   	<h1>Log In</h1>
 	  <div style="margin-top: 15px;color:red;" id="messageDiv">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message }</div>
   	<fieldset id="inputs">
-  		<input id="username" name="j_username" type="text" placeholder="Username" 
+  		<input class="login" id="username" name="j_username" type="text" placeholder="Username" 
   		value="${sessionScope['SPRING_SECURITY_LAST_USERNAME']}" autofocus required/>
-  		<input id="password" name="j_password" type="password" placeholder="Password" required/>
+  		<input class="login" id="password" name="j_password" type="password" placeholder="Password" required/>
+	  	<input id="captcha" name="captcha" type="text" placeholder="Captcha" required/>
+		<img src="${ctx}views/getLoginVerifyCode.html" id="kaptchaImage" style="margin-bottom: -15px"/>  
+		<a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">Refresh the code</a>
   	</fieldset>
   	<fieldset id="actions">
   		<input id="submit" type="submit" value="Log in"/>

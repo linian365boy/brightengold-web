@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rainier.nian.dao.MenuDao">
+	
+	<resultMap type="Menu" id="MenuMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result property="mark" column="mark" jdbcType="VARCHAR"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+		<result property="parentId" column="parentId" jdbcType="INTEGER"/>
+		<result property="priority" column="priority" jdbcType="INTEGER"/>
+		<result property="url" column="url" jdbcType="VARCHAR"/>
+		<!-- 非表中字段 -->
+		<result property="parentMenuName" column="parentName" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	
+	<insert id="save" parameterType="Menu" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+		insert into tb_menu(name,mark,url,priority,parentId) 
+		values(#{name},#{mark},#{url},#{priority},#{parentId})
+	</insert>
+	
+	<update id="update" parameterType="Menu">
+		update tb_menu set name=#{name},mark=#{mark},url=#{url},priority=#{priority},parentId=#{parentId} 
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_menu where id=#{id}
+	</delete>
+	
+	<select id="findParentMenuByRole" resultType="Menu">
+		select distinct * from tb_menu m inner join tb_role_menu rm on rm.menuId=m.id 
+		where m.parentId is null and rm.roleId in 
+		<foreach collection="roles" item="role" open="(" close=")" separator=",">
+			#{role.name}
+		</foreach>
+		order by priority desc
+	</select>
+	
+	<select id="findOne" resultType="Menu" parameterType="int">
+		select * from tb_menu where id=#{id}
+	</select>
+	
+	<select id="getChildldByParentAndRoles" resultType="Menu">
+		select distinct * from tb_menu m inner join tb_role_menu rm on rm.menuId=m.id 
+		where m.parentId = #{pid} and rm.roleId in 
+		<foreach collection="roles" item="role" open="(" close=")" separator=",">
+			#{role.name}
+		</foreach>
+		order by priority desc
+	</select>
+	
+	<select id="findParentMenu" resultType="Menu">
+		select distinct * from tb_menu m where m.parentId is null order by priority desc
+	</select>
+	
+	<select id="loadMenuByUrl" resultType="Menu">
+		select * from tb_menu m where m.url like concat('%',#{url},'%') order by priority desc
+	</select>
+	
+	<select id="findParentByAjax" resultType="Menu">
+		select id,name from tb_menu m where m.parentId is null order by priority desc
+	</select>
+	
+	<select id="findList" resultMap="MenuMap" parameterType="com.brightengold.common.vo.RequestParam">
+		select t1.*,t2.name as parentName from tb_menu t1 left join tb_menu t2 on (t1.parentId=t2.id) 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or url like concat ('%',#{search},'%')
+			</if>
+		</where> 
+		order by priority desc limit #{offset},#{limit}
+	</select>
+	
+	<select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+		select count(*) from tb_menu 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or url like concat ('%',#{search},'%')
+			</if>
+		</where> 
+	</select>
+	
+	<select id="loadMenuByResourceId" resultType="Menu">
+		select m.* from tb_menu m inner join tb_resource r on r.menuId=m.id where r.id = #{resourceId} order by priority desc
+	</select>
+	
+	<delete id="deleteRoleMenu" parameterType="java.lang.String">
+		delete from tb_role_menu where roleId=#{roleName}
+	</delete>
+	
+	<insert id="insertRoleMenu">
+		insert into tb_role_menu(roleId,menuId) values
+		<foreach collection="menus" item="item" separator=","> 
+         	(#{roleName}, #{item.id})
+    	</foreach>
+	</insert>
+	
+	<select id="findMenuByRole" parameterType="java.lang.String" resultType="Menu">
+		select m.id,m.name,m.mark,m.priority from tb_role_menu rm inner join tb_menu m on rm.menuId=m.id where rm.roleId = #{roleName}
+	</select>
+	
+	<select id="findChildMenuCount" resultType="long" parameterType="int" >
+		select count(1) from tb_menu where parentId=#{menuId}
+	</select>
+</mapper>

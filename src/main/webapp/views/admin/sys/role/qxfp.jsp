@@ -1,136 +1,102 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@include file="../../../commons/include.jsp" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%@include file="/views/commons/include.jsp" %>
 <title>角色权限分配</title>
-<link rel="stylesheet" type="text/css" href="${ctx}resources/css/dhtmlxtree.css"/>
-<script src="${ctx}resources/js/dhtmlxcommon.js"></script>
-<script src="${ctx}resources/js/dhtmlxtree.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}resources/plugins/dhtmlx/dhtmlxtree.css"/>
+<script src="${ctx}resources/plugins/dhtmlx/dhtmlxtree.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html", function(data) {
-			var da = $(data);
-			var str = "";
-			for ( var i = 0; i < da.length; i++) {
-				str += "<option value=" + da.get(i)[0] + ">" + da.get(i)[1];
-				str += "</option>";
+	$(function(){
+		<%--包括所有被选中的菜单与资源 --%>
+		$("#actionForm").ajaxForm({
+			type:'POST',
+			dataType:'json',
+			beforeSubmit:function(arr, form, options){
+				var allChecked = myTree.getAllChecked();
+				if(allChecked.length==0){
+					$(".box-header .error").removeClass("hide").html("请选择资源分配给角色！");
+					return false;
+				}
+			},
+			success:function(json) {
+		    		if(json.code==200){
+		    			$("ul.treeview-menu.menu-open li.active a").click();
+		    		}else{
+		    			$(".box-header .error").removeClass("hide").html(json.message);
+		    		}
 			}
-			$("#roles").append(str);
 		});
+		loadTree();
 	});
-	var tree = null;
-	var selectValue = null;
-	function change(obj){
-		//alert(obj.value);
-		selectValue = obj.value;
-		if(selectValue!=0&&selectValue!=null&&selectValue!="null"&&selectValue!=undefined){
-			$("#tree").empty();
-			tree = new dhtmlXTreeObject({
-				parent : "tree",
-				image_path : "${ctx}resources/css/imgs/csh_dhx_skyblue/",
-			});
-			tree.setDataMode("xml");
-			tree.enableCheckBoxes(true);
-		    tree.enableThreeStateCheckboxes(true);
-			tree.setXMLAutoLoading("${ctx}admin/sys/menu/findMenuByRole.html?name="+selectValue)+"&flag=true";
-		   	tree.loadXML("${ctx}admin/sys/menu/findMenuByRole.html?id=0&name="+selectValue+"&flag=true",function(){
-		   		tree.openAllItems(0);
-		   	});
-		}
-	}
-	function sub(){
-		if(selectValue==null||selectValue==0){
-			alert("请选择角色");
-			return false;
-		}else{
-			//所有选择的
-			//var allChecked = tree.getAllChecked().split(',');
-			//所有叶子节点
-			//var leaf = tree.getAllChildless().split(',');
-			//所有选择的（更全，包括两种状态的选择），它包括了allChecked
-			var allCheckedBranches = tree.getAllCheckedBranches().split(",");
-			//var str = "";
-			//var strMenu = "";
-			//alert("allChecked："+allChecked+"leaf："+leaf+"allCheckedBranched："+allCheckedBranches);
-			//alert("allCheckedBranched："+allCheckedBranches);
-			//得到全为叶子并且已经选择的str
-			/*$.each(allChecked,function(key,val){
-				if($.inArray(val,leaf)>=0){
-					if(key<allChecked.length-1){
-						str+=val+",";
-					}else{
-						str+=val;
-					}
-				}
-			});*/
-			//var checkedleaf = str.split(",");
-			//排除掉选择叶子的节点，（就是一级二级已经选择的节点，不管是不是全选）
-			/*$.each(allCheckedBranches,function(key,val){
-				if($.inArray(val,checkedleaf)==-1){
-					if(key<allCheckedBranches.length-1){
-						strMenu+=val+",";
-					}else{
-						strMenu+=val;
-					}
-				}
-			});*/
-			$("#name").attr("value",selectValue);
-			$("#str").attr("value",allCheckedBranches);
-			$("#actionForm").attr("action","${ctx}admin/sys/role/"+selectValue+"/distribute.html");
-			$("#actionForm").submit();
-		}
+	
+	var myTree;
+	function loadTree(){
+		myTree = new dhtmlXTreeObject({
+			parent: "tree",
+			checkbox: true,
+			image_path: "${ctx}resources/plugins/dhtmlx/skins/web/imgs/dhxtree_web/"
+		});
+		myTree.setXMLAutoLoading("${ctx}admin/sys/menu/findAllMenu.html?name=${role.name}");
+		myTree.setDataMode("json");
+		myTree.enableThreeStateCheckboxes(true);
+		myTree.attachEvent("onCheck", function(id, state){
+			var allCheckedArr = myTree.getAllChecked();
+			if(state==1){
+				$(allCheckedArr).splice(allCheckedArr.length,0,id);
+			}else{
+				$(allCheckedArr).splice($.inArray(id,allCheckedArr),1);
+			}
+			$("#str").val(allCheckedArr.split(","));
+		});
+		myTree.load("${ctx}admin/sys/menu/findAllMenu.html?id=0&name=${role.name}",function(){
+			myTree.openAllItems(0);
+		},"json");
 	}
 </script>
-<!--[if IE]>
-<link rel="stylesheet" type="text/css" href="css/ie-sucks.css" />
-<![endif]-->
-</head>
-<body>
-<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">分配权限</h3>
-		</header>
-			<div class="tab_container">
-		<div id="wrapper">
-			<div id="content">
-				<div id="infobox">
-					<div id="box">
-						<div style="width:500px;height:650px; text-align:left;">
-							<form action="#" id="actionForm" method="post">
-								<label for="street">选择角色：</label>
-								<select id="roles" onchange="change(this);">
-									<option value="0">--请选择--</option>
-								</select> <br />
-								<label for="country">选择权限： </label> <br />
-								<fieldset style="width:500px;border:0;">
-									<div style="padding: 10px;">
-										<div class="demo">
-											<div style="width: 500px; height: 500px; overflow: auto;">
-												<div id="tree" ></div>
-											</div>
-										</div>
-									</div>
-								</fieldset>
-								<input type="hidden" name="name" id="name"/>
-								<%--包括所有被选中的菜单与资源 --%>
-								<input type="hidden" name="str" id="str"/>
+
+<section class="content-header">
+      <h1>
+        	角色管理
+        <small>更轻松管理您的权限分配</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">角色管理</li>
+      </ol>
+    </section>
+    
+	<section class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-info">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title pull-left">权限分配</h3>
+						<label class="error hide"></label>
+					</div>
+					<div class="tab_container">
+							<form action="${ctx}admin/sys/role/${role.name }/distribute.html" id="actionForm" class="form-horizontal" method="post">
+								<div class="box-body">
+								<div class="form-group">
+			                      <label class="col-sm-2 control-label" for="enName">当前角色：</label>
+			                      <div class="col-sm-5">
+			                        <input type="text" disabled value="${role.describes }" class="form-control">
+			                      </div>
+			                    </div>
+			                    <div class="form-group">
+			                    	<label class="col-sm-2 control-label" for="enName">选择权限：</label>
+			                    	<div class="col-sm-5" style="overflow-y:auto; overflow-x:auto; height:500px;">
+										<div id="tree" ></div>
+			                      	</div>
+			                    </div>
+			                    <input name="str" type="hidden" id="str" value="${menuOrResource }"/>
 								<%--很诡异的一个错误，下面这个input的type不能为submit，否则在IE下会出现提交两次的结果 --%>
-								<input type="button" class="btn btn-danger" id="button" value="确认分配" onclick="return sub();" />
+								</div>
+								<div class="box-footer">
+								<button type="submit" class="btn btn-danger">确认分配</button>
 								<%--&nbsp;&nbsp; <input type="reset" id="button"value="重置" />--%>
+								</div><!-- /.box-footer -->
 							</form>
-							<br />
 						</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		</article>
 		</section>
-</body>
-</html>

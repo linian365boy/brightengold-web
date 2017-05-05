@@ -1,19 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="/views/commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>资源管理</title>
 <script type="text/javascript">
-	var update = function(id){
-		var url = '${ctx}admin/sys/menu/'+id+'/update.html';
+	var update = function(obj){
+		var url = '${ctx}admin/sys/menu/'+obj.id+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑菜单',
 			id:'bianji',
-			width:450,
-			height:300,
+			width:768,
+			height:400,
 			resize: false
 			});
 		};
@@ -23,53 +18,86 @@
 			art.dialog.open(url,{
 				title:'添加菜单',
 				id:'tianjia',
-				width: 450,
-				height: 330,
+				width: 768,
+				height: 400,
 				resize: false
 			});
 		};
-		var deleteMenu = function(id){
-			art.dialog.confirm('确定删除此菜单？',function(){
-				var url = '${ctx}admin/sys/menu/'+id+'/del.html';
-				window.location.href=url;
+		var del = function(obj){
+			art.dialog.confirm('确定删除此【'+obj.name+'】菜单？',function(){
+				var url = '${ctx}admin/sys/menu/'+obj.id+'/del.html';
+				$.post(url,function(json){
+			    		if(json.code==200){
+			    			$("button[name='refresh']",window.document).click();
+			    		}else{
+			    			art.dialog.tips(json.message, 1.5);
+			    		}
+				},"json");
 			});
 		};
+		<!--
+		$("#table").bootstrapTable();
+		//-->
 </script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">资源列表</h3>
-		<ul class="tabs">
-   			<li><a href="javascript:void(0);" onclick="tianjia();">新增资源</a></li>
-		</ul>
-		</header>
+	
+	<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	菜单管理
+        <small>更轻松管理您的后台菜单信息</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">菜单管理</li>
+      </ol>
+    </section>
 
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter table table-striped" cellspacing="0"> 
-			<thead> 
-				<tr> 
-    				<th >序号</th>
-                	<th >资源名称</th>
-	                <th >别名</th>
-	                <th >父级资源</th>
-					<th >跳转路径</th>
-					<th >排序号</th>
-					<th >操作</th>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">菜单列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toggle="table" data-toolbar="#toolbar" 
+              class="table table-striped" data-search="true" data-show-refresh="true" 
+              data-show-columns="true" 
+              data-show-export="true" 
+              data-show-pagination-switch="true" 
+              data-pagination="true" 
+              data-id-field="id" 
+              data-page-list="[10, 25, 50]" 
+              data-show-footer="false" 
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+                <thead>
+                <tr> 
+    				<th data-formatter="runningFormatter">序号</th>
+                	<th data-field="name">资源名称</th>
+	                <th data-field="mark">别名</th>
+	                <th data-field="parentMenuName">父级菜单</th>
+					<th data-field="url">跳转路径</th>
+					<th data-field="priority">排序号</th>
+					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr> 
-			</thead> 
-			<tbody id="dataContent"> 
-			<c:choose>
+                </thead>
+                <%-- <tbody>
+                <c:choose>
 				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
 					<c:forEach items="${page.result }" var="menu" varStatus="status">
 					<tr>
 						<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 						<td>${menu.name }</td>
 						<td>${menu.mark }</td>
-						<td>${menu.parentMenu.name }</td>
+						<td>${menu.parentMenuName }</td>
 						<td>${menu.url }</td>
 						<td>${menu.priority }</td>
 						<td>
@@ -85,22 +113,15 @@
 				<tr class="text-center"><td colspan="6">暂无数据</td></tr>
 			</c:otherwise>
 			</c:choose>
-			</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/sys/menu/menus"/>
-                		</c:import>
-                	</div>
-                  <!-- <div class="clear"></div></td> -->
-              </tr>
-			</tfoot>
-			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+                </tbody> --%>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

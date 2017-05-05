@@ -3,21 +3,11 @@ package com.brightengold.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-@Entity
-@Table
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class News implements Serializable {
 	/**
 	 * 
@@ -47,10 +37,12 @@ public class News implements Serializable {
 	/**
 	 * 新闻创建日期
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date createDate;
 	/**
 	 * 新闻发布日期
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date publishDate;
 	/**
 	 * 点击率
@@ -61,13 +53,9 @@ public class News implements Serializable {
 	 */
 	private String keyWords;
 	/**
-	 * 发布后的页码
-	 */
-	private int pageNum;
-	/**
 	 * 新闻发布所在的栏目下
 	 */
-	private com.brightengold.model.Column column;
+	private Integer columnId;
 	/**
 	 * 新闻类型，
 	 * 0文章类型，内容含文字或图片或视频　　
@@ -81,22 +69,24 @@ public class News implements Serializable {
 	 */
 	private String depth;
 	
-	@Id
-	@GeneratedValue
+	
+	//临时变量
+	private String columnName;
+	
+	public News(){}
+	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=50)
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	@Lob
 	public String getContent() {
 		return content;
 	}
@@ -109,21 +99,18 @@ public class News implements Serializable {
 	public void setPriority(Integer priority) {
 		this.priority = priority;
 	}
-	@Column(length=100)
 	public String getUrl() {
 		return url;
 	}
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	@Temporal(TemporalType.DATE)
 	public Date getPublishDate() {
 		return publishDate;
 	}
@@ -142,26 +129,11 @@ public class News implements Serializable {
 	public void setKeyWords(String keyWords) {
 		this.keyWords = keyWords;
 	}
-	@Column(length=500)
 	public String getIntroduce() {
 		return introduce;
 	}
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
-	}
-	public int getPageNum() {
-		return pageNum;
-	}
-	public void setPageNum(int pageNum) {
-		this.pageNum = pageNum;
-	}
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
-	@JoinColumn(name="columnId")
-	public com.brightengold.model.Column getColumn() {
-		return column;
-	}
-	public void setColumn(com.brightengold.model.Column column) {
-		this.column = column;
 	}
 	public boolean getType() {
 		return type;
@@ -175,5 +147,20 @@ public class News implements Serializable {
 	public void setDepth(String depth) {
 		this.depth = depth;
 	}
-	
+	public Integer getColumnId() {
+		return columnId;
+	}
+	public void setColumnId(Integer columnId) {
+		this.columnId = columnId;
+	}
+	public String getColumnName() {
+		return columnName;
+	}
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 }

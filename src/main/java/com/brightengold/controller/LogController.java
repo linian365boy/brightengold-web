@@ -1,14 +1,20 @@
 package com.brightengold.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import cn.rainier.nian.utils.PageRainier;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Log;
 import com.brightengold.service.LogService;
+import com.brightengold.vo.ReturnData;
+
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/sys/log")
@@ -16,24 +22,17 @@ import com.brightengold.service.LogService;
 public class LogController {
 	@Autowired
 	private LogService logService;
-	private PageRainier<Log> logs;
-	private Integer pageSize = 10;
-	
-	@RequestMapping({"/logs/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model){
-		if(pageNo==null){
-			pageNo = 1;
-		}
-		logs = logService.findAll(pageNo, pageSize);
-		model.addAttribute("page",logs);//map
+	@RequestMapping({"/logs/list"})
+	public String list(HttpServletRequest request,ModelMap map){
+		map.put("ajaxListUrl", "admin/sys/log/logs/getJsonList.html");
 		return "admin/sys/log/list";
 	}
 	
-	public PageRainier<Log> getLogs() {
-		return logs;
-	}
-
-	public void setLogs(PageRainier<Log> logs) {
-		this.logs = logs;
+	@ResponseBody
+	@RequestMapping({"/logs/getJsonList"})
+	public ReturnData<Log> getJsonList(RequestParam param){
+		PageRainier<Log> logs = logService.findAll(param);
+		ReturnData<Log> datas = new ReturnData<Log>(logs.getTotalRowNum(), logs.getResult());
+		return datas;
 	}
 }

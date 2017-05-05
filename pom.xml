@@ -6,14 +6,16 @@
 	<artifactId>web</artifactId>
 	<name>brightengold-web</name>
 	<packaging>war</packaging>
-	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<version>1.1.0${app.version.type}</version>
 	
 	<properties>
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <org.springframework-version>3.2.4.RELEASE</org.springframework-version>
 	    <org.springSecurityframework-version>3.2.3.RELEASE</org.springSecurityframework-version>
 	    <org.aspectj-version>1.7.1</org.aspectj-version>
-	    <org.slf4j-version>1.6.6</org.slf4j-version>
+	    <timestamp>${maven.build.timestamp}</timestamp>
+	    <dev.version.type>-SNAPSHOT</dev.version.type>
+	    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
   	</properties>
   
 	<dependencies>
@@ -25,18 +27,6 @@
 		</dependency>
 		<!-- aspect end -->
 
-		<!-- hibernate start -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.1.4.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-ehcache</artifactId>
-			<version>4.1.2.Final</version>
-		</dependency>
-		<!-- hibernate end -->
 		<!-- spring start -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -51,26 +41,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-instrument</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-instrument-tomcat</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
 		<dependency>
@@ -101,18 +71,6 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons-core</artifactId>
-			<version>1.3.0.RELEASE</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>1.1.0.RELEASE</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -191,14 +149,6 @@
 		</dependency>
 		<!-- commons dbcp start -->
 
-		<!-- jpa start -->
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
-		</dependency>
-		<!-- jpa end -->
-
 		<!-- servlet-api start -->
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
@@ -212,18 +162,6 @@
 			<artifactId>jsp-api</artifactId>
 			<version>2.2</version>
 			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>1.9.6</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>1.9.6</version>
 		</dependency>
 		
 		<!-- servlet-api end -->
@@ -245,26 +183,33 @@
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-extras</artifactId>
 			<version>3.0.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jcl-over-slf4j</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jackson-mapper-asl</artifactId>
+					<groupId>org.codehaus.jackson</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- return json -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.3.3</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.brightengold</groupId>
-			<artifactId>brightengold-util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.rainier.permission</groupId>
 		  	<artifactId>auth_core</artifactId>
-		  	<version>1.0.0-SNAPSHOT</version>
+		  	<version>1.1.0-SNAPSHOT</version>
 		</dependency>
-		
+		<dependency>
+		    <groupId>com.github.penggle</groupId>
+		    <artifactId>kaptcha</artifactId>
+		    <version>2.3.2</version>
+		</dependency>
 	    <dependency>
 	      <groupId>junit</groupId>
 	      <artifactId>junit</artifactId>
@@ -272,8 +217,24 @@
 	      <scope>test</scope>
 	    </dependency>
 	</dependencies>
+	
 	<build>
     <finalName>brightengold-web</finalName>
+    <resources>
+		<resource>
+			<directory>src/main/resources</directory>
+			<filtering>true</filtering>
+		</resource>
+		<resource>
+            <directory>src/main/webapp</directory>
+            <filtering>true</filtering>
+            <includes>
+            	<include>WEB-INF/web.xml</include>
+            </includes>
+            <targetPath>${project.build.directory}/${project.build.finalName}</targetPath>
+         </resource>
+	</resources>
+	
     <!-- 插件 -->
 	<pluginManagement>
 		<plugins>
@@ -323,12 +284,64 @@
 			    <artifactId>maven-compiler-plugin</artifactId>
 			    <version>3.1</version>
 			    <configuration>
-			     <source>1.6</source>
-			     <target>1.6</target>
+			    	<source>1.7</source>
+			    	<target>1.7</target>
 			    </configuration>
 			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-war-plugin</artifactId>
+	            <version>2.4</version>
+	            <configuration>
+		            <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+	            </configuration>
+        	</plugin>
     	</plugins>
     </pluginManagement>
 	<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
   </build>
+  
+  <profiles>
+  		<!-- 本地，默认激活 ，实现本地测试资源自动替换 -->
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>env</name>
+					<value>local</value>
+				</property>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/assembly/local.properties</filter>
+				</filters>
+			</build>
+			<properties>
+				<app.version.type>${dev.version.type}</app.version.type>
+				<juanpi.sdk.version.type>${dev.version.type}</juanpi.sdk.version.type>
+				<spi.version.type>${dev.version.type}</spi.version.type>
+			</properties>
+		</profile>
+		<!-- 生产环境打包：mvn -Denv=prd package -->
+		<profile>
+			<id>prd</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>prd</value>
+				</property>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/assembly/prd.properties</filter>
+				</filters>
+			</build>
+			<properties>
+				<app.version.type></app.version.type>
+				<juanpi.sdk.version.type></juanpi.sdk.version.type>
+				<spi.version.type></spi.version.type>
+			</properties>
+		</profile>
+  </profiles>
 </project>

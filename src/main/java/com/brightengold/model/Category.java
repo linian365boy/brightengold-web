@@ -2,25 +2,13 @@ package com.brightengold.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import cn.rainier.nian.model.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Entity
-@Table
 public class Category implements Serializable{
 	/**
 	 * 
@@ -38,84 +26,58 @@ public class Category implements Serializable{
 	/**
 	 * 产品父类型
 	 */
-	private Category parent;
+	private Integer parentId;
 	/**
 	 * 产品创建日期
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date createDate;
 	/**
 	 * 产品创建人
 	 */
-	private User createUser;
+	private Integer createUserId;
 	/**
 	 * 分类所在的栏目下
 	 */
-	private com.brightengold.model.Column column;
-	private List<Category> children;
-	private List<Product> products;
+	private Integer columnId;
 	//备注
 	private String remark;
 	
-	@Id
-	@GeneratedValue
+	//临时变量
+	private transient long productsSize;
+	//父类分类名称
+	private String parentName;
+	//分类所在的栏目名称
+	private String columnName;
+	//子分类
+	private transient Set<Category> children;
+	
+	//使用mybatis resuleMap的setter getter方式注入属性，必须要有一个空参数的构造方法
+	public Category(){}
+	
+	public Category(int id, String name, String enName) {
+		this.id = id;
+		this.name = name;
+		this.enName = enName;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(length=25)
 	public String getEnName() {
 		return enName;
 	}
 	public void setEnName(String enName) {
 		this.enName = enName;
 	}
-	
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
-	@JoinColumn(name="pid")
-	public Category getParent() {
-		return parent;
-	}
-	public void setParent(Category parent) {
-		this.parent = parent;
-	}
-	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
-	}
-	@ManyToOne(cascade={CascadeType.MERGE})
-	@JoinColumn(name="createUserId")
-	public User getCreateUser() {
-		return createUser;
-	}
-	public void setCreateUser(User createUser) {
-		this.createUser = createUser;
-	}
-	@OneToMany(cascade={CascadeType.MERGE},mappedBy="parent",fetch=FetchType.LAZY)
-	public List<Category> getChildren() {
-		return children;
-	}
-	public void setChildren(List<Category> children) {
-		this.children = children;
-	}
-	@OneToMany(cascade={CascadeType.MERGE},mappedBy="category",fetch=FetchType.LAZY)
-	public List<Product> getProducts() {
-		return products;
-	}
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
-	@JoinColumn(name="columnId")
-	public com.brightengold.model.Column getColumn() {
-		return column;
-	}
-	public void setColumn(com.brightengold.model.Column column) {
-		this.column = column;
 	}
 	public String getName() {
 		return name;
@@ -128,5 +90,51 @@ public class Category implements Serializable{
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public long getProductsSize() {
+		return productsSize;
+	}
+	public void setProductsSize(long productsSize) {
+		this.productsSize = productsSize;
+	}
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+	public Integer getCreateUserId() {
+		return createUserId;
+	}
+	public void setCreateUserId(Integer createUserId) {
+		this.createUserId = createUserId;
+	}
+	public Integer getColumnId() {
+		return columnId;
+	}
+	public void setColumnId(Integer columnId) {
+		this.columnId = columnId;
+	}
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+	public String getColumnName() {
+		return columnName;
+	}
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+	public Set<Category> getChildren() {
+		return children;
+	}
+	public void setChildren(Set<Category> children) {
+		this.children = children;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

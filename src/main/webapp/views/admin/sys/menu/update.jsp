@@ -1,16 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@include file="../../../commons/include.jsp" %>
+     <%@include file="/views/commons/include.jsp" %>
+     <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>修改用户信息</title>
-<link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="${ctx }resources/css/style.css" />
+<!-- jQuery 2.2.3 -->
+<script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- jQuery form plugin -->
+<script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#form").validate({
@@ -47,52 +52,67 @@ $(document).ready(function(){
 		},
 		success: function(element) {
 		      jQuery(element).closest('.form-group').removeClass('has-error');
+		},
+		submitHandler: function(form){
+			$(form).ajaxSubmit({
+				dataType:'json',
+				success:function(json) {
+			    		if(json.code==200){
+			    			$("button[name='refresh']",top.document).click();
+			    			top.art.dialog.list['bianji'].close();
+			    		}else{
+			    			$("span.help-block").html(json.message);
+			    			$(".has-error").removeClass("hide");
+			    		}
+		        }
+			});
 		}
 	});
 });
-	function formSubmit(){
-		var username = $("#username").val();
-		$("#form").attr("action","${ctx}admin/sys/menu/"+username+"/update.html");
-		$("#form").submit();
-	}
 </script>
 </head>
 <body>
-	<form id="form" action="#" method="post" target="_parent">
+	<form id="form" action="${ctx}admin/sys/menu/${model.id }/update.html" 
+		class="form-horizontal content" method="post" target="_parent">
             <div class="form-group">
-		    	<label for="name" class="col-sm-3 control-label">名称<span class="asterisk">*</span></label>
+		    	<label for="name" class="col-sm-3 control-label">名称<code>*</code></label>
 				<div class="row col-sm-8">
-				     <input type="text" class="form-control" id="name" name="name" placeholder="菜单名称">
+				     <input type="text" class="form-control" value="${model.name}" id="name" name="name" placeholder="菜单名称">
 				</div>
 			</div>
 			 <div class="form-group">
-		    	<label for="mark" class="col-sm-3 control-label">别名<span class="asterisk">*</span></label>
+		    	<label for="mark" class="col-sm-3 control-label">别名<code>*</code></label>
 				<div class="row col-sm-8">
-				     <input type="text" class="form-control" id="mark" name="mark" placeholder="菜单别名">
+				     <input type="text" class="form-control" id="mark" value="${model.mark }" name="mark" placeholder="菜单别名">
 				</div>
 			</div>
 			<div class="form-group">
-		    <label for="parentM" class="col-sm-3 control-label">父级菜单</label>
+		    <label for="parentId" class="col-sm-3 control-label">父级菜单</label>
 		    	<div class="row col-xs-8" style="overflow:hidden;">
-		    		<select class="col-xs-7 selectpicker" name="parentM" id="parentM">
-		    		<c:forEach items="${parentMenu }" var="menu">
-		    			<option value="${menu[0] }">${menu[1] }</option>
-		    		</c:forEach>
+		    		<select class="col-xs-7 selectpicker" name="parentId" id="parentId">
+		    			<option value="0">==根节点==</option>
+			    		<c:forEach items="${parentMenu }" var="menu">
+			    			<option value="${menu.id }" ${(menu.id==model.parentId)?'selected':'' }>${menu.name }</option>
+			    		</c:forEach>
 			      	</select>
 		    	</div>
 		  </div>
 		  <div class="form-group">
-		    	<label for="url" class="col-sm-3 control-label">跳转路径<span class="asterisk">*</span></label>
+		    	<label for="url" class="col-sm-3 control-label">跳转路径<code>*</code></label>
 				<div class="row col-sm-8">
-				     <input type="text" class="form-control" id="url" name="url" placeholder="跳转路径">
+				     <input type="text" class="form-control" id="url" value="${model.url }" name="url" placeholder="跳转路径">
 				</div>
 			</div>
 			<div class="form-group">
 		    	<label for="priority" class="col-sm-3 control-label">排序号</label>
 				<div class="row col-sm-8">
-				     <input type="text" class="form-control" id="priority" name="priority" placeholder="排序号">
+				     <input type="text" class="form-control" id="priority" value="${model.priority }" name="priority" placeholder="排序号">
 				</div>
 			</div>
+			<div class="form-group has-error hide">
+			  	  <label class="col-sm-3 control-label">&nbsp;</label>
+                  <span class="help-block"></span>
+               </div>
             <div class="form-group">
 			  <div class="col-sm-offset-4 col-sm-8">
 			  	<button type="submit" class="btn btn-primary">保存</button>

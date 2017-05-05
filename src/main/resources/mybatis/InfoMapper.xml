@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.brightengold.dao.InfoDao">
+	<insert id="save">
+		insert into tb_info(id,name,code,content,url,priority) 
+		values(null,#{name},#{code},#{content},#{url},#{priority})
+	</insert>
+	
+	<insert id="updateInfo" parameterType="Info">
+		update tb_info set name=#{name},code=#{code},content=#{content},url=#{url},priority=#{priority} where id=#{id}
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from tb_info where id=#{id}
+	</delete>
+	
+	<select id="loadByCode" parameterType="java.lang.String" resultType="Info">
+		select * from tb_info where code=#{codec}
+	</select>
+	
+	<select id="findOne" parameterType="int" resultType="Info">
+		select * from tb_info where id=#{id}
+	</select>
+	
+	<select id="findAll" resultType="Info">
+		select * from tb_info order by priority desc
+	</select>
+	
+	<select id="findList" resultType="Info">
+		select id,code,name,priority from tb_info 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or code like concat ('%',#{search},'%')
+			</if>
+		</where>
+		order by priority desc limit #{offset},#{limit}
+	</select>
+	
+	<select id="findAllCount" resultType="long">
+		select count(*) from tb_info 
+		<where>
+			<if test="search!=null and search!=''">
+				name like concat('%',#{search},'%') or code like concat ('%',#{search},'%')
+			</if>
+		</where>
+	</select>
+</mapper>

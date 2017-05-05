@@ -1,120 +1,42 @@
-<%@page import="java.util.Locale"%>
-<%@page import="java.util.TimeZone"%>
-<%@page import="java.util.Calendar"%>
-<%@page import="cn.rainier.nian.service.impl.MenuServiceImpl"%>
-<%@page import="cn.rainier.nian.model.Menu"%>
-<%@page import="org.springframework.web.context.ContextLoader"%>
-<%@page import="org.springframework.web.context.WebApplicationContext"%>
-<%@include file="/views/commons/include.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <html>
-    <head>
-    <meta charset="utf-8"/>
-	<title>menu</title>
-	<script type="text/javascript">
-	    $(function(){
-	       $('.column').equalHeight();
-	    });
-	</script>
-	<c:choose>
-		<c:when test="${!empty sessionScope.menuXml }">
-			<script type="text/javascript">
-			var da = loadXML("${sessionScope.menuXml}");
-			var pMenu = $(da).find("item[url='javascript:void(0);']");
-			var str = "";
-			if((pMenu!=null)&&(pMenu.length!=0)){
-				for(var i=0;i<pMenu.length;i++){
-					var pmenu = $(pMenu[i]);
-					var name = pmenu.attr("text");
-					var url = pmenu.attr("url");
-					str+= "<h3><a href='"+url+"' id='nav_"+(i+1)+"' title="+name+">"+name+"</a></h3>";
-					var sMenu = pmenu.find("item");
-					var length = sMenu.length;
-					if((sMenu!=null)&&(length!=0)){
-						str+="<ul class='toggle'>";
-						for(var j=0;j<length;j++){
-							var smenu = $(sMenu[j]);
-							var smenuName = smenu.attr("text");
-							var smenuUrl = smenu.attr("url");
-							var id = smenu.attr("id");
-							str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}"+smenuUrl+"'>"+smenuName+"</a></li>";
-						}
-						str+="</ul>";
-					};
-				};
-			};
-
-			function loadXML(xmlString){
-			    var xmlDoc;
-			    if (window.ActiveXObject)
-			    {
-			        xmlDoc = new ActiveXObject('Microsoft.XMLDOM');
-			        if(!xmlDoc) xmldoc = new ActiveXObject("MSXML2.DOMDocument.3.0");
-			        xmlDoc.async = false;
-			        xmlDoc.loadXML(xmlString);
-			    }else if (document.implementation && document.implementation.createDocument){
-			        var domParser = new DOMParser();
-			        xmlDoc = domParser.parseFromString(xmlString, 'text/xml');
-			    }else{
-			        return null;
-			    }
-			    return xmlDoc;
-			}
-		</script>
-		</c:when>		
-		<c:otherwise>
-			<script type="text/javascript">
-				$(document).ready(function(){
-					var t = new Date().getTime();
-					$.get("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(xml){
-						var da = $(xml);
-						var pMenu = da.find("item[url='javascript:void(0);']");
-						var str = "";
-						if((pMenu!=null)&&(pMenu.length!=0)){
-							for(var i=0;i<pMenu.length;i++){
-								var pmenu = $(pMenu[i]);
-								var name = pmenu.attr("text");
-								var url = pmenu.attr("url");
-								str+= "<h3><a href='"+url+"' id='nav_"+(i+1)+"' title="+name+">"+name+"</a></h3>";
-								var sMenu = pmenu.find("item");
-								var length = sMenu.length;
-								if((sMenu!=null)&&(length!=0)){
-								str+= "<ul class='toggle'>";
-									for(var j=0;j<length;j++){
-										var smenu = $(sMenu[j]);
-										var smenuName = smenu.attr("text");
-										var smenuUrl = smenu.attr("url");
-										var id = smenu.attr("id");
-										str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}"+smenuUrl+"'>"+smenuName+"</a></li>";
-									}
-									str+="</ul>";
-								};
-							};
-						};
-						$("#sidebar").html(str);
-						showHide();
-					});
-				});
-				</script>
-		</c:otherwise>
-	</c:choose>
-    </head>
-    <body>
-	<aside id="sidebar" class="column">
-	</aside><!-- end of sidebar -->
-	<%
-		if(request.getParameter("menuId")!=null){
-			WebApplicationContext app = ContextLoader.getCurrentWebApplicationContext();
-			MenuServiceImpl menuService = (MenuServiceImpl)app.getBean("menuService");
-			Menu menu = menuService.loadMenuById(Long.parseLong(request.getParameter("menuId")));
-			session.setAttribute("menu", menu);
-		}
-	%>
-	<script type="text/javascript">
-  	if(typeof(str)!='undefined'){
-  		$("#sidebar").html(str);
-  	}
-  </script>
-	</body>
-	</html>
+     <%@include file="/views/commons/include.jsp"%>
+<!-- Left side column. contains the logo and sidebar -->
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="/resources/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p><sec:authentication property="principal.username"/></p>
+          <a href="#"><i class="fa fa-circle text-success"></i> 已登录</a>
+        </div>
+      </div>
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header" id="mainNavigation">主导航</li>
+        <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+        <li class="header">LABELS</li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+      </ul>
+      <form id="menuForm" action="#" style="display: none;" method="post">
+      	<input type="hidden" name="text" id="menuText"/>
+      	<input type="hidden" name="ptext" id="pmenuText"/>
+      </form>
+    </section>
+    <!-- /.sidebar -->
