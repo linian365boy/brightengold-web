@@ -1,11 +1,9 @@
 package com.brightengold.service;
 
 import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import com.brightengold.model.WebConfig;
 import com.brightengold.util.ConstantVariable;
 import com.brightengold.util.Tools;

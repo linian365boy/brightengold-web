@@ -27,24 +27,7 @@
 		<!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称 -->
 		<property name="useCodeAsDefaultMessage" value="true" />
 	</bean>
-	<context:component-scan base-package="com.brightengold" />
-	<!-- 定义受环境影响易变的变量 -->
-	<bean id="configProperties"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="locations">
-			<!-- 禁止调整加载顺序(注：系统以list最后一个有效的value元素为准) -->
-			<list>
-				<value>classpath:jdbc.properties</value>
-				<value>classpath:common.properties</value>
-			</list>
-		</property>
-	</bean>
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
-		<property name="ignoreResourceNotFound" value="true" />
-		<property name="properties" ref="configProperties" />
-	</bean>
-
+	
 	<!-- 添加数据源参数 -->
 	<import resource="classpath:/dataSource.xml" />
 	

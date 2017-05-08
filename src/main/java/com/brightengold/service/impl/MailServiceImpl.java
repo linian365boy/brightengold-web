@@ -7,12 +7,10 @@
 package com.brightengold.service.impl;
 
 import java.io.IOException;
-
 import javax.annotation.Resource;
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;

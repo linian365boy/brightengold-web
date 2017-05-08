@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -241,7 +241,7 @@ public class NewsController {
 		if(FreemarkerUtil.fprint("newsDetail.ftl", map, realPath+Constant.NEWSPATH, tempNews.getUrl())){
 			if(newsService.saveNews(tempNews)){
 				vo.setCode(Constant.SUCCESS_CODE);
-				vo.setData(DateUtils.formatDate(new Date(), ConstantVariable.DFSTR));
+				vo.setData(DateUtil.formatDate(new Date(), ConstantVariable.DFSTR));
 				logger.info("发布成功新闻|{}",tempNews);
 			}else{
 				vo.setCode(Constant.ERROR_CODE);
