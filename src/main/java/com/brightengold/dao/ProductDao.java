@@ -1,11 +1,14 @@
 package com.brightengold.dao;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Product;
 
+@Mapper
 public interface ProductDao {
 	//@Query("select count(*) from Product pr join pr.category ca join ca.column co where (co.id = :id or co.parentColumn.id = :id) and pr.status is true and pr.publish is true")
 	long countByColId(@Param("id") Integer id);

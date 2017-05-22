@@ -1,11 +1,14 @@
 package com.brightengold.dao;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Category;
 
+@Mapper
 public interface CategoryDao {
 	
 	//@Query("select c.id,c.enName from Category c where c.parent = null")

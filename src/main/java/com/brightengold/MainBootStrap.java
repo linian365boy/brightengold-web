@@ -1,13 +1,9 @@
 package com.brightengold;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@RestController
-@EnableAutoConfiguration
-@ComponentScan("com.brightengold")
+@SpringBootApplication
 public class MainBootStrap {
 	public static void main(String[] args) {
 		SpringApplication.run(MainBootStrap.class, args);

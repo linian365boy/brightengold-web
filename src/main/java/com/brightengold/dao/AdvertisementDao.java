@@ -2,11 +2,13 @@ package com.brightengold.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Advertisement;
 
+@Mapper
 public interface AdvertisementDao {
 	//@Query("select a from Advertisement a where a.id = :id")
 	Advertisement loadAdvertisement(@Param("id") Integer id);

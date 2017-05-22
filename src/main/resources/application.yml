@@ -1,0 +1,91 @@
+jdbc: 
+  type: mysql
+  driverClassName: com.mysql.jdbc.Driver
+  url: @jdbc.url@
+  username: @jdbc.username@
+  password: @jdbc.password@
+
+#dbcp settings
+dbcp: 
+  initialSize: 5
+  maxActive: 20
+  maxIdle: 10
+
+#home page ad size
+conf.web: 
+  indexAdsSize: 5
+#cross menu max depth
+  crossMaxDepth: 2
+#vertical menu max depth
+  verticalMaxDepth: 3
+#home page product size
+  indexProductSize: 12
+#home page news size
+  indexNewsSize: 8
+#company desc length
+  companyLength: 500
+  from: @conf.email.from@
+  to: @conf.email.to@
+#generationed static page local path
+  htmlPath: @html.path@
+#upload pic local path
+  picPath: @pic.path@
+#company config file local path, avoid classes build override
+  companyConfigPath: @companyConfig.path@
+#web config file local path, avoid classes build override
+  webConfigPath: @webConfig.path@
+#static resources access path
+  staticAceessUrl: @static.accessPath@	
+
+#mybatis
+mybatis: 
+  config-location: classpath:/mybatis/mybatis-config.xml
+
+spring: 
+  datasource: 
+    url: @jdbc.url@
+    username: @jdbc.username@
+    password: @jdbc.password@
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+
+kaptcha: 
+  border: 
+    yesOrNo: yes
+    color: 105,179,90
+  textproducer: 
+    font:
+      color: blue
+      size: 37
+    char: 
+      length: 4
+  image: 
+    width: 125
+    height: 37
+    
+#email config  
+email: 
+  host: @conf.email.host@
+  protocol: @conf.email.protocol@
+  port: @conf.email.port@
+  username: @conf.email.username@
+  password: @conf.email.password@
+  encoding: UTF-8
+  mailSmtpAuth: true
+  prop: true
+  mailSmtpTimeout: 25000
+  mailDebug: @conf.email.debug@
+
+#task.executor
+task: 
+  executor: 
+    corePoolSize: 5
+    maxPoolSize: 10
+    queueCapacity: 25
+
+logging:
+  level: 
+    root: WARN
+  sample: 
+    mybatis: 
+      mapper: TRACE

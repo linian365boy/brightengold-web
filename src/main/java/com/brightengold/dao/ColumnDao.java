@@ -2,11 +2,13 @@ package com.brightengold.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Column;
 
+@Mapper
 public interface ColumnDao {
 	
 	//@Query("select c.id,c.name from Column c where c.parentColumn = null order by c.priority desc,c.id desc")
