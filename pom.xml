@@ -75,6 +75,13 @@
 		</dependency>
 		
 		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <!-- optional=true,依赖不会传递，该项目依赖devtools；之后依赖myboot项目的项目如果想要使用devtools，需要重新引入 -->
+        </dependency>
+		
+		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
@@ -175,6 +182,17 @@
 		    <artifactId>druid</artifactId>
 		    <version>1.0.29</version>
 		</dependency>
+		<!-- Provided -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	    <dependency>
 	      <groupId>junit</groupId>
 	      <artifactId>junit</artifactId>
@@ -202,45 +220,13 @@
     <!-- 插件 -->
 	<pluginManagement>
 		<plugins>
-		<!-- jetty插件 -->
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.15.v20140411</version>
-				<configuration>
-				    <scanIntervalSeconds>0</scanIntervalSeconds>
-					<webAppConfig>
-					  <contextPath>/</contextPath>
-					  <defaultsDescriptor>src/test/resources/webdefault.xml</defaultsDescriptor>
-					</webAppConfig>
-				    <connectors>
-				       <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-				          <port>8081</port>
-				          <maxIdleTime>60000</maxIdleTime>
-				       </connector>
-				     </connectors>
-			    </configuration>
-				<dependencies>
-					<dependency>
-						<groupId>mysql</groupId>
-						<artifactId>mysql-connector-java</artifactId>
-						<version>5.1.10</version>
-					</dependency>
-					<dependency>
-						<artifactId>netty</artifactId>
-						<groupId>org.jboss.netty</groupId>
-						<version>3.2.5.Final</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-                <groupId>org.zeroturnaround</groupId>  
-                <artifactId>jrebel-maven-plugin</artifactId>
-                <version>1.1.5</version>
-                <executions></executions>
+			<!-- 用于将应用打成可直接运行的jar（该jar就是用于生产环境中的jar） 值得注意的是，如果没有引用spring-boot-starter-parent做parent， 
+                且采用了上述的第二种方式，这里也要做出相应的改动 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-	                <!-- 指定生成的jrebel.xml放在哪里，要求放在web应用的 classpath下 -->
-	                <rebelXmlDirectory>${basedir}/src/main/webapp/WEB-INF/classes</rebelXmlDirectory>
+                    <fork>true</fork><!-- 如果没有该项配置，肯呢个devtools不会起作用，即应用不会restart -->
                 </configuration>
             </plugin>
             <plugin>
@@ -251,6 +237,13 @@
 			    	<source>1.7</source>
 			    	<target>1.7</target>
 			    </configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<useSystemClassLoader>false</useSystemClassLoader>
+				</configuration>
 			</plugin>
 			<plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
