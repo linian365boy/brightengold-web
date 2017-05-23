@@ -32,6 +32,8 @@ public class HomeController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model) {
+		logger.debug("jjjj");
+		logger.info("info");
 		return "admin/login";
 	}
 	

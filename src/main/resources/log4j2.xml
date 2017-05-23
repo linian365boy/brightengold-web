@@ -8,8 +8,8 @@
 		</Console>
 
 		<!-- info信息日志 -->
-		<RollingFile name="info" fileName="${logback.back.file}/info.log"
-			filePattern="${logback.back.file}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+		<RollingFile name="infoLog" fileName="@log4j2.back.file@/info.log"
+			filePattern="@log4j2.back.file@/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
 			<Filters>
 				<ThresholdFilter level="INFO" />
 				<ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL" />
@@ -22,8 +22,8 @@
 		</RollingFile>
 
 		<!-- warn信息日志 -->
-		<RollingFile name="warn" fileName="${logback.back.file}/warn.log"
-			filePattern="${logback.back.file}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+		<RollingFile name="warnLog" fileName="@log4j2.back.file@/warn.log"
+			filePattern="@log4j2.back.file@/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
 			<Filters>
 				<ThresholdFilter level="WARN" />
 				<ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL" />
@@ -36,8 +36,8 @@
 		</RollingFile>
 
 		<!-- error信息日志 -->
-		<RollingFile name="error" fileName="${logback.back.file}/error.log"
-			filePattern="${logback.back.file}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+		<RollingFile name="errorLog" fileName="@log4j2.back.file@/error.log"
+			filePattern="@log4j2.back.file@/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
 			<ThresholdFilter level="ERROR" />
 			<PatternLayout pattern="%d{yyyy/MM/dd HH:mm:ss.sss} [%-5p] %c - %m%n" />
 			<Policies>
@@ -49,8 +49,8 @@
 
 	<!-- Application Loggers -->
 	<Loggers>
-		<Root level="DEBUG">
-            ${logback.log.console}
+		<Root level="@log4j2.log.level@">
+            @log4j2.log.console@
             <AppenderRef ref="infoLog"/>
             <AppenderRef ref="warnLog"/>
             <AppenderRef ref="errorLog"/>
