@@ -276,12 +276,12 @@ public class ViewController {
             // write the data out
             ImageIO.write(bi, "jpg", out);  
             out.flush();  
-        } catch (IOException e) {
+        } catch (Exception e) {
         	logger.error("write verify code error",e);
 		} finally {
             try {
 				out.close();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				logger.error("out close error",e);
 			}  
         }

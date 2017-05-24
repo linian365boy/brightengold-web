@@ -3,6 +3,7 @@ package com.brightengold.initConfig;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesView;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
+import com.brightengold.filter.CaptchaAuthenticationFilter;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 
@@ -122,4 +124,13 @@ public class InitConfiguration {
         registration.addUrlMappings("*.html");
         return registration;
     }
+	
+	@Bean
+	public FilterRegistrationBean captchaFilterRegistration() {
+		FilterRegistrationBean registration = new FilterRegistrationBean(new CaptchaAuthenticationFilter());
+		registration.addUrlPatterns("/admin/checkLogin");
+		return registration;
+	}
+	
+	
 }

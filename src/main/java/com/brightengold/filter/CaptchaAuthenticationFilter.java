@@ -1,5 +1,6 @@
 package com.brightengold.filter;
 
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import cn.rainier.nian.exception.CaptchaException;
 import cn.rainier.nian.utils.Constant;
@@ -22,6 +24,9 @@ import cn.rainier.nian.utils.Constant;
  * @version
  * @since JDK 1.7
  */
+
+@Component
+@WebFilter(urlPatterns = "/admin/checkLogin", filterName = "captchaFilter")
 public class CaptchaAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
 	private static Logger logger = LoggerFactory.getLogger(CaptchaAuthenticationFilter.class);

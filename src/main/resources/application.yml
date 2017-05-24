@@ -52,7 +52,7 @@ spring:
     
 kaptcha: 
   border: 
-    yesOrNo: yes
+    yesOrNo: "yes"
     color: 105,179,90
   textproducer: 
     font:
