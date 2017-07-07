@@ -7,7 +7,7 @@
 	</resultMap>
 	
 	<select id="getAllResource" resultType="Resource">
-		select * from tb_resource order by priority desc
+		select r.*,rr.roleId as roleName from tb_resource r inner join tb_role_resource rr on r.id=rr.resourceId order by priority desc
 	</select>
 	
 	<select id="findResourceByParentId" resultType="Resource">

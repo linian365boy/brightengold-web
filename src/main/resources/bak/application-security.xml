@@ -5,11 +5,11 @@
     xmlns:p="http://www.springframework.org/schema/p"
     xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
-    										http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    										http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/security
-                        http://www.springframework.org/schema/security/spring-security-3.2.xsd
+                        http://www.springframework.org/schema/security/spring-security.xsd
                         http://www.springframework.org/schema/util
-                        http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+                        http://www.springframework.org/schema/util/spring-util.xsd">
 	
 	<http pattern="/resources/**" security="none"/>
     <http pattern="/admin/login*" security="none"/>
@@ -30,27 +30,27 @@
     </http>
     
      <!-- 配置认证管理器 -->
-    <authentication-manager alias="authenticationManager">
+    <!-- <authentication-manager alias="authenticationManager">
    		<authentication-provider user-service-ref="userService">
    			<password-encoder hash="md5"/>
    		</authentication-provider>
-    </authentication-manager>
+    </authentication-manager> -->
     
     <!-- 未登录的切入点 -->
     <beans:bean id="myAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
         <beans:property name="loginFormUrl" value="/admin/login.html"/>
     </beans:bean>
     
-    <beans:bean id="captchaAuthenticaionFilter" class="cn.rainier.nian.filter.CaptchaAuthenticationFilter">  
+    <!-- <beans:bean id="captchaAuthenticaionFilter" class="com.brightengold.filter.CaptchaAuthenticationFilter">  
 	    <beans:property name="authenticationManager" ref="authenticationManager" />  
 	    <beans:property name="authenticationFailureHandler" ref="authenticationFailureHandler" />  
 	    <beans:property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />  
 	    <beans:property name="filterProcessesUrl" value="/admin/checkLogin" />  
-	</beans:bean>
+	</beans:bean> -->
     
-  <beans:bean id="accessDecisionManager" class="cn.rainier.nian.security.MyAccessDecisionManager"/>
+  <!-- <beans:bean id="accessDecisionManager" class="cn.rainier.nian.security.MyAccessDecisionManager"/> -->
   
-	<beans:bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+	<!-- <beans:bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
 		<filter-chain-map request-matcher="ant">
 			<filter-chain pattern="/**" filters="
 		           securityContextPersistenceFilter,
@@ -59,48 +59,48 @@
 		           exceptionTranslationFilter,
 		           filterSecurityInterceptor"/>
 		</filter-chain-map>
-	</beans:bean> 
+	</beans:bean>  -->
 		
-	<beans:bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+	<!-- <beans:bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter" /> -->
 	
 	<!-- Used for expressions -->
-	<beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter" id="expressionVoter">
+	<!-- <beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter" id="expressionVoter">
 		<beans:property name="expressionHandler" ref="customExpressionHandler"/>
 	</beans:bean>
 	
-	<beans:bean class="cn.rainier.nian.custom.CustomWebSecurityExpressionHandler" id="customExpressionHandler"/>
+	<beans:bean class="cn.rainier.nian.custom.CustomWebSecurityExpressionHandler" id="customExpressionHandler"/> -->
 	
-	<beans:bean id="usernamePasswordProcessingFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+	<!-- <beans:bean id="usernamePasswordProcessingFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
   		<beans:property name="authenticationManager" ref="authenticationManager"/>
   		<beans:property name="authenticationFailureHandler" ref="authenticationFailureHandler"/>
-	</beans:bean>
+	</beans:bean> -->
 	
-	<beans:bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+	<!-- <beans:bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
 		<beans:property name="defaultFailureUrl" value="/admin/login.html"/>
-	</beans:bean>
+	</beans:bean> -->
 	
-	<beans:bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">  
+	<!-- <beans:bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">  
 	    <beans:property name="defaultTargetUrl" value="/admin/index.html"/>
-	</beans:bean>
+	</beans:bean> -->
 	
-	<beans:bean id="anonymousProcessingFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
+	<!-- <beans:bean id="anonymousProcessingFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
 		<beans:property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
-		<!-- randomly generated key -->
+		randomly generated key
 		<beans:property name="key" value="6EA4FB262C444375BD303DEFF00CB418"/>
-	</beans:bean>
+	</beans:bean> -->
 
-	<beans:bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+	<!-- <beans:bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
 	 <beans:property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
 	  <beans:property name="accessDeniedHandler" ref="accessDeniedHandler"/>
-	</beans:bean>
+	</beans:bean> -->
 
-	<beans:bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+	<!-- <beans:bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
 	  <beans:property name="errorPage" value="/admin/accessDenied.html"/>
-	</beans:bean>
+	</beans:bean> -->
 	
-	<beans:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+	<!-- <beans:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 	  <beans:property name="loginFormUrl" value="/admin/login.html"/>
-	</beans:bean>
+	</beans:bean> -->
 
 	<!-- 引入auth_core.jar start -->
 	<beans:bean id="resourceDetailsBuilder" class="cn.rainier.nian.helper.ResourceDetailsBuilder">

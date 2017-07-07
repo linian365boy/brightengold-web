@@ -28,7 +28,6 @@ import com.brightengold.util.LogType;
 import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
-import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
 import cn.rainier.nian.model.Role;
@@ -47,8 +46,8 @@ public class RoleController {
 	private RoleService roleService;
 	@Autowired
 	private ResourceService resourceService;
-	@Autowired
-	private ResourceDetailsMonitor resourceDetailsMonitor;
+	//@Autowired
+	//private ResourceDetailsMonitor resourceDetailsMonitor;
 	@Autowired
 	private MenuService menuService;
 	private final static Logger logger = LoggerFactory.getLogger(RoleController.class);
@@ -233,7 +232,7 @@ public class RoleController {
 					LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
 					logger.warn("角色{}重新分配了权限{}，result|{}",model.getDescribes(),ress,result, ToStringStyle.SHORT_PREFIX_STYLE);
 					//重新查询DB，更新权限
-					resourceDetailsMonitor.afterPropertiesSet();
+					//resourceDetailsMonitor.afterPropertiesSet();
 					request.getSession().removeAttribute("menuJson");
 					vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+model.getDescribes()+"】分配权限成功！");
 				}else{

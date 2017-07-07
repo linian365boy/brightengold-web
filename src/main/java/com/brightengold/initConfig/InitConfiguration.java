@@ -3,8 +3,6 @@ package com.brightengold.initConfig;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -13,12 +11,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesView;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
-import com.brightengold.filter.CaptchaAuthenticationFilter;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 
@@ -117,20 +113,5 @@ public class InitConfiguration {
 	public UserCache userCache(){
 		return new NullUserCache();
 	}
-	
-	@Bean
-    public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
-        ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
-        registration.addUrlMappings("*.html");
-        return registration;
-    }
-	
-	@Bean
-	public FilterRegistrationBean captchaFilterRegistration() {
-		FilterRegistrationBean registration = new FilterRegistrationBean(new CaptchaAuthenticationFilter());
-		registration.addUrlPatterns("/admin/checkLogin");
-		return registration;
-	}
-	
 	
 }

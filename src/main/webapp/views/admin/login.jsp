@@ -20,22 +20,23 @@ $(function(){
 	 	top.location.href = location.href;
 });
 function changeCode(){
-	jQuery('#kaptchaImage').hide().attr('src', '${ctx}views/getLoginVerifyCode.html?' + Math.floor(Math.random()*100)).fadeIn();  
+	jQuery('#kaptchaImage').hide().attr('src', '${ctx}views/getLoginVerifyCode?' + Math.floor(Math.random()*100)).fadeIn();  
 	event.cancelBubble=true;
 }
 </script>
 </head>
 <body>
-  <form action="${ctx }admin/checkLogin" id="login" method="post">
+  <form action="${ctx }admin/login" id="login" method="post">
   	<h1>Log In</h1>
 	  <div style="margin-top: 15px;color:red;" id="messageDiv">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message }</div>
   	<fieldset id="inputs">
-  		<input class="login" id="username" name="j_username" type="text" placeholder="Username" 
+  		<input class="login" id="username" name="username" type="text" placeholder="Username" 
   		value="${sessionScope['SPRING_SECURITY_LAST_USERNAME']}" autofocus required/>
-  		<input class="login" id="password" name="j_password" type="password" placeholder="Password" required/>
-	  	<input id="captcha" name="captcha" type="text" placeholder="Captcha" required/>
+  		<input class="login" id="password" name="password" type="password" placeholder="Password" required/>
+  		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	  	<%-- <input id="captcha" name="captcha" type="text" placeholder="Captcha" required/>
 		<img src="${ctx}views/getLoginVerifyCode.html" id="kaptchaImage" style="margin-bottom: -15px"/>  
-		<a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">Refresh the code</a>
+		<a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">Refresh the code</a> --%>
   	</fieldset>
   	<fieldset id="actions">
   		<input id="submit" type="submit" value="Log in"/>

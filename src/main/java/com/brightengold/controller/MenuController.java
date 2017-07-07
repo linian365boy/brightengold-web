@@ -27,7 +27,6 @@ import com.brightengold.util.LogType;
 import com.brightengold.vo.MessageVo;
 import com.brightengold.vo.ReturnData;
 
-import cn.rainier.nian.helper.ResourceDetailsMonitor;
 import cn.rainier.nian.model.Menu;
 import cn.rainier.nian.model.Resource;
 import cn.rainier.nian.model.User;
@@ -45,8 +44,8 @@ public class MenuController {
 	private MenuService menuService;
 	@Autowired
 	private ResourceService resourceService;
-	@Autowired
-	private ResourceDetailsMonitor resourceDetailsMonitor;
+	//@Autowired
+	//private ResourceDetailsMonitor resourceDetailsMonitor;
 	private final static Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
 	@RequestMapping({"/menus/list"})
@@ -112,7 +111,7 @@ public class MenuController {
 			resource.setResType(ResourceType.METHOD.getType());
 			if(updateCount>0 && resourceService.saveResource(resource)){
 				//重新查询DB
-				resourceDetailsMonitor.afterPropertiesSet();
+				//resourceDetailsMonitor.afterPropertiesSet();
 				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
 				logger.info("添加菜单{}成功！",menu);
 				vo = new MessageVo(Constant.SUCCESS_CODE);
