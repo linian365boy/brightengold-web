@@ -3,4 +3,4 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<c:set var="ctx" value="http://${header['host']}${pageContext.request.contextPath}/" scope="session"/>
+<c:set var="ctx" value="http://${header['host']}${pageContext.request.contextPath}" scope="session"/>

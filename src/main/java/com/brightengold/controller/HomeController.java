@@ -26,20 +26,13 @@ public class HomeController {
 	
 	@RequestMapping(value={"/index"}, method = RequestMethod.GET)
 	public String home(ModelMap map) {
-		logger.info(".....................enter index page........................");
 		return "admin/index";
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model) {
-		logger.info(".....................enter login page........................");
 		return "admin/login";
 	}
-	
-	/*@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginSuccss(Model model) {
-		return "admin/login";
-	}*/
 	
 	/**
 	 * invalidate:session失效时调用

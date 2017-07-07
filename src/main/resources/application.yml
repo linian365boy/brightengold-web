@@ -47,7 +47,6 @@ spring:
     view: 
       prefix: /views/
       suffix: .jsp
-    static-path-pattern: /resources/**
     
     
 kaptcha: 

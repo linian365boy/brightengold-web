@@ -11,7 +11,7 @@
 	type="image/x-icon">
 <link rel="shortcut icon" href="${ctx }/resources/dist/img/favicon_16X22.ico"
 	type="image/x-icon" />
-<link href="${ctx }resources/dist/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
+<link href="${ctx }/resources/dist/css/login.css?${style_v}" rel="stylesheet" type="text/css"/>
 <!-- jQuery 2.2.3 -->
 <script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <script type="text/javascript">
@@ -20,13 +20,13 @@ $(function(){
 	 	top.location.href = location.href;
 });
 function changeCode(){
-	jQuery('#kaptchaImage').hide().attr('src', '${ctx}views/getLoginVerifyCode?' + Math.floor(Math.random()*100)).fadeIn();  
+	jQuery('#kaptchaImage').hide().attr('src', '${ctx}/views/getLoginVerifyCode?' + Math.floor(Math.random()*100)).fadeIn();  
 	event.cancelBubble=true;
 }
 </script>
 </head>
 <body>
-  <form action="${ctx }admin/login" id="login" method="post">
+  <form action="${ctx }/admin/login" id="login" method="post">
   	<h1>Log In</h1>
 	  <div style="margin-top: 15px;color:red;" id="messageDiv">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message }</div>
   	<fieldset id="inputs">
