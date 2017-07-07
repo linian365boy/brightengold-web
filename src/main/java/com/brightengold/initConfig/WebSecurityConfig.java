@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.addFilterBefore(mySecurityFilter, FilterSecurityInterceptor.class)
 			.authorizeRequests()
-			.antMatchers("/admin/login","/admin/accessDenied","/admin/invalidate").permitAll()
+			.antMatchers("/admin/login","/admin/accessDenied","/admin/invalidate","/admin/logout").permitAll()
 			.antMatchers("/admin/**").authenticated()
 			.and()
 			.formLogin()
