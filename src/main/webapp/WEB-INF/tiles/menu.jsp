@@ -36,7 +36,6 @@
       <form id="menuForm" action="#" style="display: none;" method="post">
       	<input type="hidden" name="text" id="menuText"/>
       	<input type="hidden" name="ptext" id="pmenuText"/>
-      	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
       </form>
     </section>
     <!-- /.sidebar -->

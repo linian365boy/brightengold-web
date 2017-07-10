@@ -1,14 +1,15 @@
 package com.brightengold.initConfig;
 
 import java.sql.SQLException;
+
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 
 @Configuration
@@ -18,7 +19,7 @@ public class DruidConfiguration {
      *
      * @return
      */
-    @Bean
+    /*@Bean
     public ServletRegistrationBean DruidStatViewServle() {
         //org.springframework.boot.context.embedded.ServletRegistrationBean提供类的进行注册.
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
@@ -33,7 +34,7 @@ public class DruidConfiguration {
         //是否能够重置数据.
         servletRegistrationBean.addInitParameter("resetEnable", "false");
         return servletRegistrationBean;
-    }
+    }*/
 
     /**
      * 注册一个：filterRegistrationBean
