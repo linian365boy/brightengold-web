@@ -31,11 +31,11 @@ function changeCode(){
 	  <div style="margin-top: 15px;color:red;" id="messageDiv">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message }</div>
   	<fieldset id="inputs">
   		<input class="login" id="username" name="username" type="text" placeholder="Username" 
-  		value="${sessionScope['SPRING_SECURITY_LAST_USERNAME']}" autofocus required/>
+  		value="${sessionScope['SPRING_SECURITY_LAST_USERNAME']}" required/>
   		<input class="login" id="password" name="password" type="password" placeholder="Password" required/>
-	  	<%-- <input id="captcha" name="captcha" type="text" placeholder="Captcha" required/>
+	  	<input id="captcha" name="validateCode" type="text" placeholder="Captcha" required/>
 		<img src="${ctx}/views/getLoginVerifyCode" id="kaptchaImage" style="margin-bottom: -15px"/>  
-		<a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">Refresh the code</a> --%>
+		<a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">Refresh the code</a>
   	</fieldset>
   	<fieldset id="actions">
   		<input id="submit" type="submit" value="Log in"/>

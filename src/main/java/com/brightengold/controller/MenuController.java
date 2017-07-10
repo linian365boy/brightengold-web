@@ -293,7 +293,7 @@ public class MenuController {
 			jsonStr.append("]}");
 		}
 		jsonStr.append("]}");
-		logger.info("能够访问的菜单json字符串menuJson=>{}",jsonStr.toString());
+		logger.info("can enter menu json => {}",jsonStr.toString());
 		session.setAttribute("menuJson", jsonStr.toString());
 		return jsonStr.toString();
 	}

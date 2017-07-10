@@ -266,7 +266,7 @@ public class ViewController {
         String capText = captchaProducer.createText();  
         // store the text in the session  
         session.setAttribute(cn.rainier.nian.utils.Constant.LOGIN_VERIFY_CODE_KEY, capText);
-        logger.debug("verify code|{}",capText);
+        logger.info("verify code|{}",capText);
         // create the image with the text  
         BufferedImage bi = null;
         ServletOutputStream out = null;

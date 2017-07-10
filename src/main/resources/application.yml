@@ -59,12 +59,12 @@ kaptcha:
   textproducer: 
     font:
       color: blue
-      size: 37
+      size: 32
     char: 
       length: 4
   image: 
     width: 125
-    height: 37
+    height: 41
     
 #email config  
 email: 
