@@ -1,8 +1,11 @@
 nian
 ====
 
-Brightengold furniture web project with Java.It is benifit for us to Develop and manage project.
+#### Brightengold furniture web project with Java.It is benifit for us to Develop and manage project.
 
-@TODO
-该分支dao层采用mybatis.
-灵活写sql.没有那么笨重。
+###### @DONE
+> 该分支dao层采用mybatis.<br/>
+> 灵活写sql.没有那么笨重。
+###### @TODO
+> 删除不必要的文件
+
