@@ -53,7 +53,7 @@ public class CategoryController {
 	 */
 	@RequestMapping("/categorys/list")
 	public String list(HttpServletRequest request, ModelMap map){
-		map.put("ajaxListUrl", "admin/goods/category/categorys/getJsonList.html");
+		map.put("ajaxListUrl", "admin/goods/category/categorys/getJsonList");
 		return "admin/goods/category/list";
 	}
 	

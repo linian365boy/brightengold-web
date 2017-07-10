@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 	var update = function(obj){
-		var url = '${ctx}admin/sys/role/'+obj.name+'/update.html';
+		var url = '${ctx}/admin/sys/role/'+obj.name+'/update';
 		art.dialog.open(url,{
 			title:'编辑角色信息',
 			id:'bianji',
@@ -16,7 +16,7 @@
 		};
 		
 		var tianjia = function(){
-			var url = "${ctx}admin/sys/role/add.html";
+			var url = "${ctx}/admin/sys/role/add";
 			art.dialog.open(url,{
 				title:'添加角色',
 				id:'tianjia',
@@ -28,7 +28,7 @@
 		
 		var del = function(obj){
 			art.dialog.confirm('确定删除此['+obj.describes+']角色？',function(){
-				var url = '${ctx}admin/sys/role/'+obj.name+'/del.html';
+				var url = '${ctx}/admin/sys/role/'+obj.name+'/del';
 				$.post(url,function(json){
 			    		if(json.code==200){
 			    			$("button[name='refresh']",window.document).click();
@@ -40,13 +40,13 @@
 		};
 		
 		function qxfp(obj){
-			$.get("${ctx}admin/sys/role/"+obj.name+"/qxfp.html",function(data){
+			$.get("${ctx}/admin/sys/role/"+obj.name+"/qxfp",function(data){
 				$("div.content-wrapper").html(data);
 			});
 		}
 		
 		function view(obj){
-			art.dialog.load("${ctx}admin/sys/role/"+obj.name+"/viewResource.html", {
+			art.dialog.load("${ctx}/admin/sys/role/"+obj.name+"/viewResource", {
 			    title: '查看权限',
 			    width: 768,
 			    id:'view',
@@ -88,7 +88,7 @@
         <small>更轻松管理您的权限信息</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
         <li class="active">角色管理</li>
       </ol>
@@ -118,7 +118,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx}/${ajaxListUrl}">
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>
@@ -143,9 +143,9 @@
 					</td>
 					<td>
 						<input type="image" name="${role.name }" onclick="update(this);"
-						src="${ctx }resources/images/icn_edit.png" title="修改"/>
+						src="${ctx}/resources/images/icn_edit.png" title="修改"/>
 						<input type="image" name="${role.name }" onclick="del(this);" 
-						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
+						src="${ctx}/resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
 					</td>
 				</tr>
 			</c:forEach>

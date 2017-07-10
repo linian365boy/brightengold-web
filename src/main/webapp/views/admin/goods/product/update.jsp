@@ -2,8 +2,8 @@
     pageEncoding="UTF-8"%>
      <%@include file="../../../commons/include.jsp" %>
 <title>商品编辑</title>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/lang/zh-cn.js"></script>
+<script type="text/javascript" src="${ctx }/resources/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx }/resources/plugins/ckeditor/lang/zh-cn.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
@@ -63,7 +63,7 @@ $(document).ready(function(){
 	function changeCol(obj){
 		var cateId = $(obj).val();
 		var currentCateId = "${model.categoryId}";
-		$.post("${ctx }admin/goods/category/getChildrenCate/"+cateId+".html",{
+		$.post("${ctx }/admin/goods/category/getChildrenCate/"+cateId+"",{
 			parentCateId:cateId
 		},function(json){
 			$(obj).next().remove();
@@ -87,7 +87,7 @@ $(document).ready(function(){
         <small>更轻松管理您的产品</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">产品管理</a></li>
         <li class="active">产品管理</li>
       </ol>
@@ -103,7 +103,7 @@ $(document).ready(function(){
                   <label class="error"></label>
                 </div><!-- /.box-header -->
 	<form id="form" class="form-horizontal"
-	 action="${ctx }admin/goods/product/${model.id }/update.html" method="post" enctype="multipart/form-data">
+	 action="${ctx }/admin/goods/product/${model.id }/update" method="post" enctype="multipart/form-data">
 	 <div class="box-body">
 	 	<div class="form-group">
 			    <label for="enName" class="col-sm-2 control-label">商品名称<code>*</code></label>

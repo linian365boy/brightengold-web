@@ -33,7 +33,7 @@ public class FeedbackController {
 	
 	@RequestMapping({"/feedbacks/list"})
 	public String list(ModelMap map,HttpServletRequest request){
-		map.put("ajaxListUrl", "admin/feedback/feedbacks/getJsonList.html");
+		map.put("ajaxListUrl", "admin/feedback/feedbacks/getJsonList");
 		return "admin/feedback/list";
 	}
 	

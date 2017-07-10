@@ -47,7 +47,7 @@ public class AdvertisementController {
 	
 	@RequestMapping(value={"/ads/list"})
 	public String list(HttpServletRequest request,ModelMap map){
-		map.put("ajaxListUrl", "admin/ad/ads/getJsonList.html");
+		map.put("ajaxListUrl", "admin/ad/ads/getJsonList");
 		return "admin/ad/list";
 	}
 	

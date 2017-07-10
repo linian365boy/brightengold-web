@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Rockechogroup welcome you</title>
 <link rel="stylesheet" type="text/css"
-	href="${ctx}resources/css/style.css" />
+	href="${ctx}/resources/css/style.css" />
 
 </head>
 <body >
@@ -26,14 +26,14 @@
 				<div style="position: absolute; top:30%; left:100%;border:0px;width:500px;padding:40px;border-left:1px dashed #375a90;">
 				<div align="left">
 					<h2>
-						<img src="${ctx}resources/images/error.png" style="padding-top:10px"/><strong style="color:red;position: absolute; top:25%;padding-left:10px;">No Right！</strong>
+						<img src="${ctx}/resources/images/error.png" style="padding-top:10px"/><strong style="color:red;position: absolute; top:25%;padding-left:10px;">No Right！</strong>
 					</h2><br />
 
 					<font> Sorry. You have no access to this address.
 					</font>
 					<br />
 					<br /> <a href="javascript:history.back(-1)">back</a> <br />
-					<br /> <a href="${ctx}login">go to login</a><br />
+					<br /> <a href="${ctx}/login">go to login</a><br />
 			</div>
 			</div>
 		</div>

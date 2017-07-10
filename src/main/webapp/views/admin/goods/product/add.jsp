@@ -2,8 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@include file="/views/commons/include.jsp" %>
 <title>商品新增</title>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/lang/zh-cn.js"></script>
+<script type="text/javascript" src="${ctx }/resources/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx }/resources/plugins/ckeditor/lang/zh-cn.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
@@ -65,7 +65,7 @@
 			}
 		});
 		
-		$.getJSON("${ctx}admin/goods/category/getParentByAjax/0.html",function(returnJson){
+		$.getJSON("${ctx}/admin/goods/category/getParentByAjax/0",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
@@ -79,7 +79,7 @@
 	
 	function changeCol(obj){
 		var cateId = $(obj).val();
-		$.post("${ctx }admin/goods/category/getChildrenCate/"+cateId+".html",{
+		$.post("${ctx }/admin/goods/category/getChildrenCate/"+cateId+"",{
 			parentCateId:cateId
 		},function(json){
 			$(obj).next().remove();
@@ -103,7 +103,7 @@
         <small>更轻松管理您的产品</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">产品管理</a></li>
         <li class="active">产品管理</li>
       </ol>
@@ -118,7 +118,7 @@
 					<label class="error hide"></label>
 				</div>
                 <!-- form start -->
-                <form id="form" class="form-horizontal content" action="${ctx }admin/goods/product/add.html" 
+                <form id="form" class="form-horizontal content" action="${ctx }/admin/goods/product/add" 
 		method="post" enctype="multipart/form-data">
                   <div class="box-body">
                     <div class="form-group">
@@ -186,7 +186,7 @@
 		<article class="module width_full">
 		<div class="tab_container">
 		<div id="tab1" class="tab_content">
-	<form id="form" class="form-horizontal" action="${ctx }admin/goods/product/add.html" 
+	<form id="form" class="form-horizontal" action="${ctx }admin/goods/product/add" 
 		method="post" enctype="multipart/form-data">
              <div class="form-group">
 			    <label for="enName" class="col-sm-1 control-label">商品名称<span class="asterisk">*</span></label>

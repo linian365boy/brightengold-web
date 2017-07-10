@@ -2,8 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript" src="/resources/plugins/datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/lang/zh-cn.js"></script>
+<script type="text/javascript" src="${ctx}/resources/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/resources/plugins/ckeditor/lang/zh-cn.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
 <link rel="stylesheet" href="/resources/plugins/datetimepicker/bootstrap-datetimepicker.min.css"/>
@@ -73,7 +73,7 @@
         <small>更轻松管理您的产品</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
         <li class="active">公司管理</li>
       </ol>
@@ -90,7 +90,7 @@
             <!-- /.box-header -->
             <div class="box-body">
 		<div id="tab1" class="tab_content">
-			<form id="form" action="${ctx }admin/sys/company/update.html" method="post" 
+			<form id="form" action="${ctx}/admin/sys/company/update" method="post" 
 			enctype="multipart/form-data" class="form-horizontal">
 				<div class="form-group">
 					    <label for="name" class="col-sm-2 control-label">公司名称<code>*</code></label>

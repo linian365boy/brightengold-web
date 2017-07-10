@@ -35,7 +35,7 @@ function changeCode(){
   		<input class="login" id="password" name="password" type="password" placeholder="Password" required/>
   		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	  	<%-- <input id="captcha" name="captcha" type="text" placeholder="Captcha" required/>
-		<img src="${ctx}views/getLoginVerifyCode.html" id="kaptchaImage" style="margin-bottom: -15px"/>  
+		<img src="${ctx}/views/getLoginVerifyCode" id="kaptchaImage" style="margin-bottom: -15px"/>  
 		<a href="javascript:void(0);" id="kaptchaHref" onclick="changeCode();">Refresh the code</a> --%>
   	</fieldset>
   	<fieldset id="actions">

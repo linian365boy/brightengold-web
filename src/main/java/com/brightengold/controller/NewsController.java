@@ -52,7 +52,7 @@ public class NewsController {
 	
 	@RequestMapping({"/news/list"})
 	public String list(HttpServletRequest request,ModelMap map){
-		map.put("ajaxListUrl", "admin/news/news/getJsonList.html");
+		map.put("ajaxListUrl", "admin/news/news/getJsonList");
 		return "admin/news/list";
 	}
 	

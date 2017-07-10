@@ -19,7 +19,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$.getJSON("${ctx}admin/sys/col/getParentByAjax/1.html",function(returnJson){
+		$.getJSON("${ctx}/admin/sys/col/getParentByAjax/1",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
@@ -40,7 +40,7 @@
 					required:true,
 					remote:{
 						type:'POST',
-						url:'${ctx}admin/sys/col/existCol.html'
+						url:'${ctx}/admin/sys/col/existCol'
 					}
 				},
 				"priority":{
@@ -86,7 +86,7 @@
 	});
 	function changeCol(obj){
 		var colId = $(obj).val();
-		$.post("${ctx }admin/sys/col/getChildren/"+colId+".html",{
+		$.post("${ctx}/admin/sys/col/getChildren/"+colId+"",{
 			id:colId
 		},function(json){
 			$(obj).next().remove();
@@ -105,7 +105,7 @@
 	</script>
 </head>
 <body>
-	<form class="form-horizontal content" id="form" method="post" action="${ctx }admin/sys/col/add.html" target="_parent">
+	<form class="form-horizontal content" id="form" method="post" action="${ctx}/admin/sys/col/add" target="_parent">
   <div class="form-group">
     <label for="parentColumn" class="col-sm-2 control-label">父级栏目</label>
     <div class="col-xs-8">

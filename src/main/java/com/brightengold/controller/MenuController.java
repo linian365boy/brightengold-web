@@ -50,7 +50,7 @@ public class MenuController {
 	
 	@RequestMapping({"/menus/list"})
 	public String list(HttpServletRequest request,ModelMap map){
-		map.put("ajaxListUrl","admin/sys/menu/menus/getJsonList.html");
+		map.put("ajaxListUrl","admin/sys/menu/menus/getJsonList");
 		return "admin/sys/menu/list";
 	}
 	

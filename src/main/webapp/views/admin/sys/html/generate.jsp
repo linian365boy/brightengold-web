@@ -7,11 +7,11 @@
 		if(code!=''){
 			$.ajax({
 				   type: "POST",
-				   url: "${ctx }admin/sys/html/"+code+"/generate.html",
+				   url: "${ctx}/admin/sys/html/"+code+"/generate",
 				   beforeSend: function(){
 					   art.dialog({
 						   id:'beforeTips',
-						   content:'<img src="${ctx }resources/js/skins/icons/loading.gif"/>正在生成中...',
+						   content:'<img src="${ctx}/resources/js/skins/icons/loading.gif"/>正在生成中...',
 						   lock:true
 					   });
 				   },
@@ -49,11 +49,11 @@
 	function gennerateAllPage(){
 			$.ajax({
 				   type: "POST",
-				   url: "${ctx }admin/sys/html/generateAll.html",
+				   url: "${ctx}/admin/sys/html/generateAll",
 				   beforeSend: function(){
 					   art.dialog({
 						   id:'gennerateAllPageTips',
-						   content:'<img src="${ctx }resources/js/skins/icons/loading.gif"/>正在生成中...',
+						   content:'<img src="${ctx}/resources/js/skins/icons/loading.gif"/>正在生成中...',
 						   lock:true
 					   });
 				   },
@@ -92,7 +92,7 @@
         <small>更轻松管理您的网站</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">页面生成管理</a></li>
         <li class="active">静态页面生成</li>
       </ol>

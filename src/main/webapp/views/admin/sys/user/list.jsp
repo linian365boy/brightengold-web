@@ -11,7 +11,7 @@
 			resize: false
 		});
 		jQuery.ajax({
-			url:'${ctx}admin/sys/user/'+obj.id+".html",
+			url:'${ctx}/admin/sys/user/'+obj.id+"",
 			type:'GET',
 			success:function(data){
 				myDialog.content(data);
@@ -24,7 +24,7 @@
 	}
 	
 	var update = function(obj){
-		var url = '${ctx}admin/sys/user/'+obj.id+'/update.html';
+		var url = '${ctx}/admin/sys/user/'+obj.id+'/update';
 		art.dialog.open(url,{
 			title:'编辑员工信息',
 			id:'bianji',
@@ -35,7 +35,7 @@
 		};
 		
 		var tianjia = function(){
-			var url = "${ctx}admin/sys/user/add.html";
+			var url = "${ctx}/admin/sys/user/add";
 			art.dialog.open(url,{
 				title:'添加用户',
 				id:'tianjia',
@@ -47,7 +47,7 @@
 		
 		var resetPassword = function(obj){
 			art.dialog.confirm('密码将重置为用户名'+obj.username+'，是否确认继续？',function(){
-			var url = '${ctx}admin/sys/user/'+obj.username+'/reset.html';
+			var url = '${ctx}/admin/sys/user/'+obj.username+'/reset';
 			jQuery.get(url,function(json){
 			    		art.dialog.tips(json.message, 2);
 				},"json");
@@ -56,7 +56,7 @@
 		
 		var unsubscribe = function(obj){
 			art.dialog.confirm('注销后将不能使用此账户！是否确定注销此账户？',function(){
-				var url = '${ctx}admin/sys/user/'+obj.username+'/unsubscribe.html';
+				var url = '${ctx}/admin/sys/user/'+obj.username+'/unsubscribe';
 				jQuery.get(url,function(json){
 			    		if(json.code==200){
 				    		$("button[name='refresh']",window.document).click();
@@ -115,7 +115,7 @@
         <small>更轻松管理您的后台登录用户信息</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
         <li class="active">用户管理</li>
       </ol>
@@ -145,7 +145,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx}/${ajaxListUrl}">
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>
@@ -177,12 +177,12 @@
 						<td>
 							<c:if test="${user.accountNonLocked }">
 								<input type="image" name="${user.username }" 
-									src="${ctx }resources/images/icn_reset.png" onclick="resetPassword(this);" 
+									src="${ctx}/resources/images/icn_reset.png" onclick="resetPassword(this);" 
 									title="重置密码"/>&nbsp;&nbsp;
 								<input type="image" name="${user.username }" onclick="update(this);" 
-									src="${ctx }resources/images/icn_edit.png" title="编辑"/>&nbsp;&nbsp;
+									src="${ctx}/resources/images/icn_edit.png" title="编辑"/>&nbsp;&nbsp;
 								<input type="image" name="${user.username }" onclick="unsubscribe(this);"
-									src="${ctx }resources/images/icn_trash.png" title="注销"/>
+									src="${ctx}/resources/images/icn_trash.png" title="注销"/>
 							</c:if>
 						</td>
 					</tr>

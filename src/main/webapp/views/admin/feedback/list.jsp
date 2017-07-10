@@ -10,7 +10,7 @@
 			resize: false
 		});
 		jQuery.ajax({
-			url:'${ctx}admin/feedback/'+row.id+'.html',
+			url:'${ctx}/admin/feedback/'+row.id+'',
 			type:'GET',
 			success:function(data){
 				myDialog.content(data);
@@ -25,7 +25,7 @@
 		var del = function(obj){
 			var feedbackId = $(obj).attr("name");
 			art.dialog.confirm('确定删除此留言?',function(){
-				var url = '${ctx}admin/feedback/'+feedbackId+'/del.html';
+				var url = '${ctx}/admin/feedback/'+feedbackId+'/del';
 				window.location.href=url;
 			});
 		};
@@ -53,7 +53,7 @@
         <small>更轻松管理您的客户反馈信息</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">反馈管理</a></li>
         <li class="active">客户留言</li>
       </ol>
@@ -77,7 +77,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx }/${ajaxListUrl}">
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>

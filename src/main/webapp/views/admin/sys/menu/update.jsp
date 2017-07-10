@@ -72,7 +72,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-	<form id="form" action="${ctx}admin/sys/menu/${model.id }/update.html" 
+	<form id="form" action="${ctx}/admin/sys/menu/${model.id }/update" 
 		class="form-horizontal content" method="post" target="_parent">
             <div class="form-group">
 		    	<label for="name" class="col-sm-3 control-label">名称<code>*</code></label>

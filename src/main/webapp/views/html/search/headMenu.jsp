@@ -18,8 +18,8 @@
         <div class="headerwrap">
             <header id="masthead" class="site-header" role="banner">
          		<div class="headerinnerwrap">
-					                        <a class="home-link" href="${ctx}" title="${(company.name)}" rel="home">
-                            <span><img src="${ctx}resources/${(company.logo)}" alt="${(company.name)}" /></span>
+					                        <a class="home-link" href="${ctx}/" title="${(company.name)}" rel="home">
+                            <span><img src="${ctx}/resources/${(company.logo)}" alt="${(company.name)}" /></span>
                         </a>
                     	
         
@@ -31,18 +31,18 @@
                             <ul id="menu-%e8%8f%9c%e5%8d%952" class="nav-menu">
                             	<li id="menu-item-680" class="menu-item menu-item-type-post_type menu-item-object-page　page_item page-item-75 
                             	menu-item-680 ${empty column?'current-menu-item current_page_item':''}">
-                            		<a href="${ctx}">Home</a>
+                            		<a href="${ctx}/">Home</a>
                             	</li>
                             	<c:if test="${fn:length(crossCol)>0 }">
 								<c:forEach items="${ crossCol}" var="col">
 									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children 
 									menu-item-685 ${((!empty column) && (col.id)==(column.id))?'current-menu-item current_page_item':''}">
-										<a href="${ctx}views/html/col/${col.code}.htm">${col.enName}</a>
+										<a href="${ctx}/views/html/col/${col.code}.htm">${col.enName}</a>
 										<c:if test="${fn:length(col.childColumn)>0}">
 										<ul class="sub-menu">
 											<c:forEach items="${ col.categorys}" var="cate">
 												<li id="menu-item-818" class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-818">
-												<a href="${ctx}views/html/col/${cate.id}.htm">${(cate.enName)}</a></li>													
+												<a href="${ctx}/views/html/col/${cate.id}.htm">${(cate.enName)}</a></li>													
 											</c:forEach>
 										</ul>
 										</c:if>
@@ -64,7 +64,7 @@
 	       			<ul>
 					<c:if test="${fn:length(indexAds)>0}">
 						<c:forEach items="${indexAds}" var="ad">
-							<li style="background-image: url('${ctx}resources/${ad.picUrl}');cursor:pointer;"
+							<li style="background-image: url('${ctx}/resources/${ad.picUrl}');cursor:pointer;"
 							onclick='javascript:locationTo("${(ad.url)}");'/>
 						</c:forEach>
 					</c:if>

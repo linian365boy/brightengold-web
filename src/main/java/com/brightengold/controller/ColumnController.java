@@ -37,7 +37,7 @@ public class ColumnController {
 	
 	@RequestMapping(value={"/cols/list"})
 	public String list(HttpServletRequest request,ModelMap map){
-		map.put("ajaxListUrl", "admin/sys/col/cols/getJsonList.html");
+		map.put("ajaxListUrl", "admin/sys/col/cols/getJsonList");
 		return "admin/sys/col/list";
 	}
 	

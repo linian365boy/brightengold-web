@@ -25,7 +25,7 @@ $(document).ready(function(){
 					required:true,
 					remote:{
 						type:'POST',
-						url:'${ctx}admin/sys/user/existUser.html',
+						url:'${ctx}/admin/sys/user/existUser',
 						data:{
 							username:function(){
 								return $("#username").val();
@@ -68,7 +68,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-	<form id="form" class="form-horizontal content" action="${ctx}admin/sys/user/${model.id }/update.html" method="post" target="_parent">
+	<form id="form" class="form-horizontal content" action="${ctx}/admin/sys/user/${model.id }/update" method="post" target="_parent">
 	<div class="form-group">
 	    	<label for="username" class="col-sm-2 control-label">用户名<code>*</code></label>
 			<div class="col-sm-8">

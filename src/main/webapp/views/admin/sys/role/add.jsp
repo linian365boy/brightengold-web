@@ -61,7 +61,7 @@
 </head>
 <body>
 		<form id="form" class="form-horizontal content" 
-		action="${ctx}admin/sys/role/add.html" method="post" target="_parent">
+		action="${ctx}/admin/sys/role/add" method="post" target="_parent">
 			<div class="form-group">
 		    	<label for="describes" class="col-sm-3 control-label">角色<code>*</code></label>
 				<div class="col-sm-8">

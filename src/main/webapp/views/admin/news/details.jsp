@@ -6,7 +6,7 @@
   <head>
     <title>rockechogroup---${news.title }</title>
 	<meta http-equiv="keywords" content="${news.keyWords }"/>
-	 <link href="${ctx }resources/css/basic.css" rel="stylesheet"/>
+	 <link href="${ctx }/resources/css/basic.css" rel="stylesheet"/>
 	 <%@include file="/views/admin/commons/listJsCss.jsp" %>
 	 <%@include file="/views/admin/commons/jsCss.jsp" %>
 </head>
@@ -26,7 +26,7 @@
                     <div class="info-text-foot cFloat">
                 		<div class="fl">
                 		标签：<c:forTokens items="${news.keyWords }" delims=";" var="keyword" varStatus="n">
-                			<a href="${ctx }cu/news/news_li.do?title=${keyword}">${keyword }</a>&nbsp;&nbsp;
+                			<a href="${ctx }/cu/news/news_li.do?title=${keyword}">${keyword }</a>&nbsp;&nbsp;
                 			<c:if test="${!n.last }">
                 				|&nbsp;&nbsp;
                 			</c:if>

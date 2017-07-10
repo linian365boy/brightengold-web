@@ -24,7 +24,7 @@
         <small>更轻松管理您的网站设置</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
         <li class="active">网站设置</li>
       </ol>
@@ -40,7 +40,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-	<form id="form" action="${ctx }admin/sys/webconfig/update.html" method="post" class="form-horizontal">
+	<form id="form" action="${ctx}/admin/sys/webconfig/update" method="post" class="form-horizontal">
 			<div class="form-group">
 			    <label for="keyword" class="col-sm-2 control-label">网站关键字</label>
 			    <div class="col-sm-8">

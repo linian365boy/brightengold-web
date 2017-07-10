@@ -3,7 +3,7 @@
     <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var url = '${ctx}admin/sys/menu/'+obj.id+'/update.html';
+		var url = '${ctx}/admin/sys/menu/'+obj.id+'/update';
 		art.dialog.open(url,{
 			title:'编辑菜单',
 			id:'bianji',
@@ -14,7 +14,7 @@
 		};
 		
 		var tianjia = function(){
-			var url = "${ctx}/admin/sys/menu/add.html";
+			var url = "${ctx}/admin/sys/menu/add";
 			art.dialog.open(url,{
 				title:'添加菜单',
 				id:'tianjia',
@@ -25,7 +25,7 @@
 		};
 		var del = function(obj){
 			art.dialog.confirm('确定删除此【'+obj.name+'】菜单？',function(){
-				var url = '${ctx}admin/sys/menu/'+obj.id+'/del.html';
+				var url = '${ctx}/admin/sys/menu/'+obj.id+'/del';
 				$.post(url,function(json){
 			    		if(json.code==200){
 			    			$("button[name='refresh']",window.document).click();
@@ -47,7 +47,7 @@
         <small>更轻松管理您的后台菜单信息</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
         <li class="active">菜单管理</li>
       </ol>
@@ -77,7 +77,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx}/${ajaxListUrl}">
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>
@@ -102,9 +102,9 @@
 						<td>${menu.priority }</td>
 						<td>
 							<input type="image" onclick="update('${menu.id }');" 
-									src="${ctx }resources/images/icn_edit.png" title="编辑"/>&nbsp;&nbsp;
+									src="${ctx}/resources/images/icn_edit.png" title="编辑"/>&nbsp;&nbsp;
 							<input type="image" onclick="deleteMenu('${menu.id }');"
-									src="${ctx }resources/images/icn_trash.png" title="删除"/>
+									src="${ctx}/resources/images/icn_trash.png" title="删除"/>
 						</td>
 					</tr>
 				</c:forEach>

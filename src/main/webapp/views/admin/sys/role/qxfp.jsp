@@ -1,8 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@include file="/views/commons/include.jsp" %>
 <title>角色权限分配</title>
-<link rel="stylesheet" type="text/css" href="${ctx}resources/plugins/dhtmlx/dhtmlxtree.css"/>
-<script src="${ctx}resources/plugins/dhtmlx/dhtmlxtree.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/plugins/dhtmlx/dhtmlxtree.css"/>
+<script src="${ctx}/resources/plugins/dhtmlx/dhtmlxtree.js"></script>
 <script type="text/javascript">
 	$(function(){
 		<%--包括所有被选中的菜单与资源 --%>
@@ -32,9 +32,9 @@
 		myTree = new dhtmlXTreeObject({
 			parent: "tree",
 			checkbox: true,
-			image_path: "${ctx}resources/plugins/dhtmlx/skins/web/imgs/dhxtree_web/"
+			image_path: "${ctx}/resources/plugins/dhtmlx/skins/web/imgs/dhxtree_web/"
 		});
-		myTree.setXMLAutoLoading("${ctx}admin/sys/menu/findAllMenu.html?name=${role.name}");
+		myTree.setXMLAutoLoading("${ctx}/admin/sys/menu/findAllMenu?name=${role.name}");
 		myTree.setDataMode("json");
 		myTree.enableThreeStateCheckboxes(true);
 		myTree.attachEvent("onCheck", function(id, state){
@@ -46,7 +46,7 @@
 			}
 			$("#str").val(allCheckedArr.split(","));
 		});
-		myTree.load("${ctx}admin/sys/menu/findAllMenu.html?id=0&name=${role.name}",function(){
+		myTree.load("${ctx}/admin/sys/menu/findAllMenu?id=0&name=${role.name}",function(){
 			myTree.openAllItems(0);
 		},"json");
 	}
@@ -58,7 +58,7 @@
         <small>更轻松管理您的权限分配</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
         <li class="active">角色管理</li>
       </ol>
@@ -73,7 +73,7 @@
 						<label class="error hide"></label>
 					</div>
 					<div class="tab_container">
-							<form action="${ctx}admin/sys/role/${role.name }/distribute.html" id="actionForm" class="form-horizontal" method="post">
+							<form action="${ctx}/admin/sys/role/${role.name }/distribute" id="actionForm" class="form-horizontal" method="post">
 								<div class="box-body">
 								<div class="form-group">
 			                      <label class="col-sm-2 control-label" for="enName">当前角色：</label>

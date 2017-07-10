@@ -19,7 +19,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$.getJSON("${ctx}admin/goods/category/getParentByAjax/1.html",function(returnJson){
+		$.getJSON("${ctx}/admin/goods/category/getParentByAjax/1",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
@@ -37,7 +37,7 @@
 					required:true,
 					remote:{
 						type:'POST',
-						url:'${ctx}admin/goods/category/existCategory.html',
+						url:'${ctx}/admin/goods/category/existCategory',
 						data:{
 							enName:function(){
 								return $("#enName").val();
@@ -80,7 +80,7 @@
 	
 	function changeCol(obj){
 		var colId = $(obj).val();
-		$.post("${ctx }admin/sys/col/getChildren/"+colId+".html",{
+		$.post("${ctx }/admin/sys/col/getChildren/"+colId+"",{
 			id:colId
 		},function(json){
 			$(obj).next().remove();
@@ -99,7 +99,7 @@
 	</script>
 </head>
 <body>
-	<form id="form" class="form-horizontal content" action="${ctx }admin/goods/category/add.html" 
+	<form id="form" class="form-horizontal content" action="${ctx }/admin/goods/category/add" 
 		method="post" target="_parent">
 			<div class="form-group">
 			    <label for="parentCs" class="col-sm-2 control-label">所属栏目</label>

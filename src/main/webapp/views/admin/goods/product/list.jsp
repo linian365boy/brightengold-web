@@ -3,20 +3,20 @@
     <%@include file="../../../commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		$.get('${ctx}admin/goods/product/'+obj.id+'/update.html',function(data){
+		$.get('${ctx}/admin/goods/product/'+obj.id+'/update',function(data){
 			$("div.content-wrapper").html(data);
 		});
 	};
 		
 	var tianjia = function(){
-		$.get("${ctx}admin/goods/product/add.html",function(data){
+		$.get("${ctx}/admin/goods/product/add",function(data){
 			$("div.content-wrapper").html(data);
 		});
 	};
 		
 	var del = function(obj){
 		art.dialog.confirm('确定删除此商品【'+obj.enName+'】？',function(){
-			var url = '${ctx}admin/goods/product/'+obj.id+'/del.html';
+			var url = '${ctx}/admin/goods/product/'+obj.id+'/del';
 			$.post(url,function(json){
 	    		if(json.code==200){
 	    			$("button[name='refresh']",window.document).click();
@@ -28,10 +28,10 @@
 	};
 	
 	var publish = function(obj){
-		$.get("${ctx}admin/goods/product/"+obj.id+"/checkPub.html",function(rs){
+		$.get("${ctx}/admin/goods/product/"+obj.id+"/checkPub",function(rs){
 			if(rs=="1"){
 				art.dialog.confirm('此商品【'+obj.enName+'】已发布，确定重新发布？',function(){
-					var url = '${ctx}admin/goods/product/'+obj.id+'/release.html';
+					var url = '${ctx}/admin/goods/product/'+obj.id+'/release';
 					$.post(url,function(json){
 						if(json.code==200){
 			    			$("button[name='refresh']",window.document).click();
@@ -42,7 +42,7 @@
 				});
 			}else{
 				art.dialog.confirm('确定发布此商品【'+obj.enName+'】？',function(){
-					var url = '${ctx}admin/goods/product/'+obj.id+'/release.html';
+					var url = '${ctx}/admin/goods/product/'+obj.id+'/release';
 					$.post(url,function(json){
 						if(json.code==200){
 			    			$("button[name='refresh']",window.document).click();
@@ -62,7 +62,7 @@
 					statusStr = "锁定";
 				}
 				art.dialog.confirm('确定修改【'+row.enName+'】状态为'+statusStr+'？',function(){
-					$.post("${ctx}admin/goods/product/"+row.id+"/changeStatus.html",
+					$.post("${ctx}/admin/goods/product/"+row.id+"/changeStatus",
 							{status:row.status},function(text){
 						if(text=="1"){
 							if(row.status){
@@ -126,7 +126,7 @@
         <small>更轻松管理您的产品</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">产品管理</a></li>
         <li class="active">产品管理</li>
       </ol>
@@ -156,7 +156,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx }/${ajaxListUrl}">
                 <thead>
                 <tr>
 					<th data-halign="center" data-align="center" data-formatter="runningFormatter">序号</th>

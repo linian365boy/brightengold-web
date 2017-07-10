@@ -10,7 +10,7 @@
 					</h3>
 				</div>
 				<form role="search" method="get" class="woocommerce-product-search"
-					action="${ctx}views/products/search.html">
+					action="${ctx}/views/products/search">
 					<label class="screen-reader-text" for="s">Search for:</label> <input
 						type="search" class="search-field"
 						placeholder="Search Products&hellip;" value="${keyword }" name="keyword"
@@ -28,13 +28,13 @@
 				<ul class="product-categories">
 					<c:forEach items="${categorys}" var="pCategory">
 						<li class="cat-item cat-item-420 cat-parent"><a
-							href="${ctx}views/html/col/${fn:replace(pCategory.enName,' ','')}.htm">${(pCategory.enName)}</a>
+							href="${ctx}/views/html/col/${fn:replace(pCategory.enName,' ','')}.htm">${(pCategory.enName)}</a>
 							<span class="count">(${(pCategory.productsSize)})</span> <c:if
 								test="${fn:length(pCategory.children)>0}">
 								<ul class='children'>
 									<c:forEach items="${(pCategory.children)}" var="cCategory">
 										<li class="cat-item cat-item-410"><a
-											href="${ctx}views/html/col/${fn:replace(cCategory.enName,' ','')}.htm">${(cCategory.enName)}</a>
+											href="${ctx}/views/html/col/${fn:replace(cCategory.enName,' ','')}.htm">${(cCategory.enName)}</a>
 											<span class="count">(${(cCategory.productsSize)})</span></li>
 									</c:forEach>
 								</ul>
@@ -51,7 +51,7 @@
 				<div class="textwidget">
 					<ul class="product-categories">
 						<c:forEach items="${indexNews}" var="news">
-							<li class="cat-item cat-item-18"><a href="${ctx}">${(news.title)}</a>
+							<li class="cat-item cat-item-18"><a href="${ctx}/">${(news.title)}</a>
 							</li>
 						</c:forEach>
 					</ul>

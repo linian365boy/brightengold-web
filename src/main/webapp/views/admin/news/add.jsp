@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="/views/commons/include.jsp" %>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="${ctx }resources/plugins/ckeditor/lang/zh-cn.js"></script>
+<script type="text/javascript" src="${ctx }/resources/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx }/resources/plugins/ckeditor/lang/zh-cn.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
@@ -57,7 +57,7 @@
 	
 	function changeCol(obj){
 		var colId = $(obj).val();
-		$.post("${ctx }admin/sys/col/getChildren/"+colId+".html",{
+		$.post("${ctx }/admin/sys/col/getChildren/"+colId+"",{
 			id:colId
 		},function(json){
 			$(obj).next().remove();
@@ -82,7 +82,7 @@
         <small>更轻松管理您的新闻</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">新闻管理</a></li>
         <li class="active">新闻管理</li>
       </ol>
@@ -96,7 +96,7 @@
 					<h3 class="box-title pull-left">新增新闻</h3>
 					<label class="error hide"></label>
 				</div>
-		<form action="${ctx }admin/news/add.html" class="form-horizontal" id="form" method="post">
+		<form action="${ctx }/admin/news/add" class="form-horizontal" id="form" method="post">
 			<div class="box-body">
 			<div class="form-group">
 			    <label class="col-sm-2 control-label">栏目<code>*</code></label>

@@ -52,7 +52,7 @@ public class UserController {
 	
 	@RequestMapping({"/users/list"})
 	public String list(ModelMap map,HttpServletRequest request){
-		map.put("ajaxListUrl","admin/sys/user/users/getJsonList.html");
+		map.put("ajaxListUrl","admin/sys/user/users/getJsonList");
 		return "admin/sys/user/list";
 	}
 	

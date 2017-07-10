@@ -5,10 +5,10 @@
 				共有${page.totalRowNum}条记录，当前是${page.currentPageIndex}/${page.totalPageNum }页
 				&nbsp;&nbsp;
 					<c:if test="${page.hasFirst}">
-							<a href="${ctx}${param.url}/1.html"> 首页 </a>
+							<a href="${ctx}/${param.url}/1"> 首页 </a>
 					</c:if>
 					<c:if test="${page.hasPrev}">
-						<a href="${ctx}${param.url}/${page.currentPageIndex - 1}.html"> 上一页
+						<a href="${ctx}/${param.url}/${page.currentPageIndex - 1}"> 上一页
 						</a>
 					</c:if>
 					<c:forEach begin="${page.startPageIndex}" end="${page.endPageIndex}"
@@ -18,15 +18,15 @@
 								<a class="number current" title="${i }">${i }</a>
 		 					</c:when>
 							<c:otherwise>
-								<a class="number" title="${i }" href="${ctx}${param.url}/${i }.html">${i }</a>
+								<a class="number" title="${i }" href="${ctx}/${param.url}/${i }">${i }</a>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
 					<c:if test="${page.hasNext}">
-						<a href="${ctx}${param.url}/${page.currentPageIndex+1 }.html">
+						<a href="${ctx}/${param.url}/${page.currentPageIndex+1 }">
 							下一页 </a>
 					</c:if>
 					<c:if test="${page.hasLast}">
-						<a href="${ctx}${param.url}/${page.totalPageNum}.html"> 尾页 </a>
+						<a href="${ctx}${param.url}/${page.totalPageNum}"> 尾页 </a>
 					</c:if>
 				</c:if>

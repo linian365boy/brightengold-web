@@ -11,7 +11,7 @@
             <ul class="toggle-footer" style="">
                 <li class="link">
             		<c:forEach items="${categorys}" var="cate">
-                          <a title="${(cate.enName)}" href="${ctx}views/html/col/${fn:replace(pCategory.enName,'\\s*','')}.htm">
+                          <a title="${(cate.enName)}" href="${ctx}/views/html/col/${fn:replace(pCategory.enName,'\\s*','')}.htm">
                                ${(cate.enName)}
                           </a>
                    </c:forEach>

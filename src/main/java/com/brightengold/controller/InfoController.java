@@ -38,7 +38,7 @@ public class InfoController {
 	
 	@RequestMapping({"/list"})
 	public String list(HttpServletRequest request,ModelMap map){
-		map.put("ajaxListUrl","admin/sys/info/getJsonList.html");
+		map.put("ajaxListUrl","admin/sys/info/getJsonList");
 		return "admin/sys/info/list";
 	}
 	

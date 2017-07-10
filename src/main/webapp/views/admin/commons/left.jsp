@@ -38,7 +38,7 @@
 							var smenuName = smenu.attr("text");
 							var smenuUrl = smenu.attr("url");
 							var id = smenu.attr("id");
-							str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}"+smenuUrl+"'>"+smenuName+"</a></li>";
+							str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}/"+smenuUrl+"'>"+smenuName+"</a></li>";
 						}
 						str+="</ul>";
 					};
@@ -67,7 +67,7 @@
 			<script type="text/javascript">
 				$(document).ready(function(){
 					var t = new Date().getTime();
-					$.get("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(xml){
+					$.get("${ctx}/admin/sys/menu/findMenuByRole?t="+t,function(xml){
 						var da = $(xml);
 						var pMenu = da.find("item[url='javascript:void(0);']");
 						var str = "";
@@ -86,7 +86,7 @@
 										var smenuName = smenu.attr("text");
 										var smenuUrl = smenu.attr("url");
 										var id = smenu.attr("id");
-										str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}"+smenuUrl+"'>"+smenuName+"</a></li>";
+										str+="<li class='icn_categories'><a title="+smenuName+" href='${ctx}/"+smenuUrl+"'>"+smenuName+"</a></li>";
 									}
 									str+="</ul>";
 								};
@@ -100,25 +100,6 @@
 	</c:choose>
     </head>
     <body>
-<%-- <section id="secondary_bar">
-		<div class="user">
-			<p><sec:authentication property="principal.realName"/>(<sec:authentication property="principal.username"/>)</p>
-			<!-- <a class="logout_user" href="#" title="Logout">Logout</a> -->
-		</div>
-		<div class="breadcrumbs_container">
-			<article class="breadcrumbs">
-			<a href="${ctx }admin/index.html">首页</a> 
-			<c:if test="${!empty param.menuName}">
-				<div class="breadcrumb_divider"></div>
-				<a href="#" class="${!empty param.menuSubName?'current':'' }">${param.menuName }</a>
-			</c:if>
-			<c:if test="${!empty param.menuSubName }">
-				<div class="breadcrumb_divider"></div>
-				<a class="current">${param.menuSubName }</a>
-			</c:if>
-			</article>
-		</div>
-	</section> --%><!-- end of secondary bar -->
 	
 	<aside id="sidebar" class="column" style="height: 602px;">
 		<footer id="footer">

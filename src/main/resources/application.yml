@@ -47,6 +47,9 @@ spring:
     view: 
       prefix: /views/
       suffix: .jsp
+  http:
+    encoding:
+      force: true
     
     
 kaptcha: 

@@ -28,7 +28,7 @@ $(document).ready(function(){
 					required:true,
 					remote:{
 						type:'POST',
-						url:'${ctx}admin/goods/category/existCategory.html',
+						url:'${ctx}/admin/goods/category/existCategory',
 						data:{
 							en:function(){
 								return "${model.enName}";
@@ -70,13 +70,13 @@ $(document).ready(function(){
 });
 function formSubmit(){
 	var categoryId = "${model.id}";
-	$("#form").attr("action","${ctx}admin/goods/category/"+categoryId+"/update.html");
+	$("#form").attr("action","${ctx}/admin/goods/category/"+categoryId+"/update");
 	$("#form").submit();
 }
 
 function changeCol(obj){
 	var colId = $(obj).val();
-	$.post("${ctx }admin/sys/col/getChildren/"+colId+".html",{
+	$.post("${ctx }/admin/sys/col/getChildren/"+colId+"",{
 		id:colId
 	},function(json){
 		$(obj).next().remove();

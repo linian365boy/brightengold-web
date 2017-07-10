@@ -3,7 +3,7 @@
     <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var url = '${ctx}admin/sys/col/'+obj.id+'/update.html';
+		var url = '${ctx}/admin/sys/col/'+obj.id+'/update';
 		art.dialog.open(url,{
 			title:'编辑栏目信息',
 			id:'bianji',
@@ -14,7 +14,7 @@
 		};
 		
 		var tianjia = function(){
-			var url = "${ctx}admin/sys/col/add.html";
+			var url = "${ctx}/admin/sys/col/add";
 			art.dialog.open(url,{
 				title:'添加栏目类别',
 				id:'tianjia',
@@ -26,7 +26,7 @@
 		
 		var del = function(obj){
 			art.dialog.confirm('确定删除此['+obj.enName+']栏目？',function(){
-				var url = '${ctx}admin/sys/col/'+obj.id+'/delete.html';
+				var url = '${ctx}/admin/sys/col/'+obj.id+'/delete';
 				$.post(url,function(json){
 		    		if(json.code==200){
 		    			$("button[name='refresh']",window.document).click();
@@ -37,7 +37,7 @@
 			});
 		};
 		var setPublishType = function(obj){
-			art.dialog.open("${ctx}admin/sys/col/"+obj.id+"/setPublishContent.html",{
+			art.dialog.open("${ctx}/admin/sys/col/"+obj.id+"/setPublishContent",{
 				title:'发布内容设置',
 				id:'setPublish',
 				width: 768,
@@ -71,7 +71,7 @@
         <small>更轻松管理您的前台菜单栏目</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx}/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">系统管理</a></li>
         <li class="active">栏目管理</li>
       </ol>
@@ -101,7 +101,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx}/${ajaxListUrl}">
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>
@@ -125,9 +125,9 @@
 					<td>${column.priority }</td>
 					<td>
 						<input type="image" name="${column.id }" data-toggle="tooltip" data-placement="top" onclick="update(this);"
-						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
+						src="${ctx}/resources/images/icn_edit.png" title="修改"/>&nbsp;
 						<input type="image" name="${column.id }" onclick="setPublish(this);" 
-						src="${ctx }resources/images/icn_publish.png" data-toggle="tooltip" data-placement="top" 
+						src="${ctx}/resources/images/icn_publish.png" data-toggle="tooltip" data-placement="top" 
 						title="发布设置（当前使用
 						<c:choose>
 							<c:when test="${column.type==1 }">
@@ -146,7 +146,7 @@
 						</c:choose>
 						模式发布）．设置时，其子栏目也会一起设置"/>&nbsp;
 						<input type="image" name="${column.id }" data-toggle="tool1tip" data-placement="top" onclick="del(this);" 
-						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
+						src="${ctx}/resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
 					</td>
 				</tr>
 				</c:forEach>

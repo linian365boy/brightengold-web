@@ -3,13 +3,13 @@
     <%@include file="../../commons/include.jsp" %>
 <script type="text/javascript">
 		var tianjia = function(){
-			var url = '${ctx}admin/news/add.html';
+			var url = '${ctx}/admin/news/add';
 			$.get(url,function(data){
 				$("div.content-wrapper").html(data);
 			});
 		};
 		var update = function(obj){
-			var url = '${ctx}admin/news/'+obj.id+'/update.html';
+			var url = '${ctx}/admin/news/'+obj.id+'/update';
 			$.get(url,function(data){
 				$("div.content-wrapper").html(data);
 			});
@@ -17,7 +17,7 @@
 		//del
 		var del = function(obj){
 			art.dialog.confirm('确定删除此【'+obj.title+'】新闻？',function(){
-				var url = '${ctx}admin/news/'+obj.id+'/del.html';
+				var url = '${ctx}/admin/news/'+obj.id+'/del';
 				$.getJSON(url,function(json){
 		    		if(json.code==200){
 		    			$("button[name='refresh']",window.document).click();
@@ -29,16 +29,16 @@
 		};
 		//purview
 		/* var purview = function(obj){
-			var url = '${ctx}admin/news/'+obj.id+".html";
+			var url = '${ctx}admin/news/'+obj.id+"";
 			window.open(url);
 		}; */
 		//publish
 		var publish = function(obj){
 			var newsId = obj.id;
-			$.get("${ctx}admin/news/"+newsId+"/checkPub.html",function(rs){
+			$.get("${ctx}/admin/news/"+newsId+"/checkPub",function(rs){
 				if(rs=="1"){
 					art.dialog.confirm('此新闻【'+obj.title+'】已发布，确定重新发布？',function(){
-						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
+						$.getJSON("${ctx}/admin/news/"+newsId+"/release",function(data){
 							var dialog = art.dialog({
 								id:"publish",
 								lock:true
@@ -53,7 +53,7 @@
 					});
 				}else{
 					art.dialog.confirm('确定发布此【'+obj.title+'】新闻？',function(){
-						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
+						$.getJSON("${ctx}/admin/news/"+newsId+"/release",function(data){
 							var dialog = art.dialog({
 								id:"publish",
 								lock:true
@@ -102,7 +102,7 @@
         <small>更轻松管理您的新闻</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="javascript:void(0);">新闻管理</a></li>
         <li class="active">新闻管理</li>
       </ol>
@@ -132,7 +132,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx }/${ajaxListUrl}">
                 <thead>
                 <tr> 
     				<th data-formatter="runningFormatter">序号</th>

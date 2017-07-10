@@ -79,7 +79,7 @@
 	</script>
 </head>
 <body>
-	<form id="form" action="${ctx }admin/sys/menu/add.html" class="form-horizontal content" method="post" target="_parent">
+	<form id="form" action="${ctx}/admin/sys/menu/add" class="form-horizontal content" method="post" target="_parent">
              <div class="form-group">
 		    	<label for="name" class="col-sm-2 control-label">名称<code>*</code></label>
 				<div class="row col-sm-8">

@@ -28,9 +28,7 @@
 
 <script type="text/javascript">
 		$(function(){
-			//var pmenuText = "${pmenuText}";
-			//var menuText = "${menuText}";
-			$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+new Date().getTime(),function(json){
+			$.getJSON("${ctx}/admin/sys/menu/findMenuByRole?t="+new Date().getTime(),function(json){
 				var pMenu = json.item;
 				var str = "";
 				if((pMenu!=null)&&(pMenu.length!=0)){
@@ -41,7 +39,7 @@
 						if((sMenu!=null)&&(sMenu.length!=0)){
 							str+= "<ul class='treeview-menu'>";
 							for(var j=0;j<sMenu.length;j++){
-								str+="<li><a title="+sMenu[j].text+" href='javascript:void(0);' onclick='gotoMenu(&apos;${ctx}"+sMenu[j].url+"&apos;,&apos;"+pMenu[i].text+"&apos;,&apos;"+sMenu[j].text+"&apos;)'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
+								str+="<li><a title="+sMenu[j].text+" href='javascript:void(0);' onclick='gotoMenu(&apos;${ctx}/"+sMenu[j].url+"&apos;,&apos;"+pMenu[i].text+"&apos;,&apos;"+sMenu[j].text+"&apos;)'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
 							}
 							str+="</ul></li>";
 						};
@@ -87,7 +85,7 @@
 	    $.ajaxSetup({
 	           complete: function(xhr, status) {
 	                if (xhr.responseText == 'invalidSession') {
-	                    window.location = "/admin/login.html"; 
+	                    window.location = "/admin/login"; 
 	                }
 	           }
 	  	});

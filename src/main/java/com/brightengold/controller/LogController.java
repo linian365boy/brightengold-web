@@ -24,7 +24,7 @@ public class LogController {
 	private LogService logService;
 	@RequestMapping({"/logs/list"})
 	public String list(HttpServletRequest request,ModelMap map){
-		map.put("ajaxListUrl", "admin/sys/log/logs/getJsonList.html");
+		map.put("ajaxListUrl", "admin/sys/log/logs/getJsonList");
 		return "admin/sys/log/list";
 	}
 	

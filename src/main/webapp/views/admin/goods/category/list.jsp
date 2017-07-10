@@ -3,7 +3,7 @@
     <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var url = '${ctx}admin/goods/category/'+obj.id+'/update.html';
+		var url = '${ctx}/admin/goods/category/'+obj.id+'/update';
 		art.dialog.open(url,{
 			title:'编辑分类信息',
 			id:'bianji',
@@ -14,7 +14,7 @@
 		};
 		
 		var tianjia = function(){
-			var url = "${ctx}admin/goods/category/add.html";
+			var url = "${ctx}/admin/goods/category/add";
 			art.dialog.open(url,{
 				title:'添加商品分类',
 				id:'tianjia',
@@ -26,7 +26,7 @@
 		
 		var del = function(obj){
 			art.dialog.confirm("确定删除此["+obj.enName+"]分类？",function(){
-				var url = '${ctx}admin/goods/category/'+obj.id+'/del.html';
+				var url = '${ctx}/admin/goods/category/'+obj.id+'/del';
 				$.post(url,function(json){
 		    		if(json.code==200){
 		    			$("button[name='refresh']",window.document).click();
@@ -48,7 +48,7 @@
         <small>更轻松管理您的分类</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">产品管理</a></li>
         <li class="active">产品分类管理</li>
       </ol>
@@ -78,7 +78,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+              data-side-pagination="server" data-url="${ctx }/${ajaxListUrl}">
                 <thead>
                 <tr> 
                 	<th data-formatter="runningFormatter">序号</th>

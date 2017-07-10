@@ -19,7 +19,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$.getJSON("${ctx}admin/sys/role/getRolesByAjax.html",function(returnJson){
+		$.getJSON("${ctx}/admin/sys/role/getRolesByAjax",function(returnJson){
 			var json = $(returnJson);
 			var str = "";
 			for(var i=0;i<json.length;i++){
@@ -34,7 +34,7 @@
 					required:true,
 					remote:{
 						type:'POST',
-						url:'${ctx}admin/sys/user/existUser.html',
+						url:'${ctx}/admin/sys/user/existUser',
 						data:{
 							username:function(){
 								return $("#username").val();
@@ -80,7 +80,7 @@
 	</script>
 </head>
 <body>
-	<form id="form" class="form-horizontal content" action="${ctx }admin/sys/user/add.html" 
+	<form id="form" class="form-horizontal content" action="${ctx}/admin/sys/user/add" 
 		method="post" target="_parent">
 		<div class="form-group">
 	    	<label for="username" class="col-sm-2 control-label">用户名<code>*</code></label>

@@ -73,7 +73,7 @@ public class ProductController {
 	
 	@RequestMapping(value={"/products/list"})
 	public String list(HttpServletRequest request,ModelMap map){
-		map.put("ajaxListUrl", "admin/goods/product/products/getJsonList.html");
+		map.put("ajaxListUrl", "admin/goods/product/products/getJsonList");
 		return "admin/goods/product/list";
 	}
 	

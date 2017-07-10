@@ -3,7 +3,7 @@
     <%@include file="../../commons/include.jsp" %>
 <script type="text/javascript">
 	var tianjia = function(){
-		var url = "${ctx}admin/ad/save.html";
+		var url = "${ctx}/admin/ad/save";
 		art.dialog.open(url,{
 			title:'添加滚动图片',
 			id:'tianjia',
@@ -13,7 +13,7 @@
 		});
 	};
 	var update = function(obj){
-		var url = '${ctx}admin/ad/'+obj.id+'/update.html';
+		var url = '${ctx}/admin/ad/'+obj.id+'/update';
 		art.dialog.open(url,{
 			title:'修改滚动图片',
 			id:'bianji',
@@ -25,7 +25,7 @@
 	//del
 	var del = function(obj){
 		art.dialog.confirm('确定删除此新闻？',function(){
-			var url = '${ctx}admin/ad/'+obj.id+'/delete.html';
+			var url = '${ctx}/admin/ad/'+obj.id+'/delete';
 			$.getJSON(url,function(json){
 	    		if(json.code==200){
 	    			$("button[name='refresh']",window.document).click();
@@ -41,7 +41,7 @@
 			statusStr = "锁定";
 		}
 		art.dialog.confirm("确定修改为【"+statusStr+"】状态？",function(){
-			var url = '${ctx}admin/ad/'+row.id+'/updateStatus.html';
+			var url = '${ctx}/admin/ad/'+row.id+'/updateStatus';
 			$.getJSON(url,{'status':row.status},function(json){
 				if(json.code==200){
 					$("button[name='refresh']",window.document).click();
@@ -79,7 +79,7 @@
         <small>更轻松管理您的广告</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="${ctx }/admin/index"><i class="fa fa-dashboard"></i> 主页</a></li>
         <li><a href="#">滚动图片管理</a></li>
         <li class="active">首页滚动图片</li>
       </ol>
@@ -108,7 +108,7 @@
               data-id-field="id" 
               data-page-list="[10, 25, 50]" 
               data-show-footer="false" 
-              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}"> 
+              data-side-pagination="server" data-url="${ctx }/${ajaxListUrl}"> 
 			<thead> 
 				<tr> 
     				<th data-formatter="runningFormatter">序号</th>
@@ -122,36 +122,6 @@
 					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr>
 			</thead> 
-			<%-- <tbody id="dataContent"> 
-				<c:forEach items="${page.result }" var="ad" varStatus="status">
-				<tr>
-					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td><img title="${ad.name }" alt="${ad.name }"
-					 src="${ctx }resources/${ ad.picUrl}" width="107px" height="50px"/></td>
-					<td>${ad.name }</td>
-					<td><a href="${ ad.url}" target="_blank">${ ad.url}</a></td>
-					<td>${ ad.width}</td>
-					<td>${ ad.height}</td>
-					<td>${ ad.priority}</td>
-					<td>
-						<c:choose>
-							<c:when test="${ad.status eq 1}">
-								<span title="正常" onclick="changeStatus('${ad.id}','0');" class="label btn label-success">正常</span>
-							</c:when>
-							<c:otherwise>
-								<span title="锁定" onclick="changeStatus('${ad.id}','1');" class="label btn label-danger">锁定</span>
-							</c:otherwise>
-						</c:choose>
-					</td>
-					<td>
-						<input type="image" name="${ad.id }" onclick="update(this);"
-						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
-						<input type="image" name="${ad.id }" onclick="del(this);" 
-						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;
-					</td>
-				</tr>
-				</c:forEach>
-				</tbody>  --%>
 			</table>
 			</div>
             <!-- /.box-body -->

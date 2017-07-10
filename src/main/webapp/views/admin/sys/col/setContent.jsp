@@ -31,7 +31,7 @@
 </script>
 </head>
 <body>
-	<form class="form-horizontal content" id="form" method="post" action="${ctx }admin/sys/col/${column.id }/setPublishContent.html" target="_parent">
+	<form class="form-horizontal content" id="form" method="post" action="${ctx}/admin/sys/col/${column.id }/setPublishContent" target="_parent">
 		 <div class="form-group">
 		    <label for="name" class="col-sm-3 control-label">中文名称</label>
 		    <div class="col-sm-7">

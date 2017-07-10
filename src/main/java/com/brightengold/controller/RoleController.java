@@ -67,7 +67,7 @@ public class RoleController {
 	
 	@RequestMapping({"/roles/list"})
 	public String list(ModelMap map,HttpServletRequest request){
-		map.put("ajaxListUrl","admin/sys/role/roles/getJsonList.html");
+		map.put("ajaxListUrl","admin/sys/role/roles/getJsonList");
 		return "admin/sys/role/list";
 	}
 	

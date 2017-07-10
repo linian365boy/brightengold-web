@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="/views/commons/include.jsp" %>
-	<link href="${ctx }resources/js/skins/blue.css" rel="stylesheet"/>
-	<script type="text/javascript" src="${ctx }resources/js/artDialog.js"></script>
-	<script type="text/javascript" src="${ctx }resources/js/plugins/iframeTools.js"></script>
+	<link href="${ctx }/resources/js/skins/blue.css" rel="stylesheet"/>
+	<script type="text/javascript" src="${ctx }/resources/js/artDialog.js"></script>
+	<script type="text/javascript" src="${ctx }/resources/js/plugins/iframeTools.js"></script>
     <html>
     <head>
     <meta charset="utf-8"/>
@@ -16,17 +16,17 @@
     <body>
 	<header id="header">
 		<hgroup>
-			<h1 class="site_title"><a href="${ctx }admin">rockechogroup</a></h1>
+			<h1 class="site_title"><a href="${ctx }/admin">rockechogroup</a></h1>
 			<h2 class="section_title">rockechogroup Management System</h2>
 			<div class="btn_view_site"><a><sec:authentication property="principal.realName"/>(<sec:authentication property="principal.username"/>)&nbsp;</a></div>
 			<a href="javascript:void(0);" onclick="modifyPass();" style="color:white;">修改密码</a>
 			&nbsp;&nbsp;&nbsp;
-			<a href="${ctx }admin/logout" style="color:white;">退出</a>
+			<a href="${ctx }/admin/logout" style="color:white;">退出</a>
 		</hgroup>
 	</header> <!-- end of header bar -->
 	<script type="text/javascript">
 		function modifyPass(){
-			art.dialog.load('${ctx}views/admin/sys/user/modifyPass.jsp',{
+			art.dialog.load('${ctx}/views/admin/sys/user/modifyPass.jsp',{
 				title: '修改密码',
 				id: 'modify',
 				resize: false,

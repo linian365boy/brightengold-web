@@ -86,7 +86,7 @@
 </head>
 <body>
 	<form class="form-horizontal content" id="form" method="post" 
-	enctype="multipart/form-data" action="${ctx }admin/ad/save.html" target="_parent">
+	enctype="multipart/form-data" action="${ctx }/admin/ad/save" target="_parent">
   <div class="form-group">
     <label for="name" class="col-sm-2 control-label">名称<code>*</code></label>
     <div class="col-sm-8">

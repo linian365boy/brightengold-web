@@ -3,9 +3,9 @@
 <%@include file="/views/commons/include.jsp"%>
 <title>信息新增</title>
 <script type="text/javascript"
-	src="${ctx }resources/plugins/ckeditor/ckeditor.js"></script>
+	src="${ctx}/resources/plugins/ckeditor/ckeditor.js"></script>
 <script type="text/javascript"
-	src="${ctx }resources/plugins/ckeditor/lang/zh-cn.js"></script>
+	src="${ctx}/resources/plugins/ckeditor/lang/zh-cn.js"></script>
 <script type="text/javascript"
 	src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
 <script type="text/javascript"
@@ -66,7 +66,7 @@
 		信息管理 <small>更轻松管理您的信息页面</small>
 	</h1>
 	<ol class="breadcrumb">
-		<li><a href="${ctx }admin/index.html"><i
+		<li><a href="${ctx}/admin/index"><i
 				class="fa fa-dashboard"></i> 主页</a></li>
 		<li><a href="#">系统管理</a></li>
 		<li class="active">信息管理</li>
@@ -85,7 +85,7 @@
 				<!-- /.box-header -->
 				<!-- form start -->
 				<form class="form-horizontal content" id="form" method="post"
-					action="${ctx }admin/sys/info/add.html" target="_parent">
+					action="${ctx}/admin/sys/info/add" target="_parent">
 					<div class="box-body">
 						<div class="form-group">
 							<label for="name" class="col-sm-2 control-label">名称<code>*</code></label>

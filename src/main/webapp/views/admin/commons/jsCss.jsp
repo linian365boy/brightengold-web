@@ -37,7 +37,7 @@
 <script src="/resources/dist/js/demo.js"></script>
 <script type="text/javascript">
 		var t = new Date().getTime();
-		$.getJSON("${ctx}admin/sys/menu/findMenuByRole.html?t="+t,function(json){
+		$.getJSON("${ctx}/admin/sys/menu/findMenuByRole?t="+t,function(json){
 			var pMenu = json.tree.item;
 			var str = "";
 			if((pMenu!=null)&&(pMenu.length!=0)){
@@ -57,7 +57,7 @@
 							}else{
 								str+="<li>";
 							}
-							str+="<a title="+sMenu[j].text+" href='${ctx}"+sMenu[j].url+"'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
+							str+="<a title="+sMenu[j].text+" href='${ctx}/"+sMenu[j].url+"'><i class='fa fa-circle-o'></i>"+sMenu[j].text+"</a></li>";
 						}
 						str+="</ul></li>";
 					};

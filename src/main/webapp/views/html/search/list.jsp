@@ -9,7 +9,7 @@
 <meta name="description" itemprop="description" content="${(webConfig.description)}" />
 <meta name="keywords" itemprop="keywords" content="${(webConfig.keyword)}" />
 
-<link rel="canonical" href="${ctx}" />
+<link rel="canonical" href="${ctx}/" />
 		<style type="text/css">
 img.wp-smiley,
 img.emoji {
@@ -39,12 +39,12 @@ border-bottom: 3px solid #5fd6d8;
     font-weight: bold;
 }
 </style>
-<script type='text/javascript' src='${ctx}resources/js/jquery-1.11.1.min.js'></script>
-<script type='text/javascript' src='${ctx}resources/js/jquery-migrate.min.js'></script>
-<script type="text/javascript" src="${ctx}resources/js/unslider/unslider.min.js"></script>
+<script type='text/javascript' src='${ctx}/resources/js/jquery-1.11.1.min.js'></script>
+<script type='text/javascript' src='${ctx}/resources/js/jquery-migrate.min.js'></script>
+<script type="text/javascript" src="${ctx}/resources/js/unslider/unslider.min.js"></script>
 <meta name="generator" content="WordPress 4.5.3" />
 <meta name="generator" content="WooCommerce 2.3.11" />
-<link rel='shortlink' href='${ctx}' />
+<link rel='shortlink' href='${ctx}/' />
 <style type="text/css">
 .grid figcaption a, div.grid_no_animation figcaption a.button {background: #1abc9c!important;}
 .grid figcaption a:hover, div.grid_no_animation figcaption a.button:hover {background: #16a085!important;}
@@ -60,10 +60,10 @@ a,a:visited,.blog-columns .comments-link a:hover {color: #5fd6d8;}input:focus,te
 <style type="text/css" id="custom-background-css">
 body.custom-background { background-color: #e2e2e2; }
 </style>
-<link rel="icon" href="${ctx}resources/views/style-ewa/images/steroids-benefits.png" sizes="32x32" />
-<link rel="icon" href="${ctx}resources/views/style-ewa/images/steroids-benefits.png" sizes="192x192" />
-<link rel="apple-touch-icon-precomposed" href="${ctx}resources/views/style-ewa/images/steroids-benefits.png" />
-<meta name="msapplication-TileImage" content="${ctx}resources/views/style-ewa/images/steroids-benefits.png" />
+<link rel="icon" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" sizes="32x32" />
+<link rel="icon" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
+<meta name="msapplication-TileImage" content="${ctx}/resources/views/style-ewa/images/steroids-benefits.png" />
 </head>
 <body class="archive search search-results post-type-archive post-type-archive-product custom-background woocommerce woocommerce-page sidebar nx-boxed onecol-blog no-avatars" style="  ">
 	<div id="page" class="hfeed site">
@@ -72,7 +72,7 @@ body.custom-background { background-color: #e2e2e2; }
 			<div id="primary" class="content-area">
 				<div id="content" class="site-content" role="main">
 					<nav class="woocommerce-breadcrumb" >
-						<a href="${ctx }">Home</a>
+						<a href="${ctx}/">Home</a>
 						&nbsp;&#47;&nbsp;Search results for &ldquo;${keyword }&rdquo;
 					</nav>
 					<h1 class="page-title">Search Results: &ldquo;${keyword }&rdquo;</h1>
@@ -81,8 +81,8 @@ body.custom-background { background-color: #e2e2e2; }
 							<ul class="products">
 								<c:forEach items="${page.result }" var="product" varStatus="status">
 									<li class="${(status.index%4==0)?'first':'' } ${((status.index+1)%4==0)?'last':'' } post-113 product type-product status-publish has-post-thumbnail product_cat-raw-steroid-powders product_cat-testosterone-series product_tag-buy-testosterone-propionate-powder product_tag-testosterone-propionate-powder product_tag-testosterone-propionate-powder-conversion product_tag-testosterone-propionate-powder-manufacturers shipping-taxable product-type-simple product-cat-raw-steroid-powders product-cat-testosterone-series product-tag-buy-testosterone-propionate-powder product-tag-testosterone-propionate-powder product-tag-testosterone-propionate-powder-conversion product-tag-testosterone-propionate-powder-manufacturers instock">
-									 		<a href="${ctx}views/html/product/detail/${product.id}.htm">
-											<img width="500" height="500" src="${ctx }resources/${product.picUrl}" class="attachment-shop_catalog size-shop_catalog wp-post-image" alt="${product.enName }" />
+									 		<a href="${ctx}/views/html/product/detail/${product.id}.htm">
+											<img width="500" height="500" src="${ctx}/resources/${product.picUrl}" class="attachment-shop_catalog size-shop_catalog wp-post-image" alt="${product.enName }" />
 											<h3>${product.enName }</h3>
 										</a>
 									</li>
@@ -92,7 +92,7 @@ body.custom-background { background-color: #e2e2e2; }
 								<nav class="woocommerce-pagination">
 									<ul class="page-numbers">
 										<c:if test="${pageNo>1 }">
-											<li><a href="${ctx}views/products/search.html?pageNo=${pageNo-1}&keyword=${keyword}" class="prev page-numbers">←</a></li>
+											<li><a href="${ctx}/views/products/search?pageNo=${pageNo-1}&keyword=${keyword}" class="prev page-numbers">←</a></li>
 										</c:if>
 										<c:forEach var="index" begin="1" end="${page.totalPageNum }" step="1">
 											<c:choose>
@@ -100,12 +100,12 @@ body.custom-background { background-color: #e2e2e2; }
 													<li><span class="page-numbers current">${index }</span></li>
 												</c:when>
 												<c:otherwise>
-													<li><a href="${ctx}views/products/search.html?pageNo=${index}&keyword=${keyword}" class="page-numbers">${index }</a></li>
+													<li><a href="${ctx}/views/products/search?pageNo=${index}&keyword=${keyword}" class="page-numbers">${index }</a></li>
 												</c:otherwise>
 											</c:choose>
 										</c:forEach>
 										<c:if test="${pageNo<page.totalPageNum }">
-											<li><a href="${ctx}views/products/search.html?pageNo=${pageNo+1}&keyword=${keyword}" class="next page-numbers">→</a></li>
+											<li><a href="${ctx}/views/products/search?pageNo=${pageNo+1}&keyword=${keyword}" class="next page-numbers">→</a></li>
 										</c:if>
 									</ul>
 								</nav>
@@ -121,7 +121,7 @@ body.custom-background { background-color: #e2e2e2; }
 			<hr />
 			<jsp:include page="bottom.jsp"/>
 		</div>
-		<script type='text/javascript' src='${ctx}resources/views/style-ewa/js/select2.min.js'></script>
+		<script type='text/javascript' src='${ctx}/resources/views/style-ewa/js/select2.min.js'></script>
 		<jsp:include page="bottomJs.jsp"/>
 	</div>
 </body>
