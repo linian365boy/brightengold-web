@@ -107,23 +107,6 @@
 		</dependency>
 		<!-- cglib end -->
 
-		<!-- servlet-api start -->
-		<!-- <dependency>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>3.0.20100224</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.2</version>
-			<scope>provided</scope>
-		</dependency> -->
-		
-		<!-- servlet-api end -->
-		
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -203,14 +186,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<scope>provided</scope>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>6.0.53</version>
 		</dependency>
-	    <dependency>
+		<dependency>
 	      <groupId>junit</groupId>
 	      <artifactId>junit</artifactId>
 	      <scope>test</scope>
@@ -227,10 +209,6 @@
 		<resource>
             <directory>src/main/webapp</directory>
             <filtering>true</filtering>
-            <includes>
-            	<include>WEB-INF/web.xml</include>
-            </includes>
-            <targetPath>${project.build.directory}/${project.build.finalName}</targetPath>
          </resource>
 	</resources>
 	
@@ -266,13 +244,9 @@
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-war-plugin</artifactId>
 	            <version>2.4</version>
-	            <configuration>
-		            <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-	            </configuration>
         	</plugin>
     	</plugins>
     </pluginManagement>
-	<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
   </build>
   
   <profiles>
