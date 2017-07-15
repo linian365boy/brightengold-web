@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 	private final static Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	@RequestMapping(value={"/index"}, method = RequestMethod.GET)
+	@RequestMapping(value={"","/","/index"}, method = RequestMethod.GET)
 	public String home(ModelMap map) {
 		return "admin/index";
 	}

@@ -97,7 +97,7 @@ public class GennerateController {
 		//1　生成首页
 		List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
 		map.put("hotProducts", products);
-		if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
+		if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.html")){
 			logger.error("生成index页面失败。");
 		}else{
 			logger.info("生成index产品页面成功");
@@ -174,7 +174,7 @@ public class GennerateController {
 					//首页产品
 					List<Product> products = productService.findIndexPic(systemConfig.getIndexProductSize());
 					map.put("hotProducts", products);
-					if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.htm")){
+					if(!FreemarkerUtil.fprint("index.ftl", map, path+File.separator, "index.html")){
 						logger.error("生成{}页面失败！",code);
 						return "500";
 					}else{
