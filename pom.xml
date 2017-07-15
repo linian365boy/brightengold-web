@@ -191,9 +191,9 @@
 		</dependency>
 		<!-- gson end -->
 		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>druid</artifactId>
-		    <version>1.0.29</version>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
 		</dependency>
 		<!-- Provided -->
 		<dependency>
