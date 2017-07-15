@@ -31,11 +31,19 @@ mybatis:
 
 spring: 
   datasource:
-    url: @jdbc.url@
-    username: @jdbc.username@
-    password: @jdbc.password@
-    driver-class-name: com.mysql.jdbc.Driver
     druid:
+      url: @jdbc.url@
+      username: @jdbc.username@
+      password: @jdbc.password@
+      driver-class-name: com.mysql.jdbc.Driver
+      initial-size: 5
+      max-active: 8
+      pool-prepared-statements: false
+      max-open-prepared-statements: -1
+      validation-query: select 'x'
+      validation-query-timeout: 5
+      test-while-idle: true
+      filters: stat,wall
       web-stat-filter:
         enabled: true
         urlPattern: "/*"
