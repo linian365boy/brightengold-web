@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.News;
 
-@Mapper
 public interface NewsDao {
 	//@Modifying
 	//@Query("update News set clicks = ?2 where id = ?1")

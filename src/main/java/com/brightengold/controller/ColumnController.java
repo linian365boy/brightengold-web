@@ -90,7 +90,7 @@ public class ColumnController {
 				column.setDepth(1);
 			}
 		}
-		column.setUrl("views/html/col/"+column.getCode()+".htm");
+		column.setUrl("views/col/" +column.getCode()+".htm");
 		if(columnService.save(column)){
 			logger.info("新增栏目:{}成功！",column);
 			vo.setMessage("新增栏目【"+column.getEnName()+"】成功！");
@@ -121,7 +121,7 @@ public class ColumnController {
 			}
 			column.setCreateDate(temp.getCreateDate());
 			if(!(column.getCode().equals(temp.getCode()))){
-				column.setUrl("views/html/col/"+column.getCode()+".htm");
+				column.setUrl("views/col/" +column.getCode()+".htm");
 			}else{
 				column.setUrl(temp.getUrl());
 			}

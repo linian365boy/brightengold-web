@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Info;
 
-@Mapper
 public interface InfoDao {
 	//@Query("select info from Info info where info.code = :codec")
 	Info loadByCode(@Param("codec") String code);

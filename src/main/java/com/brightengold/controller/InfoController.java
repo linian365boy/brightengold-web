@@ -61,7 +61,7 @@ public class InfoController {
 		StringBuilder sb = new StringBuilder();
 		MessageVo vo = null;
 		try {
-			info.setUrl("views/html/info/"+info.getCode()+".htm");
+			info.setUrl("views/info/" +info.getCode()+".htm");
 			infoService.save(info);
 			sb.append("信息名称："+info.getName());
 			LogUtil.getInstance().log(LogType.ADD, sb.toString());
@@ -92,7 +92,7 @@ public class InfoController {
 			Info tinfo = infoService.loadOne(infoId);
 			content.append("信息名称："+tinfo.getName());
 			if(!(info.getCode().equals(tinfo.getCode()))){
-				info.setUrl("views/html/info/"+info.getCode()+".htm");
+				info.setUrl("views/info/" +info.getCode()+".htm");
 			}else{
 				info.setUrl(tinfo.getUrl());
 			}

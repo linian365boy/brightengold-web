@@ -45,10 +45,6 @@ public class AdvertisementService {
 	}
 
 	public List<Advertisement> getIndexAds(int indexAdsSize) {
-		//状态为正常的广告图片，按priority降序排序
-		//Page<Advertisement> tempPage = 
-		//		advertisementDao.findAll(indexAdsSpec(), 
-		//				new PageRequest(0,indexAdsSize,new Sort(Direction.DESC,"priority","id")));
 		return advertisementDao.findIndexAds(indexAdsSize);
 	}
 
