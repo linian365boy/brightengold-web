@@ -145,17 +145,18 @@ public class AdvertisementController {
 	@ResponseBody
 	@RequestMapping(value={"/{id}/updateStatus"})
 	public ResultVo<String> updateStatus(@PathVariable Integer id,Integer status){
+		logger.info("updateStatus param id => {}, status => {}",id, status);
 		ResultVo<String> vo = new ResultVo<String>();
 		try{
 			service.updateStatus(id,status);
 			vo.setCode(Constant.SUCCESS_CODE);
 			vo.setMessage("修改状态成功！");
-			logger.info("从{}修改为{}状态",(status==1)?"锁定":"正常",(status==1)?"正常":"锁定");
 		}catch(Exception e){
 			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("修改状态失败！");
 			logger.error("修改状态失败！",e);
 		}
+		logger.info("from {} update to {}, return data => {}",(status==1)?"正常":"锁定",(status==1)?"锁定":"正常", vo);
 		return vo;
 	}
 	
