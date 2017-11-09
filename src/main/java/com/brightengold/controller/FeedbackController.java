@@ -56,17 +56,19 @@ public class FeedbackController {
 	@ResponseBody
 	@RequestMapping(value="/{id}/del",method=RequestMethod.GET)
 	public MessageVo delete(@PathVariable Integer id){
+	    logger.info("delete feedback param => {}", id);
 		MessageVo vo = null;
 		if (id != null) {
 			try{
 				feedbackService.delete(id);
-				logger.warn("删除id|{}的评论",id);
+				logger.warn("delete feedback id => {} succeed.",id);
 				vo = new MessageVo(Constant.SUCCESS_CODE,"删除评论成功！");
 			}catch(Exception e){
-				logger.error("删除评论报错!",e);
+				logger.error("delete feedback error.",e);
 				vo = new MessageVo(Constant.ERROR_CODE,"删除评论失败！");
 			}
 		}
+		logger.info("delete feedback return data => {}", vo);
 		return vo;
 	}
 }

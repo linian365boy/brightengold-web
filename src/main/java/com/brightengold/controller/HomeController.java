@@ -51,7 +51,7 @@ public class HomeController {
             try{
                response.sendRedirect("/admin/login.html");
             }catch (IOException e) {
-               logger.error("重定向url报错|{}",e);
+               logger.error("redirecturl error.",e);
             }
         }
         return "";

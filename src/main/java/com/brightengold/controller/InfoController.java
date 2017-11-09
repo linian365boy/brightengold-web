@@ -60,6 +60,7 @@ public class InfoController {
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public MessageVo add(Info info) {
+	    logger.info("add info param => {}", info);
 		StringBuilder sb = new StringBuilder();
 		MessageVo vo = null;
 		try {
@@ -67,12 +68,13 @@ public class InfoController {
 			infoService.save(info);
 			sb.append("信息名称："+info.getName());
 			logUtil.log(LogType.ADD, sb.toString());
-			logger.info("新增信息{}成功！",info);
+			logger.info("add info => {} succeed",info);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"新增信息【"+info.getName()+"】成功！");
 		} catch (Exception e) {
-			logger.error("新增信息失败",e);
+			logger.error("add info error.",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"新增信息【"+info.getName()+"】失败！");
 		}
+        logger.info("add info return data => {}", vo);
 		return vo;
 	}
 	
@@ -88,6 +90,7 @@ public class InfoController {
 	@RequestMapping(value="/{infoId}/update",method=RequestMethod.POST)
 	public MessageVo update(HttpServletRequest request, 
 			@PathVariable Integer infoId,Info info) {
+	    logger.info("update info param => {}, request param => {}", info, request.getParameterMap());
 		StringBuilder content = new StringBuilder();
 		MessageVo vo = null;
 		try {
@@ -99,16 +102,17 @@ public class InfoController {
 				info.setUrl(tinfo.getUrl());
 			}
 			if(infoService.updateInfo(info)){
-				logger.info("修改信息内容|{}",info);
+				logger.info("update info => {} succeed.",info);
 				logUtil.log(LogType.EDIT,content.toString());
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改信息【"+info.getName()+"】成功！");
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"修改信息【"+info.getName()+"】失败！");
 			}
 		} catch (Exception e) {
-			logger.error("修改信息失败！",e);
+			logger.error("update info error.",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"修改信息【"+info.getName()+"】失败！");
 		}
+		logger.info("update info return data => {}", vo);
 		return vo;
 	}
 	
@@ -119,7 +123,7 @@ public class InfoController {
 		StringBuilder sb = new StringBuilder();
 		Info info = infoService.loadOne(infoId);
 		if(infoService.deleteInfo(info)){
-			logger.warn("删除信息内容|{}",info);
+			logger.warn("delete info => {}",info);
 			String path = request.getSession().getServletContext().getRealPath("/");
 			FileUtil.delFile(path +File.separator+info.getUrl());
 			sb.append("名称："+info.getName());

@@ -82,26 +82,26 @@ public class MenuController {
 	
 	@RequestMapping(value="/{menuId}/update",method=RequestMethod.POST)
 	public MessageVo doUpdate(@PathVariable("menuId") Integer menuId, Menu menu){
+	    logger.info("doUpdate menu param => {}", menu);
 		MessageVo vo = null;
 		Menu tempMenu = menuService.loadMenuById(menuId);
 		if(menuService.updateMenu(menu)){
-			logger.info("原菜单{}，修改成菜单{}成功!",tempMenu,menu);
+			logger.info("old menu => {}, update to => {} succeed.", tempMenu, menu);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"修改后台菜单成功！");
 		}else{
-			logger.info("原菜单{}，修改成菜单{}失败!",tempMenu,menu);
+			logger.info("old menu => {}, update to => {} fail.", tempMenu, menu);
 			vo = new MessageVo(Constant.ERROR_CODE,"修改后台菜单失败！");
 		}
+        logger.info("doUpdate return data => {}", vo);
 		return vo;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public MessageVo add(Menu menu,Resource resource){
+	    logger.info("add menu menu => {}, resource => {}", menu, resource);
 		MessageVo vo = null;
 		try{
-			if(0==menu.getParentId()){
-				menu.setParentId(null);
-			}
 			int updateCount = menuService.saveMenu(menu);
 			//返回的主键在menu里面，不在返回值里面
 			logger.info("新增的menu信息|{}",menu);
@@ -115,21 +115,23 @@ public class MenuController {
 				//重新查询DB
 				//resourceDetailsMonitor.afterPropertiesSet();
 				logUtil.log(LogType.ADD,"名称："+menu.getName());
-				logger.info("添加菜单{}成功！",menu);
+				logger.info("add menu => {} succeed.",menu);
 				vo = new MessageVo(Constant.SUCCESS_CODE);
 			}else{
 				logUtil.log(LogType.ADD,"名称："+menu.getName());
 				vo = new MessageVo(Constant.ERROR_CODE,"新增菜单【"+menu.getName()+"】失败");
 			}
 		}catch(Exception e){
-			logger.error("新增菜单报错！",e);
+			logger.error("add menu error.",e);
 		}
+        logger.info("add menu return data => {}", vo);
 		return vo;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/{menuId}/del",method=RequestMethod.POST)
 	public MessageVo del(@PathVariable("menuId") Integer menuId){
+	    logger.info("delete menu menuId => {}", menuId);
 		MessageVo vo = null;
 		//1、先判断是否有子节点
 		long count = menuService.findChildMenuCount(menuId);
@@ -143,6 +145,7 @@ public class MenuController {
 		}else{
 			vo = new MessageVo(Constant.ERROR_CODE,"该菜单下有"+count+"个子菜单，请先删除子菜单！");
 		}
+        logger.info("delete menu return data => {}", vo);
 		return vo;
 	}
 	
@@ -295,7 +298,7 @@ public class MenuController {
 			jsonStr.append("]}");
 		}
 		jsonStr.append("]}");
-		logger.info("can enter menu json => {}",jsonStr.toString());
+		logger.info("generateInitTreeString menu json => {}",jsonStr.toString());
 		session.setAttribute("menuJson", jsonStr.toString());
 		return jsonStr.toString();
 	}
