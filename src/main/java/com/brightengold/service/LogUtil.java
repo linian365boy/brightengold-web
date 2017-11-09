@@ -9,11 +9,6 @@ public class LogUtil {
 	
 	private LogService logService;
 	
-	private LogUtil(){
-		WebApplicationContext app = ContextLoader.getCurrentWebApplicationContext();
-		logService = (LogService)app.getBean("logService");
-	}
-	
 	private static class LogUtilHolder {
 		public static LogUtil instance = new LogUtil();
 	}

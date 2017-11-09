@@ -2,6 +2,10 @@ package com.brightengold.initConfig;
 
 import java.util.Properties;
 
+import com.brightengold.model.Log;
+import com.brightengold.service.LogService;
+import com.brightengold.service.LogUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +24,10 @@ import com.google.code.kaptcha.util.Config;
 
 @Configuration
 public class InitConfiguration {
-	
+
+	@Autowired
+	private LogService logService;
+
 	@Bean
 	public DefaultKaptcha druidDataSource(@Value("${kaptcha.border.yesOrNo}") String kaptchaBorder,
 			@Value("${kaptcha.border.color}") String kaptchaBorderColor,
@@ -113,5 +120,11 @@ public class InitConfiguration {
 	public UserCache userCache(){
 		return new NullUserCache();
 	}
-	
+
+	@Bean
+	public LogUtil logUtil(){
+		LogUtil logUtil = LogUtil.getInstance();
+		logUtil.setLogService(logService);
+		return logUtil;
+	}
 }

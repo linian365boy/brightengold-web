@@ -34,6 +34,8 @@ import cn.rainier.nian.utils.PageRainier;
 public class InfoController {
 	@Autowired
 	private InfoService infoService;
+    @Autowired
+    private LogUtil logUtil;
 	private final static Logger logger = LoggerFactory.getLogger(InfoController.class);
 	
 	@RequestMapping({"/list"})
@@ -64,7 +66,7 @@ public class InfoController {
 			info.setUrl("views/info/" +info.getCode()+".htm");
 			infoService.save(info);
 			sb.append("信息名称："+info.getName());
-			LogUtil.getInstance().log(LogType.ADD, sb.toString());
+			logUtil.log(LogType.ADD, sb.toString());
 			logger.info("新增信息{}成功！",info);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"新增信息【"+info.getName()+"】成功！");
 		} catch (Exception e) {
@@ -98,7 +100,7 @@ public class InfoController {
 			}
 			if(infoService.updateInfo(info)){
 				logger.info("修改信息内容|{}",info);
-				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				logUtil.log(LogType.EDIT,content.toString());
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改信息【"+info.getName()+"】成功！");
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"修改信息【"+info.getName()+"】失败！");
@@ -121,7 +123,7 @@ public class InfoController {
 			String path = request.getSession().getServletContext().getRealPath("/");
 			FileUtil.delFile(path +File.separator+info.getUrl());
 			sb.append("名称："+info.getName());
-			LogUtil.getInstance().log(LogType.DEL, sb.toString());
+			logUtil.log(LogType.DEL, sb.toString());
 			vo = new MessageVo(Constant.SUCCESS_CODE, "删除信息【"+info.getName()+"】成功！");
 		}else{
 			vo = new MessageVo(Constant.ERROR_CODE,"删除信息【"+info.getName()+"】失败！");

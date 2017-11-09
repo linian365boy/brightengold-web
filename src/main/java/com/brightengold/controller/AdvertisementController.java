@@ -43,6 +43,8 @@ public class AdvertisementController {
 	private AdvertisementService service;
 	@Resource
 	private SystemConfig systemConfig;
+    @Autowired
+    private LogUtil logUtil;
 	private final static Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
 	
 	@RequestMapping(value={"/ads/list"})
@@ -83,11 +85,11 @@ public class AdvertisementController {
 			ad.setStatus(Constant.C_ONE);
 			ad.setCreateDate(new Date());
 			service.saveAdvertisement(ad);
-			LogUtil.getInstance().log(LogType.ADD, "新增滚动图片"+ad.getName()+"成功!");
+			logUtil.log(LogType.ADD, "新增滚动图片"+ad.getName()+"成功!");
 			logger.info("新增滚动图片成功，新增信息为：{}",ad);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"新增滚动图片"+ad.getName()+"成功!");
 		}catch(Exception e){
-			LogUtil.getInstance().log(LogType.ADD, "新增滚动图片"+ad.getName()+"失败!");
+			logUtil.log(LogType.ADD, "新增滚动图片"+ad.getName()+"失败!");
 			logger.error("新增滚动图片发生错误",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"新增滚动图片"+ad.getName()+"失败!");
 		}
@@ -129,7 +131,7 @@ public class AdvertisementController {
 			}
 			content.append("图片名称："+ad.getName());
 			if(service.updateAdvertisement(ad)){
-				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				logUtil.log(LogType.EDIT,content.toString());
 				logger.info("修改滚动图片信息成功，原图片信息：{}，修改后信息：{}",temp,ad);
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改滚动图片信息【"+ad.getName()+"】成功");
 			}else{
@@ -169,7 +171,7 @@ public class AdvertisementController {
 			service.delAdvertisement(id);
 			vo.setCode(Constant.SUCCESS_CODE);
 			vo.setMessage("删除信息成功！");
-			LogUtil.getInstance().log(LogType.DEL, "图片名称："+ad.getName());
+			logUtil.log(LogType.DEL, "图片名称："+ad.getName());
 			logger.warn("删除图片信息成功，图片信息{}",ad);
 		}catch(Exception e){
 			vo.setCode(Constant.ERROR_CODE);

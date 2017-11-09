@@ -167,11 +167,11 @@ public class ProductService {
 	}*/
 
 	public PageRainier<Product> findAllReleaseProductByLikeKeyword(RequestParam param) {
-		//Page<Product> tempPage = productDao.findAll(findAllReleaseProductByLikeKeywordSpec(keyword), 
-		//		new PageRequest(pageNo-1, pageSize, new Sort(Direction.DESC,"priority","hot","id")));
+		logger.info("findAllReleaseProductByLikeKeyword request param => {}", param);
 		long count = productDao.countAllReleaseProductByLikeKeyword(param);
 		PageRainier<Product> page = new PageRainier<Product>(count);
 		page.setResult(productDao.findAllReleaseProductByLikeKeyWordList(param));
+        logger.info("findAllReleaseProductByLikeKeyword return data => {}", count);
 		return page;
 	}
 

@@ -44,6 +44,8 @@ public class MenuController {
 	private MenuService menuService;
 	@Autowired
 	private ResourceService resourceService;
+	@Autowired
+	private LogUtil logUtil;
 	//@Autowired
 	//private ResourceDetailsMonitor resourceDetailsMonitor;
 	private final static Logger logger = LoggerFactory.getLogger(MenuController.class);
@@ -112,11 +114,11 @@ public class MenuController {
 			if(updateCount>0 && resourceService.saveResource(resource)){
 				//重新查询DB
 				//resourceDetailsMonitor.afterPropertiesSet();
-				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
+				logUtil.log(LogType.ADD,"名称："+menu.getName());
 				logger.info("添加菜单{}成功！",menu);
 				vo = new MessageVo(Constant.SUCCESS_CODE);
 			}else{
-				LogUtil.getInstance().log(LogType.ADD,"名称："+menu.getName());
+				logUtil.log(LogType.ADD,"名称："+menu.getName());
 				vo = new MessageVo(Constant.ERROR_CODE,"新增菜单【"+menu.getName()+"】失败");
 			}
 		}catch(Exception e){
@@ -161,7 +163,7 @@ public class MenuController {
 	/**
 	 * generateTreeNodeXmlString:获取第三级资源
 	 * @author tanfan 
-	 * @param parseLong
+	 * @param menuId
 	 * @param roleName
 	 * @return 
 	 * @since JDK 1.7

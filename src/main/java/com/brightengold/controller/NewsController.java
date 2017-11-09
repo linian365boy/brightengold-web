@@ -42,13 +42,15 @@ import cn.rainier.nian.utils.PageRainier;
 @RequestMapping("/admin/news")
 @Scope("prototype")
 public class NewsController {
-	private static Logger logger = LoggerFactory.getLogger(NewsController.class);
 	@Autowired
 	private NewsService newsService;
 	@Autowired
 	private ColumnService columnService;
 	@Autowired
 	private SystemConfig systemConfig;
+	@Autowired
+	private LogUtil logUtil;
+	private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
 	
 	@RequestMapping({"/news/list"})
 	public String list(HttpServletRequest request,ModelMap map){
@@ -75,6 +77,7 @@ public class NewsController {
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public MessageVo add(News news, Integer firstColId, Integer secondColId, Integer thirdColId){
+        logger.info("add news firstColId => {}, secondColId => {}, thirdColId => {}", firstColId, secondColId, thirdColId);
 		MessageVo vo = null;
 		if(news.getPriority()==null){
 			news.setPriority(0);
@@ -93,12 +96,13 @@ public class NewsController {
 			news.setDepth(String.valueOf(firstColId));
 		}
 		if(newsService.saveNews(news)){
-			LogUtil.getInstance().log(LogType.ADD,"标题："+news.getTitle());
-			logger.info("添加了新闻：{}",news);
+			logUtil.log(LogType.ADD,"标题："+news.getTitle());
+			logger.info("add news => {} succeed.",news);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"添加新闻"+news.getTitle()+"成功");
 		}else{
 			vo = new MessageVo(Constant.ERROR_CODE,"添加新闻"+news.getTitle()+"失败");
 		}
+		logger.info("add news return data => {}", vo);
 		return vo;
 	}
 	
@@ -124,6 +128,7 @@ public class NewsController {
 	@RequestMapping(value="/{newsId}/update",method=RequestMethod.POST)
 	public MessageVo update(HttpServletRequest request,
 			@PathVariable Integer newsId,News news, Integer firstColId, Integer secondColId){
+        logger.info("update news firstColId => {}, secondColId => {}, news => {}", firstColId, secondColId, news);
 		MessageVo vo = null;
 		if(newsId!=null){
 			StringBuilder content = new StringBuilder();
@@ -139,7 +144,7 @@ public class NewsController {
 				news.setDepth(String.valueOf(firstColId));
 			}
 			if(newsService.updateNews(news)){
-				logger.info("修改前新闻信息|{}，修改后新闻信息|{}",temp,news);
+				logger.info("update from news => {}, to => {}", temp, news);
 				if(!temp.getTitle().equals(news.getTitle())){
 					content.append("标题由\""+temp.getTitle()+"\"修改为\""+news.getTitle()+"\"");
 				}
@@ -149,7 +154,7 @@ public class NewsController {
 				if("".equals(content.toString().trim())){
 					content.append("修改了标题为"+news.getTitle()+"新闻");
 				}
-				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+				logUtil.log(LogType.EDIT, content.toString());
 				//删除页面
 				String path = request.getSession().getServletContext().getRealPath("/");
 				Tools.delFile(path + Constant.NEWSPATH + File.separator+news.getUrl());
@@ -159,6 +164,7 @@ public class NewsController {
 				vo = new MessageVo(Constant.ERROR_CODE,"修改新闻【"+news.getTitle()+"】失败");
 			}
 		}
+        logger.info("update news return data => {}", vo);
 		return vo;
 	}
 	
@@ -178,6 +184,7 @@ public class NewsController {
 	@ResponseBody
 	@RequestMapping(value="/{newsId}/del",method=RequestMethod.GET)
 	public MessageVo del(@PathVariable Integer newsId,HttpServletRequest request,News news){
+	    logger.info("delete news param => {}", news);
 		MessageVo vo = null;
 		if(newsId!=null){
 			news = newsService.loadNews(newsId);
@@ -192,8 +199,9 @@ public class NewsController {
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"删除新闻【"+news.getTitle()+"】失败！");
 			}
-			LogUtil.getInstance().log(LogType.DEL, "标题："+news.getTitle());
+			logUtil.log(LogType.DEL, "标题："+news.getTitle());
 		}
+        logger.info("delete news return data => {}", vo);
 		return vo;
 	}
 	
@@ -219,18 +227,18 @@ public class NewsController {
 	@RequestMapping(value="/{newsId}/release",method=RequestMethod.GET)
 	@ResponseBody
 	public MessageVo releaseNews(@PathVariable Integer newsId,HttpServletRequest request, ModelMap map){
+	    logger.info("release news newsId => {}", newsId);
 		MessageVo vo = new MessageVo();
 		String fPath = null;
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
-		//String realPath = request.getSession().getServletContext().getRealPath("/");
 		String realPath = systemConfig.getHtmlPath();
 		News tempNews = newsService.loadNews(newsId);
 		tempNews.setPublishDate(new Date());
 		if(StringUtils.isBlank(tempNews.getUrl())){
 			tempNews.setUrl(Tools.getRndFilename()+".htm");
 		}
-		LogUtil.getInstance().log(LogType.PUBLISH, "标题："+tempNews.getTitle());
+		logUtil.log(LogType.PUBLISH, "标题："+tempNews.getTitle());
 		if(tempNews.getPublishDate()!=null){
 			 fPath = realPath +Constant.NEWSPATH+File.separator+tempNews.getUrl();
 			 FileUtil.delFile(fPath);
@@ -242,17 +250,18 @@ public class NewsController {
 			if(newsService.saveNews(tempNews)){
 				vo.setCode(Constant.SUCCESS_CODE);
 				vo.setData(DateUtil.formatDate(new Date(), ConstantVariable.DFSTR));
-				logger.info("发布成功新闻|{}",tempNews);
+				logger.info("release news => {} succeed.",tempNews);
 			}else{
 				vo.setCode(Constant.ERROR_CODE);
 				vo.setMessage("发布新闻失败！");
-				logger.error("发布新闻|{}失败，save News error",tempNews);
+				logger.error("release news => {} fail.",tempNews);
 			}
 		}else{
 			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("发布新闻失败！");
-			logger.error("发布新闻|{}失败，Freemarker fprint error",tempNews);
+			logger.error("release news => {} freemarker fail.",tempNews);
 		}
+        logger.info("release news return data => {}", vo);
 		return vo;
 	}
 }

@@ -92,6 +92,7 @@ public class ViewController {
 	
 	@RequestMapping(value="/products/search")
 	public String searchProducts(ModelMap map, RequestParam param){
+		logger.info("searchProducts ModelMap param => {}, RequestParam pram => {}", map, param);
 		//生成公共部分内容
 		gennerateCommon(map);
 		PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(param);
@@ -103,36 +104,28 @@ public class ViewController {
 	}
 	
 	protected void gennerateCommon(ModelMap map){
+		logger.info("gennerateCommon param => {}", map);
 		//首页广告
 		List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
+		logger.info("getIndexAds return data => {}", ads);
 		map.put("indexAds", ads);
 		//横条菜单，最深显示到二级菜单
 		List<Column> crossCol = columnService.findColumnsByDepth();
+		logger.info("findColumnsByDepth return data => {}", crossCol);
 		map.put("crossCol", crossCol);
-		//首页侧边栏目，最深显示到三级菜单
-		//List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
-		//map.put("verticalCol", verticalCol);
 		//首页新闻
 		List<News> news = newsService.findIndexPic(systemConfig.getIndexNewsSize());
+		logger.info("findIndexPic return data => {}", news);
 		map.put("indexNews", news);
 		//查询所有第一级分类
 		List<Category> categorysList = categoryService.findAllParentCateList();
+		logger.info("findAllParentCateList return data => {}", categorysList);
 		if(!CollectionUtils.isEmpty(categorysList)){
 			for(Category cate : categorysList){
 				long catProductsSize = productService.countByCateId(cate.getId());
 				if(catProductsSize!=0){
 					long parentCateProductSize = catProductsSize;
 					logger.info("cate products size |{}",catProductsSize);
-					/*if(!CollectionUtils.isEmpty(cate.getChildren())){
-						for(Category childCate : cate.getChildren()){
-							catProductsSize = productService.countByCateId(childCate.getId());
-							logger.info("childCate products size |{}",catProductsSize);
-							if(catProductsSize!=0){
-								childCate.setProductsSize(catProductsSize);
-								parentCateProductSize+=catProductsSize;
-							}
-						}
-					}*/
 					cate.setProductsSize(parentCateProductSize);
 				}
 			}
@@ -140,12 +133,15 @@ public class ViewController {
 		map.put("categorys", categorysList);
  		//企业信息
 		Company company = companyService.loadCompany(systemConfig.getCompanyConfigPath());
+		logger.info("loadCompany return data => {}", company);
 		map.put("company", company);
 		//info信息
 		List<Info> infos = infoService.findList();
+		logger.info("findList return data => {}", infos);
 		map.put("infos", infos);
 		//网站关键字
 		WebConfig webConfig = configService.loadSystemConfig(systemConfig.getWebConfigPath());
+		logger.info("loadSystemConfig return data => {}", webConfig);
 		map.put("webConfig", webConfig);
 	}
 	
@@ -210,6 +206,7 @@ public class ViewController {
 			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("server error.");
 		}
+		logger.info("addFeedback return data => {}", vo);
 		return vo;
 	}
 	

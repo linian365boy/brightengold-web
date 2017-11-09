@@ -40,6 +40,8 @@ public class CompanyController {
 	private CompanyService companyService;
 	@Autowired
 	private SystemConfig systemConfig;
+    @Autowired
+    private LogUtil logUtil;
 	private final static Logger logger = LoggerFactory.getLogger(CompanyController.class);
 	
 	@InitBinder
@@ -87,7 +89,7 @@ public class CompanyController {
 				if(!temp.getTelPhone().equals(company.getTelPhone())){
 					content.append("公司联系方式由\""+temp.getTelPhone()+"\"修改为\""+company.getTelPhone()+"\"");
 				}
-				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+				logUtil.log(LogType.EDIT, content.toString());
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改公司信息成功！");
 			}else{
 				logger.error("修改公司信息报错");

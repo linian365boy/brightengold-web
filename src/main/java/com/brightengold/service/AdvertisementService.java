@@ -45,6 +45,7 @@ public class AdvertisementService {
 	}
 
 	public List<Advertisement> getIndexAds(int indexAdsSize) {
+		logger.info("getIndexAds param => {}", indexAdsSize);
 		return advertisementDao.findIndexAds(indexAdsSize);
 	}
 

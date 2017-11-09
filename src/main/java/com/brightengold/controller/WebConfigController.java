@@ -35,6 +35,8 @@ public class WebConfigController {
 	private WebConfigService webConfigService;
 	@Autowired
 	private SystemConfig systemConfig;
+	@Autowired
+	private LogUtil logUtil;
 	private static final Logger logger = LoggerFactory.getLogger(WebConfigController.class);
 	
 	@RequestMapping(value={"/detail","/",""},method=RequestMethod.POST)
@@ -46,6 +48,7 @@ public class WebConfigController {
 	@ResponseBody
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
 	public MessageVo update(WebConfig config, HttpServletRequest request){
+		logger.info("update webConfig param => {}", config);
 		WebConfig webConfig = webConfigService.loadSystemConfig(systemConfig.getWebConfigPath());
 		MessageVo vo = null;
 		try{
@@ -55,17 +58,17 @@ public class WebConfigController {
 				if(!webConfig.getKeyword().equals(config.getKeyword())){
 					content.append("网站关键字由\""+webConfig.getKeyword()+"\"修改为\""+config.getKeyword()+"\"");
 				}
-				logger.info("修改web配置信息成功|{}",config);
-				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+                logUtil.log(LogType.EDIT, content.toString());
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改网站设置成功！");
 			}else{
-				logger.error("修改网站关键字出错");
+				logger.error("update webConfig fail.");
 				vo = new MessageVo(Constant.ERROR_CODE,"修改网站设置失败！");
 			}
 		}catch(Exception e){
-			logger.error("修改网站关键字报错",e);
+			logger.error("update webConfig error",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"修改网站设置失败！");
 		}
+        logger.info("update webConfig return data => {}", config);
 		return vo;
 	}
 }

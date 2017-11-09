@@ -40,6 +40,8 @@ public class CategoryController {
 	private ColumnService columnService;
 	@Autowired
 	private ProductService productService;
+    @Autowired
+    private LogUtil logUtil;
 	private final static Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	
 	/**
@@ -47,8 +49,7 @@ public class CategoryController {
 	 * @author tanfan 
 	 * @param request
 	 * @param map
-	 * @param pageNo
-	 * @return 
+	 * @return
 	 * @since JDK 1.7
 	 */
 	@RequestMapping("/categorys/list")
@@ -96,7 +97,7 @@ public class CategoryController {
 			category.setCreateDate(new Date());
 			category.setCreateUserId(u.getId());
 			categoryService.saveCategory(category);
-			LogUtil.getInstance().log(LogType.ADD,"名称："+category.getEnName());
+			logUtil.log(LogType.ADD,"名称："+category.getEnName());
 			logger.info("添加产品分类{}成功！",category);
 			vo = new MessageVo(Constant.SUCCESS_CODE, "添加产品分类【"+category.getEnName()+"】成功！");
 		} catch (Exception e) {
@@ -173,7 +174,7 @@ public class CategoryController {
 				}
 				category.setCreateUserId(temp.getCreateUserId());
 				categoryService.updateCategory(category);
-				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				logUtil.log(LogType.EDIT,content.toString());
 				logger.info("修改商品分类{}成功！",category);
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改商品分类【"+category.getEnName()+"】成功！");
 			}
@@ -224,7 +225,7 @@ public class CategoryController {
 					logger.info("删除分类|{}",temp);
 					categoryService.delCategory(categoryId);
 					//日志记录
-					LogUtil.getInstance().log(LogType.DEL, temp.getEnName()+"删除了");
+					logUtil.log(LogType.DEL, temp.getEnName()+"删除了");
 					vo = new MessageVo(Constant.SUCCESS_CODE,"删除分类【"+temp.getEnName()+"】成功！");
 				}
 			}

@@ -69,6 +69,8 @@ public class ProductController {
 	private SystemConfig systemConfig;
 	@Autowired
 	private ColumnService columnService;
+	@Autowired
+	private LogUtil logUtil;
 	private final static Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@RequestMapping(value={"/products/list"})
@@ -87,6 +89,7 @@ public class ProductController {
 	
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.GET)
 	public String update(@PathVariable Integer productId,Model model) {
+	    logger.info("update product param => {}", productId);
 		if (productId != null) {
 			Product product = productService.loadProductById(productId);
 			model.addAttribute("model",product);
@@ -112,6 +115,7 @@ public class ProductController {
 	 */
 	@RequestMapping(value="/{productId}",method=RequestMethod.GET)
 	public String detail(@PathVariable Integer productId,ModelMap model) {
+        logger.info("detail product param => {}", productId);
 		if (productId != null) {
 			Product product = productService.loadProductById(productId);
 			//首页广告
@@ -138,6 +142,7 @@ public class ProductController {
 	@RequestMapping(value="/{productId}/update",method=RequestMethod.POST)
 	public MessageVo update(HttpServletRequest request,MultipartFile photo, 
 			@PathVariable Integer productId,Product product) {
+        logger.info("update product param => {}, request param => {}", product, request.getParameterMap());
 		StringBuilder content = new StringBuilder();
 		MessageVo vo = null;
 		try {
@@ -174,8 +179,8 @@ public class ProductController {
 				}
 				product.setStatus(tempProduct.isStatus());
 				productService.updateProduct(product);
-				logger.info("修改产品信息|{}",product);
-				LogUtil.getInstance().log(LogType.EDIT,content.toString());
+				logger.info("update product to => {}", product);
+				logUtil.log(LogType.EDIT,content.toString());
 				//删除页面
 				//String path = request.getSession().getServletContext().getRealPath("/");
 				String path = systemConfig.getHtmlPath();
@@ -184,12 +189,13 @@ public class ProductController {
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改产品【"+product.getEnName()+"】信息成功！");
 			}
 		} catch (NumberFormatException e) {
-			logger.error("修改产品信息报错",e);
+			logger.error("update product error.",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"修改产品信息失败！");
 		} catch (IOException e) {
-			logger.error("修改产品信息报错",e);
+			logger.error("update product error.",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"修改产品信息失败！");
 		}
+		logger.info("update product return data => {}", vo);
 		return vo;
 	}
 	
@@ -201,6 +207,7 @@ public class ProductController {
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public MessageVo add(MultipartFile photo,Product product,HttpServletRequest request) {
+	    logger.info("add product param => {}, request param => {}", product, request.getParameterMap());
 		User u = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		StringBuilder sb = new StringBuilder();
 		MessageVo vo = null;
@@ -212,7 +219,6 @@ public class ProductController {
 			}else{
 				product.setCategoryId(Integer.parseInt(categoryId));
 			}
-			//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/products");
 			String realPath = systemConfig.getPicPath()+File.separator+"upload"+File.separator+"products";
 			String newFileName = realPath+File.separator+Tools.getRndFilename()+Tools.getExtname(photo.getOriginalFilename());
 			FileUtils.copyInputStreamToFile(photo.getInputStream(), new File(newFileName));
@@ -227,19 +233,21 @@ public class ProductController {
 			}
 			productService.saveProduct(product);
 			sb.append("名称："+product.getEnName());
-			LogUtil.getInstance().log(LogType.ADD, sb.toString());
-			logger.info("新增产品{}成功！",product);
+			logUtil.log(LogType.ADD, sb.toString());
+			logger.info("add product => {} succeed.",product);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"新增产品【"+product.getEnName()+"】成功！");
 		} catch (Exception e) {
-			logger.error("新增产品发生错误。",e);
+			logger.error("add product => {} error",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"新增产品【"+product.getEnName()+"】失败！");
 		}
+		logger.info("add product return data => {}", vo);
 		return vo;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/{productId}/del",method=RequestMethod.POST)
 	public MessageVo del(@PathVariable Integer productId,Product product){
+	    logger.info("delete product param => {}", product);
 		MessageVo vo = null;
 		if(productId!=null){
 			StringBuilder sb = new StringBuilder();
@@ -247,12 +255,13 @@ public class ProductController {
 			if(productService.delProduct(productId)){
 				logger.warn("删除了产品|{}",product);
 				sb.append("名称："+product.getEnName());
-				LogUtil.getInstance().log(LogType.DEL, sb.toString());
+				logUtil.log(LogType.DEL, sb.toString());
 				vo = new MessageVo(Constant.SUCCESS_CODE,"删除产品【"+product.getEnName()+"】成功！");
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"删除产品【"+product.getEnName()+"】失败！");
 			}
 		}
+        logger.info("delete product return data => {}", vo);
 		return vo;
 	}
 	
@@ -273,11 +282,11 @@ public class ProductController {
 	@ResponseBody
 	@RequestMapping(value="/{productId}/release",method=RequestMethod.POST)
 	public MessageVo releaseProduct(HttpServletRequest request, @PathVariable Integer productId, ModelMap map){
+        logger.info("release product param => {}, request param => {}", productId, request.getParameterMap());
 		MessageVo vo = null;
 		Product temp = productService.loadProductById(productId);
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();
-		//String realPath = request.getSession().getServletContext().getRealPath("/");
 		String realPath = systemConfig.getHtmlPath();
 		if(StringUtils.isBlank(temp.getUrl())){
 			temp.setUrl(Tools.getRndFilename()+".htm");
@@ -298,11 +307,11 @@ public class ProductController {
 		//生成唯一的产品页面路径，不需要根据页码生成页面
 		if(FreemarkerUtil.fprint("productDetail.ftl", map, realPath + Constant.PRODUCTPATH, temp.getUrl())){
 			productService.updateProduct(temp);
-			logger.info("生成产品|{}页面成功",temp.getEnName());
 			vo = new MessageVo(Constant.SUCCESS_CODE,"生产产品【"+temp.getEnName()+"】页面成功！");
 		}else{
 			vo = new MessageVo(Constant.ERROR_CODE,"生产产品【"+temp.getEnName()+"】页面失败！");
 		}
+		logger.info("release product return data => {}", vo);
 		return vo;
 	}
 	

@@ -50,6 +50,8 @@ public class RoleController {
 	//private ResourceDetailsMonitor resourceDetailsMonitor;
 	@Autowired
 	private MenuService menuService;
+	@Autowired
+	private LogUtil logUtil;
 	private final static Logger logger = LoggerFactory.getLogger(RoleController.class);
 	
 	/**
@@ -87,18 +89,18 @@ public class RoleController {
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public MessageVo add(Role role) {
+	    logger.info("add role param => {}", role);
 		MessageVo vo = null;
 		String marking = UUIDGenerator.getUUID().toUpperCase();
 		role.setName("ROLE_"+marking);
 		role.setCreateDate(new Date());
 		if(roleService.saveRole(role)){
-			LogUtil.getInstance().log(LogType.ADD,"角色："+role.getDescribes());
-			logger.info("添加角色{}成功！",role);
+			logUtil.log(LogType.ADD,"角色："+role.getDescribes());
 			vo = new MessageVo(Constant.SUCCESS_CODE,"添加角色"+role.getDescribes()+"成功！");
 		}else{
-			logger.error("添加角色{}发生错误!",role);
 			vo = new MessageVo(Constant.ERROR_CODE,"添加角色"+role.getDescribes()+"失败！");
 		}
+        logger.info("add role return data => {}", vo);
 		return vo;
 	}
 	
@@ -113,36 +115,39 @@ public class RoleController {
 	@ResponseBody
 	@RequestMapping(value="/{roleName}/update",method=RequestMethod.POST)
 	public MessageVo update(@PathVariable String roleName,Role role) {
+	    logger.info("update role param => {}", role);
 		MessageVo vo = null;
 		if(roleName!=null){
 			Role temp = roleService.loadRoleByName(role.getName());
 			role.setCreateDate(temp.getCreateDate());
 			role.setDefaultOrNo(temp.isDefaultOrNo());
 			if(roleService.updateRole(role)){
-				logger.info("修改角色信息|{}",role);
-				LogUtil.getInstance().log(LogType.EDIT,"角色由\""+temp.getDescribes()+"\"修改为：\""+role.getDescribes()+"\"");
+				logUtil.log(LogType.EDIT,"角色由\""+temp.getDescribes()+"\"修改为：\""+role.getDescribes()+"\"");
 				vo = new MessageVo(Constant.SUCCESS_CODE,"角色【"+temp.getDescribes()+"】修改成功！");
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"角色【"+temp.getDescribes()+"】修改失败！");
 			}
 		}
+		logger.info("update role return data => {}", vo);
 		return vo;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/{roleName}/del",method=RequestMethod.POST)
 	public MessageVo del(@PathVariable String roleName){
+	    logger.info("del role param => {}", roleName);
 		MessageVo vo = null;
 		if(roleName!=null){
 			Role role = roleService.loadRoleByName(roleName);
 			if(roleService.delRole(roleName)){
-				LogUtil.getInstance().log(LogType.DEL,"角色名为："+role.getDescribes());
+				logUtil.log(LogType.DEL,"角色名为："+role.getDescribes());
 				logger.warn("删除角色为{}",role.getDescribes());
 				vo = new MessageVo(Constant.SUCCESS_CODE,"删除角色【"+role.getDescribes()+"】成功！");
 			}else{
 				vo = new MessageVo(Constant.ERROR_CODE,"删除角色【"+role.getDescribes()+"】失败！");
 			}
 		}
+        logger.info("del role return data => {}", vo);
 		return vo;
 	}
 	
@@ -183,6 +188,7 @@ public class RoleController {
 	@ResponseBody
 	@RequestMapping(value="/{roleName}/distribute",method=RequestMethod.POST)
 	public MessageVo distribute(@PathVariable String roleName,HttpServletRequest request){
+	    logger.info("distribute param => {}, request param => {}", roleName, request.getParameterMap());
 		MessageVo vo = null;
 		Role model = null;
 		try {
@@ -190,6 +196,7 @@ public class RoleController {
 			String strIds = request.getParameter("str");
 			String[] strIdArr = null;
 			model = roleService.loadRoleByName(roleName);
+			logger.info("loadRoleByName return data => {}", model);
 			boolean result = false;
 			if(StringUtils.isNotBlank(strIds)){
 				strIdArr = strIds.split(",");
@@ -213,6 +220,7 @@ public class RoleController {
 						menus.add(menu);
 					}
 				}
+				logger.info("get ress => {}, menus => {}", ress, menus);
 				if(!CollectionUtils.isEmpty(ress)){
 					if(resourceService.updateRoleResources(roleName,ress)){
 						result = true;
@@ -229,8 +237,10 @@ public class RoleController {
 					}
 				}
 				if(result){
-					LogUtil.getInstance().log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
-					logger.warn("角色{}重新分配了权限{}，result|{}",model.getDescribes(),ress,result, ToStringStyle.SHORT_PREFIX_STYLE);
+					logUtil.log(LogType.DISTRIBUTE, "重新分配了"+model.getDescribes()+"的权限");
+					logger.warn("role => {} reset authorization  and result => {}",
+                            model.getDescribes(),
+                            result);
 					//重新查询DB，更新权限
 					//resourceDetailsMonitor.afterPropertiesSet();
 					request.getSession().removeAttribute("menuJson");
@@ -240,9 +250,10 @@ public class RoleController {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("角色{}分配权限失败，发生错误：{}！",roleName,e);
+			logger.error("role => {} reset auth error.",roleName,e);
 			vo = new MessageVo(Constant.ERROR_CODE,"角色【"+(model==null?roleName:model.getDescribes())+"】分配权限失败！");
 		}
+        logger.info("distribute return data => {}", vo);
 		return vo;
 	}
 
