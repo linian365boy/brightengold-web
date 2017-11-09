@@ -57,6 +57,9 @@ spring:
       aop-patterns: com.brightengold.service.*,cn.rainier.nian.service.*
   aop:
     proxy-target-class: true
+  profiles:
+    avtive: win-local
+    include: xxx
 
 
   mvc:
@@ -107,3 +110,22 @@ logging:
   
 server: 
   port: 8081
+log4j2:
+  log:
+    level: INFO
+---
+spring:
+  profiles: win-local
+server:
+  port: 8082
+---
+spring:
+  profiles: mac-local
+server:
+  port: 8082
+---
+spring:
+  profiles: prd
+server:
+  port: 8080
+
