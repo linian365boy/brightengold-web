@@ -29,7 +29,7 @@ public class InitConfiguration {
 	private LogService logService;
 
 	@Bean
-	public DefaultKaptcha druidDataSource(@Value("${kaptcha.border.yesOrNo}") String kaptchaBorder,
+	public DefaultKaptcha defaultKaptcha(@Value("${kaptcha.border.yesOrNo}") String kaptchaBorder,
 			@Value("${kaptcha.border.color}") String kaptchaBorderColor,
 			@Value("${kaptcha.textproducer.font.color}") String kaptchaFontColor,
 			@Value("${kaptcha.image.width}") String kaptchaImgWidth,

@@ -58,9 +58,8 @@ spring:
   aop:
     proxy-target-class: true
   profiles:
-    avtive: win-local
-    include: xxx
-
+    avtive: @env@
+    include: @env@
 
   mvc:
     view: 
@@ -110,14 +109,14 @@ logging:
   
 server: 
   port: 8081
-log4j2:
-  log:
-    level: INFO
 ---
 spring:
   profiles: win-local
 server:
   port: 8082
+log4j2:
+  log:
+    level: INFO
 ---
 spring:
   profiles: mac-local
