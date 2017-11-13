@@ -101,7 +101,7 @@ $(document).ready(function(){
   <div class="form-group">
     <label for="parentColumn" class="col-sm-2 control-label">父级栏目</label>
     <div class="col-xs-8">
-	      <select class="col-xs-5 selectpicker" name="parentColumn.id" id="parentColumn">
+	      <select class="col-xs-5 selectpicker" name="parentId" id="parentColumn">
 	      </select>
     </div>
   </div>

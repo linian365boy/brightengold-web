@@ -73,7 +73,7 @@ public class GennerateController {
 	private Integer pageSize = 16;
 	private Integer pageNo = 1;
 	
-	@RequestMapping(value={"/generate"},method=RequestMethod.GET)
+	@RequestMapping(value={"/generate"},method=RequestMethod.POST)
 	public String toGennerateHtml(ModelMap map){
 		return "admin/sys/html/generate";
 	}

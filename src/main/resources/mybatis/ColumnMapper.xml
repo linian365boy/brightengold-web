@@ -64,7 +64,7 @@
 	</select>
 	
 	<update id="updateColumn" parameterType="Column">
-		update tb_column set name=#{name},enName=#{enName},url=#{url},priority=#{priority} where id=#{id}
+		update tb_column set name=#{name},enName=#{enName},url=#{url},priority=#{priority},code=#{code},parentId=#{parentId} where id=#{id}
 	</update>
 	
 	<delete id="delete" parameterType="int">

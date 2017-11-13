@@ -1,5 +1,8 @@
 package com.brightengold.vo;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 
 public class MessageVo implements Serializable {
@@ -60,5 +63,10 @@ public class MessageVo implements Serializable {
 	}
 	public void setData(Object data) {
 		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

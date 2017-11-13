@@ -26,8 +26,8 @@ conf.web:
 
 #mybatis
 mybatis: 
-  typeAliasesPackage: com.brightengold.model,cn.rainier.nian.model
-  mapperLocations: classpath:mybatis/*.xml
+  type-aliases-package: com.brightengold.model,cn.rainier.nian.model
+  mapper-locations: classpath:mybatis/*Mapper.xml
 
 spring: 
   datasource:
@@ -114,9 +114,6 @@ spring:
   profiles: win-local
 server:
   port: 8082
-log4j2:
-  log:
-    level: INFO
 ---
 spring:
   profiles: mac-local

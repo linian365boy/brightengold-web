@@ -221,10 +221,6 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>**/application*.yml</include>
-                    <include>**/log4j2*.xml</include>
-                </includes>
             </resource>
         </resources>
 
@@ -274,16 +270,16 @@
             <properties>
                 <env>win-local</env>
             </properties>
-            <activation>
-                <!-- 默认启用win-local环境配置 -->
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
         <profile>
             <id>mac-local</id>
             <properties>
                 <env>mac-local</env>
             </properties>
+			<activation>
+				<!-- 默认启用win-local环境配置 -->
+				<activeByDefault>true</activeByDefault>
+			</activation>
         </profile>
         <profile>
             <id>prf</id>

@@ -90,6 +90,54 @@ public class SystemConfig {
 	public String getStaticAceessUrl() {
 		return staticAceessUrl;
 	}
+
+	public void setIndexAdsSize(int indexAdsSize) {
+		this.indexAdsSize = indexAdsSize;
+	}
+
+	public void setCrossMaxDepth(int crossMaxDepth) {
+		this.crossMaxDepth = crossMaxDepth;
+	}
+
+	public void setVerticalMaxDepth(int verticalMaxDepth) {
+		this.verticalMaxDepth = verticalMaxDepth;
+	}
+
+	public void setIndexProductSize(int indexProductSize) {
+		this.indexProductSize = indexProductSize;
+	}
+
+	public void setIndexNewsSize(int indexNewsSize) {
+		this.indexNewsSize = indexNewsSize;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	public void setCompanyLength(int companyLength) {
+		this.companyLength = companyLength;
+	}
+
+	public void setHtmlPath(String htmlPath) {
+		this.htmlPath = htmlPath;
+	}
+
+	public void setPicPath(String picPath) {
+		this.picPath = picPath;
+	}
+
+	public void setWebConfigPath(String webConfigPath) {
+		this.webConfigPath = webConfigPath;
+	}
+
+	public void setStaticAceessUrl(String staticAceessUrl) {
+		this.staticAceessUrl = staticAceessUrl;
+	}
 }
 
 	

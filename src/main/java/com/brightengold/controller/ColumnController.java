@@ -71,6 +71,8 @@ public class ColumnController {
 	@RequestMapping(value={"/add"},method=RequestMethod.POST)
 	public MessageVo add(Column column,
 			Integer firstColumnId,Integer secondColumnId){
+		logger.info("add param => {}, firstColumnbId => {}, secondColumnId => {}",
+				column, firstColumnId, secondColumnId);
 		MessageVo vo = new MessageVo(Constant.SUCCESS_CODE);
 		if(firstColumnId==0){
 			firstColumnId = null;
@@ -99,6 +101,7 @@ public class ColumnController {
 			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("新增栏目【"+column.getEnName()+"】失败！");
 		}
+		logger.info("add column return data => {}", vo);
 		return vo;
 	}
 	
@@ -110,15 +113,11 @@ public class ColumnController {
 	@ResponseBody
 	@RequestMapping(value={"/{id}/update"},method=RequestMethod.POST)
 	public MessageVo update(@PathVariable Integer id,Column column){
+		logger.info("update column param => {}", column);
 		Column temp = null;
 		MessageVo vo = null;
 		try {
 			temp = columnService.getById(id);
-			if(column.getParentId()!=0){
-				column.setParentId(column.getParentId());
-			}else{
-				column.setParentId(null);
-			}
 			column.setCreateDate(temp.getCreateDate());
 			if(!(column.getCode().equals(temp.getCode()))){
 				column.setUrl("views/col/" +column.getCode()+".htm");
@@ -129,9 +128,10 @@ public class ColumnController {
 			logger.info("修改栏目成功，原栏目信息：{}，修改后栏目信息：{}！",temp, column);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"修改栏目"+column.getEnName()+"成功");
 		} catch (Exception e) {
-			logger.error("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！",temp,column);
+			logger.error("修改栏目失败，原栏目信息：{}，修改后栏目信息：{}！",temp,column,e);
 			vo = new MessageVo(Constant.ERROR_CODE,"修改栏目"+column.getEnName()+"失败");
 		}
+		logger.info("update column return data => {}", vo);
 		return vo;
 	}
 	
@@ -145,6 +145,7 @@ public class ColumnController {
 	@RequestMapping(value={"/{id}/delete"})
 	@ResponseBody
 	public ResultVo<String> delete(@PathVariable Integer id){
+		logger.info("delete column param => {}", id);
 		Column temp = columnService.getById(id);
 		ResultVo<String> vo = new ResultVo<String>();
 		if(!(CollectionUtils.isEmpty(temp.getChildColumn()))){
@@ -166,6 +167,7 @@ public class ColumnController {
 			vo.setMessage("删除成功！");
 			logger.warn("删除栏目信息：{}成功",temp);
 		}
+		logger.info("delete column return data => {}", vo);
 		return vo;
 	}
 	
@@ -198,6 +200,7 @@ public class ColumnController {
 	@ResponseBody
 	@RequestMapping(value={"/{id}/setPublishContent"},method = RequestMethod.POST)
 	public MessageVo doPublishContent(@PathVariable Integer id,Column column){
+		logger.info("doPublishContent param  => {}", column);
 		MessageVo vo = null;
 		try{
 			columnService.updateColumnPublishContent(id,column);
@@ -207,6 +210,7 @@ public class ColumnController {
 			logger.error("设置发布模式发生错误！",e);
 			vo = new MessageVo(Constant.ERROR_CODE,"设置发布模式失败！");
 		}
+		logger.info("doPublishContent return data  => {}", vo);
 		return vo;
 	}
 }

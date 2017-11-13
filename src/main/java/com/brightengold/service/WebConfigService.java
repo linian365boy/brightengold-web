@@ -17,7 +17,7 @@ public class WebConfigService {
 	public boolean saveOrUpdateSystem(String path, WebConfig system){
 		system.setUpdateTime(new Date());
 		String jsonStr = new GsonBuilder().setDateFormat(ConstantVariable.DFTSTR).create().toJson(system);
-		logger.info("保存到classpath的json串为|{}",jsonStr);
+		logger.info("saveOrUpdateSystem param => {}, webConfig => {}, translate to jsonStr => {}",path, system, jsonStr);
 		boolean flag = false;
 		if(Tools.saveOrUpdateWebConfig(path,jsonStr)){
 			flag = true;
@@ -25,11 +25,11 @@ public class WebConfigService {
 		}else{
 			logger.error("设置网站配置失败");
 		}
+		logger.info("saveOrUpdateSystem return data => {}", flag);
 		return flag;
 	}
 
 	public WebConfig loadSystemConfig(String path) {
-		//String path = WebConfigService.class.getClassLoader().getResource("webConfig.json").getPath();
 		String jsonStr = Tools.getJsonStrFromPath(path);
 		logger.info("从文件|{}解析的json串为|{}",path,jsonStr);
 		return new GsonBuilder().setDateFormat(ConstantVariable.DFTSTR).create().fromJson(jsonStr, WebConfig.class);
