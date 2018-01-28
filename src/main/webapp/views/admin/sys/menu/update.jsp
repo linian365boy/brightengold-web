@@ -113,6 +113,7 @@ $(document).ready(function(){
 			  	  <label class="col-sm-3 control-label">&nbsp;</label>
                   <span class="help-block"></span>
                </div>
+              <input type="hidden" value="${model.id}" name="id"/>
             <div class="form-group">
 			  <div class="col-sm-offset-4 col-sm-8">
 			  	<button type="submit" class="btn btn-primary">保存</button>

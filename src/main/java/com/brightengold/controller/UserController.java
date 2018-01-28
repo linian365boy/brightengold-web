@@ -76,8 +76,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public MessageVo add(User user, String role) {
-		logger.info("add user param  => {}, role => {}",
-				ToStringBuilder.reflectionToString(user, ToStringStyle.SHORT_PREFIX_STYLE), role);
+		logger.info("add user param  => {}, role => {}", user, role);
 		MessageVo vo = null;
 		user.setAccountNonLocked(true);
 		//日志记录

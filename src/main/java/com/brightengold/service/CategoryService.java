@@ -55,7 +55,7 @@ public class CategoryService {
 	}
 	/**
 	 * 根据英文名称查询分类是否存在
-	 * @param code
+	 * @param enName
 	 * @return
 	 */
 	public long countByCateEname(String enName) {

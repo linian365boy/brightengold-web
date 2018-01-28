@@ -140,6 +140,7 @@ public class CategoryController {
 	@ResponseBody
 	@RequestMapping(value="/{categoryId}/update",method=RequestMethod.POST)
 	public MessageVo update(HttpServletRequest request,@PathVariable Integer categoryId,Category category) {
+		logger.info("update category param category => {}, request param => {}", category, request.getParameterMap());
 		StringBuilder content = new StringBuilder();
 		MessageVo vo = null;
 		try {
@@ -175,13 +176,14 @@ public class CategoryController {
 				category.setCreateUserId(temp.getCreateUserId());
 				categoryService.updateCategory(category);
 				logUtil.log(LogType.EDIT,content.toString());
-				logger.info("修改商品分类{}成功！",category);
+				logger.info("update category => {} success.",category);
 				vo = new MessageVo(Constant.SUCCESS_CODE,"修改商品分类【"+category.getEnName()+"】成功！");
 			}
 		}catch(Exception e){
-			logger.error("修改商品分类失败！",e);
+			logger.error("update category => {} error.", category, e);
 			vo = new MessageVo(Constant.ERROR_CODE,"修改商品分类【"+category.getEnName()+"】失败！");
 		}
+		logger.info("update category return data => {}", vo);
 		return vo;
 	}
 	

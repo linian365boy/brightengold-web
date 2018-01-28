@@ -32,9 +32,6 @@
 				},
 				"priority":{
 					number:true
-				},
-				"resString":{
-					required:true
 				}
 			},
 			messages:{
@@ -49,9 +46,6 @@
 				},
 				"priority":{
 					number:"排序号为数字！"
-				},
-				"resString":{
-					required:"包路径不能为空"
 				}
 			},
 			highlight: function(element) {
@@ -107,12 +101,6 @@
 		    	<label for="url" class="col-sm-2 control-label">跳转路径<code>*</code></label>
 				<div class="row col-sm-8">
 				     <input type="text" class="form-control" id="url" name="url" placeholder="跳转路径">
-				</div>
-			</div>
-			<div class="form-group">
-		    	<label for="url" class="col-sm-2 control-label">包路径<code>*</code></label>
-				<div class="row col-sm-8">
-				     <input type="text" class="form-control" id="resString" name="resString" placeholder="跳转路径对应的方法路径">
 				</div>
 			</div>
 			<div class="form-group">

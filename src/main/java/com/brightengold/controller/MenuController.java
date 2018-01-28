@@ -46,8 +46,6 @@ public class MenuController {
 	private ResourceService resourceService;
 	@Autowired
 	private LogUtil logUtil;
-	//@Autowired
-	//private ResourceDetailsMonitor resourceDetailsMonitor;
 	private final static Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
 	@RequestMapping({"/menus/list"})
@@ -79,12 +77,14 @@ public class MenuController {
 		map.put("parentMenu", parentMenu);
 		return "admin_unless/sys/menu/update";
 	}
-	
+
+	@ResponseBody
 	@RequestMapping(value="/{menuId}/update",method=RequestMethod.POST)
 	public MessageVo doUpdate(@PathVariable("menuId") Integer menuId, Menu menu){
 	    logger.info("doUpdate menu param => {}", menu);
 		MessageVo vo = null;
 		Menu tempMenu = menuService.loadMenuById(menuId);
+		if(menu.getParentId() ==0 ) menu.setParentId(null);
 		if(menuService.updateMenu(menu)){
 			logger.info("old menu => {}, update to => {} succeed.", tempMenu, menu);
 			vo = new MessageVo(Constant.SUCCESS_CODE,"修改后台菜单成功！");
@@ -98,22 +98,13 @@ public class MenuController {
 	
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public MessageVo add(Menu menu,Resource resource){
-	    logger.info("add menu menu => {}, resource => {}", menu, resource);
+	public MessageVo add(Menu menu){
+	    logger.info("add menu param menu => {}, resource => {}", menu);
 		MessageVo vo = null;
 		try{
+			if(menu.getParentId() == 0) menu.setParentId(null);
 			int updateCount = menuService.saveMenu(menu);
-			//返回的主键在menu里面，不在返回值里面
-			logger.info("新增的menu信息|{}",menu);
-			resource.setMenuId(menu.getId());
-			resource.setDescn(menu.getName());
-			resource.setDisplay(true);
-			resource.setName(menu.getName());
-			resource.setPriority(0);
-			resource.setResType(ResourceType.METHOD.getType());
-			if(updateCount>0 && resourceService.saveResource(resource)){
-				//重新查询DB
-				//resourceDetailsMonitor.afterPropertiesSet();
+			if(updateCount>0){
 				logUtil.log(LogType.ADD,"名称："+menu.getName());
 				logger.info("add menu => {} succeed.",menu);
 				vo = new MessageVo(Constant.SUCCESS_CODE);
@@ -122,6 +113,7 @@ public class MenuController {
 				vo = new MessageVo(Constant.ERROR_CODE,"新增菜单【"+menu.getName()+"】失败");
 			}
 		}catch(Exception e){
+			vo = new MessageVo(Constant.ERROR_CODE,"新增菜单【"+menu.getName()+"】失败");
 			logger.error("add menu error.",e);
 		}
         logger.info("add menu return data => {}", vo);

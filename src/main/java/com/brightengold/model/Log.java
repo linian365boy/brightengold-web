@@ -31,7 +31,7 @@ public class Log implements Serializable {
 	 */
 	private String operatorRealName;
 	/**
-	 * 操作T时间
+	 * 操作时间
 	 */
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date createTime;

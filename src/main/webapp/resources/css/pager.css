@@ -1,0 +1,24 @@
+.pagination {
+                text-align: center;
+                padding: 20px 0 10px 0;
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                }
+.pagination a {
+                margin: 0 5px 0 0;
+                padding: 3px 6px;
+                }
+
+.pagination a.number {
+				border: 1px solid #ddd;
+                }
+
+.pagination a.current {
+                background: #a5a5a5!important;
+               
+                color: #fff !important;
+                }
+				
+.pagination a.current:hover {
+				text-decoration: underline;
+                }

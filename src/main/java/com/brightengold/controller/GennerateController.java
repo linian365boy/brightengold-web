@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.brightengold.common.vo.RequestParam;
@@ -69,7 +70,7 @@ public class GennerateController {
 	private InfoService infoService;
 	@Resource
 	private WebConfigService configService;
-	
+
 	private Integer pageSize = 16;
 	private Integer pageNo = 1;
 	
@@ -157,7 +158,9 @@ public class GennerateController {
 		}else{
 			count = columnService.countColumnByCode(code);
 		}
-		String style_v = (String) request.getSession().getAttribute("style_v");
+		//String style_v = (String) request.getSession().getAttribute("style_v");
+		String style_v = (String)request.getSession().getServletContext().getAttribute("style_v");
+
 		String path = request.getSession().getServletContext().getRealPath("/");
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+
 				request.getServerPort()+request.getContextPath();

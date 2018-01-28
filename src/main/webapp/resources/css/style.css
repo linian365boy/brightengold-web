@@ -1,0 +1,12 @@
+*{
+	margin:0;
+	padding:0;
+}
+.asterisk {
+    color: #d9534f;
+}
+label.error {
+    color: #b94a48;
+    margin-top: 2px;
+    display: inline;
+}
