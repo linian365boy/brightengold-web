@@ -26,6 +26,22 @@ public class MessageVo implements Serializable {
 	 * 有时需要返回给前台数据
 	 */
 	private Object data;
+
+	public MessageVo(){}
+
+	public MessageVo(int code) {
+		this.code = code;
+	}
+
+	public MessageVo(int code, String message) {
+		this(code);
+		this.message = message;
+	}
+
+	public MessageVo(int code, String message, Object data) {
+		this(code, message);
+		this.data = data;
+	}
 	
 	public int getCode() {
 		return code;

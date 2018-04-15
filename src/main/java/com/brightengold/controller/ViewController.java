@@ -1,17 +1,14 @@
 package com.brightengold.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import cn.rainier.nian.utils.PageRainier;
+import com.brightengold.common.vo.RequestParam;
+import com.brightengold.model.*;
+import com.brightengold.service.*;
+import com.brightengold.util.Constant;
+import com.brightengold.util.Tools;
+import com.brightengold.vo.MessageVo;
+import com.google.code.kaptcha.Producer;
+import com.google.common.collect.Maps;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,42 +20,24 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.rainier.nian.utils.PageRainier;
-
-import com.brightengold.model.Advertisement;
-import com.brightengold.model.Category;
-import com.brightengold.model.Column;
-import com.brightengold.model.Company;
-import com.brightengold.model.Feedback;
-import com.brightengold.model.Info;
-import com.brightengold.model.News;
-import com.brightengold.model.Product;
-import com.brightengold.model.WebConfig;
-import com.brightengold.service.AdvertisementService;
-import com.brightengold.service.CategoryService;
-import com.brightengold.service.ColumnService;
-import com.brightengold.service.CompanyService;
-import com.brightengold.service.FeedbackService;
-import com.brightengold.service.InfoService;
-import com.brightengold.service.MailService;
-import com.brightengold.service.NewsService;
-import com.brightengold.service.ProductService;
-import com.brightengold.service.SystemConfig;
-import com.brightengold.service.WebConfigService;
-import com.brightengold.util.Constant;
-import com.brightengold.util.Tools;
-import com.brightengold.vo.MessageVo;
-import com.google.code.kaptcha.Producer;
-import com.google.common.collect.Maps;
-import com.google.gson.Gson;
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
- * @ClassName: ViewController  
- * @Description: 提供给view层的接口，供view层查询信息，不设置权限控制 
- * @date: 2016年7月25日 下午6:35:49 
- * 
- * @author tanfan 
- * @version  
+ * @ClassName: ViewController
+ * @Description: 提供给view层的接口，供view层查询信息，不设置权限控制
+ * @date: 2016年7月25日 下午6:35:49
+ *
+ * @author tanfan
+ * @version
  * @since JDK 1.7
  */
 @Controller
@@ -86,27 +65,22 @@ public class ViewController {
 	@Autowired
 	private FeedbackService feedbackService;
 	@Autowired
-    private Producer captchaProducer = null;
+	private Producer captchaProducer = null;
 	@Autowired
 	private MailService mailService;
-	
+
 	@RequestMapping(value="/products/search")
-	public String searchProducts(HttpServletRequest request, ModelMap map){
-		String keyword = request.getParameter("keyword");
-		String pageNoStr = request.getParameter("pageNo");
-		int pageNo = 1;
-		if(StringUtils.isNoneBlank(pageNoStr)){
-			pageNo = Integer.parseInt(pageNoStr);
-		}
+	public String searchProducts(ModelMap map, RequestParam param){
 		//生成公共部分内容
 		gennerateCommon(map);
-		PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(keyword,pageNo,Constant.PAGE_INDEX_SIZE);
+		PageRainier<Product> page = productService.findAllReleaseProductByLikeKeyword(param);
 		map.put("page", page);
-		map.put("keyword", keyword);
-		map.put("pageNo", pageNo);
+		map.put("keyword", param.getSearch());
+		map.put("pageNo", (param.getOffset()%param.getLimit()==0)?param.getOffset()/param.getLimit():
+				1+(param.getOffset()/param.getLimit()));
 		return "html/search/list";
 	}
-	
+
 	protected void gennerateCommon(ModelMap map){
 		//首页广告
 		List<Advertisement> ads= advertisementService.getIndexAds(systemConfig.getIndexAdsSize());
@@ -128,7 +102,7 @@ public class ViewController {
 				if(catProductsSize!=0){
 					long parentCateProductSize = catProductsSize;
 					logger.info("cate products size |{}",catProductsSize);
-					if(!CollectionUtils.isEmpty(cate.getChildren())){
+					/*if(!CollectionUtils.isEmpty(cate.getChildren())){
 						for(Category childCate : cate.getChildren()){
 							catProductsSize = productService.countByCateId(childCate.getId());
 							logger.info("childCate products size |{}",catProductsSize);
@@ -137,35 +111,34 @@ public class ViewController {
 								parentCateProductSize+=catProductsSize;
 							}
 						}
-					}
+					}*/
 					cate.setProductsSize(parentCateProductSize);
 				}
 			}
 		}
 		map.put("categorys", categorysList);
- 		//企业信息
-		Company company = companyService.loadCompany();
+		//企业信息
+		Company company = companyService.loadCompany(systemConfig.getCompanyConfigPath());
 		map.put("company", company);
 		//info信息
-		List<Info> infos = infoService.getList();
+		List<Info> infos = infoService.findList();
 		map.put("infos", infos);
 		//网站关键字
-		WebConfig webConfig = configService.loadSystemConfig();
+		WebConfig webConfig = configService.loadSystemConfig(systemConfig.getWebConfigPath());
 		map.put("webConfig", webConfig);
 	}
-	
+
 	/**
-	 * addFeedback:客户留言反馈 
-	 * @author tanfan 
-	 * @return 
+	 * addFeedback:客户留言反馈
+	 * @author tanfan
+	 * @return
 	 * @since JDK 1.7
 	 */
 	@RequestMapping("/feedback/add")
 	@ResponseBody
-	public String addFeedback(Feedback feedback, String kaptcha, HttpServletRequest request){
+	public MessageVo addFeedback(Feedback feedback, String kaptcha, HttpServletRequest request){
 		String code = (String)request.getSession().getAttribute(Constant.VERIFY_CODE_KEY);
 		logger.info("addFeedback session verfiy code |{}, user input code |{}",code, kaptcha);
-		Gson gson = new Gson();
 		MessageVo vo = new MessageVo();
 		Map<String,String> messageMap = Maps.newHashMap();
 		try{
@@ -188,10 +161,10 @@ public class ViewController {
 					messageMap.put("content", "Please fill the Message.");
 				}
 				if(MapUtils.isNotEmpty(messageMap)){
-					vo.setCode(202);
+					vo.setCode(Constant.CODE_202);
 					vo.setMessage("Please fill the required field or confirm the fields and submit it again.");
 					vo.setData(messageMap);
-					return gson.toJson(vo);
+					return vo;
 				}
 				feedbackService.addFeedback(feedback);
 				StringBuffer sb = new StringBuffer();
@@ -201,59 +174,96 @@ public class ViewController {
 				sb.append(String.format("Message：%s<br/>",feedback.getContent()));
 				//异步sendEmail
 				mailService.sendHtmlEmails(
-						String.format("inquiry----%s",feedback.getName()), 
-								sb.toString());
+						String.format("inquiry----%s",feedback.getName()),
+						sb.toString());
 				logger.info("客户留言信息|{}",feedback);
-				vo.setCode(200);
+				vo.setCode(Constant.SUCCESS_CODE);
 				vo.setMessage("succeed send email.");
 			}else{
 				logger.error("验证码输入错误！");
-				vo.setCode(201);
+				vo.setCode(Constant.CODE_201);
 				vo.setMessage("kaptcha error.");
 			}
 		}catch(Exception e){
 			logger.error("客户留言出现错误！",e);
-			vo.setCode(500);
+			vo.setCode(Constant.ERROR_CODE);
 			vo.setMessage("server error.");
 		}
-		return gson.toJson(vo);
+		return vo;
 	}
-	
+
 	@RequestMapping("/getVerifyCode")
 	public void verifyCode(HttpServletRequest request,HttpServletResponse response){
-		HttpSession session = request.getSession();  
-	    response.setDateHeader("Expires", 0);
-        // Set standard HTTP/1.1 no-cache headers.  
-        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");  
-        // Set IE extended HTTP/1.1 no-cache headers (use addHeader).  
-        response.addHeader("Cache-Control", "post-check=0, pre-check=0");  
-        // Set standard HTTP/1.0 no-cache header.  
-        response.setHeader("Pragma", "no-cache");
-        // return a jpeg  
-        response.setContentType("image/jpeg");  
-        // create the text for the image  
-        String capText = captchaProducer.createText();  
-        // store the text in the session  
-        session.setAttribute(Constant.VERIFY_CODE_KEY, capText);
-        logger.debug("verify code|{}",capText);
-        // create the image with the text  
-        BufferedImage bi = null;
-        ServletOutputStream out = null;
-        try { 
-        	bi = captchaProducer.createImage(capText);
-        	out = response.getOutputStream();  
-            // write the data out
-            ImageIO.write(bi, "jpg", out);  
-            out.flush();  
-        } catch (IOException e) {
-        	logger.error("write verify code error",e);
-		} finally {  
-            try {
+		HttpSession session = request.getSession();
+		response.setDateHeader("Expires", 0);
+		// Set standard HTTP/1.1 no-cache headers.
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		// Set IE extended HTTP/1.1 no-cache headers (use addHeader).
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		// Set standard HTTP/1.0 no-cache header.
+		response.setHeader("Pragma", "no-cache");
+		// return a jpeg
+		response.setContentType("image/jpeg");
+		// create the text for the image
+		String capText = captchaProducer.createText();
+		// store the text in the session
+		session.setAttribute(Constant.VERIFY_CODE_KEY, capText);
+		logger.debug("verify code|{}",capText);
+		// create the image with the text
+		BufferedImage bi = null;
+		ServletOutputStream out = null;
+		try {
+			bi = captchaProducer.createImage(capText);
+			out = response.getOutputStream();
+			// write the data out
+			ImageIO.write(bi, "jpg", out);
+			out.flush();
+		} catch (IOException e) {
+			logger.error("write verify code error",e);
+		} finally {
+			try {
 				out.close();
 			} catch (IOException e) {
 				logger.error("out close error",e);
-			}  
-        }
+			}
+		}
 	}
-	
+
+	@RequestMapping("/getLoginVerifyCode")
+	public void getLoginVerifyCode(HttpServletRequest request,HttpServletResponse response){
+		HttpSession session = request.getSession();
+		response.setDateHeader("Expires", 0);
+		// Set standard HTTP/1.1 no-cache headers.
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		// Set IE extended HTTP/1.1 no-cache headers (use addHeader).
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		// Set standard HTTP/1.0 no-cache header.
+		response.setHeader("Pragma", "no-cache");
+		// return a jpeg
+		response.setContentType("image/jpeg");
+		// create the text for the image
+		String capText = captchaProducer.createText();
+		// store the text in the session
+		session.setAttribute(cn.rainier.nian.utils.Constant.LOGIN_VERIFY_CODE_KEY, capText);
+		logger.debug("verify code|{}",capText);
+		// create the image with the text
+		BufferedImage bi = null;
+		ServletOutputStream out = null;
+		try {
+			bi = captchaProducer.createImage(capText);
+			out = response.getOutputStream();
+			// write the data out
+			ImageIO.write(bi, "jpg", out);
+			out.flush();
+		} catch (IOException e) {
+			logger.error("write verify code error",e);
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				logger.error("out close error",e);
+			}
+		}
+	}
+
 }

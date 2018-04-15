@@ -1,13 +1,27 @@
 package com.brightengold.dao;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import cn.rainier.nian.dao.base.AbstractDao;
-
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Info;
+import org.apache.ibatis.annotations.Param;
 
-public interface InfoDao extends AbstractDao<Info, Integer>{
-	@Query("select info from Info info where info.code = :codec")
+import java.util.List;
+
+public interface InfoDao {
 	Info loadByCode(@Param("codec") String code);
+
+	Info findOne(Integer id);
+
+	void delete(Integer id);
+
+	void save(Info info);
+
+	List<Info> findAll();
+
+	void delete(Info info);
+
+	List<Info> findList(RequestParam param);
+
+	long findAllCount(RequestParam param);
+
+	void updateInfo(Info info);
 }

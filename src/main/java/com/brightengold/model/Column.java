@@ -1,29 +1,17 @@
 package com.brightengold.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * 前台菜单栏目表
  * @author li.n1
  *
  */
-@Entity
-@Table(name="columns")
 public class Column implements Serializable{
 	/**
 	 * 序列化
@@ -45,7 +33,7 @@ public class Column implements Serializable{
 	/**
 	 * 父栏目
 	 */
-	private Column parentColumn;
+	private Integer parentId;
 	/**
 	 * 优先值（排序用），越大排名越前，默认为0
 	 */
@@ -55,14 +43,7 @@ public class Column implements Serializable{
 	 */
 	private Date createDate;
 	/**
-	 * 子栏目
-	 */
-	private Set<Column> childColumn;
-	/**
-	 * 栏目下的产品分类
-	 */
-	private Set<Category> categorys;
-	/**
+	 /**
 	 * 栏目代码，唯一
 	 */
 	private String code;
@@ -70,7 +51,7 @@ public class Column implements Serializable{
 	//存储类似：1，表示本栏目是深度为1，一级栏目,2表示为二级栏目,3表示为三级栏目
 	//冗余字段
 	private int depth = 1;
-	
+
 	/**
 	 * 栏目页面发布的类型，
 	 * 区别即显示标题还是内容的页面
@@ -79,42 +60,43 @@ public class Column implements Serializable{
 	 * 2  文章标题列表的页面
 	 */
 	private int type;
-	
+
 	/**
 	 * false: 默认不需要表单嵌入
 	 * true: 栏目发布的页面嵌入表单
 	 */
 	private boolean hasNeedForm = false;
-	
-	@Id
-	@GeneratedValue
+
+	//临时变量
+	private String parentName;
+	//子栏目
+	private transient Set<Column> childColumn;
+
+	//使用mybatis resuleMap的setter getter方式注入属性，必须要有一个空参数的构造方法
+	public Column(){}
+
+	public Column(int id, String name, String enName) {
+		this.id = id;
+		this.name = name;
+		this.enName = enName;
+	}
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@javax.persistence.Column(length=20)
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	@javax.persistence.Column(length=100)
 	public String getUrl() {
 		return url;
 	}
 	public void setUrl(String url) {
 		this.url = url;
-	}
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
-	@JoinColumn(name="pid")
-	public Column getParentColumn() {
-		return parentColumn;
-	}
-	public void setParentColumn(Column parentColumn) {
-		this.parentColumn = parentColumn;
 	}
 	public Integer getPriority() {
 		return priority;
@@ -122,22 +104,12 @@ public class Column implements Serializable{
 	public void setPriority(Integer priority) {
 		this.priority = priority;
 	}
-	@Temporal(TemporalType.DATE)
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	@OneToMany(cascade={CascadeType.MERGE},mappedBy="parentColumn",fetch=FetchType.LAZY)
-	@OrderBy("priority desc")
-	public Set<Column> getChildColumn() {
-		return childColumn;
-	}
-	public void setChildColumn(Set<Column> childColumn) {
-		this.childColumn = childColumn;
-	}
-	@javax.persistence.Column(length=10)
 	public String getCode() {
 		return code;
 	}
@@ -162,18 +134,33 @@ public class Column implements Serializable{
 	public void setEnName(String enName) {
 		this.enName = enName;
 	}
-	@OneToMany(cascade={CascadeType.MERGE},mappedBy="column",fetch=FetchType.LAZY)
-	@OrderBy("createDate asc")
-	public Set<Category> getCategorys() {
-		return categorys;
-	}
-	public void setCategorys(Set<Category> categorys) {
-		this.categorys = categorys;
-	}
 	public boolean isHasNeedForm() {
 		return hasNeedForm;
 	}
 	public void setHasNeedForm(boolean hasNeedForm) {
 		this.hasNeedForm = hasNeedForm;
+	}
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+	public Set<Column> getChildColumn() {
+		return childColumn;
+	}
+	public void setChildColumn(Set<Column> childColumn) {
+		this.childColumn = childColumn;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 }

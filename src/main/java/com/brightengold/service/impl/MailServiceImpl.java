@@ -50,7 +50,6 @@ public class MailServiceImpl implements MailService {
 	/**
 	 * 异步发送
 	 * 
-	 * @see com.zhangjihao.service.MailService#sendMailByAsynchronousMode(com.zhangjihao.bean.Email)
 	 */
 	public void sendMailByAsynchronousMode(final String subject, final String content) {
 		logger.debug("当前邮件采取异步发送..");
@@ -70,7 +69,6 @@ public class MailServiceImpl implements MailService {
 	 * 同步发送
 	 * 
 	 * @throws IOException
-	 * @see com.zhangjihao.service.MailServiceMode#sendMail(com.zhangjihao.bean.Email)
 	 */
 
 	public void sendMailBySynchronizationMode(String subject, String content) throws Exception {

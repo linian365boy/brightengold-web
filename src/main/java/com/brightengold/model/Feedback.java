@@ -1,23 +1,15 @@
 package com.brightengold.model;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-@Entity
-@Table
+import java.io.Serializable;
+import java.util.Date;
+
 public class Feedback implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3888436901906791573L;
 	private Integer id;
@@ -40,15 +32,13 @@ public class Feedback implements Serializable {
 	/**
 	 * 反馈时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date createTime;
 	/**
-	 * 备用字段
+	 * 产品名称
 	 */
 	private String productName;
-	private String temp2;
-	
-	@Id
-	@GeneratedValue
+
 	public Integer getId() {
 		return id;
 	}
@@ -85,13 +75,6 @@ public class Feedback implements Serializable {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public String getTemp2() {
-		return temp2;
-	}
-	public void setTemp2(String temp2) {
-		this.temp2 = temp2;
-	}
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreateTime() {
 		return createTime;
 	}

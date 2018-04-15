@@ -1,11 +1,14 @@
 package com.brightengold.controller;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-
+import cn.rainier.nian.utils.FileUtil;
+import com.brightengold.model.Company;
+import com.brightengold.service.CompanyService;
+import com.brightengold.service.LogUtil;
+import com.brightengold.service.SystemConfig;
+import com.brightengold.util.Constant;
+import com.brightengold.util.LogType;
+import com.brightengold.util.Tools;
+import com.brightengold.vo.MessageVo;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.brightengold.model.Company;
-import com.brightengold.service.CompanyService;
-import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
-import com.brightengold.util.LogType;
-import com.brightengold.util.Tools;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/admin/sys/company")
@@ -34,33 +35,40 @@ import com.brightengold.util.Tools;
 public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
-	private static Logger logger = LoggerFactory.getLogger(CompanyController.class);
-	
+	@Autowired
+	private SystemConfig systemConfig;
+	private final static Logger logger = LoggerFactory.getLogger(CompanyController.class);
+
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
 	}
-	
-	@RequestMapping(value={"/detail","/",""},method=RequestMethod.GET)
-	public String detail(Model model) {
-		model.addAttribute("model",companyService.loadCompany());
+
+	@RequestMapping(value={"/detail"},method=RequestMethod.POST)
+	public String detail(ModelMap map) {
+		map.put("model",companyService.loadCompany(systemConfig.getCompanyConfigPath()));
 		return "admin/sys/company/detail";
 	}
-	
+
+	@ResponseBody
 	@RequestMapping(value={"/update"},method=RequestMethod.POST)
-	public String update(@RequestParam  MultipartFile photos,Company company, HttpServletRequest request){
-		Company temp = companyService.loadCompany();
+	public MessageVo update(MultipartFile photos,Company company){
+		Company temp = companyService.loadCompany(systemConfig.getCompanyConfigPath());
+		MessageVo vo = null;
 		try{
-			if(!photos.isEmpty()){
-				String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
-				String newFileName = realPath+"/"+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
+			if(photos!=null && !photos.isEmpty()){
+				//String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/company");
+				String realPath = systemConfig.getPicPath()+File.separator+"upload"+File.separator+"company";
+				String newFileName = realPath+File.separator+Tools.getRndFilename()+Tools.getExtname(photos.getOriginalFilename());
+				//把前一张图片删除
+				FileUtil.delFile(systemConfig.getPicPath()+File.separator+temp.getLogo());
 				FileUtils.copyInputStreamToFile(photos.getInputStream(), new File(newFileName));
 				String url = newFileName.substring(realPath.lastIndexOf("upload"));
 				company.setLogo(url.replace("\\", "/"));
 			}else{
 				company.setLogo(temp.getLogo());
 			}
-			boolean flag = companyService.save(company);
+			boolean flag = companyService.save(systemConfig.getCompanyConfigPath(),company);
 			logger.info("修改公司前信息|{}，修改公司后信息|{}",temp,company);
 			if(flag){
 				StringBuilder content = new StringBuilder();
@@ -76,16 +84,17 @@ public class CompanyController {
 				if(!temp.getTelPhone().equals(company.getTelPhone())){
 					content.append("公司联系方式由\""+temp.getTelPhone()+"\"修改为\""+company.getTelPhone()+"\"");
 				}
-				MsgUtil.setMsgUpdate("success");
 				LogUtil.getInstance().log(LogType.EDIT, content.toString());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"修改公司信息成功！");
 			}else{
-				MsgUtil.setMsgUpdate("error");
 				logger.error("修改公司信息报错");
+				vo = new MessageVo(Constant.ERROR_CODE,"修改公司信息失败！");
 			}
 		}catch(Exception e){
 			logger.error("修改公司信息报错",e);
+			vo = new MessageVo(Constant.ERROR_CODE,"修改公司信息失败！");
 		}
-		return "redirect:/admin/sys/company/detail.html";
+		return vo;
 	}
-	
+
 }

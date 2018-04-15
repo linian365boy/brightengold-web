@@ -1,9 +1,14 @@
 package com.brightengold.dao;
 
-import cn.rainier.nian.dao.base.AbstractDao;
-
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Log;
 
-public interface LogDao extends AbstractDao<Log, Integer> {
+import java.util.List;
 
+public interface LogDao {
+    void save(Log log);
+
+    long findAllCount(RequestParam param);
+
+    List<Log> findList(RequestParam param);
 }

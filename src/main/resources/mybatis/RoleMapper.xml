@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rainier.nian.dao.RoleDao">
+
+    <resultMap type="Role" id="RoleListMap">
+        <id column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="describes" property="describes" jdbcType="VARCHAR"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="priority" property="priority" jdbcType="INTEGER"/>
+        <collection property="resources" ofType="Resource">
+            <id column="res_id" property="id" jdbcType="INTEGER"/>
+            <result column="res_descn" property="descn" jdbcType="VARCHAR"/>
+            <result column="res_display" property="display" jdbcType="BOOLEAN"/>
+            <result column="res_name" property="name" jdbcType="VARCHAR"/>
+            <result column="res_priority" property="priority" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <insert id="save">
+        insert into tb_role(name,describes,defaultOrNo,createDate,priority)
+        values(#{name},#{describes},#{defaultOrNo},#{createDate},#{priority})
+    </insert>
+
+    <update id="updateRole">
+        update tb_role set describes=#{describes},priority=#{priority} where name=#{name}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from tb_role where name=#{roleId}
+    </delete>
+
+    <select id="findOne" parameterType="java.lang.String" resultMap="RoleListMap">
+        select tr.*,trr.resourceId as res_id from tb_role tr left join tb_role_resource trr on tr.name=trr.roleId where tr.name=#{roleName}
+    </select>
+
+    <select id="findRoleDesc" parameterType="java.lang.String" resultType="java.lang.String">
+        select describes from tb_role where name=#{roleId}
+    </select>
+
+    <select id="finAllByAjax" resultType="Role">
+        select r.name,r.describes from tb_role r where r.defaultOrNo is false
+    </select>
+
+    <select id="findRoleByUser" parameterType="int" resultType="Role">
+        select r.name,r.describes from tb_role r inner join tb_user_role ur on r.name=ur.roleId where ur.userId =#{userId}
+    </select>
+
+    <select id="findNoDefaultRoleByUser" parameterType="int" resultType="Role">
+        select r.name,r.describes from tb_role r inner join tb_user_role ur on r.name=ur.roleId where ur.userId =#{userId} and r.defaultOrNo is false
+    </select>
+
+    <select id="findDefaultRole" resultType="Role">
+        select * from tb_role r where r.defaultOrNo is true limit 1
+    </select>
+
+    <select id="findAllCount" resultType="long" parameterType="com.brightengold.common.vo.RequestParam">
+        select count(*) from tb_role r where r.defaultOrNo is not true
+        <if test="search!=null and search!=''">
+            and describes like concat('%',#{search},'%')
+        </if>
+    </select>
+
+    <!-- <select id="findAll" resultMap="RoleListMap" parameterType="com.brightengold.common.vo.RequestParam">
+        select r.*,re.id as res_id,re.descn as res_descn,re.display as res_display,re.name as res_name,re.priority as res_priority
+        from tb_role r left join tb_role_resource rr on r.name=rr.roleId left join tb_resource re on rr.resourceId = re.id
+        where r.defaultOrNo is not true order by r.priority desc limit #{offset},#{limit}
+    </select> -->
+
+    <select id="findAll" resultType="Role" parameterType="com.brightengold.common.vo.RequestParam">
+        select * from tb_role r where r.defaultOrNo is not true
+        <if test="search!=null and search!=''">
+            and describes like concat('%',#{search},'%')
+        </if>
+        order by r.priority desc limit #{offset},#{limit}
+    </select>
+
+    <select id="findResourceByRole" parameterType="java.lang.String" resultType="Resource">
+        select * from tb_resource tr inner join tb_role_resource trr on tr.id=trr.resourceId where trr.roleId = #{roleId}
+    </select>
+
+    <delete id="deleteByUserId" parameterType="int">
+        delete from tb_user_role where userId=#{userId}
+    </delete>
+
+    <insert id="insertUserRole">
+        insert into tb_user_role(userId,roleId) values
+        <foreach collection="roles" item="item" separator="," >
+            (#{userId},#{item.name})
+        </foreach>
+    </insert>
+</mapper>

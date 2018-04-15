@@ -1,56 +1,49 @@
 package com.brightengold.service;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
-
 import cn.rainier.nian.utils.PageRainier;
-
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.dao.NewsDao;
 import com.brightengold.model.News;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component("newsService")
 public class NewsService {
 	@Autowired
 	private NewsDao newsDao;
-	
-	public PageRainier<News> findAll(Integer pageNo, Integer pageSize) {
-		Page<News> tempPage = newsDao.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id","priority")));
-		PageRainier<News> page = new PageRainier<News>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+	private static Logger logger = LoggerFactory.getLogger(NewsService.class);
+
+	public PageRainier<News> findAll(RequestParam param) {
+		long count = newsDao.findAllCount(param);
+		PageRainier<News> page = new PageRainier<News>(count);
+		page.setResult(newsDao.findList(param));
 		return page;
 	}
-	
-	public News saveNews(News news) {
+
+	public boolean saveNews(News news) {
+		boolean flag = false;
 		try {
-			return newsDao.save(news);
+			newsDao.save(news);
+			flag = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("添加新闻报错",e);
 		}
-		return null;
+		return flag;
 	}
 	public News loadNews(Integer id){
 		return newsDao.findOne(id);
 	}
 
-	public boolean delNews(News news) {
+	public boolean delNews(Integer newsId) {
 		try{
-			newsDao.delete(news);
+			newsDao.delete(newsId);
 			return true;
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error("删除新闻报错",e);
 		}
 		return false;
 	}
@@ -62,21 +55,12 @@ public class NewsService {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * @param id
-	 * @param depth 
-	 * @return
-	 */
-	
-	public long count() {
-		return newsDao.count();
-	}
 
 	public void insertOfBatch(List<News> tempNewsList) {
 		newsDao.save(tempNewsList);
 	}
-	
-	public Specification<News> countByColIdSpec(final Integer colId, final int depth){
+
+	/*public Specification<News> countByColIdSpec(final Integer colId, final int depth){
 		return new Specification<News>(){
 			@Override
 			public Predicate toPredicate(Root<News> root,
@@ -96,8 +80,8 @@ public class NewsService {
 				return null;
 			}
 		};
-	}
-	
+	}*/
+
 	/**
 	 * 根据栏目id，查询该栏目下所有的文章，包括子栏目下的文章
 	 * @param colId
@@ -105,25 +89,36 @@ public class NewsService {
 	 * @return
 	 */
 	public long countByColId(Integer colId, int depth) {
-		return newsDao.count(countByColIdSpec(colId,depth));
+		return newsDao.countByColId(colId,depth);
 	}
 
-	public PageRainier<News> findAllByColId(int pageNo, Integer pageSize,
-			Integer colId, int depth) {
-		Page<News> tempPage = newsDao.findAll(countByColIdSpec(colId,depth), 
-				new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id","priority")));
-		PageRainier<News> page = new PageRainier<News>(tempPage.getTotalElements(),pageNo,pageSize);
-		page.setResult(tempPage.getContent());
+	public PageRainier<News> findAllByColId(RequestParam param,
+											Integer colId, int depth) {
+		//Page<News> tempPage = newsDao.findAll(countByColIdSpec(colId,depth),
+		//		new PageRequest(pageNo-1,pageSize,new Sort(Direction.DESC,"id","priority")));
+		long count = newsDao.findAllCountByColId(colId,depth);
+		PageRainier<News> page = new PageRainier<News>(count);
+		page.setResult(newsDao.findList(param));
 		return page;
 	}
 
 	public List<News> findIndexPic(int indexNewsSize) {
-		Page<News> tempPage = newsDao.findAll(findIndexNewsSpec(), 
-				new PageRequest(0,indexNewsSize,new Sort(Direction.DESC,"priority","createDate")));
-		return tempPage.getContent();
+		//Page<News> tempPage = newsDao.findAll(findIndexNewsSpec(),
+		//		new PageRequest(0,indexNewsSize,new Sort(Direction.DESC,"priority","createDate")));
+		return newsDao.findIndexNews(indexNewsSize);
 	}
 
-	private Specification<News> findIndexNewsSpec() {
+	public boolean updateNews(News news) {
+		try{
+			newsDao.updateNews(news);
+			return true;
+		}catch(Exception e){
+			logger.error("删除新闻报错",e);
+		}
+		return false;
+	}
+
+	/*private Specification<News> findIndexNewsSpec() {
 		return new Specification<News>(){
 			@Override
 			public Predicate toPredicate(Root<News> root,
@@ -131,6 +126,6 @@ public class NewsService {
 				return cb.and(cb.isNotNull(root.<Date>get("publishDate")));
 			}
 		};
-	}
+	}*/
 	
 }

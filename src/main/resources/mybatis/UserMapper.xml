@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.rainier.nian.dao.UserDao">
+
+    <resultMap type="User" id="userRoleMap">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="realName" property="realName" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" jdbcType="BOOLEAN"/>
+        <result column="accountNonLocked" property="accountNonLocked" jdbcType="BOOLEAN"/>
+        <result column="lastCloseDate" property="lastCloseDate" jdbcType="TIMESTAMP"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="telphone" property="telphone" jdbcType="VARCHAR"/>
+        <collection property="roles" ofType="Role">
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="describes" property="describes" jdbcType="VARCHAR"/>
+            <result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+            <result column="defaultOrNo" property="defaultOrNo" jdbcType="BOOLEAN"/>
+        </collection>
+    </resultMap>
+
+    <insert id="save" parameterType="User" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
+        insert into tb_user(realName,username,email,password,enabled,accountNonLocked,lastCloseDate,createDate)
+        values(#{realName},#{username},#{email},#{password},#{enabled},#{accountNonLocked},#{lastCloseDate},#{createDate})
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        update tb_user set realName=#{realName},email=#{email},enabled=#{enabled},username=#{username} where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from tb_user where id=#{id}
+    </delete>
+
+    <select id="findUserByRole" resultType="User">
+        select distinct * from tb_user u inner join tb_user_role ur on u.id=ur.userId
+        where ur.roleId = #{roleId} order by u.id desc
+    </select>
+
+    <select id="findByName" resultMap="userRoleMap">
+        select u.*,ur.roleId as name from tb_user u left join tb_user_role ur on u.id = ur.userId where u.username = #{username}
+    </select>
+
+    <select id="findUserByLike" resultType="User">
+        select * from tb_user u where u.username like concat('%',#{un},'%')
+    </select>
+
+    <select id="findOne"  parameterType="int" resultType="User">
+        select u.* from tb_user u where u.id = #{id} limit 1
+    </select>
+
+    <select id="getPasswordById" resultType="java.lang.String" parameterType="int">
+        select u.password from tb_user u where u.id = #{id}
+    </select>
+
+    <update id="changePassword">
+        update tb_user set password = #{password} where username = #{username}
+    </update>
+
+    <update id="unsubscribe" parameterType="java.lang.String">
+        update tb_user set accountNonLocked = false,lastCloseDate=NOW() where username = #{username}
+    </update>
+
+    <select id="findList" resultType="User">
+        select * from tb_user where id!=#{loginId}
+        <if test="param.search!=null and param.search!=''">
+            and username like concat('%',#{param.search},'%') or realName like concat ('%',#{param.search},'%')
+        </if>
+        order by createDate desc limit #{param.offset},#{param.limit}
+    </select>
+
+    <select id="findAllCount" resultType="long">
+        select count(*) from tb_user where id!=#{loginId}
+        <if test="param.search!=null and param.search!=''">
+            and username like concat('%',#{param.search},'%') or realName like concat ('%',#{param.search},'%')
+        </if>
+    </select>
+
+    <update id="updateUserRole">
+        update tb_user_role set roleId = #{newRoleId} where roleId = #{roleId}
+    </update>
+</mapper>

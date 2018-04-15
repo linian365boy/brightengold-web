@@ -8,17 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.rainier.nian.utils.PageRainier;
-
+import com.brightengold.common.vo.RequestParam;
 import com.brightengold.model.Feedback;
 import com.brightengold.service.FeedbackService;
-import com.brightengold.service.LogUtil;
-import com.brightengold.service.MsgUtil;
-import com.brightengold.util.LogType;
+import com.brightengold.util.Constant;
+import com.brightengold.vo.MessageVo;
+import com.brightengold.vo.ReturnData;
+
+import cn.rainier.nian.utils.PageRainier;
 
 @Controller
 @RequestMapping("/admin/feedback")
@@ -26,20 +29,22 @@ import com.brightengold.util.LogType;
 public class FeedbackController {
 	@Autowired
 	private FeedbackService feedbackService;
-	private PageRainier<Feedback> feedbacks;
-	private Integer pageSize = 10;
-	private static Logger logger = LoggerFactory.getLogger(FeedbackController.class);
-	
-	@RequestMapping({"/feedbacks/{pageNo}"})
-	public String list(@PathVariable Integer pageNo,Model model,HttpServletRequest request){
-		if(pageNo==null){
-			pageNo = 1;
-		}
-		feedbacks = feedbackService.findAll(pageNo, pageSize);
-		model.addAttribute("page",feedbacks);//map
+	private final static Logger logger = LoggerFactory.getLogger(FeedbackController.class);
+
+	@RequestMapping({"/feedbacks/list"})
+	public String list(ModelMap map,HttpServletRequest request){
+		map.put("ajaxListUrl", "admin/feedback/feedbacks/getJsonList.html");
 		return "admin/feedback/list";
 	}
-	
+
+	@ResponseBody
+	@RequestMapping({"/feedbacks/getJsonList"})
+	public ReturnData<Feedback> getJsonList(RequestParam param){
+		PageRainier<Feedback> feedbacks = feedbackService.findAll(param);
+		ReturnData<Feedback> datas = new ReturnData<Feedback>(feedbacks.getTotalRowNum(), feedbacks.getResult());
+		return datas;
+	}
+
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public String detail(@PathVariable Integer id,Model model){
 		if(id!=null){
@@ -47,36 +52,21 @@ public class FeedbackController {
 		}
 		return "admin_unless/feedback/detail";
 	}
-	
+
+	@ResponseBody
 	@RequestMapping(value="/{id}/del",method=RequestMethod.GET)
-	public String delete(@PathVariable Integer id,Feedback feedback){
+	public MessageVo delete(@PathVariable Integer id){
+		MessageVo vo = null;
 		if (id != null) {
 			try{
 				feedbackService.delete(id);
 				logger.warn("删除id|{}的评论",id);
-				MsgUtil.setMsgDelete("success");
-				LogUtil.getInstance().log(LogType.DEL, "联系方式为"+feedback.getTelePhone());
+				vo = new MessageVo(Constant.SUCCESS_CODE,"删除评论成功！");
 			}catch(Exception e){
 				logger.error("删除评论报错!",e);
+				vo = new MessageVo(Constant.ERROR_CODE,"删除评论失败！");
 			}
 		}
-		return "redirect:/admin/feedback/feedbacks/1.html";
+		return vo;
 	}
-
-	public Integer getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public PageRainier<Feedback> getFeedbacks() {
-		return feedbacks;
-	}
-
-	public void setFeedbacks(PageRainier<Feedback> feedbacks) {
-		this.feedbacks = feedbacks;
-	}
-	
 }
