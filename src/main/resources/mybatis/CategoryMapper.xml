@@ -20,6 +20,7 @@
         <result column="enName" property="enName" jdbcType="VARCHAR"/>
         <result column="parentId" property="parentId" jdbcType="INTEGER"/>
         <result column="columnId" property="columnId" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <collection property="children" ofType="Category">
             <id column="child_id" property="id" jdbcType="INTEGER"/>
             <result column="child_enName" property="enName" jdbcType="VARCHAR"/>
@@ -55,7 +56,7 @@
         select count(*) from tb_category c
         <where>
             <if test="search!=null and search!=''">
-                title like concat('%',#{search},'%') or enName like concat ('%',#{search},'%')
+                c.name like concat('%',#{search},'%') or c.enName like concat ('%',#{search},'%')
             </if>
         </where>
     </select>

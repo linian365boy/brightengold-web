@@ -1,37 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="../../commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>新闻管理</title>
 <script type="text/javascript">
-	var update = function(obj){
-		var newsId = $(obj).attr("name");
-		var url = '${ctx}admin/news/'+newsId+'/update.html';
-		window.location.href=url;
+		var tianjia = function(){
+			var url = '${ctx}admin/news/add.html';
+			$.get(url,function(data){
+				$("div.content-wrapper").html(data);
+			});
+		};
+		var update = function(obj){
+			var url = '${ctx}admin/news/'+obj.id+'/update.html';
+			$.get(url,function(data){
+				$("div.content-wrapper").html(data);
+			});
 		};
 		//del
 		var del = function(obj){
-			var newsId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此新闻？',function(){
-				var url = '${ctx}admin/news/'+newsId+'/del.html';
-				window.location.href=url;
+			art.dialog.confirm('确定删除此【'+obj.title+'】新闻？',function(){
+				var url = '${ctx}admin/news/'+obj.id+'/del.html';
+				$.getJSON(url,function(json){
+		    		if(json.code==200){
+		    			$("button[name='refresh']",window.document).click();
+		    		}else{
+		    			art.dialog.tips(json.message, 1.5);
+		    		}
+				});
 			});
 		};
 		//purview
-		var purview = function(obj){
-			var newsId = $(obj).attr("name");
-			var url = '${ctx}admin/news/'+newsId+".html";
+		/* var purview = function(obj){
+			var url = '${ctx}admin/news/'+obj.id+".html";
 			window.open(url);
-		};
+		}; */
 		//publish
 		var publish = function(obj){
-			var newsId = $(obj).attr("name");
+			var newsId = obj.id;
 			$.get("${ctx}admin/news/"+newsId+"/checkPub.html",function(rs){
 				if(rs=="1"){
-					art.dialog.confirm('此新闻已发布，确定重新发布？',function(){
+					art.dialog.confirm('此新闻【'+obj.title+'】已发布，确定重新发布？',function(){
 						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
 							var dialog = art.dialog({
 								id:"publish",
@@ -39,15 +45,14 @@
 							});
 							if(data.code==200){
 								dialog.content('恭喜您，发布成功！').time(2.5);
-								$("#"+newsId).html(data.data);
+								$("button[name='refresh']",window.document).click();
 							}else{
 								dialog.content('对不起，发布失败！').time(2.5);
 							}
 						});
 					});
 				}else{
-					art.dialog.confirm('确定发布此新闻？',function(){
-						var newsId = $(obj).attr("name");
+					art.dialog.confirm('确定发布此【'+obj.title+'】新闻？',function(){
 						$.getJSON("${ctx}admin/news/"+newsId+"/release.html",function(data){
 							var dialog = art.dialog({
 								id:"publish",
@@ -55,88 +60,98 @@
 							});
 							 if(data.code==200){
 								dialog.content('恭喜您，发布成功！').time(2.5);
-								$("#"+newsId).html(data.data);
+								$("button[name='refresh']",window.document).click();
 							}else{
 								dialog.content('对不起，发布失败！').time(2.5);
-							} 
+							}
 						});
 					});
 				}
 			},"html");
 		};
-		
-</script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">新闻列表</h3>
-		<ul class="tabs">
-   			<li><a href="${ctx}admin/news/add.html" >新增新闻</a></li>
-		</ul>
-		</header>
 
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
-			<thead> 
-				<tr> 
-    				<th >序号</th>
-					<th >新闻标题</th>
-					<th >所在栏目</th>
-					<th >创建日期</th>
-					<th >发布日期</th>
-					<th >优先值</th>
-					<th >操作</th>
+		var publishDateFormatter=function(value, row, index){
+			return row.publishDate?row.publishDate:"<span class='label label-default' title='未发布'>未发布</span>";
+		};
+
+		var newsActionFormatter = function(value, row, index){
+			 return [
+				        '<a class="label label-info edit" href="javascript:void(0)" title="修改">修改</a>',
+				        '<a class="label label-info publish ml10" href="javascript:void(0)" title="发布">发布</a>',
+						'<a class="label label-danger ml10 remove" href="javascript:void(0)" title="删除">删除</a>'
+				    ].join('');
+		}
+
+		window.newsActionEvents = {
+				'click .publish':function(e, value, row, index){
+					publish(row);
+				},
+				'click .edit': function (e, value, row, index) {
+			    	update(row);
+			    },
+			    'click .remove': function (e, value, row, index) {
+			    	del(row);
+			    }
+		};
+		$("#table").bootstrapTable();
+</script>
+	<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	新闻管理
+        <small>更轻松管理您的新闻</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="javascript:void(0);">新闻管理</a></li>
+        <li class="active">新闻管理</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">新闻列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar"
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true"
+              data-show-columns="true"
+              data-show-export="true"
+              data-show-pagination-switch="true"
+              data-pagination="true"
+              data-id-field="id"
+              data-page-list="[10, 25, 50]"
+              data-show-footer="false"
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+                <thead>
+                <tr>
+    				<th data-formatter="runningFormatter">序号</th>
+					<th data-field="title">新闻标题</th>
+					<th data-field="columnName">所在栏目</th>
+					<th data-field="createDate">创建日期</th>
+					<th data-formatter="publishDateFormatter">发布日期</th>
+					<th data-field="priority">优先值</th>
+					<th data-formatter="newsActionFormatter" data-events="newsActionEvents">操作</th>
 				</tr>
-			</thead> 
-			<tbody id="dataContent"> 
-				<c:forEach items="${page.result }" var="news" varStatus="status">
-				<tr>
-					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td><a href="${ctx }admin/news/${news.id}.html" title="${news.title }" target="_blank">${news.title }</a></td>
-					<td>${news.column.name }（${news.column.enName }）</td>
-					<td>${news.createDate }</td>
-					<td id="${news.id }">
-						<c:choose>
-							<c:when test="${ empty news.publishDate}">
-								<span class='label label-default' title='未发布'>未发布</span>
-							</c:when>
-							<c:otherwise>
-								${ news.publishDate}
-							</c:otherwise>
-						</c:choose>
-					</td>
-					<td>${ news.priority}</td>
-					<td>
-						<input type="image" name="${news.id }" onclick="update(this);"
-						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
-						<input type="image" name="${news.id }" onclick="purview(this);" 
-						src="${ctx }resources/images/icn_preview.png" title="预览"/>&nbsp;
-						<input type="image" name="${news.id }" onclick="publish(this);" 
-						src="${ctx }resources/images/icn_publish.png" title="发布"/>&nbsp;
-						<input type="image" name="${news.id }" onclick="del(this);" 
-						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;
-					</td>
-				</tr>
-				</c:forEach>
-				</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/news/news"/>
-                		</c:import>
-                	</div>
-              </tr>
-			</tfoot>
-			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+                </thead>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

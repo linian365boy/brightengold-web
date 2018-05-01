@@ -1,32 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@include file="../../../commons/include.jsp" %>
+     <%@include file="/views/commons/include.jsp" %>
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>商品分类编辑</title>
-<script type="text/javascript" src="${ctx }resources/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.validate.js"></script>
-<script type="text/javascript" src="${ctx }resources/js/jquery.metadata.js"></script>
-<link href="${ctx }resources/css/bootstrap.min.css" rel="stylesheet"/>
-<link rel="stylesheet" type="text/css" href="${ctx }resources/css/style.css" />
-<style type="text/css">
-	.selectpicker {
-		background-color: #fff;
-	    background-image: none;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-	    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-	    color: #555;
-	    display: block;
-	    font-size: 14px;
-	    height: 34px;
-	    line-height: 1.42857;
-	    padding: 6px 12px;
-	    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-	    vertical-align: middle;
-	}
-</style>
+<!-- jQuery 2.2.3 -->
+<script src="/resources/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- jQuery form plugin -->
+<script src="/resources/plugins/jQueryForm/jquery.form.min.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.validate.js"></script>
+<script type="text/javascript" src="/resources/plugins/jQueryValidate/jquery.metadata.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/resources/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" type="text/css" href="/resources/dist/css/customUse.css" />
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#form").validate({
@@ -49,7 +39,7 @@ $(document).ready(function(){
 			},
 			messages:{
 				"name":{
-					required:"商品名称不能为空"
+					required:"商品分类不能为空"
 				},
 				"enName":{
 					required:"商品分类不能为空",
@@ -61,6 +51,20 @@ $(document).ready(function(){
 			},
 			success: function(element) {
 			      jQuery(element).closest('.form-group').removeClass('has-error');
+			},
+			submitHandler: function(form){
+				$(form).ajaxSubmit({
+					dataType:'json',
+					success:function(json) {
+			    		if(json.code==200){
+			    			$("button[name='refresh']",top.document).click();
+			    			top.art.dialog.list['bianji'].close();
+			    		}else{
+			    			$("span.help-block").html(json.message);
+			    			$(".has-error").removeClass("hide");
+			    		}
+			        }
+				});
 			}
 	});
 });
@@ -69,7 +73,6 @@ function formSubmit(){
 	$("#form").attr("action","${ctx}admin/goods/category/"+categoryId+"/update.html");
 	$("#form").submit();
 }
-
 function changeCol(obj){
 	var colId = $(obj).val();
 	$.post("${ctx }admin/sys/col/getChildren/"+colId+".html",{
@@ -81,95 +84,100 @@ function changeCol(obj){
 			html+='<select class="col-xs-5 selectpicker" name="secondCol" >';
 			html+="<option value='0'>==请选择==</option>";
 			$.each(json,function(i,n){
-				html+="<option value='"+n[0]+"'>"+n[1]+"</option>";
+				html+="<option value='"+n.id+"'>"+n.name+"</option>";
 			});
 			html+="</select>";
 		}
 		$(obj).after(html);
 	},"json");
 }
-
 </script>
 </head>
 <body>
-	<form id="form" class="form-horizontal" action="#" method="post" target="_parent">
-			<div class="form-group">
-			    <label for="parentCs" class="col-sm-3 control-label">所属栏目</label>
-			    	<div class="row col-xs-8" style="overflow:hidden;">
-			    		<c:if test="${fn:length(parentCol)>0 }">
-			    			<select class="col-xs-5 selectpicker" name="parentCol" onchange="changeCol(this);">
-				    			<c:forEach items="${parentCol }" var="col">
-				    				<option value="${col[0] }" 
-				    				<c:choose>
-				    					<c:when test="${empty model.column.parentColumn }">
-				    						<c:if test="${col[0] eq model.column.id }">
-					            				selected="selected"
-					            			</c:if>
-				    					</c:when>
-				    					<c:otherwise>
-				    						<c:if test="${col[0] eq model.column.parentColumn.id }">
-					            				selected="selected"
-					            			</c:if>
-				    					</c:otherwise>
-				    				</c:choose>
-			            			>${col[1] }</option>
-				    			</c:forEach>
-				      		</select>
-				      		<c:if test="${!(empty model.column.parentColumn) }">
-				      			<select class="col-xs-5 selectpicker" name="secondCol" >
-				      				<option value='0'>==请选择==</option>
-				      				<c:forEach items="${model.column.parentColumn.childColumn }" var="column">
-				      					<option value="${column.id }" 
-				      					<c:if test="${column.id eq model.column.id }">
-					            				selected="selected"
-					            			</c:if>
-				      					>${column.name }</option>
-				      				</c:forEach>
-				      			</select>
-				      		</c:if>
-			    		</c:if>
-			    	</div>
+	 <form id="form" class="form-horizontal content" action="#" method="post" target="_parent">
+		<div class="box-body">
+			 <div class="form-group">
+			    <label for="parentCs" class="col-sm-2 control-label">所属栏目</label>
+		    	<div class="col-sm-8" style="overflow:hidden;">
+		    		<c:if test="${fn:length(parentCol)>0 }">
+		    			<select class="col-xs-5 selectpicker" name="parentCol" onchange="changeCol(this);">
+			    			<c:forEach items="${parentCol }" var="col">
+			    				<option value="${col.id }"
+			    				<c:choose>
+			    					<c:when test="${empty column.parentId }">
+			    						<c:if test="${col.id eq column.id }">
+				            				selected="selected"
+				            			</c:if>
+			    					</c:when>
+			    					<c:otherwise>
+			    						<c:if test="${col.id eq column.parentId }">
+				            				selected="selected"
+				            			</c:if>
+			    					</c:otherwise>
+			    				</c:choose>
+		            			>${col.name }</option>
+			    			</c:forEach>
+			      		</select>
+			      		<c:if test="${!(empty column.parentId) }">
+			      			<select class="col-xs-5 selectpicker" name="secondCol" >
+			      				<option value='0'>==请选择==</option>
+			      				<c:forEach items="${parentColumn.childColumn }" var="ccolumn">
+			      					<option value="${ccolumn.id }"
+			      					<c:if test="${ccolumn.id eq column.id }">
+				            				selected="selected"
+				            			</c:if>
+			      					>${ccolumn.name }</option>
+			      				</c:forEach>
+			      			</select>
+			      		</c:if>
+		    		</c:if>
+		    	</div>
 			  </div>
             <div class="form-group">
-			    <label for="pName" class="col-sm-3 control-label">父级栏目</label>
-				     <div class="row col-sm-8" style="overflow:hidden;">
-				      <select class="col-xs-5 selectpicker" name="parents" id="parents">
-				      	<c:forEach items="${parents }" var="parent">
-			            	<option value="${parent[0] }"
-			            			<c:if test="${parent[0] eq model.parent.id }">
-			            				selected="selected"
-			            			</c:if>
-			            		>
-			            			${parent[1] }
-			            		</option>
-			            </c:forEach>
-				      </select>
-				    </div> 
+			    <label for="pName" class="col-sm-2 control-label">父级分类</label>
+			     <div class="col-sm-8" style="overflow:hidden;">
+			      <select class="col-xs-5 selectpicker" name="parents" id="parents">
+			      	<c:forEach items="${parents }" var="parent">
+		            	<option value="${parent.id }"
+		            			<c:if test="${parent.id eq model.parentId }">
+		            				selected="selected"
+		            			</c:if>
+		            		>
+		            			${parent.enName }
+		            		</option>
+		            </c:forEach>
+			      </select>
+			    </div>
 			  </div>
-			  <div class="form-group">
-			    <label for="name" class="col-sm-3 control-label">中文名称<span class="asterisk">*</span></label>
-			    <div class="row col-sm-8">
+			   <div class="form-group">
+			    <label for="name" class="col-sm-2 control-label">中文名称<code>*</code></label>
+			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="name" value="${model.name }" name="name" placeholder="名称">
 			    </div>
 			  </div>
-			  <div class="form-group">
-			    <label for="enName" class="col-sm-3 control-label">英文名称<span class="asterisk">*</span></label>
-			    <div class="row col-sm-8">
+			   <div class="form-group">
+			    <label for="enName" class="col-sm-2 control-label">英文名称<code>*</code></label>
+			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="enName" value="${model.enName }" name="enName" placeholder="名称">
 			    </div>
 			  </div>
 			  <div class="form-group">
-			    <label for="remark" class="col-sm-3 control-label">备注</label>
-			    <div class="row col-sm-8">
+			    <label for="remark" class="col-sm-2 control-label">备注</label>
+			    <div class="col-sm-8">
 			      <input type="text" class="form-control" id="remark" value="${model.remark }" name="remark" placeholder="备注">
 			    </div>
 			  </div>
             <input type="hidden" name="id" value="${model.id }"/>
+            <div class="form-group has-error hide">
+			  	  <label class="col-sm-3 control-label">&nbsp;</label>
+                  <span class="help-block"></span>
+               </div>
             <div class="form-group">
 			  <div class="col-sm-offset-4 col-sm-8">
 			  	<button type="submit" class="btn btn-primary">保存</button>
 			      <button class="btn btn-default" type="reset">重置</button>
 			    </div>
+			  </div>
 			  </div>
           </form>
 </body>

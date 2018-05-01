@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@include file="../../../commons/include.jsp" %>
+<%@include file="/views/commons/include.jsp" %>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -119,7 +119,7 @@ body.custom-background { background-color: #e2e2e2; }
 	  		<h3 class="wpb_area_title"><span>Related Product</span></h3>
 	  	</div>
 	  	<div class="supercat-des">
-			<a class="img-class" title=""></a>		
+			<a class="img-class" title=""></a>
 		</div>
 			<div id="owl-demo-related" class="owl-carousel">
 				<#list relatedProducts as relatedp>
@@ -130,7 +130,7 @@ body.custom-background { background-color: #e2e2e2; }
 								</a>
 								<figcaption>
 									<h3 class="pro_title">${relatedp.enName}</h3>
-									<div class="price_area_fix">		
+									<div class="price_area_fix">
 										<p class="product woocommerce add_to_cart_inline " style="border:4px solid #ccc; padding: 12px;">
 											<a href="${ctx}/relatedp" rel="nofollow" data-product_id="440" data-product_sku="" data-quantity="1" class="button  product_type_simple">查看更多</a>
 										</p>
@@ -138,10 +138,10 @@ body.custom-background { background-color: #e2e2e2; }
 								</figcaption>
 							</figure>
 						</div>
-					</#list>			
+					</#list>
 				</div>
-			</div>	 
-		</#if> 
+			</div>
+		</#if>
 	</div>
 </div><!-- #product-1066 -->
 		</div><!-- #content -->
@@ -153,7 +153,7 @@ body.custom-background { background-color: #e2e2e2; }
 jQuery.noConflict();
 (function( $ ) {
   $(function() {
-  
+
 $(document).ready(function() {
 	// carousel latest
     $("#owl-demo").owlCarousel({
@@ -174,7 +174,7 @@ $(document).ready(function() {
 		mouseDrag:false,
 		touchDrag:false,
 		lazyLoad : true,
-	}); 
+	});
 	// carousel feature
 	$("#owl-demo-feature").owlCarousel({
 		autoPlay: true,
@@ -195,9 +195,8 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
 	});
-	
-// sidebar carousel latest
 
+// sidebar carousel latest
     $("#owl-demo-side").owlCarousel({
         autoPlay: true,
 		stopOnHover: false,
@@ -217,9 +216,9 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
     });
-	
+
 // sidebar carousel feature product
-	
+
 	$("#owl-demo-side-feature").owlCarousel({
         autoPlay: false,
 		stopOnHover: false,
@@ -239,7 +238,7 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
     });
-	
+
 		// carousel related
 	$("#owl-demo-related").owlCarousel({
 		autoPlay: true,
@@ -260,8 +259,8 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
 	});
-	
-//	
+
+//
 		$("#owl-demo-la").owlCarousel({
 		autoPlay: true,
 		stopOnHover: false,
@@ -281,8 +280,8 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
 	});
-	
-//	
+
+//
 		$("#owl-demo-fe").owlCarousel({
 		autoPlay: false,
 		stopOnHover: false,
@@ -302,9 +301,9 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
 	});
-	
+
 // sidebar carousel three product
-	
+
 	$("#owl-demo-side-three").owlCarousel({
         autoPlay: false,
 		stopOnHover: false,
@@ -324,9 +323,9 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
     });
-		
+
 // sidebar carousel flash product
-	
+
 	$("#owl-demo-side-flash").owlCarousel({
         autoPlay: false,
 		stopOnHover: false,
@@ -349,9 +348,8 @@ $(document).ready(function() {
 		transitionStyle:"fade",
 		lazyLoad : true,
     });
-
 // sidebar carousel four product
-	
+
 	$("#owl-demo-side-four").owlCarousel({
         autoPlay: true,
 		stopOnHover: true,
@@ -371,7 +369,7 @@ $(document).ready(function() {
 		touchDrag:false,
 		lazyLoad : true,
     });
-	
+
 	// slider style type for latest product general
 	$('.wpb_latest_pro_sli .owl-wrapper').addClass('grid cs-style-3');
 	// slider style type for feature product general
@@ -380,19 +378,19 @@ $(document).ready(function() {
 	$('.widget_wpb_latest_class .owl-wrapper').addClass('grid cs-style-3');
 	// slider style type for feature product sidebar
 	$('.widget_wpb_feature_class .owl-wrapper').addClass('grid cs-style-3');
-		
+
 	$('.wpb_related_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
+
 	$('.wpb_la_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
+
 	$('.wpb_fe_pro_sli .owl-wrapper').addClass('grid cs-style-3');
-	
+
 	$('.widget_wpb_three_class .owl-wrapper').addClass('grid cs-style-3');
-	
+
 	$('.widget_wpb_flash_class .owl-wrapper').addClass('grid cs-style-3');
-	
+
 	$('.widget_wpb_four_class .owl-wrapper').addClass('grid cs-style-3');
-	
+
 	$('.banner').unslider({
 		speed: 500, // The speed to animate each slide (in milliseconds)
 		delay: 3000, // The delay between slide animations (in milliseconds)
@@ -401,7 +399,7 @@ $(document).ready(function() {
 		dots: true, // Display dot navigation
 		fluid: false // Support responsive design. May break non-responsive designs
 	});
-});	
+});
 });
 })(jQuery);
 </script>

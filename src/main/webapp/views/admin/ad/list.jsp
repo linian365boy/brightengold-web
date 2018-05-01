@@ -1,85 +1,128 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="../../commons/include.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>新闻管理</title>
 <script type="text/javascript">
 	var tianjia = function(){
 		var url = "${ctx}admin/ad/save.html";
 		art.dialog.open(url,{
 			title:'添加滚动图片',
 			id:'tianjia',
-			width: 550,
+			width: 768,
 			height: 440,
 			resize: false
 		});
 	};
 	var update = function(obj){
-		var newsId = $(obj).attr("name");
-		var url = '${ctx}admin/ad/'+newsId+'/update.html';
+		var url = '${ctx}admin/ad/'+obj.id+'/update.html';
 		art.dialog.open(url,{
-			title:'添加滚动图片',
-			id:'tianjia',
-			width: 550,
+			title:'修改滚动图片',
+			id:'bianji',
+			width: 768,
 			height: 440,
 			resize: false
 		});
 	};
 	//del
 	var del = function(obj){
-		var newsId = $(obj).attr("name");
 		art.dialog.confirm('确定删除此新闻？',function(){
-			var url = '${ctx}admin/ad/'+newsId+'/delete.html';
-			window.location.href=url;
+			var url = '${ctx}admin/ad/'+obj.id+'/delete.html';
+			$.getJSON(url,function(json){
+	    		if(json.code==200){
+	    			$("button[name='refresh']",window.document).click();
+	    		}else{
+	    			art.dialog.tips(json.message, 1.5);
+	    		}
+			});
 		});
 	};
-	var changeStatus = function(id,objstatus){
+	var changeStatus = function(row){
 		var statusStr = "正常";
-		if(objstatus==0){
+		if(row.status==1){
 			statusStr = "锁定";
 		}
-		art.dialog.confirm("确定修改为"+statusStr+"状态？",function(){
-			var url = '${ctx}admin/ad/'+id+'/updateStatus.html';
-			$.getJSON(url,{'status':objstatus},function(json){
+		art.dialog.confirm("确定修改为【"+statusStr+"】状态？",function(){
+			var url = '${ctx}admin/ad/'+row.id+'/updateStatus.html';
+			$.getJSON(url,{'status':row.status},function(json){
 				if(json.code==200){
-					art.dialog.alert(json.message);
+					$("button[name='refresh']",window.document).click();
+				}else{
+					art.dialog.tips(json.message, 2);
 				}
 			});
 		});
 	};
-</script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">首页滚动图片列表</h3>
-		<ul class="tabs">
-   			<li><a href="javascript:void(0);" onclick="tianjia();">新增首页滚动图片</a></li>
-		</ul>
-		</header>
+	var adImgFormatter = function(value, row, index){
+		return "<img title='"+row.name +"' alt='"+row.name +"' src='${applicationScope.staticAccessPath }/"+row.picUrl+"' width='107px' height='50px'/>";
+	}
 
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
-			<thead> 
-				<tr> 
-    				<th >序号</th>
-    				<th >图片</th>
-					<th >图片名称</th>
-					<th >跳转路径</th>
-					<th >宽度</th>
-					<th >高度</th>
-					<th >排序号</th>
-					<th >状态</th>
-					<th >操作</th>
+	var adHrefFormatter = function(value, row, index){
+		return "<a href='"+row.url+"' target='_blank'>"+row.url+"</a>";
+	}
+
+	var adStatusFormatter = function(value, row, index){
+		return row.status==1?"<span title='正常' class='label btn label-success editStatus'>正常</span>":
+			"<span title='锁定' class='label btn label-danger editStatus'>锁定</span>";
+	}
+
+	window.adStatusActionEvents = {
+		    'click .editStatus': function (e, value, row, index) {
+		    	changeStatus(row);
+		    }
+	};
+	$("#table").bootstrapTable();
+</script>
+
+	<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	滚动图片管理
+        <small>更轻松管理您的广告</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">滚动图片管理</a></li>
+        <li class="active">首页滚动图片</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">首页滚动图片列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+			<table id="table" data-toolbar="#toolbar"
+			 data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true"
+              data-show-columns="true"
+              data-show-export="true"
+              data-show-pagination-switch="true"
+              data-pagination="true"
+              data-id-field="id"
+              data-page-list="[10, 25, 50]"
+              data-show-footer="false"
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+			<thead>
+				<tr>
+    				<th data-formatter="runningFormatter">序号</th>
+    				<th data-formatter="adImgFormatter">图片</th>
+					<th data-field="name">图片名称</th>
+					<th data-formatter="adHrefFormatter">跳转路径</th>
+					<th data-field="width">宽度</th>
+					<th data-field="height">高度</th>
+					<th data-field="priority">排序号</th>
+					<th data-formatter="adStatusFormatter" data-events="adStatusActionEvents">状态</th>
+					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr>
-			</thead> 
-			<tbody id="dataContent"> 
+			</thead>
+			<%-- <tbody id="dataContent">
 				<c:forEach items="${page.result }" var="ad" varStatus="status">
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
@@ -103,26 +146,20 @@
 					<td>
 						<input type="image" name="${ad.id }" onclick="update(this);"
 						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
-						<input type="image" name="${ad.id }" onclick="del(this);" 
+						<input type="image" name="${ad.id }" onclick="del(this);"
 						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;
 					</td>
 				</tr>
 				</c:forEach>
-				</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/ad/ads"/>
-                		</c:import>
-                	</div>
-              </tr>
-			</tfoot>
+				</tbody>  --%>
 			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+			</div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

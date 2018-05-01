@@ -1,28 +1,36 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<%@include file="/views/commons/include.jsp" %>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@include file="/views/commons/include.jsp"%>
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
-<title><tiles:insertAttribute name="title" /></title>
-<link rel="shortcut icon" href="/resources/images/favicon.ico" type="image/ico"></link>
-<%@include file="/views/admin/commons/listJsCss.jsp" %>
+	<title><tiles:insertAttribute name="title"/></title>
+	<tiles:insertAttribute name="headJsCss"/>
 </head>
-<body>
-		<div id="newhead" class="header">
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<header class="main-header">
 			<tiles:insertAttribute name="head" />
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<tiles:insertAttribute name="left" />
+		</aside>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<tiles:insertAttribute name="main" />
 		</div>
-		<div id="newcontent" class="wrap clearfix mt10">
-			<div id="newleft" class="main_menu fl jsMainMenu">
-				<tiles:insertAttribute name="left" />
-			</div>
-			<div id="newmain" class="main_bd fr">
-				<tiles:insertAttribute name="main" />
-			</div>
-		</div>
-		<div id="newfooter" class="wrap footer">
+		<footer class="main-footer">
 			<tiles:insertAttribute name="footer" />
-		</div>
-		<%@include file="/views/admin/commons/jsCss.jsp" %>
+		</footer>
+		<!-- control-sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<tiles:insertAttribute name="sidebar"/>
+		</aside>
+		<!-- Control Sidebar -->
+		<div class="control-sidebar-bg"></div>
+	</div>
+	<tiles:insertAttribute name="footerJsCss"/>
 </body>
 </html>

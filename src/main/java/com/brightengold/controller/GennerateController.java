@@ -310,6 +310,10 @@ public class GennerateController {
 		//横条菜单，最深显示到二级菜单
 		List<Column> crossCol = columnService.findColumnsByDepth();
 		map.put("crossCol", crossCol);
+		for(Column col : crossCol){
+			List<Category> cats = categoryService.findCateByColId(col.getId());
+			map.put(col.getEnName(), cats);
+		}
 		//首页侧边栏目，最深显示到三级菜单
 		//List<Column> verticalCol= columnService.findColumnsByDepth(systemConfig.getVerticalMaxDepth());
 		//map.put("verticalCol", verticalCol);

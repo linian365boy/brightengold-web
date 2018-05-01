@@ -17,7 +17,7 @@
  <!--启用spring security基于注解的安全方法,切点表达式定义的会覆盖掉annotation的-->
 	<sec:global-method-security/>
     
-	<beans:bean id="resourceDetailsMonitor" class="cn.rainier.nian.model.ResourceDetailsMonitor" autowire="byType">
+	<beans:bean id="resourceDetailsMonitor" class="cn.rainier.nian.helper.ResourceDetailsMonitor" autowire="byType">
         <beans:property name="resourceDetailsBuilder" ref="resourceDetailsBuilder"/>
         <beans:property name="accessDecisionManager" ref="accessDecisionManager"/>
     </beans:bean>

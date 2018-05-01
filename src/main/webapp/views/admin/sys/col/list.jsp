@@ -1,54 +1,46 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@include file="/views/commons/include.jsp" %>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script type="text/javascript" src="${ctx }resources/js/system.js"></script>
-<title>栏目分类管理</title>
 <script type="text/javascript">
 	var update = function(obj){
-		var categoryId = $(obj).attr("name");
-		var url = '${ctx}admin/sys/col/'+categoryId+'/update.html';
+		var url = '${ctx}admin/sys/col/'+obj.id+'/update.html';
 		art.dialog.open(url,{
-			title:'编辑分类信息',
+			title:'编辑栏目信息',
 			id:'bianji',
-			width:550,
-			height:340,
+			width:768,
+			height:360,
 			resize: false
 			});
 		};
-		
+
 		var tianjia = function(){
 			var url = "${ctx}admin/sys/col/add.html";
 			art.dialog.open(url,{
 				title:'添加栏目类别',
 				id:'tianjia',
-				width: 550,
-				height: 340,
+				width: 768,
+				height: 360,
 				resize: false
 			});
 		};
-		
+
 		var del = function(obj){
-			var categoryId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此栏目？',function(){
-				var url = '${ctx}admin/sys/col/'+categoryId+'/delete.html';
-				$.getJSON(url,function(json){
-					art.dialog.alert(json.message,function(){
-						if(json.code==200){
-							$("#searchForm").submit();
-						}
-					});
-				});
+			art.dialog.confirm('确定删除此['+obj.enName+']栏目？',function(){
+				var url = '${ctx}admin/sys/col/'+obj.id+'/delete.html';
+				$.post(url,function(json){
+		    		if(json.code==200){
+		    			$("button[name='refresh']",window.document).click();
+		    		}else{
+		    			art.dialog.tips(json.message, 1.5);
+		    		}
+				},"json");
 			});
 		};
-		var setPublish = function(obj){
-			var categoryId = $(obj).attr("name");
-			art.dialog.open("${ctx}admin/sys/col/"+categoryId+"/setPublishContent.html",{
+		var setPublishType = function(obj){
+			art.dialog.open("${ctx}admin/sys/col/"+obj.id+"/setPublishContent.html",{
 				title:'发布内容设置',
 				id:'setPublish',
-				width: 550,
+				width: 768,
 				height: 300,
 				resize: false
 			});
@@ -56,57 +48,86 @@
 		$(function(){
 			 $('[data-toggle="tooltip"]').tooltip();
 		});
+
+		var typeFormatter = function(value, row, index){
+			return row.type==1?"<a class='changeType' title='点击修改发布类型' href='javascript:void(0);'>产品列表</a>":
+				(row.type==0?"<a class='changeType' title='点击修改发布类型' href='javascript:void(0);'>信息列表</a>":
+					"<a class='changeType' title='点击修改发布类型' href='javascript:void(0);'>文章标题</a>");
+		};
+
+		window.typeEvents = {
+			    'click .changeType': function (e, value, row, index) {
+			    	setPublishType(row);
+			    }
+		};
+
+		$("#table").bootstrapTable();
 </script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<form class="form-inline" id="searchForm">
-		  <div class="form-group">
-		    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
-		    <div class="input-group">
-		      <div class="input-group-addon">关键字</div>
-		      <input type="text" class="form-control" name="keyword" value="${param.keyword }" id="exampleInputAmount" placeholder="请输入关键字搜索">
-		      <div class="input-group-addon"></div>
-		    </div>
-		  </div>
-		  <button type="submit" class="btn btn-primary">搜索</button>
-		</form>
-		<header>
-		<h3 class="tabs_involved">栏目分类列表</h3>
-		<ul class="tabs">
-   			<li><a href="javascript:void(0);" onclick="tianjia();">新增栏目</a></li>
-		</ul>
-		</header>
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter"> 
-			<thead> 
-				<tr> 
-    				<th >序号</th>
-					<th >栏目名称(英文)</th>
-					<th >栏目代码</th>
-					<th >父级栏目</th>
-					<th >排序号</th>
-					<th >操作</th>
-				</tr> 
-			</thead> 
-			<tbody id="dataContent">
-				<c:choose>
+
+	<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	栏目管理
+        <small>更轻松管理您的前台菜单栏目</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">栏目管理</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">前台菜单栏目列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar"
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true"
+              data-show-columns="true"
+              data-show-export="true"
+              data-show-pagination-switch="true"
+              data-pagination="true"
+              data-id-field="id"
+              data-page-list="[10, 25, 50]"
+              data-show-footer="false"
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+                <thead>
+                <tr>
+    				<th data-formatter="runningFormatter">序号</th>
+					<th data-field="enName">栏目名称(英文)</th>
+					<th data-field="code">栏目代码</th>
+					<th data-field="parentName">父级栏目</th>
+					<th data-field="priority">排序号</th>
+					<th data-formatter="typeFormatter" data-events="typeEvents">发布类型</th>
+					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+				</tr>
+                </thead>
+                <%-- <tbody>
+                <c:choose>
 				<c:when test="${!(empty page.result) and (page.totalRowNum>0) }">
 				<c:forEach items="${page.result }" var="column" varStatus="status">
 				<tr>
 					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
 					<td title="${column.name }（${column.enName }）">${column.name }（${column.enName }）</td>
 					<td>${column.code }</td>
-					<td>${empty column.parentColumn?"————":column.parentColumn.name }</td>
+					<td>${empty column.parentName?"————":column.parentName }</td>
 					<td>${column.priority }</td>
 					<td>
 						<input type="image" name="${column.id }" data-toggle="tooltip" data-placement="top" onclick="update(this);"
 						src="${ctx }resources/images/icn_edit.png" title="修改"/>&nbsp;
-						<input type="image" name="${column.id }" onclick="setPublish(this);" 
-						src="${ctx }resources/images/icn_publish.png" data-toggle="tooltip" data-placement="top" 
+						<input type="image" name="${column.id }" onclick="setPublish(this);"
+						src="${ctx }resources/images/icn_publish.png" data-toggle="tooltip" data-placement="top"
 						title="发布设置（当前使用
 						<c:choose>
 							<c:when test="${column.type==1 }">
@@ -124,7 +145,7 @@
 							</c:otherwise>
 						</c:choose>
 						模式发布）．设置时，其子栏目也会一起设置"/>&nbsp;
-						<input type="image" name="${column.id }" data-toggle="tool1tip" data-placement="top" onclick="del(this);" 
+						<input type="image" name="${column.id }" data-toggle="tool1tip" data-placement="top" onclick="del(this);"
 						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
 					</td>
 				</tr>
@@ -134,21 +155,15 @@
 				<tr class="text-center"><td colspan="6">暂无数据</td></tr>
 			</c:otherwise>
 			</c:choose>
-				</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/sys/col/cols"/>
-                		</c:import>
-                	</div>
-              </tr>
-			</tfoot>
-			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+                </tbody> --%>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

@@ -58,12 +58,15 @@
 
     <bean class="cn.rainier.nian.service.impl.UserServiceImpl" id="userService">
         <property name="userDao" ref="userDao"/>
-        <property name="outCSV" ref="outUser"/>
+        <property name="userCache" ref="nullUserCache"/>
+        <property name="roleDao" ref="roleDao"/>
     </bean>
+
+    <bean class="org.springframework.security.core.userdetails.cache.NullUserCache" id="nullUserCache"/>
 
     <bean id="roleService" class="cn.rainier.nian.service.impl.RoleServiceImpl">
         <property name="roleDao" ref="roleDao"/>
-        <property name="outCSV" ref="outRole"/>
+        <property name="userDao" ref="userDao"/>
     </bean>
 
     <bean id="menuService" class="cn.rainier.nian.service.impl.MenuServiceImpl">

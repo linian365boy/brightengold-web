@@ -12,7 +12,7 @@ public interface AdvertisementDao {
 
 	void updateStatus(@Param("id") Integer id,@Param("status") Integer status);
 
-	List<Advertisement> findIndexAds(@Param("findIndexAds") int indexAdsSize);
+	List<Advertisement> findIndexAds(@Param("indexAdsSize") int indexAdsSize);
 
 	void save(Advertisement temp);
 

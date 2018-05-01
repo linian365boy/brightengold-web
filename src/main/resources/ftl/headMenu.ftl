@@ -35,9 +35,9 @@
 								<#list crossCol as col>
 									<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-685 ${(column?? && (col.id)==(column.id))?string('current-menu-item current_page_item','')}">
 										<a href="${ctx}/views/html/col/${col.code}.htm">${col.enName}</a>
-										<#if ((col.categorys)?size>0)>
+										<#if ((col.enName)?size>0)>
 										<ul class="sub-menu">
-											<#list col.categorys as cate>
+											<#list col.enName as cate>
 												<#if (cate.parent)??>
 												<!--二级分类-->
 												<#else>

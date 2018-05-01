@@ -29,7 +29,7 @@
     </http>
 
     <!-- 配置认证管理器 -->
-    <authentication-manager alias="autheticationManager">
+    <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="userService">
             <password-encoder hash="md5"/>
         </authentication-provider>
@@ -39,6 +39,13 @@
     <beans:bean id="myAuthenticationEntryPoint"
                 class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
         <beans:property name="loginFormUrl" value="/admin/login.html"></beans:property>
+    </beans:bean>
+
+    <beans:bean id="captchaAuthenticaionFilter" class="cn.rainier.nian.filter.CaptchaAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+        <beans:property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+        <beans:property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+        <beans:property name="filterProcessesUrl" value="/admin/checkLogin" />
     </beans:bean>
 
     <beans:bean id="accessDecisionManager" class="cn.rainier.nian.security.MyAccessDecisionManager"/>

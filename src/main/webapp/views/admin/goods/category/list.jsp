@@ -1,108 +1,103 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@include file="../../../commons/include.jsp" %>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script type="text/javascript" src="${ctx }resources/js/system.js?${style_v}"></script>
-<title>商品分类管理</title>
-
+    <%@include file="/views/commons/include.jsp" %>
 <script type="text/javascript">
 	var update = function(obj){
-		var categoryId = $(obj).attr("name");
-		var url = '${ctx}admin/goods/category/'+categoryId+'/update.html';
+		var url = '${ctx}admin/goods/category/'+obj.id+'/update.html';
 		art.dialog.open(url,{
 			title:'编辑分类信息',
 			id:'bianji',
-			width:550,
-			height:330,
+			width:768,
+			height:360,
 			resize: false
 			});
 		};
-		
+
 		var tianjia = function(){
 			var url = "${ctx}admin/goods/category/add.html";
 			art.dialog.open(url,{
 				title:'添加商品分类',
 				id:'tianjia',
-				width: 550,
-				height: 330,
+				width: 768,
+				height: 360,
 				resize: false
 			});
 		};
-		
+
 		var del = function(obj){
-			var categoryId = $(obj).attr("name");
-			art.dialog.confirm('确定删除此分类',function(){
-				var url = '${ctx}admin/goods/category/'+categoryId+'/del.html';
-				window.location.href=url;
+			art.dialog.confirm("确定删除此["+obj.enName+"]分类？",function(){
+				var url = '${ctx}admin/goods/category/'+obj.id+'/del.html';
+				$.post(url,function(json){
+		    		if(json.code==200){
+		    			$("button[name='refresh']",window.document).click();
+		    		}else{
+		    			art.dialog.tips(json.message, 1.5);
+		    		}
+				},"json");
 			});
 		};
-		
-</script>
-</head>
-<body>
-	<section id="main" class="column">
-	<jsp:include page="/views/admin/commons/message.jsp"/>
-		<article class="module width_full">
-		<header>
-		<h3 class="tabs_involved">商品分类列表<!-- <span style="color:red;">（*商品分类必须在二级栏目下，前台页面才起作用）</span> --></h3>
-		<ul class="tabs">
-   			<li><a href="javascript:void(0);" onclick="tianjia();">新增分类</a></li>
-		</ul>
-		</header>
 
-		<div class="tab_container">
-			<div id="tab1" class="tab_content">
-			<table class="tablesorter" cellspacing="0"> 
-			<thead> 
-				<tr> 
-    				<th >序号</th>
-					<th >一级分类</th>
-					<th >二级分类</th>
-					<th >所在栏目</th>
-					<th >操作</th>
-				</tr> 
-			</thead> 
-			<tbody id="dataContent"> 
-				<c:forEach items="${page.result }" var="category" varStatus="status">
-				<tr>
-					<td>${(page.currentPageIndex-1)*page.pageSize+status.index+1 }</td>
-					<td>
-						<c:choose>
-							<c:when test="${!(empty category.parent) }">
-								${category.parent.name }（${category.parent.enName }）
-							</c:when>
-							<c:otherwise>
-								————
-							</c:otherwise>
-						</c:choose>
-					</td>
-					<td>${category.name }（${category.enName }）</td>
-					<td>${category.column.name }（${category.column.enName }）</td>
-					<td>
-						<input type="image" name="${category.id }" onclick="update(this);"
-						src="${ctx }resources/images/icn_edit.png" title="修改"/>
-						<input type="image" name="${category.id }" onclick="del(this);" 
-						src="${ctx }resources/images/icn_trash.png" title="删除"/>&nbsp;&nbsp;
-					</td>
+		$("#table").bootstrapTable();
+
+</script>
+
+	<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        	产品分类管理
+        <small>更轻松管理您的分类</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${ctx }admin/index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li><a href="#">产品管理</a></li>
+        <li class="active">产品分类管理</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">产品分类列表</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            	<div id="toolbar">
+			        <button class="btn btn-block btn-primary" onclick="tianjia();">
+			            <i class="glyphicon glyphicon-plus icon-plus"></i> 新增
+			        </button>
+			    </div>
+              <table id="table" data-toolbar="#toolbar"
+              data-toggle="table" class="table table-striped" data-search="true" data-show-refresh="true"
+              data-show-columns="true"
+              data-show-export="true"
+              data-show-pagination-switch="true"
+              data-pagination="true"
+              data-id-field="id"
+              data-page-list="[10, 25, 50]"
+              data-show-footer="false"
+              data-side-pagination="server" data-url="${ctx }${ajaxListUrl}">
+                <thead>
+                <tr>
+                	<th data-formatter="runningFormatter">序号</th>
+					<th data-field="parentName">父级分类</th>
+					<th data-field="name">名称（中）</th>
+					<th data-field="enName">名称（英）</th>
+					<th data-field="columnName">所在栏目</th>
+					<th data-field="createDate">创建日期</th>
+					<th data-formatter="actionFormatter" data-events="actionEvents">操作</th>
 				</tr>
-				</c:forEach>
-				</tbody> 
-			<tfoot>
-				<tr>
-                <td colspan="12">
-                	<div class="pagination">
-                		<c:import url="/views/admin/commons/page.jsp">
-                			<c:param name="url" value="admin/goods/category/categorys"/>
-                		</c:import>
-                	</div>
-              </tr>
-			</tfoot>
-			</table>
-			</div><!-- end of #tab1 -->
-		</div><!-- end of .tab_container -->
-		</article><!-- end of content manager article -->
-	</section>
-</body>
-</html>
+                </thead>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->

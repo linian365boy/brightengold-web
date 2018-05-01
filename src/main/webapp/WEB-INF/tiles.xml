@@ -1,42 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
-       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+		"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+		"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 	<!-- 主框架 -->
 	<definition name="baselayout" template="/WEB-INF/tiles/baselayout.jsp">
 		<put-attribute name="title" value="年年有鱼管理后台" />
-        <put-attribute name="head" value="/WEB-INF/tiles/head.jsp"/>
-        <put-attribute name="left" value="/WEB-INF/tiles/menu.jsp"/>
-        <put-attribute name="main" value="/WEB-INF/tiles/index.jsp"/>
-        <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>
-        <!-- <put-list-attribute name="stylesheets">  
-            <add-attribute value="static/style/main" />  
+		<put-attribute name="headJsCss" value="/WEB-INF/tiles/headJsCss.jsp"/>
+		<put-attribute name="head" value="/WEB-INF/tiles/head.jsp"/>
+		<put-attribute name="left" value="/WEB-INF/tiles/menu.jsp"/>
+		<put-attribute name="main" value="/WEB-INF/tiles/index.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>
+		<put-attribute name="sidebar" value="/WEB-INF/tiles/sidebar.jsp"/>
+		<put-attribute name="footerJsCss" value="/WEB-INF/tiles/footerJsCss.jsp"/>
+		<!-- <put-list-attribute name="stylesheets">
+            <add-attribute value="static/style/main" />
         </put-list-attribute>
-        <put-list-attribute name="scripts">  
-            <add-attribute value="static/js/util" />  
+        <put-list-attribute name="scripts">
+            <add-attribute value="static/js/util" />
         </put-list-attribute> -->
 	</definition>
+
+	<!-- 内容框架 -->
+	<definition name="contentlayout" template="/WEB-INF/tiles/contentlayout.jsp">
+		<put-attribute name="main" value="/WEB-INF/tiles/index.jsp"/>
+	</definition>
+
 	<!-- 没有extends　baselayout 会是新页面 -->
 	<definition name="admin_unless/*/*/*" template="/views/admin/{1}/{2}/{3}.jsp" />
 	<definition name="admin_unless/*/*" template="/views/admin/{1}/{2}.jsp" />
-    <!-- 菜单 -->
-    <definition name="admin/index" extends="baselayout">
+	<!-- 菜单 -->
+	<definition name="admin/index" extends="baselayout">
 		<put-attribute name="main" value="/views/admin/index.jsp" />
 	</definition>
-	<definition name="admin/sys/*/*" extends="baselayout">
+	<definition name="admin/sys/*/*" extends="contentlayout">
+		<!-- <put-attribute name="headJsCss" value="/views/admin/commons/headJsCss.jsp"/> -->
 		<put-attribute name="main" value="/views/admin/sys/{1}/{2}.jsp" />
+		<!-- <put-attribute name="footerJsCss" value="/views/admin/commons/footerJsCss.jsp"/> -->
 	</definition>
-	<definition name="admin/news/*" extends="baselayout">
+	<definition name="admin/news/*" extends="contentlayout">
+		<!-- <put-attribute name="headJsCss" value="/views/admin/commons/headJsCss.jsp"/> -->
 		<put-attribute name="main" value="/views/admin/news/{1}.jsp" />
+		<!-- <put-attribute name="footerJsCss" value="/views/admin/commons/footerJsCss.jsp"/> -->
 	</definition>
-	<definition name="admin/ad/*" extends="baselayout">
+	<definition name="admin/ad/*" extends="contentlayout">
+		<!-- <put-attribute name="headJsCss" value="/views/admin/commons/headJsCss.jsp"/> -->
 		<put-attribute name="main" value="/views/admin/ad/{1}.jsp" />
+		<!-- <put-attribute name="footerJsCss" value="/views/admin/commons/footerJsCss.jsp"/> -->
 	</definition>
-	<definition name="admin/goods/*/*" extends="baselayout">
+	<definition name="admin/goods/*/*" extends="contentlayout">
+		<!-- <put-attribute name="headJsCss" value="/views/admin/commons/headJsCss.jsp"/> -->
 		<put-attribute name="main" value="/views/admin/goods/{1}/{2}.jsp" />
+		<!-- <put-attribute name="footerJsCss" value="/views/admin/commons/footerJsCss.jsp"/> -->
 	</definition>
-	<definition name="admin/feedback/*" extends="baselayout">
+	<definition name="admin/feedback/*" extends="contentlayout">
+		<!-- <put-attribute name="headJsCss" value="/views/admin/commons/headJsCss.jsp"/> -->
 		<put-attribute name="main" value="/views/admin/feedback/{1}.jsp" />
+		<!-- <put-attribute name="footerJsCss" value="/views/admin/commons/footerJsCss.jsp"/> -->
 	</definition>
 </tiles-definitions>
